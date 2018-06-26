@@ -1,3 +1,3 @@
-# Monash Human Power - Data Aquisition System Web Server 
+# Monash Human Power - Data Acquisition System Web Server 
 
-A web server for the Data Aquisition System (DAS) for Monash Human Power.
+A web server for the Data Acquisition System (DAS) for Monash Human Power.
