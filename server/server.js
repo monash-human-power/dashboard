@@ -17,12 +17,15 @@ app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname + '/../client/index.html'));
 });
 
-// Endpoint to get a result
+// Endpoint to get the last result
 app.get('/result', (req, res) => {
 	output_result = {}
 	output_result['result'] = ""
 	res.send(output_result);
 });
+
+// Endpoint to upload data to server?
+// app.post('/result', (req, res)=>{});
 
 // Endpoint to get all results
 app.get('/all_results', (req, res) => {
