@@ -13,11 +13,20 @@ var server = app.listen(PORT, () => {
 
 // Endpoint for main page
 app.get('/', (req, res) => {
+	// Send back the index.html document
 	res.sendFile(path.join(__dirname + '/../client/index.html'));
 });
 
+// Endpoint to get a result
 app.get('/result', (req, res) => {
 	output_result = {}
 	output_result['result'] = ""
 	res.send(output_result);
-})
+});
+
+// Endpoint to get all results
+app.get('/all_results', (req, res) => {
+	output_result = {}
+	output_result['result'] = []
+	res.send(output_result);
+});
