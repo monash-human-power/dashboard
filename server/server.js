@@ -15,3 +15,9 @@ var server = app.listen(PORT, () => {
 app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname + '/../client/index.html'));
 });
+
+app.get('/result', (req, res) => {
+	output_result = {}
+	output_result['result'] = ""
+	res.send(output_result);
+})
