@@ -1,6 +1,3 @@
 [submodule "server/MHP_Modelling"]
 	path = server/MHP_Modelling
 	url = https://github.com/Monash-Human-Power/MHP_Modelling.git
-[submodule "server/csv2json"]
-	path = server/csv2json
-	url = https://github.com/khanguslee/csv2json.git
