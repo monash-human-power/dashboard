@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
 // Endpoint to get the last result from sensors
 app.get('/result', (req, res) => {
 	// Read json file
-	var json_path = path.join(__dirname, '/data/sample_data_18_3_30_9_52.json')
+	var json_path = path.join(__dirname, '/data/sample_data_18_3_31_9_39.json')
 	var contents = fs.readFileSync(json_path);
 	var json_contents = JSON.parse(contents);
 
