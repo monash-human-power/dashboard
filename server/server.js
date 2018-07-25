@@ -22,11 +22,44 @@ app.get('/', (req, res) => {
 });
 
 // Endpoint to start recording data
-// Client will need to send the name of the file within the body of the POST request
 app.post('/start', (req, res) => {
 	// Create csv file
-	console.log(req.body);
-	res.status(200).send("YES");
+	var data = req.body;
+
+	// Check if client sent the name of the file within the body of the POST request
+	if (!data.filename) {
+		console.error('Invalid request');
+		res.status(400).send();
+		return;
+	}
+
+	// TODO: Check filename is of valid format
+	// should be data_YEAR_MONTH_DATE_HOUR_MIN
+	// eg. 2018_07_25_17_07
+
+	// Create csv file
+	var filepath = 'data/' + data.filename + '.csv'
+
+	// Check if file already exists
+	if (fs.existsSync(filepath)) {
+		console.error("File name exists");
+		res.status(400).send("File name exists");
+		return;
+	}
+
+	// Create an empty csv file (Open then close immediately)
+	fs.open(filepath, 'a', (err, file_data) => {
+		if (err) {
+			console.error(err);
+			res.status(400).send(err);
+			return;
+		}
+		fs.close(file_data, (err) => {
+			console.log(req.body);
+			res.status(200).send("YES");
+			res.end();
+		});
+	})
 });
 
 // Endpoint to get the last result from sensors
