@@ -3,9 +3,12 @@ const express = require('express');
 const app = express();
 var path = require('path');
 const fs = require('fs');
+var bodyParser = require('body-parser');
 
 // Set port to whatever the environment variable for PORT is, else use port 5000
 const PORT = process.env.PORT || 5000;
+
+app.use(bodyParser.urlencoded({extended:true}));
 
 // Start the server
 var server = app.listen(PORT, () => {
@@ -16,6 +19,14 @@ var server = app.listen(PORT, () => {
 app.get('/', (req, res) => {
 	// Send back the index.html document
 	res.sendFile(path.join(__dirname + '/../client/index.html'));
+});
+
+// Endpoint to start recording data
+// Client will need to send the name of the file within the body of the POST request
+app.post('/start', (req, res) => {
+	// Create csv file
+	console.log(req.body);
+	res.status(200).send("YES");
 });
 
 // Endpoint to get the last result from sensors
