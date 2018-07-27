@@ -91,6 +91,7 @@ app.get('/result', (req, res) => {
 app.post('/result', (req, res)=>{
 	var data = req.body;
 	console.log(data)
+	res.status(200)
 });
 
 // Endpoint to get all results
