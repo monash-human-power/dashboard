@@ -90,8 +90,8 @@ app.get('/result', (req, res) => {
 // Endpoint to upload data to server
 app.post('/result', (req, res)=>{
 	var data = req.body;
-	console.log(data)
-	res.status(200)
+	console.log(data);
+	res.status(200);
 });
 
 // Endpoint to get all results
