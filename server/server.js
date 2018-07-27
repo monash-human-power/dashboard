@@ -23,7 +23,6 @@ app.get('/', (req, res) => {
 
 // Endpoint to start recording data
 app.post('/start', (req, res) => {
-	// Create csv file
 	var data = req.body;
 
 	// Check if client sent the name of the file within the body of the POST request
@@ -88,8 +87,11 @@ app.get('/result', (req, res) => {
 	res.send(output_result);
 });
 
-// Endpoint to upload data to server?
-// app.post('/result', (req, res)=>{});
+// Endpoint to upload data to server
+app.post('/result', (req, res)=>{
+	var data = req.body;
+	console.log(data)
+});
 
 // Endpoint to get all results
 app.get('/result/all', (req, res) => {
