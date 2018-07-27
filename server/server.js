@@ -55,7 +55,7 @@ app.post('/start', (req, res) => {
 		}
 		fs.close(file_data, (err) => {
 			console.log(req.body);
-			res.status(200).send("YES");
+			res.status(200).send("Start of new data entry");
 			res.end();
 		});
 	})
@@ -88,10 +88,10 @@ app.get('/result', (req, res) => {
 });
 
 // Endpoint to upload data to server
-app.post('/result', (req, res)=>{
+app.post('/result', (req, res) => {
 	var data = req.body;
 	console.log(data);
-	res.status(200);
+	res.status(200).send("Data uploaded");
 });
 
 // Endpoint to get all results
