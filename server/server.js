@@ -34,7 +34,7 @@ app.post('/start', (req, res) => {
 
 	// TODO: Check filename is of valid format
 	// should be data_YEAR_MONTH_DATE_HOUR_MIN
-	// eg. 2018_07_25_17_07
+	// eg. data_2018_07_25_17_07
 
 	// Create csv file
 	var filepath = 'data/' + data.filename + '.csv'
