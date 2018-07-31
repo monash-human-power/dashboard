@@ -5,6 +5,9 @@ var path = require('path');
 const fs = require('fs');
 var bodyParser = require('body-parser');
 
+// csv file stuff
+var csv = require('fast-csv');
+
 // Set port to whatever the environment variable for PORT is, else use port 5000
 const PORT = process.env.PORT || 5000;
 
@@ -47,18 +50,16 @@ app.post('/start', (req, res) => {
 	}
 
 	// Create an empty csv file (Open then close immediately)
-	fs.open(filepath, 'a', (err, file_data) => {
+	var csv_headers = ["filename", "gps", "reed", "aX", "aY", "aZ", "gX", "gY", "gZ", "thermoC", "thermoF", "pot"]
+
+	fs.writeFile(filepath, csv_headers.join(',') + '\n', (err) => {
 		if (err) {
 			console.error(err);
 			res.status(400).send(err);
 			return;
 		}
-		fs.close(file_data, (err) => {
-			console.log(req.body);
-			res.status(200).send("Start of new data entry");
-			res.end();
-		});
-	})
+		res.status(200).send("Start of new data entry");
+	});
 });
 
 // Endpoint to get the last result from sensors
@@ -93,7 +94,7 @@ app.post('/result', (req, res) => {
 	var data = req.body;
 	
 	// Check if user sent all the required data to the server
-	var body_keys = ["gps", "reed", "aX", "aY", "aZ", "gX", "gY", "gZ", "thermoC", "thermoF", "pot"]
+	var body_keys = ["filename", "gps", "reed", "aX", "aY", "aZ", "gX", "gY", "gZ", "thermoC", "thermoF", "pot"]
 	for (var i = 0; i < body_keys.length; i++) {
 		var current_key = body_keys[i]
 		if (!(current_key in data)){
@@ -102,6 +103,15 @@ app.post('/result', (req, res) => {
 			return;
 		}
 	}
+
+	// If all keys are present, add data into csv file
+	var filepath = 'data/' + data.filename + '.csv'
+
+	
+	var csvStream = csv.createWriteStream({headers: false, includeEndRowDelimiter:true}), writableStream = fs.createWriteStream(filepath, {'flags' : 'a'});
+	csvStream.pipe(writableStream);
+	csvStream.write(data);
+	csvStream.end();
 
 	console.log(data);
 	res.status(200).send("Data uploaded");
