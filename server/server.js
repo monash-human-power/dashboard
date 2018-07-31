@@ -89,7 +89,20 @@ app.get('/result', (req, res) => {
 
 // Endpoint to upload data to server
 app.post('/result', (req, res) => {
+	// Get data from the body of the request
 	var data = req.body;
+	
+	// Check if user sent all the required data to the server
+	var body_keys = ["gps", "reed", "aX", "aY", "aZ", "gX", "gY", "gZ", "thermoC", "thermoF", "pot"]
+	for (var i = 0; i < body_keys.length; i++) {
+		var current_key = body_keys[i]
+		if (!(current_key in data)){
+			console.error("Missing keys in POST request")
+			res.status(400).send("Invalid data");
+			return;
+		}
+	}
+
 	console.log(data);
 	res.status(200).send("Data uploaded");
 });
