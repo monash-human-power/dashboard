@@ -50,7 +50,7 @@ app.post('/start', (req, res) => {
 	}
 
 	// Create an empty csv file (Open then close immediately)
-	var csv_headers = ["filename", "gps", "reed", "aX", "aY", "aZ", "gX", "gY", "gZ", "thermoC", "thermoF", "pot"]
+	var csv_headers = ["gps", "reed", "aX", "aY", "aZ", "gX", "gY", "gZ", "thermoC", "thermoF", "pot", "datetime"]
 
 	fs.writeFile(filepath, csv_headers.join(',') + '\n', (err) => {
 		if (err) {
@@ -107,7 +107,11 @@ app.post('/result', (req, res) => {
 	// If all keys are present, add data into csv file
 	var filepath = 'data/' + data.filename + '.csv'
 
-	
+	// Remove filename from the body of the data
+	delete data["filename"];
+	data["datetime"] = getDateTime();
+
+	// Write to csv file
 	var csvStream = csv.createWriteStream({headers: false, includeEndRowDelimiter:true}), writableStream = fs.createWriteStream(filepath, {'flags' : 'a'});
 	csvStream.pipe(writableStream);
 	csvStream.write(data);
@@ -136,3 +140,27 @@ app.get('/server/status', (req, res) => {
 	var output_json = {'status':'True'}
 	res.status(200).send(output_json);
 })
+
+// Returns a date time string of the format YYYY_MM_DD_HH_MM_SS
+function getDateTime(){
+	var date = new Date();
+	
+	// Get date
+	var year = date.getFullYear();
+	var month = date.getMonth();
+	month = (month < 10 ? "0" : "") + month;
+	var day = date.getDate();
+	day = (day < 10 ? "0" : "") + day;
+
+	// Get time
+	var hour = date.getHours();
+	hour = (hour < 10 ? "0" : "") + hour;
+	var minute = date.getMinutes();
+	minute = (minute < 10 ? "0" : "") + minute;
+	var seconds = date.getSeconds();
+	seconds = (seconds < 10 ? "0" : "") + seconds;
+	var milliseconds = date.getMilliseconds();
+	
+	output_string = year + "_" + month + "_" + day + "_" + hour + "_" + minute + "_" + seconds + "_" + milliseconds;
+	return output_string
+}
