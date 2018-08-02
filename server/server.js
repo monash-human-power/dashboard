@@ -6,7 +6,8 @@ const fs = require('fs');
 var bodyParser = require('body-parser');
 
 // csv file stuff
-var csv = require('fast-csv');
+var csv = require('csv-write-stream');
+const csv_headers = ["datetime", "gps", "reed", "aX", "aY", "aZ", "gX", "gY", "gZ", "thermoC", "thermoF", "pot"];
 
 // Set port to whatever the environment variable for PORT is, else use port 5000
 const PORT = process.env.PORT || 5000;
@@ -49,9 +50,7 @@ app.post('/start', (req, res) => {
 		return;
 	}
 
-	// Create an empty csv file (Open then close immediately)
-	var csv_headers = ["gps", "reed", "aX", "aY", "aZ", "gX", "gY", "gZ", "thermoC", "thermoF", "pot", "datetime"]
-
+	// Create an empty csv file (Open then close immediately)	
 	fs.writeFile(filepath, csv_headers.join(',') + '\n', (err) => {
 		if (err) {
 			console.error(err);
@@ -112,10 +111,11 @@ app.post('/result', (req, res) => {
 	data["datetime"] = getDateTime();
 
 	// Write to csv file
-	var csvStream = csv.createWriteStream({headers: false, includeEndRowDelimiter:true}), writableStream = fs.createWriteStream(filepath, {'flags' : 'a'});
-	csvStream.pipe(writableStream);
-	csvStream.write(data);
-	csvStream.end();
+	var writer = csv({headers: csv_headers, sendHeaders : false });
+	var writableStream = fs.createWriteStream(filepath, {'flags' : 'a'});
+	writer.pipe(writableStream);
+	writer.write(data);
+	writer.end();
 
 	console.log(data);
 	res.status(200).send("Data uploaded");
