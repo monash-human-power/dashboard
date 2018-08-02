@@ -129,3 +129,10 @@ app.get('/result/all', (req, res) => {
 	output_result['results'] = json_contents
 	res.send(output_result);
 });
+
+// Endpoint to tell client that the server is online
+// This endpoint is here so that the client script (DAS.py) can continue to query an endpoint until the RPi is online 
+app.get('/server/status', (req, res) => {
+	var output_json = {'status':'True'}
+	res.status(200).send(output_json);
+})
