@@ -149,6 +149,17 @@ app.get('/files', (req, res) => {
 	  })
 })
 
+// Endpoint to download file from server
+app.get('/files/:filename', (req, res) => {
+	var filename = req.params.filename;
+	var filepath = path.join(__dirname, '/data/' + filename);
+	res.download(filepath, (err) => {
+		if (err) {
+			res.status(400).send("File not found");
+		}
+	});
+})
+
 // Endpoint to tell client that the server is online
 // This endpoint is here so that the client script (DAS.py) can continue to query an endpoint until the RPi is online 
 app.get('/server/status', (req, res) => {
