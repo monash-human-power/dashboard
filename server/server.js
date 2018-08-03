@@ -156,7 +156,9 @@ app.get('/files/:filename', (req, res) => {
 	res.download(filepath, (err) => {
 		if (err) {
 			res.status(400).send("File not found");
+			return;
 		}
+		console.log('Downloading ' + filename);
 	});
 })
 
