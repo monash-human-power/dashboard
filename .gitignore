@@ -1,4 +1,5 @@
 /.vscode
+/server/data/*.csv
 
 # Logs
 logs
