@@ -98,7 +98,7 @@ app.post('/result', (req, res) => {
 	for (var i = 0; i < body_keys.length; i++) {
 		var current_key = body_keys[i]
 		if (!(current_key in data)){
-			console.error("Missing keys in POST request")
+			console.error("Missing keys in POST request: " + current_key);
 			res.status(400).send("Invalid data");
 			return;
 		}
