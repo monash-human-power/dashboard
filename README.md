@@ -8,10 +8,15 @@ After you clone the repository, make sure you run `npm install` to install all o
 ## Documentation
 Base URL: http://das-web-server.herokuapp.com
 
-|Endpoint|Method|Description|
-|--------|------|-----------|
-|/result|GET|Returns current sensor data|
-|/result/all|GET|Returns all sensor data|
+|Endpoint|Method|Body|Description|
+|--------|------|----|-----------|
+|/start|POST|{"filename" : *data_YYYY_MM_DD_HH_MM_SS* }|Notify server that a new data recording session has started|
+|/result|GET||Returns current sensor data|
+|/result|POST|TODO|Data to be stored within the specified csv file|
+|/result/all|GET||Returns all sensor data|
+|/files|GET||Returns an array of files that are stored on the server|
+|/files/*filename*|GET||Download specified file from server|
+|/server/status|GET||Status of the server|
 
 ## Heroku Files
 Files to remove once ported to a Raspberry Pi
