@@ -135,6 +135,33 @@ app.get('/result/all', (req, res) => {
 	res.send(output_result);
 });
 
+// Endpoint to get a list of files stored on the server
+app.get('/files', (req, res) => {
+	var data_folder_path = path.join(__dirname, '/data');
+	var file_array = []
+	fs.readdir(data_folder_path, (err, files) => {
+		files.forEach(file => {
+		  file_array.push(file);
+		});
+		console.log("Query files stored on server");
+		var output_json = {'files':file_array};
+		res.status(200).send(output_json);
+	  })
+})
+
+// Endpoint to download file from server
+app.get('/files/:filename', (req, res) => {
+	var filename = req.params.filename;
+	var filepath = path.join(__dirname, '/data/' + filename);
+	res.download(filepath, (err) => {
+		if (err) {
+			res.status(400).send("File not found");
+			return;
+		}
+		console.log('Downloading ' + filename);
+	});
+})
+
 // Endpoint to tell client that the server is online
 // This endpoint is here so that the client script (DAS.py) can continue to query an endpoint until the RPi is online 
 app.get('/server/status', (req, res) => {
