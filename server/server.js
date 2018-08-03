@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 
 // csv file stuff
 var csv = require('csv-write-stream');
-const csv_headers = ["datetime", "gps", "aX", "aY", "aZ", "gX", "gY", "gZ", "thermoC", "thermoF", "pot"];
+const csv_headers = ["time", "gps", "aX", "aY", "aZ", "gX", "gY", "gZ", "thermoC", "thermoF", "pot"];
 
 // Set port to whatever the environment variable for PORT is, else use port 5000
 const PORT = process.env.PORT || 5000;
@@ -94,7 +94,7 @@ app.post('/result', (req, res) => {
 	var data = req.body;
 	
 	// Check if user sent all the required data to the server
-	var body_keys = ["filename", "gps", "aX", "aY", "aZ", "gX", "gY", "gZ", "thermoC", "thermoF", "pot"]
+	var body_keys = ["filename", "time", "gps", "aX", "aY", "aZ", "gX", "gY", "gZ", "thermoC", "thermoF", "pot"]
 	for (var i = 0; i < body_keys.length; i++) {
 		var current_key = body_keys[i]
 		if (!(current_key in data)){
@@ -109,7 +109,6 @@ app.post('/result', (req, res) => {
 
 	// Remove filename from the body of the data
 	delete data["filename"];
-	data["datetime"] = getDateTime();
 
 	// Write to csv file
 	var writer = csv({headers: csv_headers, sendHeaders : false });
