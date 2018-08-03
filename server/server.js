@@ -41,7 +41,7 @@ app.post('/start', (req, res) => {
 	// eg. data_2018_07_25_17_07
 
 	// Create csv file
-	var filepath = 'data/' + data.filename + '.csv'
+	var filepath = './data/' + data.filename + '.csv'
 
 	// Check if file already exists
 	if (fs.existsSync(filepath)) {
