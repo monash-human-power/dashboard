@@ -105,7 +105,7 @@ app.post('/result', (req, res) => {
 	}
 
 	// If all keys are present, add data into csv file
-	var filepath = 'data/' + data.filename + '.csv'
+	var filepath = './data/' + data.filename + '.csv'
 
 	// Remove filename from the body of the data
 	delete data["filename"];
