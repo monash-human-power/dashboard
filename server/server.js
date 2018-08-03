@@ -41,7 +41,7 @@ app.post('/start', (req, res) => {
 	// eg. data_2018_07_25_17_07
 
 	// Create csv file
-	var filepath = './data/' + data.filename + '.csv'
+	var filepath = path.join(__dirname, 'data/' + data.filename + '.csv');
 
 	// Check if file already exists
 	if (fs.existsSync(filepath)) {
@@ -65,7 +65,7 @@ app.post('/start', (req, res) => {
 // Endpoint to get the last result from sensors
 app.get('/result', (req, res) => {
 	// Read json file
-	var json_path = path.join(__dirname, '/data/sample_data_18_3_31_9_39.json')
+	var json_path = path.join(__dirname, '/data/sample_data_18_3_31_9_39.json');
 	var contents = fs.readFileSync(json_path);
 	var json_contents = JSON.parse(contents);
 
@@ -105,7 +105,7 @@ app.post('/result', (req, res) => {
 	}
 
 	// If all keys are present, add data into csv file
-	var filepath = './data/' + data.filename + '.csv'
+	var filepath = path.join(__dirname,  'data/' + data.filename + '.csv');
 
 	// Remove filename from the body of the data
 	delete data["filename"];
@@ -125,7 +125,7 @@ app.post('/result', (req, res) => {
 // Endpoint to get all results
 app.get('/result/all', (req, res) => {
 	// Read json file
-	var json_path = path.join(__dirname, '/data/sample_data_18_3_30_9_52.json')
+	var json_path = path.join(__dirname, '/data/sample_data_18_3_30_9_52.json');
 	var contents = fs.readFileSync(json_path);
 	var json_contents = JSON.parse(contents);
 
