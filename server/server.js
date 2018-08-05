@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 
 // csv file stuff
 var csv = require('csv-write-stream');
-const csv_headers = ["time", "gps", "aX", "aY", "aZ", "gX", "gY", "gZ", "thermoC", "thermoF", "pot"];
+const csv_headers = ['time', 'gps_location' , 'gps_course', 'gps_speed', 'gps_satellites', 'aX', 'aY', 'aZ', 'gX', 'gY', 'gZ', 'thermoC', 'thermoF', 'pot'];
 
 // Set port to whatever the environment variable for PORT is, else use port 5000
 const PORT = process.env.PORT || 5000;
@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 // Start the server
 var server = app.listen(PORT, () => {
-	console.log("Example app listening at", server.address().port);
+	console.log('Example app listening at', server.address().port);
 });
 
 // Endpoint for main page
@@ -45,8 +45,8 @@ app.post('/start', (req, res) => {
 
 	// Check if file already exists
 	if (fs.existsSync(filepath)) {
-		console.error("File name exists");
-		res.status(400).send("File name exists");
+		console.error('File name exists');
+		res.status(400).send('File name exists');
 		return;
 	}
 
@@ -57,8 +57,8 @@ app.post('/start', (req, res) => {
 			res.status(400).send(err);
 			return;
 		}
-		console.log("New file: " + filepath + " created");
-		res.status(200).send("Start of new data entry");
+		console.log('New file: ' + filepath + ' created');
+		res.status(200).send('Start of new data entry');
 	});
 });
 
@@ -94,13 +94,31 @@ app.post('/result', (req, res) => {
 	var data = req.body;
 	
 	// Check if user sent all the required data to the server
-	var body_keys = ["filename", "time", "gps", "aX", "aY", "aZ", "gX", "gY", "gZ", "thermoC", "thermoF", "pot"]
+	var body_keys = ['filename', 'time', 'gps', 'aX', 'aY', 'aZ', 'gX', 'gY', 'gZ', 'thermoC', 'thermoF', 'pot']
 	for (var i = 0; i < body_keys.length; i++) {
 		var current_key = body_keys[i]
 		if (!(current_key in data)){
-			console.error("Missing keys in POST request: " + current_key);
-			res.status(400).send("Invalid data");
+			console.error('Missing keys in POST request: ' + current_key);
+			res.status(400).send('Invalid data');
 			return;
+		}
+	}
+
+	// If GPS is enabled, check existence of GPS specific keys
+	var gps_body_keys = ['gps_location', 'gps_course', 'gps_speed', 'gps_satellites'];
+	if (data['gps'] == '1') {
+		for (var i = 0; i < gps_body_keys.length; i++) {
+			var current_key = gps_body_keys[i];
+			if (!(current_key in data)){
+				console.error('Missing keys in POST request: ' + current_key);
+				res.status(400).send('Invalid data');
+				return;
+			}
+		}
+	} else if (data['gps'] == '0') {
+		for (var i = 0; i < gps_body_keys.length; i++) {
+			var current_key = gps_body_keys[i];
+			data[current_key] = '';
 		}
 	}
 
@@ -108,7 +126,8 @@ app.post('/result', (req, res) => {
 	var filepath = path.join(__dirname,  'data/' + data.filename + '.csv');
 
 	// Remove filename from the body of the data
-	delete data["filename"];
+	delete data['filename'];
+	delete data['gps'];
 
 	// Write to csv file
 	var writer = csv({headers: csv_headers, sendHeaders : false });
@@ -118,7 +137,7 @@ app.post('/result', (req, res) => {
 	writer.end();
 
 	console.log(data);
-	res.status(200).send("Data uploaded");
+	res.status(200).send('Data uploaded');
 });
 
 // Endpoint to get all results
@@ -142,7 +161,7 @@ app.get('/files', (req, res) => {
 		files.forEach(file => {
 		  file_array.push(file);
 		});
-		console.log("Query files stored on server");
+		console.log('Query files stored on server');
 		var output_json = {'files':file_array};
 		res.status(200).send(output_json);
 	  });
@@ -157,7 +176,7 @@ app.get('/files/recent', (req, res) => {
 	}
 	res.download(newest_filepath, (err) => {
 		if (err) {
-			res.status(404).send("File not found");
+			res.status(404).send('File not found');
 		}
 		console.log('Downloading most recent file: ' + newest_filepath);
 	});
@@ -169,7 +188,7 @@ app.get('/files/:filename', (req, res) => {
 	var filepath = path.join(__dirname, '/data/' + filename);
 	res.download(filepath, (err) => {
 		if (err) {
-			res.status(404).send("File not found");
+			res.status(404).send('File not found');
 			return;
 		}
 		console.log('Downloading: ' + filename);
@@ -190,42 +209,50 @@ function getDateTime(){
 	// Get date
 	var year = date.getFullYear();
 	var month = date.getMonth();
-	month = (month < 10 ? "0" : "") + month;
+	month = (month < 10 ? '0' : '') + month;
 	var day = date.getDate();
-	day = (day < 10 ? "0" : "") + day;
+	day = (day < 10 ? '0' : '') + day;
 
 	// Get time
 	var hour = date.getHours();
-	hour = (hour < 10 ? "0" : "") + hour;
+	hour = (hour < 10 ? '0' : '') + hour;
 	var minute = date.getMinutes();
-	minute = (minute < 10 ? "0" : "") + minute;
+	minute = (minute < 10 ? '0' : '') + minute;
 	var seconds = date.getSeconds();
-	seconds = (seconds < 10 ? "0" : "") + seconds;
+	seconds = (seconds < 10 ? '0' : '') + seconds;
 	var milliseconds = date.getMilliseconds();
 
-	output_string = year + "_" + month + "_" + day + "_" + hour + "_" + minute + "_" + seconds + "_" + milliseconds;
+	output_string = year + '_' + month + '_' + day + '_' + hour + '_' + minute + '_' + seconds + '_' + milliseconds;
 	return output_string
 }
 
 // Returns the newest file from the data folder
 // Currently finds newest file in O(N) time complexity
 function getNewestFile() {
-	data_filepath = path.join(__dirname, 'data');
-	files = fs.readdirSync(data_filepath);
+	var data_filepath = path.join(__dirname, 'data');
+	var files = fs.readdirSync(data_filepath);
 
 	// Check if there are no files stored
 	if (files.length == 0) {
 		return null;
 	// Check if only one file stored
 	} else if (files.length == 1) {
+		if (path.extname(files[0]) != '.csv') {
+			return null;
+		}
 		return path.join(data_filepath, files[0]);
 	}
 
-	newest = files[0];
-	for (var i = 1; i < files.length; i++) {
-		var current_file_name = files[i];
+	var newest = null;
+	for (var i = 0; i < files.length; i++) {
 		// Check if the file is a csv file
+		var current_file_name = files[i];
 		if (path.extname(current_file_name) != '.csv') {
+			continue;
+		}
+
+		if (newest == null) {
+			newest = files[i];
 			continue;
 		}
 
@@ -236,5 +263,8 @@ function getNewestFile() {
 			newest = current_file_name;
 	}
 
+	if (newest == null) {
+		return null;
+	}
 	return path.join(data_filepath, newest);
 }
