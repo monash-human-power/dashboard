@@ -129,7 +129,7 @@ app.get('/result/all', (req, res) => {
 	var json_contents = JSON.parse(contents);
 
 	// Output data to correct format
-	output_result = {}
+	output_result = {};
 	output_result['results'] = json_contents
 	res.send(output_result);
 });
@@ -137,7 +137,7 @@ app.get('/result/all', (req, res) => {
 // Endpoint to get a list of files stored on the server
 app.get('/files', (req, res) => {
 	var data_folder_path = path.join(__dirname, '/data');
-	var file_array = []
+	var file_array = [];
 	fs.readdir(data_folder_path, (err, files) => {
 		files.forEach(file => {
 		  file_array.push(file);
@@ -145,8 +145,23 @@ app.get('/files', (req, res) => {
 		console.log("Query files stored on server");
 		var output_json = {'files':file_array};
 		res.status(200).send(output_json);
-	  })
-})
+	  });
+});
+
+// Endpoint to download most recent file from server
+app.get('/files/recent', (req, res) => {
+	newest_filepath = getNewestFile();
+	if (newest_filepath == null) {
+		console.error('No files stored');
+		res.status(404).send('No files stored');
+	}
+	res.download(newest_filepath, (err) => {
+		if (err) {
+			res.status(404).send("File not found");
+		}
+		console.log('Downloading most recent file: ' + newest_filepath);
+	});
+});
 
 // Endpoint to download file from server
 app.get('/files/:filename', (req, res) => {
@@ -154,17 +169,17 @@ app.get('/files/:filename', (req, res) => {
 	var filepath = path.join(__dirname, '/data/' + filename);
 	res.download(filepath, (err) => {
 		if (err) {
-			res.status(400).send("File not found");
+			res.status(404).send("File not found");
 			return;
 		}
-		console.log('Downloading ' + filename);
+		console.log('Downloading: ' + filename);
 	});
-})
+});
 
 // Endpoint to tell client that the server is online
 // This endpoint is here so that the client script (DAS.py) can continue to query an endpoint until the RPi is online 
 app.get('/server/status', (req, res) => {
-	var output_json = {'status':'True'}
+	var output_json = {'status':'True'};
 	res.status(200).send(output_json);
 })
 
@@ -187,7 +202,39 @@ function getDateTime(){
 	var seconds = date.getSeconds();
 	seconds = (seconds < 10 ? "0" : "") + seconds;
 	var milliseconds = date.getMilliseconds();
-	
+
 	output_string = year + "_" + month + "_" + day + "_" + hour + "_" + minute + "_" + seconds + "_" + milliseconds;
 	return output_string
+}
+
+// Returns the newest file from the data folder
+// Currently finds newest file in O(N) time complexity
+function getNewestFile() {
+	data_filepath = path.join(__dirname, 'data');
+	files = fs.readdirSync(data_filepath);
+
+	// Check if there are no files stored
+	if (files.length == 0) {
+		return null;
+	// Check if only one file stored
+	} else if (files.length == 1) {
+		return path.join(data_filepath, files[0]);
+	}
+
+	newest = files[0];
+	for (var i = 1; i < files.length; i++) {
+		var current_file_name = files[i];
+		// Check if the file is a csv file
+		if (path.extname(current_file_name) != '.csv') {
+			continue;
+		}
+
+		// Compare current file time with stored file time
+		var current_file_time = fs.statSync(path.join(data_filepath, current_file_name)).mtime.getTime()
+		var newest_file_time = fs.statSync(path.join(data_filepath, newest)).mtime.getTime()
+		if (current_file_time > newest_file_time)
+			newest = current_file_name;
+	}
+
+	return path.join(data_filepath, newest);
 }
