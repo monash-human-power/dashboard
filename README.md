@@ -15,6 +15,7 @@ Base URL: http://das-web-server.herokuapp.com
 |/result|POST|TODO|Data to be stored within the specified csv file|
 |/result/all|GET||Returns all sensor data|
 |/files|GET||Returns an array of files that are stored on the server|
+|/files/recent|GET||Download most recent file edited from server|
 |/files/*filename*|GET||Download specified file from server|
 |/server/status|GET||Status of the server|
 
