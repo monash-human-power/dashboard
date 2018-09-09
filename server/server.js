@@ -13,6 +13,7 @@ const csv_headers = ['time', 'gps_location' , 'gps_course', 'gps_speed', 'gps_sa
 const PORT = process.env.PORT || 5000;
 
 app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.json());
 
 // Start the server
 var server = app.listen(PORT, () => {
