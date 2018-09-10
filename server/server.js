@@ -1,4 +1,4 @@
-// Initialise server 
+// Initialise server
 const express = require("express");
 const app = express();
 var path = require("path");
@@ -95,7 +95,7 @@ app.post("/result", (req, res) => {
     var data = req.body;
     
     // Check if user sent all the required data to the server
-    var body_keys = ["filename", "time", "gps", "aX", "aY", "aZ", "gX", "gY", "gZ", "thermoC", "thermoF", "pot"]
+    var body_keys = ["filename", "time", "gps", "aX", "aY", "aZ", "gX", "gY", "gZ", "thermoC", "thermoF", "pot"];
     for (var i = 0; i < body_keys.length; i++) {
         var current_key = body_keys[i]
         if (!(current_key in data)){
@@ -197,7 +197,7 @@ app.get("/files/:filename", (req, res) => {
 });
 
 // Endpoint to tell client that the server is online
-// This endpoint is here so that the client script (DAS.py) can continue to query an endpoint until the RPi is online 
+// This endpoint is here so that the client script (DAS.py) can continue to query an endpoint until the RPi is online
 app.get("/server/status", (req, res) => {
     var output_json = {"status":"True"};
     res.status(200).send(output_json);
@@ -206,7 +206,7 @@ app.get("/server/status", (req, res) => {
 // Returns a date time string of the format YYYY_MM_DD_HH_MM_SS
 function getDateTime(){
     var date = new Date();
-    
+
     // Get date
     var year = date.getFullYear();
     var month = date.getMonth();
