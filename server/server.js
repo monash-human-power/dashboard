@@ -195,6 +195,13 @@ app.get('/files/:filename', (req, res) => {
 	});
 });
 
+app.delete('/files/:filename', (req, res) => {
+	var filename = req.params.filename;
+	var filepath = path.join(__dirname, '/data/' + filename);
+
+	console.log('Deleting: ' + filepath);
+});
+
 // Endpoint to tell client that the server is online
 // This endpoint is here so that the client script (DAS.py) can continue to query an endpoint until the RPi is online 
 app.get('/server/status', (req, res) => {
