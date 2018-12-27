@@ -195,11 +195,17 @@ app.get('/files/:filename', (req, res) => {
 	});
 });
 
+// Endpoint to delete file from server
 app.delete('/files/:filename', (req, res) => {
 	var filename = req.params.filename;
 	var filepath = path.join(__dirname, '/data/' + filename);
-
-	console.log('Deleting: ' + filepath);
+	fs.unlink(filepath, (err) => {
+		if (err) {
+			res.status(404).send('File not found');
+			return;
+		}
+		console.log('Deleting: ' + filepath);
+	});
 });
 
 // Endpoint to tell client that the server is online
