@@ -17,6 +17,7 @@ Base URL: http://das-web-server.herokuapp.com
 |/files|GET||Returns an array of files that are stored on the server|
 |/files/recent|GET||Download most recent file edited from server|
 |/files/*filename*|GET||Download specified file from server|
+|/files/*filename*|DELETE||Delete specified file from server|
 |/server/status|GET||Status of the server|
 
 ## Heroku Files
