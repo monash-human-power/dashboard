@@ -20,8 +20,13 @@
   "homepage": "https://github.com/khanguslee/MHP-DAS-Web-Server#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "bootstrap": "^4.2.1",
     "csv-write-stream": "^2.0.0",
     "express": "^4.16.3",
     "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.0",
+    "gulp-sass": "^4.0.2"
   }
 }
