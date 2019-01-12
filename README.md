@@ -3,7 +3,11 @@
 A web server for the Data Acquisition System (DAS) for Monash Human Power.
 
 ## Getting Started
-After you clone the repository, make sure you run `npm install` to install all of the necessary libraries for node.js
+1. `npm install` to install all dependencies and libraries
+2. `npm run build` when it's your first time running the application
+3. `npm start` to start the server
+
+
 
 ## Documentation
 Base URL: http://das-web-server.herokuapp.com
