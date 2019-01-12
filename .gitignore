@@ -1,6 +1,9 @@
 /.vscode
 /server/data/*.csv
 
+/client/css/bootstrap.css
+/client/js/bootstrap.bundle.min.js
+
 # Logs
 logs
 *.log
