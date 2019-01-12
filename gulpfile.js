@@ -9,8 +9,9 @@ gulp.task('sass', () => {
 });
 
 var bootstrapJsPath = 'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js';
+var jqueryJsPath = 'node_modules/jquery/dist/jquery.min.js'
 gulp.task('js', ()=> {
-    return gulp.src(bootstrapJsPath)
+    return gulp.src([bootstrapJsPath, jqueryJsPath])
         .pipe(gulp.dest('client/js'))
 });
 

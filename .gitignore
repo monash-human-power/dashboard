@@ -1,8 +1,10 @@
 /.vscode
 /server/data/*.csv
 
+# Ignore built files from gulp
 /client/css/bootstrap.css
 /client/js/bootstrap.bundle.min.js
+/client/js/jquery.min.js
 
 # Logs
 logs
