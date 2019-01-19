@@ -1,5 +1,6 @@
-// Ask server for list of files
-fetch('/files')
+function loadFiles(){
+    // Ask server for list of files
+    fetch('/files')
     .then((response) => {
         return response.json();
     })
@@ -12,3 +13,8 @@ fetch('/files')
                 .append("<a class='list-group-item list-group-item-action' href='/files/" + files[index] + "'>" + files[index] + "</a>");
         }
     })
+}
+
+$( document ).ready(function() {
+    loadFiles();
+});
