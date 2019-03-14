@@ -3,9 +3,9 @@
 	<head>
 		<script src="js/jquery.min.js"></script>
 		<script src="js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>      
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 		<link rel="stylesheet" type="text/css" href="css/index.css">
-
 		<title>DAS</title>
 	</head>
 	<body>
@@ -27,9 +27,13 @@
 		</div>
 
 		<div id="main">
-			<div class="col-md-12">
-				<h1>Dashboard</h1>
-			</div>
+
+            <div id="chart1" style="width: 45%; height: 45vh; float: left;"><canvas id="velocity-time"></canvas></div>
+            <div id="chart2" style="width: 45%; height: 45vh; float: left;"><canvas id="power-time"></canvas></div>
+            <div id="chart3" style="width: 45%; height: 45vh; float: left;"><canvas id="cadence-time"></canvas></div>
+            <div id="chart4" style="width: 45%; height: 45vh; float: left;"><canvas id="spare"></canvas></div>
+
 		</div>
 	</body>
+    <script type="text/javascript" src="js/main.js"></script>
 </html>
