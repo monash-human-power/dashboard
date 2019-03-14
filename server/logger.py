@@ -1,4 +1,5 @@
 import os
+import sys
 import csv
 import paho.mqtt.client as mqtt
 
@@ -8,9 +9,11 @@ CSV_FIELDNAMES = ["time", "gps", "gps_location", "gps_course", "gps_speed", "gps
     "thermoC", "thermoF",\
     "pot", "cadence", "power"]
 
+DATA_DIRECTORY = os.path.dirname(os.path.realpath(sys.argv[0]))
+DATA_FOLDER_PATH = os.path.join(DATA_DIRECTORY, "data")
+
 def create_filename():
-    data_folder_path = os.path.join(os.getcwd(), "data")
-    file_array = os.listdir(data_folder_path)
+    file_array = os.listdir(DATA_FOLDER_PATH)
     if (len(file_array) == 0):
         return "data_0.csv"
 
@@ -27,8 +30,7 @@ def create_filename():
 
 # Creates the csv file and places the csv headers
 def create_csv_file(filename):
-    data_folder_path = os.path.join(os.getcwd(), "data")
-    with open(os.path.join(data_folder_path, filename), mode="w", newline="") as csv_file:
+    with open(os.path.join(DATA_FOLDER_PATH, filename), mode="w", newline="") as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=CSV_FIELDNAMES)
         writer.writeheader()
 
@@ -47,8 +49,7 @@ def parse_data(data):
 
 # Store data into csv file
 def log_data(filename, data):
-    data_folder_path = os.path.join(os.getcwd(), "data")
-    with open(os.path.join(data_folder_path, filename), mode="a", newline="") as csv_file:
+    with open(os.path.join(DATA_FOLDER_PATH, filename), mode="a", newline="") as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=CSV_FIELDNAMES)
         writer.writerow(data)
 
