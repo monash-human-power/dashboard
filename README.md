@@ -23,7 +23,3 @@ Base URL: http://das-web-server.herokuapp.com
 |/files/*filename*|GET||Download specified file from server|
 |/files/*filename*|DELETE||Delete specified file from server|
 |/server/status|GET||Status of the server|
-
-## Heroku Files
-Files to remove once ported to a Raspberry Pi
-Procfile - Can delete this if not using Heroku
