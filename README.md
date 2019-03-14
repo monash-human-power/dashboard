@@ -7,7 +7,7 @@ The node.js + Express HTTP REST server is used to host the real-time dashboard w
 ## Getting Started
 1. `npm install` to install all dependencies and libraries
 2. `npm run build` when it's your first time running the application
-3. `npm start` to start the server
+3. `npm run start` to start the server
 
 
 

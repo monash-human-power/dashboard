@@ -4,7 +4,8 @@
   "description": "A web server for the Data Acquisition System (DAS) for Monash Human Power.",
   "main": "server/server.js",
   "scripts": {
-    "build": "gulp"
+    "build": "gulp",
+    "start": "node server/server.js"
   },
   "repository": {
     "type": "git",
