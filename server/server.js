@@ -17,6 +17,13 @@ app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, '..', '/client')));
 
+// Create a data folder if it is not created already
+const dataDirectory = path.join(__dirname, "data");
+if (!fs.existsSync(dataDirectory)) {
+    console.log("data folder does not exist, creating folder...");
+    fs.mkdirSync(dataDirectory);
+}
+
 // Start the server
 var server = app.listen(PORT, () => {
     console.log("Example app listening at", server.address().port);
@@ -158,14 +165,21 @@ app.get("/result/all", (req, res) => {
 
 // Endpoint to get a list of files stored on the server
 app.get("/files", (req, res) => {
+    console.log("Query files stored on server");
     var data_folder_path = path.join(__dirname, "/data");
     var file_array = [];
+    var output_json = {"files":file_array};
     fs.readdir(data_folder_path, (err, files) => {
-        files.forEach(file => {
-          file_array.push(file);
-        });
-        console.log("Query files stored on server");
-        var output_json = {"files":file_array};
+        if (err) {
+            console.error(err);
+            res.status(500).send('Internal Server Error!');
+        }
+        if (files.length != 0) {
+            files.forEach(file => {
+              file_array.push(file);
+            });
+            output_json["files"] = file_array;
+        }
         res.status(200).send(output_json);
       });
 });
