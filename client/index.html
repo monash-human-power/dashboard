@@ -1,12 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<script src="/socket.io/socket.io.js"></script>
-		<script src="js/jquery.min.js"></script>
-		<script src="js/bootstrap.bundle.min.js"></script>
+	<head>   
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 		<link rel="stylesheet" type="text/css" href="css/index.css">
-
 		<title>DAS</title>
 	</head>
 	<body>
@@ -28,10 +24,18 @@
 		</div>
 
 		<div id="main">
-			<div class="col-md-12">
-				<h1>Dashboard</h1>
-			</div>
+
+            <div id="velocityChartDiv" style="width: 48%; height: 44vh; float: left;"><canvas id="velocityTimeChart"></canvas></div>
+            <div id="powerChartDiv" style="width: 48%; height: 44vh; float: right;"><canvas id="powerTimeChart"></canvas></div>
+            <div id="cadenceChartDiv" style="width: 48%; height: 44vh; float: left;"><canvas id="cadenceTimeChart"></canvas></div>
+            <div id="spareChartDiv" style="width: 48%; height: 44vh; float: right;"><canvas id="spare"></canvas></div>
+
 		</div>
 	</body>
-	<script src="js/index.js"></script>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.bundle.min.js"></script>
+	<script src="js/Chart.bundle.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+
+    <script type="text/javascript" src="js/index.js"></script>
 </html>
