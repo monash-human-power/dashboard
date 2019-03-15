@@ -109,7 +109,7 @@ var cadenceTimeOptions = {
               };
 
 
-new Chart(document.getElementById("velocityTimeChart"), {
+new Chart(velocityTimeChart, {
                 type:'scatter',
                 data:{
                     label:'Scatter Dataset',
@@ -121,7 +121,7 @@ new Chart(document.getElementById("velocityTimeChart"), {
                 options: velocityTimeOptions
             });
 
-new Chart(document.getElementById("powerTimeChart"), {
+new Chart(powerTimeChart, {
                 type:'scatter',
                 data:{
                     label:'Scatter Dataset',
@@ -133,7 +133,7 @@ new Chart(document.getElementById("powerTimeChart"), {
                 options: powerTimeOptions
             });
 
-new Chart(document.getElementById("cadenceTimeChart"), {
+new Chart(cadenceTimeChart, {
                 type:'scatter',
                 data:{
                     label:'Scatter Dataset',
