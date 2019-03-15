@@ -22,6 +22,7 @@ function loadFiles(){
     .then((result) => {
         // Display list of files
         let files = result.files;
+        // TODO: Account for no files found on the server
         for(let index=0; index<files.length; index++){
             $("<a class='list-group-item list-group-item-action' href='/files/" + files[index] + "'>" + files[index] + "</a>")
                 .appendTo($("#list-files"))
@@ -31,5 +32,6 @@ function loadFiles(){
 }
 
 $( document ).ready(function() {
+    // TODO: Server-side rendering of webpage
     loadFiles();
 });
