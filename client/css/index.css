@@ -15,6 +15,12 @@ body {
     color: #007bff;
 }
 
+.row {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
+
+
 /* Other CSS */
 #top-bar {
     padding-bottom: 0px;
@@ -36,4 +42,9 @@ body {
 #main {
     height:100%;
     overflow:auto;
+}
+
+#filenameElement {
+    display: none;
+    padding: 15px;
 }

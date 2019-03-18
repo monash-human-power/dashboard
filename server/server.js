@@ -1,6 +1,8 @@
 // Initialise server
 const express = require("express");
 const app = express();
+const server = require('http').Server(app);
+
 var path = require("path");
 const fs = require("fs");
 var bodyParser = require("body-parser");
@@ -24,12 +26,26 @@ if (!fs.existsSync(dataDirectory)) {
     fs.mkdirSync(dataDirectory);
 }
 
-// Start the server
-var server = app.listen(PORT, () => {
+/*
+ *  Initialise socket.io
+ */
+const sockets = require(path.join(__dirname, "js", "sockets.js"));
+sockets.init(server);
+
+
+/*
+ * Start the server
+ */
+
+server.listen(PORT, () => {
     console.log("Example app listening at", server.address().port);
 });
 
-// Endpoint for main page
+
+/*
+ * Server endpoints
+ */
+
 app.get("/", (req, res) => {
     // Send back the index.html document
     res.sendFile(path.join(__dirname + "/../client/index.html"));

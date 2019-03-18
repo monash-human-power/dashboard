@@ -9,11 +9,7 @@ The node.js + Express HTTP REST server is used to host the real-time dashboard w
 2. `npm run build` when it's your first time running the application
 3. `npm run start` to start the server
 
-
-
 ## Documentation
-Base URL: http://das-web-server.herokuapp.com
-
 |Endpoint|Method|Body|Description|
 |--------|------|----|-----------|
 |/start|POST|{"filename" : *data_YYYY_MM_DD_HH_MM_SS* }|Notify server that a new data recording session has started|
@@ -25,3 +21,8 @@ Base URL: http://das-web-server.herokuapp.com
 |/files/*filename*|GET||Download specified file from server|
 |/files/*filename*|DELETE||Delete specified file from server|
 |/server/status|GET||Status of the server|
+
+## TODO
+
+- [ ] Add Map display
+- [ ] Add power model graph/output
