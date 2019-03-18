@@ -24,6 +24,8 @@ sockets.init = function(server) {
         connectTimeout: 5000,
       };
     const mqttClient = mqtt.connect('mqtt://localhost:1883', mqttOptions);
+    mqttClient.subscribe('start');
+    mqttClient.subscribe('stop');
     mqttClient.subscribe('data');
     mqttClient.on('connect', mqttConnected);
 

@@ -24,12 +24,15 @@
 		</div>
 
 		<div id="main">
+			<div class="row">
+				<h5 id="filenameElement"> Current Filename: <span id="filenameText"></span></h5>
+			</div>
 
-            <div id="velocityChartDiv" style="width: 48%; height: 44vh; float: left;"><canvas id="velocityTimeChart"></canvas></div>
-            <div id="powerChartDiv" style="width: 48%; height: 44vh; float: right;"><canvas id="powerTimeChart"></canvas></div>
-            <div id="cadenceChartDiv" style="width: 48%; height: 44vh; float: left;"><canvas id="cadenceTimeChart"></canvas></div>
-            <div id="spareChartDiv" style="width: 48%; height: 44vh; float: right;"><canvas id="spare"></canvas></div>
-
+			<div class="row">
+				<div class="col-xl-4" id="velocityChartDiv"><canvas id="velocityTimeChart"></canvas></div>
+				<div class="col-xl-4" id="powerChartDiv"><canvas id="powerTimeChart"></canvas></div>
+				<div class="col-xl-4" id="cadenceChartDiv"><canvas id="cadenceTimeChart"></canvas></div>
+			</div>
 		</div>
 	</body>
 	<script src="js/jquery.min.js"></script>
@@ -37,5 +40,6 @@
 	<script src="js/Chart.bundle.min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
 
+    <script type="text/javascript" src="js/charts.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
 </html>
