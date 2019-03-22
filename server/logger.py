@@ -30,9 +30,13 @@ def create_filename():
 
 # Creates the csv file and places the csv headers
 def create_csv_file(filename):
-    with open(os.path.join(DATA_FOLDER_PATH, filename), mode="w", newline="") as csv_file:
-        writer = csv.DictWriter(csv_file, fieldnames=CSV_FIELDNAMES)
-        writer.writeheader()
+    filepath = os.path.join(DATA_FOLDER_PATH, filename)
+    try:
+        with open(filepath, mode="wb+") as csv_file:
+            writer = csv.DictWriter(csv_file, fieldnames=CSV_FIELDNAMES)
+            writer.writeheader()
+    except Exception as e:
+        print("Error: " + str(e))
 
 # Convert data to a suitable format
 def parse_data(data):
@@ -49,9 +53,13 @@ def parse_data(data):
 
 # Store data into csv file
 def log_data(filename, data):
-    with open(os.path.join(DATA_FOLDER_PATH, filename), mode="a", newline="") as csv_file:
-        writer = csv.DictWriter(csv_file, fieldnames=CSV_FIELDNAMES)
-        writer.writerow(data)
+    filepath = os.path.join(DATA_FOLDER_PATH, filename)
+    try:
+        with open(filepath, mode="ab") as csv_file:
+            writer = csv.DictWriter(csv_file, fieldnames=CSV_FIELDNAMES)
+            writer.writerow(data)
+    except Exception as e:
+        print("Error: " + str(e))
 
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
