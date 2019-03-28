@@ -26,3 +26,4 @@ The node.js + Express HTTP REST server is used to host the real-time dashboard w
 
 - [ ] Add Map display
 - [ ] Add power model graph/output
+- [ ] Options page that saves options to browser storage
