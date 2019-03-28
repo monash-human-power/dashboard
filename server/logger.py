@@ -7,7 +7,7 @@ CSV_FIELDNAMES = ["time", "gps", "gps_location", "gps_course", "gps_speed", "gps
     "aX", "aY", "aZ",\
     "gX", "gY", "gZ",\
     "thermoC", "thermoF",\
-    "pot", "cadence", "power"]
+    "pot", "cadence", "power", "reed_velocity", "reed_distance"]
 
 DATA_DIRECTORY = os.path.dirname(os.path.realpath(sys.argv[0]))
 DATA_FOLDER_PATH = os.path.join(DATA_DIRECTORY, "data")
