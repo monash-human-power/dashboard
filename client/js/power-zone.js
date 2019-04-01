@@ -1,11 +1,20 @@
 let numberOfZones = 0;
 
+function removeZoneCards() {
+    let zoneCards = document.getElementsByClassName('zone');
+    for (let index = 0; index < zoneCards.length; index++) {
+        zoneCards[index].remove();
+    }
+}
+
 /*
     Dynamically generate zone cards
 */
 function renderZoneCards(numZones) {
     let formElement = document.getElementById('powerZoneForm');
-    formElement.innerHTML = '';
+    removeZoneCards();
+    let zoneCardsElement = document.createElement('div');
+    zoneCardsElement.className = 'zone';
 
     for (let zoneNumber = 1; zoneNumber <= numZones; zoneNumber++) {
         // Create card
@@ -59,7 +68,7 @@ function renderZoneCards(numZones) {
         cardBody.appendChild(cardTitle);
         cardBody.appendChild(formRow);
         card.appendChild(cardBody);
-        formElement.appendChild(card);
+        zoneCardsElement.appendChild(card);
     }
     let submitButton = document.createElement('button');
     submitButton.setAttribute('type', 'submit');
@@ -73,7 +82,8 @@ function renderZoneCards(numZones) {
     divColumn.className = 'col-sm-10';
     divColumn.appendChild(submitButton);
     formRow.appendChild(divColumn);
-    formElement.appendChild(formRow);
+    zoneCardsElement.appendChild(formRow);
+    formElement.appendChild(zoneCardsElement);
 }
 
 function numZoneHandler(zoneValue) {
@@ -82,4 +92,15 @@ function numZoneHandler(zoneValue) {
     }
     numberOfZones = zoneValue;
     renderZoneCards(zoneValue);
+}
+
+function formSubmitHandler(event) {
+    event.preventDefault();
+    let form = document.getElementById('powerZoneForm');
+    let outputDict = {};
+    for(let index = 1; index < form.elements.length - 1; index++) {
+        outputDict[form.elements[index].id] = form.elements[index].value;
+    }
+    // Submit form input here 
+    console.log(outputDict);
 }
