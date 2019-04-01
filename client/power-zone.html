@@ -35,16 +35,61 @@
 						<div class="card">
 							<div class="card-body">
 								<div class="form-row">
-									<label for="numZones">Number of Zones</label>
-									<select id="numZones" class="form-control" onclick="numZoneHandler(value)">
-										<option selected>Select number of zones</option>
-										<option>1</option>
-										<option>2</option>
-										<option>3</option>
-										<option>4</option>
-										<option>5</option>
-										<option>6</option>
-									</select>
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label for="numZones">Number of Zones</label>
+											<select id="numZones" class="form-control" onclick="numZoneHandler(value)">
+												<option selected>Select number of zones</option>
+												<option>1</option>
+												<option>2</option>
+												<option>3</option>
+												<option>4</option>
+												<option>5</option>
+												<option>6</option>
+											</select>
+										</div>
+									</div>
+								</div>
+
+								<div class="form-row">
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label for="inputLowerBound">Lower Bound</label>
+											<input type="number" class="form-control" id="inputLowerBound" placeholder="Lower Bound">
+										</div>
+									</div>
+
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label for="inputUpperBound">Upper Bound</label>
+											<input type="number" class="form-control" id="inputUpperBound" placeholder="Upper Bound">
+										</div>
+									</div>
+								</div>
+
+								<div class="form-row">
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label for="inputStep">Step</label>
+											<input type="number" class="form-control" id="inputStep" placeholder="Step">
+										</div>
+									</div>
+								</div>
+
+								<div class="form-row">
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label for="inputStartTrap">Start Trap</label>
+											<input type="number" class="form-control" id="inputStartTrap" placeholder="Start Trap">
+										</div>
+									</div>
+
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label for="inputEndTrap">End Trap</label>
+											<input type="number" class="form-control" id="inputEndTrap" placeholder="End Trap">
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
