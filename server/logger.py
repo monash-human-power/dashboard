@@ -31,7 +31,8 @@ def create_filename():
 # Creates the csv file and places the csv headers
 def create_csv_file(filename):
     try:
-        with open(os.path.join(DATA_FOLDER_PATH, filename), mode="w+") as csv_file:
+        filepath = os.path.join(DATA_FOLDER_PATH, filename)
+        with open(filepath, mode="w+") as csv_file:
             writer = csv.DictWriter(csv_file, fieldnames=CSV_FIELDNAMES)
             writer.writeheader()
     except Exception as e:
@@ -51,9 +52,9 @@ def parse_data(data):
 
 # Store data into csv file
 def log_data(filename, data):
-    print(data)
     try:
-        with open(os.path.join(DATA_FOLDER_PATH, filename), mode="a") as csv_file:
+        filepath = os.path.join(DATA_FOLDER_PATH, filename)
+        with open(filepath, mode="a") as csv_file:
             writer = csv.DictWriter(csv_file, fieldnames=CSV_FIELDNAMES)
             writer.writerow(data)
     except Exception as e:
