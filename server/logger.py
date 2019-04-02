@@ -7,7 +7,7 @@ CSV_FIELDNAMES = ["time", "gps", "gps_location", "gps_course", "gps_speed", "gps
     "aX", "aY", "aZ",\
     "gX", "gY", "gZ",\
     "thermoC", "thermoF",\
-    "pot", "cadence", "power"]
+    "pot", "cadence", "power", "reed_velocity", "reed_distance"]
 
 DATA_DIRECTORY = os.path.dirname(os.path.realpath(sys.argv[0]))
 DATA_FOLDER_PATH = os.path.join(DATA_DIRECTORY, "data")
@@ -30,10 +30,12 @@ def create_filename():
 
 # Creates the csv file and places the csv headers
 def create_csv_file(filename):
-    with open(os.path.join(DATA_FOLDER_PATH, filename), mode="w", newline="") as csv_file:
-        writer = csv.DictWriter(csv_file, fieldnames=CSV_FIELDNAMES)
-        writer.writeheader()
-
+    try:
+        with open(os.path.join(DATA_FOLDER_PATH, filename), mode="w+") as csv_file:
+            writer = csv.DictWriter(csv_file, fieldnames=CSV_FIELDNAMES)
+            writer.writeheader()
+    except Exception as e:
+        print("create_csv_file Error: " + str(e))
 # Convert data to a suitable format
 def parse_data(data):
     terms = data.split("&")
@@ -49,9 +51,13 @@ def parse_data(data):
 
 # Store data into csv file
 def log_data(filename, data):
-    with open(os.path.join(DATA_FOLDER_PATH, filename), mode="a", newline="") as csv_file:
-        writer = csv.DictWriter(csv_file, fieldnames=CSV_FIELDNAMES)
-        writer.writerow(data)
+    print(data)
+    try:
+        with open(os.path.join(DATA_FOLDER_PATH, filename), mode="a") as csv_file:
+            writer = csv.DictWriter(csv_file, fieldnames=CSV_FIELDNAMES)
+            writer.writerow(data)
+    except Exception as e:
+        print("log_data Error: " + str(e))
 
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
@@ -72,6 +78,9 @@ def on_message(client, userdata, msg):
         data = str(msg.payload.decode("utf-8"))
         filename, parsed_data = parse_data(data)
         log_data(filename, parsed_data)
+
+def on_log(client, userdata, level, buf):
+    print("log: ", buf)
     
 broker_address = "localhost"
 client = mqtt.Client()
@@ -79,6 +88,7 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_disconnect = on_disconnect
 client.on_message = on_message
+client.on_log = on_log
 
 client.connect(broker_address)
 
