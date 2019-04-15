@@ -48,6 +48,11 @@ sockets.init = function(server) {
                 mqttDataTopicHandler(socket, payload);
             }
         });
+
+        socket.on('reset-calibration', () => {
+            console.log('Reset calibration');
+            mqttClient.publish('power_model/calibrate/reset', 'true');
+        });
     });
 }
 
