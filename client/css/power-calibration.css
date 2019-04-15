@@ -1,0 +1,11 @@
+#main .list-group-item {
+    margin-top: 20px;
+}
+
+#invalid-distance-message {
+    display: none;
+}
+
+#valid-distance-message {
+    display: none;
+}
