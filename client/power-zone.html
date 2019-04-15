@@ -5,6 +5,7 @@
 		<script src="js/bootstrap.bundle.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 		<link rel="stylesheet" type="text/css" href="css/files.css">
+		<link rel="stylesheet" type="text/css" href="css/power-zone.css">
 
 		<title>DAS</title>
 	</head>
@@ -24,7 +25,13 @@
 						<a class="nav-link" href="files.html">Download Files</a>
 					</li>
 					<li class="nav-item">
+						<a class="nav-link" href="status.html">Sensor Status</a>
+					</li>
+					<li class="nav-item">
 						<a class="nav-link active" href="#">Generate Power Map</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="power-calibration.html">Power Model Calibration</a>
 					</li>
 				</ul>
 			</div>	
@@ -54,7 +61,15 @@
 										</div>
 									</div>
 								</div>
-
+								<div class="form-row">
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label for="inputFileName">Power Plan File Name</label>
+											<input type="text" class="form-control" id="inputFileName" placeholder="Filename">
+											<span>.pkl</span>
+										</div>
+									</div>
+								</div>
 								<div class="form-row">
 									<div class="col-lg-6">
 										<div class="form-group">
