@@ -44,10 +44,16 @@
 							<li class="list-group-item">
 								<h4>Current Actual Distance</h4>
 								<div class="input-group mb-3">
-									<input type="number" class="form-control" placeholder="Current distance">
+									<input type="number" class="form-control" id="input-calibration" placeholder="Current distance">
 									<div class="input-group-append">
-										<button class="btn btn-outline-secondary" type="button" id="button-calibrate">Submit</button>
+										<button class="btn btn-outline-secondary" type="button" id="button-calibrate" onclick="submitActualDistance()">Submit</button>
 									</div>
+								</div>
+								<div class="alert alert-warning" role="alert" id="invalid-distance-message">
+									Invalid distance!
+								</div>
+								<div class="alert alert-success" role="alert" id="valid-distance-message">
+									Distance sent!
 								</div>
 							</li>
 							<li class="list-group-item">
@@ -58,7 +64,9 @@
 					</div>
 				</div>
 			</div>
+
 		</div>
+
 	</body>
 	<script src="/socket.io/socket.io.js"></script>
 

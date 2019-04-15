@@ -53,6 +53,11 @@ sockets.init = function(server) {
             console.log('Reset calibration');
             mqttClient.publish('power_model/calibrate/reset', 'true');
         });
+
+        socket.on('submit-calibration', (calibratedDistance) => {
+            console.log('Calibrate distance');
+            mqttClient.publish('power_model/calibrate', 'calibrate=' + calibratedDistance);
+        })
     });
 }
 
