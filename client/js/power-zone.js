@@ -1,3 +1,4 @@
+const socket = io();
 let numberOfZones = 0;
 
 function removeZoneCards() {
@@ -98,9 +99,35 @@ function formSubmitHandler(event) {
     event.preventDefault();
     let form = document.getElementById('powerZoneForm');
     let outputDict = {};
+    let outputString = '';
     for(let index = 1; index < form.elements.length - 1; index++) {
-        outputDict[form.elements[index].id] = form.elements[index].value;
+        // Group up 'inputs' information
+        let inputMatch = form.elements[index].id.match(/(?<input>input)(?<value>.*)/);
+        if (inputMatch) {
+            let inputDict = {};
+            if (outputDict["inputs"]) {
+                inputDict = outputDict["inputs"];
+            }
+            inputDict[inputMatch.groups.value] = form.elements[index].value;
+            outputDict["inputs"] = inputDict;
+            continue;
+        }
+
+        // Group up 'zone' information
+        let zoneInputMatch = form.elements[index].id.match(/(?<zone>zone\d*)(?<value>.*)/);
+        if (zoneInputMatch) {
+            let zoneDict = {};
+            // Check if there is existing dict already
+            if (outputDict[zoneInputMatch.groups.zone]) {
+                zoneDict = outputDict[zoneInputMatch.groups.zone];
+            } 
+            zoneDict[zoneInputMatch.groups.value] = form.elements[index].value;
+            outputDict[zoneInputMatch.groups.zone] = zoneDict;
+        } else {
+            outputDict[form.elements[index].id] = form.elements[index].value;
+        }
     }
     // Submit form input here 
     console.log(outputDict);
+    socket.emit('create-power-plan', outputDict);
 }
