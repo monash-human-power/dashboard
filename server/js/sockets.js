@@ -49,6 +49,14 @@ sockets.init = function(server) {
             }
         });
 
+        socket.on('start-power-model', () => {
+            console.log('Start power model');
+        });
+
+        socket.on('stop-power-model', () => {
+            console.log('Stop power model');
+        });
+
         socket.on('reset-calibration', () => {
             console.log('Reset calibration');
             mqttClient.publish('power_model/calibrate/reset', 'true');

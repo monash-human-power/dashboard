@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>   
+	<head>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/bootstrap.bundle.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 		<link rel="stylesheet" type="text/css" href="css/index.css">
+		<link rel="stylesheet" type="text/css" href="css/power-model.css">
+
 		<title>DAS</title>
 	</head>
+
 	<body>
 		<nav class="navbar navbar-dark bg-dark fixed-top" id="top-bar">
 			<span class="navbar-brand">MHP DAShboard</span>
@@ -14,7 +19,7 @@
 			<div class="col-md-12">
 				<ul class="nav flex-column">
 					<li class="nav-item">
-						<a class="nav-link active" href="#">Dashboard</a>
+						<a class="nav-link" href="index.html">Dashboard</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="files.html">Download Files</a>
@@ -23,7 +28,7 @@
 						<a class="nav-link" href="status.html">Sensor Status</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="power-model.html">Power Model Start/Stop</a>
+						<a class="nav-link active" href="#">Power Model Start/Stop</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="power-calibration.html">Power Model Calibration</a>
@@ -33,22 +38,32 @@
 		</div>
 
 		<div id="main">
-			<div class="row">
-				<h5 id="filenameElement"> Current Filename: <span id="filenameText"></span></h5>
+			<div class="col-md-12">
+				<h1>Power Model</h1>
+
+				<div class="row">
+					<div class="col-md-6">
+						<div class="card text-center">
+							<div class="card-body">
+								<h5 class="card-title">Start Power Model</h5>
+								<button type="button" class="btn btn-success" onclick="startPowerModel()">Start</button>
+							</div>
+						</div>
+
+						<div class="card text-center">
+							<div class="card-body">
+								<h5 class="card-title">Stop Power Model</h5>
+								<button type="button" class="btn btn-danger" onclick="stopPowerModel()">Stop</button>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 
-			<div class="row">
-				<div class="col-xl-4" id="velocityChartDiv"><canvas id="velocityTimeChart"></canvas></div>
-				<div class="col-xl-4" id="powerChartDiv"><canvas id="powerTimeChart"></canvas></div>
-				<div class="col-xl-4" id="cadenceChartDiv"><canvas id="cadenceTimeChart"></canvas></div>
-			</div>
 		</div>
+
 	</body>
-	<script src="js/jquery.min.js"></script>
-	<script src="js/bootstrap.bundle.min.js"></script>
-	<script src="js/Chart.bundle.min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
 
-    <script type="text/javascript" src="js/charts.js"></script>
-    <script type="text/javascript" src="js/index.js"></script>
+	<script src="js/power-model.js"></script>
 </html>
