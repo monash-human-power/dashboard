@@ -33,6 +33,8 @@ sockets.init = function(server) {
     mqttClient.subscribe('start');
     mqttClient.subscribe('stop');
     mqttClient.subscribe('data');
+    mqttClient.subscribe('power_model/max_speed');
+    mqttClient.subscribe('power_model/recommended_SP');
     mqttClient.on('connect', mqttConnected);
 
     const io = require('socket.io').listen(server);
@@ -46,6 +48,8 @@ sockets.init = function(server) {
                 socket.emit('stop');
             } else if (topic == 'data') {
                 mqttDataTopicHandler(socket, payload);
+            } else if ((topic == 'power_model/max_speed') || (topic == 'power_model/recommended_SP')) {
+                socket.emit('power-model-running');
             }
         });
 

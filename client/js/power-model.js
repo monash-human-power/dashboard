@@ -10,4 +10,11 @@ function startPowerModel() {
 function stopPowerModel() {
     console.log('Stopping power model');
     socket.emit('stop-power-model');
+    document.getElementById('start-button').disabled = false;
 }
+
+socket.on('power-model-running', function() {
+    console.log('Power model running');
+    // Disable start button if power model is currently running
+    document.getElementById('start-button').disabled = true;
+})
