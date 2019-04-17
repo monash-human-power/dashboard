@@ -51,10 +51,12 @@ sockets.init = function(server) {
 
         socket.on('start-power-model', () => {
             console.log('Start power model');
+            mqttClient.publish('power_model/start', 'true');
         });
 
         socket.on('stop-power-model', () => {
             console.log('Stop power model');
+            mqttClient.publish('power_model/stop', 'true');
         });
 
         socket.on('reset-calibration', () => {
