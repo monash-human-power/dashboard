@@ -36,7 +36,7 @@ function renderZoneCards(numZones) {
         recPowerFormGroup.className = 'form-group col-md-4';
         let recPowerInput = document.createElement('input');
         recPowerInput.className = 'form-control';
-        recPowerInput.id = 'zone1RecPower';
+        recPowerInput.id = 'zone' + zoneNumber + 'RecPower';
         recPowerInput.setAttribute('type', 'number');
         recPowerInput.placeholder = 'Recommended Power';
         recPowerFormGroup.appendChild(recPowerInput);
@@ -46,7 +46,7 @@ function renderZoneCards(numZones) {
         maxTimeFormGroup.className = 'form-group col-md-4';
         let maxTimeInput = document.createElement('input');
         maxTimeInput.className = 'form-control';
-        maxTimeInput.id = 'zone1MaxTime';
+        maxTimeInput.id = 'zone' + zoneNumber + 'MaxTime';
         maxTimeInput.setAttribute('type', 'number');
         maxTimeInput.placeholder = 'Max Time';
         maxTimeFormGroup.appendChild(maxTimeInput);
@@ -56,7 +56,7 @@ function renderZoneCards(numZones) {
         spentTimeFormGroup.className = 'form-group col-md-4';
         let spentTimeInput = document.createElement('input');
         spentTimeInput.className = 'form-control';
-        spentTimeInput.id = 'zone1SpentTime';
+        spentTimeInput.id = 'zone' + zoneNumber + 'SpentTime';
         spentTimeInput.setAttribute('type', 'number');
         spentTimeInput.placeholder = 'Spent Time';
         spentTimeFormGroup.appendChild(spentTimeInput);
