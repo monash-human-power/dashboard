@@ -77,7 +77,7 @@ sockets.init = function(server) {
                 let message = mqttDataTopicHandler(socket, payload);
                 if (process.env.HEROKU == undefined) {
                     console.log("Not a heroku instance");
-                    publicMqttClient.publish('data', message.toString());
+                    publicMqttClient.publish('data', payload);
                 }
             }
         });
