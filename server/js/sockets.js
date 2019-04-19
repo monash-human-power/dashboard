@@ -38,7 +38,7 @@ sockets.init = function(server) {
     const publicMqttOptions = {
         reconnectPeriod: 1000,
         connectTimeout: 5000,
-        clientId: 'publicMqttClient',
+        clientId: 'publicMqttClient-ACTUAL',
         username: process.env.MQTT_USERNAME,
         password: process.env.MQTT_PASSWORD,
     };
@@ -46,7 +46,7 @@ sockets.init = function(server) {
     let mqttClient = null; 
     if (process.env.HEROKU) {
         console.log('I am using a Heroku instance');
-        publicMqttOptions.cliendId = publicMqttOptions.cliendId + '-HEROKU'
+        publicMqttOptions.clientId = publicMqttOptions.clientId + '-HEROKU'
         mqttClient = mqtt.connect('mqtt://m16.cloudmqtt.com:10421', publicMqttOptions);
     } else {
         mqttClient = mqtt.connect('mqtt://localhost:1883', mqttOptions);
