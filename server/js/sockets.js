@@ -46,6 +46,7 @@ sockets.init = function(server) {
     let mqttClient = null; 
     if (process.env.HEROKU) {
         console.log('I am using a Heroku instance');
+        publicMqttOptions.cliendId = publicMqttOptions.cliendId + '-HEROKU'
         mqttClient = mqtt.connect('mqtt://m16.cloudmqtt.com:10421', publicMqttOptions);
     } else {
         mqttClient = mqtt.connect('mqtt://localhost:1883', mqttOptions);
@@ -57,7 +58,7 @@ sockets.init = function(server) {
 
     // Not a heroku instance
     let publicMqttClient = null;
-    if (~process.env.HEROKU) {
+    if (process.env.HEROKU == undefined) {
         console.log("Not a heroku instance");
         publicMqttClient = mqtt.connect('mqtt://m16.cloudmqtt.com:10421', publicMqttOptions);
         publicMqttClient.on('connect', publicMqttConnected);
@@ -74,7 +75,8 @@ sockets.init = function(server) {
                 socket.emit('stop');
             } else if (topic == 'data') {
                 let message = mqttDataTopicHandler(socket, payload);
-                if (process.env.HEROKU) {
+                if (process.env.HEROKU == undefined) {
+                    console.log("Not a heroku instance");
                     publicMqttClient.publish('data', message.toString());
                 }
             }
