@@ -3,6 +3,10 @@
  */
 let sockets = {};
 
+function publicMqttConnected() {
+    console.log('Connected to public mqtt broker');
+}
+
 function mqttConnected() {
     console.log('Connected to mqtt broker');
 }
@@ -21,6 +25,7 @@ function mqttDataTopicHandler(socket, payload) {
         }
     }
     socket.emit('data', message);
+    return message;
 }
 
 sockets.init = function(server) {
@@ -28,12 +33,23 @@ sockets.init = function(server) {
     const mqttOptions = {
         reconnectPeriod: 1000,
         connectTimeout: 5000,
+        clientId: 'mqttClient',
       };
     const mqttClient = mqtt.connect('mqtt://localhost:1883', mqttOptions);
     mqttClient.subscribe('start');
     mqttClient.subscribe('stop');
     mqttClient.subscribe('data');
     mqttClient.on('connect', mqttConnected);
+
+    const publicMqttOptions = {
+        reconnectPeriod: 1000,
+        connectTimeout: 5000,
+        clientId: 'publicMqttClient',
+        username: process.env.MQTT_USERNAME,
+        password: process.env.MQTT_PASSWORD,
+    };
+    const publicMqttClient = mqtt.connect('mqtt://m16.cloudmqtt.com:10421', publicMqttOptions);
+    publicMqttClient.on('connect', publicMqttConnected);
 
     const io = require('socket.io').listen(server);
     io.on('connection', function(socket){
@@ -45,7 +61,8 @@ sockets.init = function(server) {
             } else if (topic == 'stop') {
                 socket.emit('stop');
             } else if (topic == 'data') {
-                mqttDataTopicHandler(socket, payload);
+                let message = mqttDataTopicHandler(socket, payload);
+                publicMqttClient.publish('data', message.toString());
             }
         });
 
