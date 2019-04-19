@@ -3,6 +3,8 @@
  */
 let sockets = {};
 
+const os = require('os');
+
 function publicMqttConnected() {
     console.log('Connected to public mqtt broker');
 }
@@ -25,7 +27,6 @@ function mqttDataTopicHandler(socket, payload) {
         }
     }
     socket.emit('data', message);
-    return message;
 }
 
 sockets.init = function(server) {
@@ -38,7 +39,7 @@ sockets.init = function(server) {
     const publicMqttOptions = {
         reconnectPeriod: 1000,
         connectTimeout: 5000,
-        clientId: 'publicMqttClient-ACTUAL',
+        clientId: 'publicMqttClient-' + os.hostname(),
         username: process.env.MQTT_USERNAME,
         password: process.env.MQTT_PASSWORD,
     };
@@ -74,9 +75,8 @@ sockets.init = function(server) {
             } else if (topic == 'stop') {
                 socket.emit('stop');
             } else if (topic == 'data') {
-                let message = mqttDataTopicHandler(socket, payload);
+                mqttDataTopicHandler(socket, payload);
                 if (process.env.HEROKU == undefined) {
-                    console.log("Not a heroku instance");
                     publicMqttClient.publish('data', payload);
                 }
             }
