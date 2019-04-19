@@ -55,6 +55,8 @@ sockets.init = function(server) {
     mqttClient.subscribe('start');
     mqttClient.subscribe('stop');
     mqttClient.subscribe('data');
+    mqttClient.subscribe('power_model/max_speed');
+    mqttClient.subscribe('power_model/recommended_SP');
     mqttClient.on('connect', mqttConnected);
 
     // Not a heroku instance
@@ -79,7 +81,19 @@ sockets.init = function(server) {
                 if (process.env.HEROKU == undefined) {
                     publicMqttClient.publish('data', payload);
                 }
+            } else if ((topic == 'power_model/max_speed') || (topic == 'power_model/recommended_SP')) {
+                socket.emit('power-model-running');
             }
+        });
+
+        socket.on('start-power-model', () => {
+            console.log('Start power model');
+            mqttClient.publish('power_model/start', 'true');
+        });
+
+        socket.on('stop-power-model', () => {
+            console.log('Stop power model');
+            mqttClient.publish('power_model/stop', 'true');
         });
 
         socket.on('reset-calibration', () => {
