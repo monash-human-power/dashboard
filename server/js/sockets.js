@@ -104,6 +104,11 @@ sockets.init = function(server) {
         socket.on('submit-calibration', (calibratedDistance) => {
             console.log('Calibrate distance');
             mqttClient.publish('power_model/calibrate', 'calibrate=' + calibratedDistance);
+        });
+
+        socket.on('create-power-plan', (inputPowerPlan) => {
+            console.log("Generated new power plan - " + inputPowerPlan["inputs"]["FileName"] + '.pkl');
+            mqttClient.publish('power_model/generate_power_plan', JSON.stringify(inputPowerPlan));
         })
     });
 }
