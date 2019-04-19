@@ -34,13 +34,7 @@ sockets.init = function(server) {
         reconnectPeriod: 1000,
         connectTimeout: 5000,
         clientId: 'mqttClient',
-      };
-    const mqttClient = mqtt.connect('mqtt://localhost:1883', mqttOptions);
-    mqttClient.subscribe('start');
-    mqttClient.subscribe('stop');
-    mqttClient.subscribe('data');
-    mqttClient.on('connect', mqttConnected);
-
+    };
     const publicMqttOptions = {
         reconnectPeriod: 1000,
         connectTimeout: 5000,
@@ -48,8 +42,26 @@ sockets.init = function(server) {
         username: process.env.MQTT_USERNAME,
         password: process.env.MQTT_PASSWORD,
     };
-    const publicMqttClient = mqtt.connect('mqtt://m16.cloudmqtt.com:10421', publicMqttOptions);
-    publicMqttClient.on('connect', publicMqttConnected);
+
+    let mqttClient = null; 
+    if (process.env.HEROKU) {
+        console.log('I am using a Heroku instance');
+        mqttClient = mqtt.connect('mqtt://m16.cloudmqtt.com:10421', publicMqttOptions);
+    } else {
+        mqttClient = mqtt.connect('mqtt://localhost:1883', mqttOptions);
+    }
+    mqttClient.subscribe('start');
+    mqttClient.subscribe('stop');
+    mqttClient.subscribe('data');
+    mqttClient.on('connect', mqttConnected);
+
+    // Not a heroku instance
+    let publicMqttClient = null;
+    if (~process.env.HEROKU) {
+        console.log("Not a heroku instance");
+        publicMqttClient = mqtt.connect('mqtt://m16.cloudmqtt.com:10421', publicMqttOptions);
+        publicMqttClient.on('connect', publicMqttConnected);
+    }
 
     const io = require('socket.io').listen(server);
     io.on('connection', function(socket){
@@ -62,7 +74,9 @@ sockets.init = function(server) {
                 socket.emit('stop');
             } else if (topic == 'data') {
                 let message = mqttDataTopicHandler(socket, payload);
-                publicMqttClient.publish('data', message.toString());
+                if (process.env.HEROKU) {
+                    publicMqttClient.publish('data', message.toString());
+                }
             }
         });
 
