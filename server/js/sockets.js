@@ -3,6 +3,12 @@
  */
 let sockets = {};
 
+const os = require('os');
+
+function publicMqttConnected() {
+    console.log('Connected to public mqtt broker');
+}
+
 function mqttConnected() {
     console.log('Connected to mqtt broker');
 }
@@ -28,14 +34,38 @@ sockets.init = function(server) {
     const mqttOptions = {
         reconnectPeriod: 1000,
         connectTimeout: 5000,
-      };
-    const mqttClient = mqtt.connect('mqtt://localhost:1883', mqttOptions);
+        clientId: 'mqttClient',
+    };
+    const publicMqttOptions = {
+        reconnectPeriod: 1000,
+        connectTimeout: 5000,
+        clientId: 'publicMqttClient-' + os.hostname(),
+        username: process.env.MQTT_USERNAME,
+        password: process.env.MQTT_PASSWORD,
+    };
+
+    let mqttClient = null; 
+    if (process.env.HEROKU) {
+        console.log('I am using a Heroku instance');
+        publicMqttOptions.clientId = publicMqttOptions.clientId + '-HEROKU'
+        mqttClient = mqtt.connect('mqtt://m16.cloudmqtt.com:10421', publicMqttOptions);
+    } else {
+        mqttClient = mqtt.connect('mqtt://localhost:1883', mqttOptions);
+    }
     mqttClient.subscribe('start');
     mqttClient.subscribe('stop');
     mqttClient.subscribe('data');
     mqttClient.subscribe('power_model/max_speed');
     mqttClient.subscribe('power_model/recommended_SP');
     mqttClient.on('connect', mqttConnected);
+
+    // Not a heroku instance
+    let publicMqttClient = null;
+    if (process.env.HEROKU == undefined) {
+        console.log("Not a heroku instance");
+        publicMqttClient = mqtt.connect('mqtt://m16.cloudmqtt.com:10421', publicMqttOptions);
+        publicMqttClient.on('connect', publicMqttConnected);
+    }
 
     const io = require('socket.io').listen(server);
     io.on('connection', function(socket){
@@ -48,6 +78,9 @@ sockets.init = function(server) {
                 socket.emit('stop');
             } else if (topic == 'data') {
                 mqttDataTopicHandler(socket, payload);
+                if (process.env.HEROKU == undefined) {
+                    publicMqttClient.publish('data', payload);
+                }
             } else if ((topic == 'power_model/max_speed') || (topic == 'power_model/recommended_SP')) {
                 socket.emit('power-model-running');
             }
