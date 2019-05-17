@@ -5,6 +5,8 @@
   "main": "server/server.js",
   "scripts": {
     "build": "gulp",
+    "eslint": "eslint --ignore-path .gitignore",
+    "eslint-check": "eslint --print-config . | eslint-config-prettier-check",
     "start": "node server/server.js"
   },
   "repository": {
@@ -30,9 +32,14 @@
     "socket.io": "^2.2.0"
   },
   "devDependencies": {
-    "eslint": "^5.15.1",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-prettier": "^3.1.0",
     "gulp": "^4.0.0",
     "gulp-sass": "^4.0.2",
-    "node-sass": "^4.11.0"
+    "node-sass": "^4.11.0",
+    "prettier": "^1.17.1"
   }
 }
