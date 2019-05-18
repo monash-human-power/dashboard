@@ -1,9 +1,10 @@
-# Monash Human Power - Data Acquisition System Web Server 
+# Monash Human Power - Data Acquisition System Web Server
+[![Build Status](https://www.travis-ci.org/Monash-Human-Power/MHP-DAS-Web-Server.svg?branch=master)](https://www.travis-ci.org/Monash-Human-Power/MHP-DAS-Web-Server)
 
 A web server for the Data Acquisition System (DAS) for Monash Human Power.
 
 The node.js + Express HTTP REST server is used to host the real-time dashboard whilst the MQTT broker is used to transfer data from the sensors to all the necessary scripts that need it.
- 
+
 ## Getting Started
 You will need to set up `MQTT_USERNAME` and `MQTT_PASSWORD` environment variables. Credentials can be found on the google drive.
 
