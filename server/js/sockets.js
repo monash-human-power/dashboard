@@ -2,7 +2,8 @@
  * Socket.io (Server-side)
  */
 const sockets = {};
-
+const mqtt = require('mqtt');
+const io = require('socket.io');
 const os = require('os');
 
 function publicMqttConnected() {
@@ -17,20 +18,21 @@ function mqttDataTopicHandler(socket, payload) {
   // Parse data
   const message = {};
   const dataArray = payload.split('&');
-  for (let index = 0; index < dataArray.length; index++) {
-    data = dataArray[index].split('=');
+  for (let index = 0; index < dataArray.length; index += 1) {
+    const data = dataArray[index].split('=');
+    const key = data[0];
+    const value = data[1];
     // No need to average filename value
-    if (data[0] === 'filename') {
-      message[data[0]] = data[1];
+    if (key === 'filename') {
+      message[key] = value;
     } else {
-      message[data[0]] = Number(data[1]);
+      message[key] = Number(value);
     }
   }
   socket.emit('data', message);
 }
 
-sockets.init = function(server) {
-  const mqtt = require('mqtt');
+sockets.init = function socketInit(server) {
   const mqttOptions = {
     reconnectPeriod: 1000,
     connectTimeout: 5000,
@@ -64,7 +66,7 @@ sockets.init = function(server) {
 
   // Not a heroku instance
   let publicMqttClient = null;
-  if (process.env.HEROKU == undefined) {
+  if (process.env.HEROKU === undefined) {
     console.log('Not a heroku instance');
     publicMqttClient = mqtt.connect(
       'mqtt://m16.cloudmqtt.com:10421',
@@ -73,23 +75,23 @@ sockets.init = function(server) {
     publicMqttClient.on('connect', publicMqttConnected);
   }
 
-  const io = require('socket.io').listen(server);
-  io.on('connection', function(socket) {
+  io.listen(server);
+  io.on('connection', function ioConnection(socket) {
     console.log('A user connected');
-    mqttClient.on('message', function(topic, payload) {
-      payload = payload.toString();
-      if (topic == 'start') {
+    mqttClient.on('message', function mqttMessage(topic, payload) {
+      const payloadString = payload.toString();
+      if (topic === 'start') {
         socket.emit('start');
-      } else if (topic == 'stop') {
+      } else if (topic === 'stop') {
         socket.emit('stop');
-      } else if (topic == 'data') {
-        mqttDataTopicHandler(socket, payload);
-        if (process.env.HEROKU == undefined) {
-          publicMqttClient.publish('data', payload);
+      } else if (topic === 'data') {
+        mqttDataTopicHandler(socket, payloadString);
+        if (process.env.HEROKU === undefined) {
+          publicMqttClient.publish('data', payloadString);
         }
       } else if (
-        topic == 'power_model/max_speed' ||
-        topic == 'power_model/recommended_SP'
+        topic === 'power_model/max_speed' ||
+        topic === 'power_model/recommended_SP'
       ) {
         socket.emit('power-model-running');
       }
