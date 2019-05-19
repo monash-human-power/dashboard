@@ -134,5 +134,6 @@ function formSubmitHandler(event) {
   }
   // Submit form input here
   console.log(outputDict);
+  // TODO: Confirmation alert/modal that tells user that they have created a power plan
   socket.emit('create-power-plan', outputDict);
 }
