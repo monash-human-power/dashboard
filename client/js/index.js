@@ -1,3 +1,9 @@
+/* global io,
+  setupCadenceTimeChart,
+  setupVelocityTimeChart,
+  setupPowerTimeChart,
+  addData,
+  */
 const socket = io();
 let cadenceTimeChart = setupCadenceTimeChart();
 let velocityTimeChart = setupVelocityTimeChart();
@@ -5,10 +11,10 @@ let powerTimeChart = setupPowerTimeChart();
 
 let dataCount = 0;
 let storedData = {};
-const emitInterval = setInterval(updateGraphs, 1000);
 let isInitialData = true;
 
 function startHandler() {
+  // eslint-disable-next-line no-console
   console.log('start');
   isInitialData = true;
 
@@ -25,16 +31,17 @@ function startHandler() {
 
 function updateGraphs() {
   // Do nothing if there is no data
-  if (dataCount == 0) {
+  if (dataCount === 0) {
     return;
   }
 
   // Average data
   const data = {};
-  for (const key in storedData) {
-    if (key == 'filename') {
+  const keys = Object.keys(storedData);
+  for (let index = 0; index < keys.length; index += 1) {
+    const key = keys[index];
+    if (key === 'filename') {
       data[key] = storedData[key];
-      continue;
     } else {
       data[key] = Number(storedData[key] / dataCount);
     }
@@ -67,17 +74,16 @@ function updateGraphs() {
   };
   addData(powerTimeChart, powerData);
 }
+setInterval(updateGraphs, 1000);
 
 function dataHandler(inputData) {
-  console.log(inputData);
   dataCount += 1;
-  for (const key in inputData) {
-    if (key == 'filename') {
+  const keys = Object.keys(inputData);
+  for (let index = 0; index < keys.length; index += 1) {
+    const key = keys[index];
+    if (key === 'filename') {
       storedData[key] = inputData[key];
-      continue;
-    }
-
-    if (storedData.hasOwnProperty(key)) {
+    } else if (Object.prototype.hasOwnProperty.call(storedData, key)) {
       storedData[key] += Number(inputData[key]);
     } else {
       storedData[key] = Number(inputData[key]);
@@ -90,6 +96,7 @@ function dataHandler(inputData) {
 }
 
 function stopHandler() {
+  // eslint-disable-next-line no-console
   console.log('stop');
 }
 
