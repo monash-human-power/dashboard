@@ -5,11 +5,11 @@
   "main": "server/server.js",
   "scripts": {
     "build": "gulp",
-    "eslint": "eslint --ignore-path .gitignore .",
+    "eslint": "eslint --ignore-path .gitignore",
     "eslint-check": "eslint --print-config . | eslint-config-prettier-check",
     "eslint-fix": "eslint --fix --ignore-path .gitignore .",
     "start": "node server/server.js",
-    "test": "npm run eslint"
+    "test": "npm run eslint ."
   },
   "repository": {
     "type": "git",
@@ -26,7 +26,6 @@
     "body-parser": "^1.18.3",
     "bootstrap": "^4.2.1",
     "chart.js": "^2.8.0",
-    "csv-write-stream": "^2.0.0",
     "express": "^4.16.3",
     "jquery": "^3.3.1",
     "mqtt": "^2.18.8",
