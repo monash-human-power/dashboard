@@ -1,4 +1,7 @@
+/* global Chart */
+
 // TODO: Make this into a module
+// eslint-disable-next-line no-unused-vars
 function setupCadenceTimeChart() {
   const cadenceTimeChartElement = document.getElementById('cadenceTimeChart');
 
@@ -55,6 +58,7 @@ function setupCadenceTimeChart() {
   return cadenceTimeChart;
 }
 
+// eslint-disable-next-line no-unused-vars
 function setupVelocityTimeChart() {
   const velocityTimeChartElement = document.getElementById('velocityTimeChart');
 
@@ -111,6 +115,8 @@ function setupVelocityTimeChart() {
 
   return velocityTimeChart;
 }
+
+// eslint-disable-next-line no-unused-vars
 function setupPowerTimeChart() {
   const powerTimeChartElement = document.getElementById('powerTimeChart');
 
@@ -168,6 +174,7 @@ function setupPowerTimeChart() {
   return powerTimeChart;
 }
 
+// eslint-disable-next-line no-unused-vars
 function addData(chart, data) {
   // let lastValue = chart.data.datasets[0].data.length - 1;
   // chart.data.datasets[0].data[lastValue] = dataInput;
