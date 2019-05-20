@@ -1,9 +1,10 @@
+/* global io */
 const socket = io();
 
 // TODO: Prevent users from spamming the start/stop buttons
 // TODO: Check if power model is already running
+// eslint-disable-next-line no-unused-vars
 function startPowerModel() {
-  console.log('Starting power model');
   socket.emit('start-power-model');
   document.getElementById('start-button').disabled = true;
   document.getElementById('status-success').style.display = 'block';
@@ -11,8 +12,8 @@ function startPowerModel() {
     'Started power model!';
 }
 
+// eslint-disable-next-line no-unused-vars
 function stopPowerModel() {
-  console.log('Stopping power model');
   socket.emit('stop-power-model');
   document.getElementById('start-button').disabled = false;
   document.getElementById('status-success').style.display = 'block';
@@ -20,8 +21,7 @@ function stopPowerModel() {
     'Stopping power model!';
 }
 
-socket.on('power-model-running', function() {
-  console.log('Power model running');
+socket.on('power-model-running', function runPowerModel() {
   // Disable start button if power model is currently running
   document.getElementById('start-button').disabled = true;
 });

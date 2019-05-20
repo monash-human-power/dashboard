@@ -1,9 +1,10 @@
+/* global io */
 const socket = io();
 let numberOfZones = 0;
 
 function removeZoneCards() {
   const zoneCards = document.getElementsByClassName('zone');
-  for (let index = 0; index < zoneCards.length; index++) {
+  for (let index = 0; index < zoneCards.length; index += 1) {
     zoneCards[index].remove();
   }
 }
@@ -17,7 +18,7 @@ function renderZoneCards(numZones) {
   const zoneCardsElement = document.createElement('div');
   zoneCardsElement.className = 'zone';
 
-  for (let zoneNumber = 1; zoneNumber <= numZones; zoneNumber++) {
+  for (let zoneNumber = 1; zoneNumber <= numZones; zoneNumber += 1) {
     // Create card
     const card = document.createElement('div');
     card.className = 'card';
@@ -87,20 +88,21 @@ function renderZoneCards(numZones) {
   formElement.appendChild(zoneCardsElement);
 }
 
+// eslint-disable-next-line no-unused-vars
 function numZoneHandler(zoneValue) {
-  if (numberOfZones == zoneValue || isNaN(zoneValue)) {
+  if (numberOfZones === zoneValue || Number.isNaN(zoneValue)) {
     return;
   }
   numberOfZones = zoneValue;
   renderZoneCards(zoneValue);
 }
 
+// eslint-disable-next-line no-unused-vars
 function formSubmitHandler(event) {
   event.preventDefault();
   const form = document.getElementById('powerZoneForm');
   const outputDict = {};
-  const outputString = '';
-  for (let index = 1; index < form.elements.length - 1; index++) {
+  for (let index = 1; index < form.elements.length - 1; index += 1) {
     // Group up 'inputs' information
     const inputMatch = form.elements[index].id.match(
       /(?<input>input)(?<value>.*)/,
@@ -112,26 +114,25 @@ function formSubmitHandler(event) {
       }
       inputDict[inputMatch.groups.value] = form.elements[index].value;
       outputDict.inputs = inputDict;
-      continue;
-    }
-
-    // Group up 'zone' information
-    const zoneInputMatch = form.elements[index].id.match(
-      /(?<zone>zone\d*)(?<value>.*)/,
-    );
-    if (zoneInputMatch) {
-      let zoneDict = {};
-      // Check if there is existing dict already
-      if (outputDict[zoneInputMatch.groups.zone]) {
-        zoneDict = outputDict[zoneInputMatch.groups.zone];
-      }
-      zoneDict[zoneInputMatch.groups.value] = form.elements[index].value;
-      outputDict[zoneInputMatch.groups.zone] = zoneDict;
     } else {
-      outputDict[form.elements[index].id] = form.elements[index].value;
+      // Group up 'zone' information
+      const zoneInputMatch = form.elements[index].id.match(
+        /(?<zone>zone\d*)(?<value>.*)/,
+      );
+      if (zoneInputMatch) {
+        let zoneDict = {};
+        // Check if there is existing dict already
+        if (outputDict[zoneInputMatch.groups.zone]) {
+          zoneDict = outputDict[zoneInputMatch.groups.zone];
+        }
+        zoneDict[zoneInputMatch.groups.value] = form.elements[index].value;
+        outputDict[zoneInputMatch.groups.zone] = zoneDict;
+      } else {
+        outputDict[form.elements[index].id] = form.elements[index].value;
+      }
     }
   }
   // Submit form input here
-  console.log(outputDict);
+  // TODO: Confirmation alert/modal that tells user that they have created a power plan
   socket.emit('create-power-plan', outputDict);
 }
