@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/bootstrap.bundle.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="css/index.css">
+		<link rel="stylesheet" type="text/css" href="css/power-model.css">
+
+		<title>DAS</title>
+	</head>
+
+	<body>
+		<<% include ./partials/header %>
+
+		<% include ./partials/sidebar %>
+
+		<div id="main">
+			<div class="col-md-12">
+				<h1>Power Model</h1>
+				<div class="alert alert-warning" role="alert">
+					Make sure power model is not running before you start it!
+				</div>
+				<div class="alert alert-success" id="status-success" role="alert">
+					<span id="status-success-message"></span>
+				</div>
+				<div class="alert alert-danger" id="status-error" role="alert">
+					<span id="status-error-message"></span>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="card text-center">
+							<div class="card-body">
+								<h5 class="card-title">Start Power Model</h5>
+								<button type="button" id='start-button' class="btn btn-success" onclick="startPowerModel()">Start</button>
+							</div>
+						</div>
+
+						<div class="card text-center">
+							<div class="card-body">
+								<h5 class="card-title">Stop Power Model</h5>
+								<button type="button" id='stop-button' class="btn btn-danger" onclick="stopPowerModel()">Stop</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+	</body>
+	<script src="/socket.io/socket.io.js"></script>
+
+	<script src="js/power-model.js"></script>
+</html>
