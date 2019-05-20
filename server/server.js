@@ -47,7 +47,6 @@ app.get('/', (req, res) => {
 
 // Endpoint to get a list of files stored on the server
 app.get('/files', (req, res) => {
-  console.log('Query files stored on server');
   const dataFolderPath = path.join(__dirname, '/data');
   const fileArray = [];
   const outputJson = { files: fileArray };
@@ -73,9 +72,7 @@ app.get('/files/:filename', (req, res) => {
   res.download(filepath, err => {
     if (err) {
       res.status(404).send('File not found');
-      return;
     }
-    console.log(`Downloading: ${filename}`);
   });
 });
 
@@ -86,9 +83,7 @@ app.delete('/files/:filename', (req, res) => {
   fs.unlink(filepath, err => {
     if (err) {
       res.status(404).send('File not found');
-      return;
     }
-    console.log(`Deleting: ${filepath}`);
   });
 });
 

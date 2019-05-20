@@ -77,7 +77,6 @@ sockets.init = function socketInit(server) {
 
   io.listen(server);
   io.on('connection', function ioConnection(socket) {
-    console.log('A user connected');
     mqttClient.on('message', function mqttMessage(topic, payload) {
       const payloadString = payload.toString();
       if (topic === 'start') {
@@ -98,22 +97,18 @@ sockets.init = function socketInit(server) {
     });
 
     socket.on('start-power-model', () => {
-      console.log('Start power model');
       mqttClient.publish('power_model/start', 'true');
     });
 
     socket.on('stop-power-model', () => {
-      console.log('Stop power model');
       mqttClient.publish('power_model/stop', 'true');
     });
 
     socket.on('reset-calibration', () => {
-      console.log('Reset calibration');
       mqttClient.publish('power_model/calibrate/reset', 'true');
     });
 
     socket.on('submit-calibration', calibratedDistance => {
-      console.log('Calibrate distance');
       mqttClient.publish(
         'power_model/calibrate',
         `calibrate=${calibratedDistance}`,

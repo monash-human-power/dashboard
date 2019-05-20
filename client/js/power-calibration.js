@@ -1,8 +1,8 @@
 /* global io */
+/* eslint no-console: ["error", { allow: ["warn", "error"] }] */
 const socket = io();
 // eslint-disable-next-line no-unused-vars
 function resetDistance() {
-  console.log('Reset distance');
   socket.emit('reset-calibration');
 }
 
@@ -15,7 +15,7 @@ function submitActualDistance() {
     document.getElementById('valid-distance-message').style.display = 'none';
     return;
   }
-  console.log(`Submit calibration distance: ${calibratedDistance}`);
+
   socket.emit('submit-calibration', calibratedDistance);
   document.getElementById('input-calibration').value = '';
   document.getElementById('invalid-distance-message').style.display = 'none';

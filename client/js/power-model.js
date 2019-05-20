@@ -5,7 +5,6 @@ const socket = io();
 // TODO: Check if power model is already running
 // eslint-disable-next-line no-unused-vars
 function startPowerModel() {
-  console.log('Starting power model');
   socket.emit('start-power-model');
   document.getElementById('start-button').disabled = true;
   document.getElementById('status-success').style.display = 'block';
@@ -15,7 +14,6 @@ function startPowerModel() {
 
 // eslint-disable-next-line no-unused-vars
 function stopPowerModel() {
-  console.log('Stopping power model');
   socket.emit('stop-power-model');
   document.getElementById('start-button').disabled = false;
   document.getElementById('status-success').style.display = 'block';
@@ -24,7 +22,6 @@ function stopPowerModel() {
 }
 
 socket.on('power-model-running', function runPowerModel() {
-  console.log('Power model running');
   // Disable start button if power model is currently running
   document.getElementById('start-button').disabled = true;
 });
