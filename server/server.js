@@ -1,6 +1,5 @@
 // Initialise server
 const express = require('express');
-
 const app = express();
 const server = require('http').Server(app);
 
@@ -13,7 +12,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
+app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, '..', '/client')));
 
 // Create a data folder if it is not created already
@@ -42,7 +41,20 @@ server.listen(PORT, () => {
  */
 app.get('/', (req, res) => {
   // Send back the index.html document
-  res.sendFile(path.join(`${__dirname}/../client/index.html`));
+  res.render(path.join(`${__dirname}/../client/index`));
+});
+
+[
+  'index',
+  'power-model',
+  'power-zone',
+  'power-calibration',
+  'status',
+  'files',
+].forEach(page => {
+  app.get(`/${page}`, (req, res) => {
+    res.render(path.join(`${__dirname}/../client/${page}`));
+  });
 });
 
 // Endpoint to get a list of files stored on the server
