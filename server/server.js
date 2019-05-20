@@ -59,6 +59,7 @@ sidebar.forEach(item => {
     res.render(path.join(`${__dirname}/../client/${item.file}`), {
       // eslint-disable-next-line object-shorthand
       sidebar: sidebar,
+      current: item.file,
     });
   });
 });
