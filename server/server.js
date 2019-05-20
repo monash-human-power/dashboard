@@ -45,16 +45,21 @@ app.get('/', (req, res) => {
   res.render(path.join(`${__dirname}/../client/index`));
 });
 
-[
-  'index',
-  'power-model',
-  'power-zone',
-  'power-calibration',
-  'status',
-  'files',
-].forEach(page => {
-  app.get(`/${page}`, (req, res) => {
-    res.render(path.join(`${__dirname}/../client/${page}`));
+const sidebar = [
+  { file: 'index', title: 'Dashboard' },
+  { file: 'files', title: 'Download Files' },
+  { file: 'status', title: 'Sensor Status' },
+  { file: 'power-model', title: 'Power Model Start/Stop' },
+  { file: 'power-zone', title: 'Generate Power Map' },
+  { file: 'power-calibration', title: 'Power Model Calibration' },
+];
+
+sidebar.forEach(item => {
+  app.get(`/${item.file}`, (req, res) => {
+    res.render(path.join(`${__dirname}/../client/${item.file}`), {
+      // eslint-disable-next-line object-shorthand
+      sidebar: sidebar,
+    });
   });
 });
 
