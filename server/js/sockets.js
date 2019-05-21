@@ -3,7 +3,6 @@
  */
 const sockets = {};
 const mqtt = require('mqtt');
-// const io = require('socket.io');
 const os = require('os');
 
 function publicMqttConnected() {
