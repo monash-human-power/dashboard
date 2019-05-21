@@ -3,7 +3,7 @@
     <ul class="nav flex-column">
       <% for(let i =0; i < sidebar.length; i++){ %>
       <li class="nav-item">
-        <a class=<%if (sidebar[i].file == current) { %>
+        <a class=<%if (sidebar[i].file == current.file) { %>
             "nav-link active"
             <% } else { %>
               "nav-link"

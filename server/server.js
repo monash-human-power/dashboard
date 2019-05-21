@@ -36,15 +36,7 @@ sockets.init(server);
 server.listen(PORT, () => {
   console.log('Example app listening at', server.address().port);
 });
-
-/*
- * Server endpoints
- */
-app.get('/', (req, res) => {
-  // Send back the index.html document
-  res.render(path.join(`${__dirname}/../client/index`));
-});
-
+const HEADER = 'MHP DAShboard';
 const sidebar = [
   { file: 'index', title: 'Dashboard' },
   { file: 'files', title: 'Download Files' },
@@ -54,12 +46,26 @@ const sidebar = [
   { file: 'power-calibration', title: 'Power Model Calibration' },
 ];
 
+/*
+ * Server endpoints
+ */
+app.get('/', (req, res) => {
+  // Send back the index.html document
+  res.render(path.join(`${__dirname}/../client/index`), {
+    header: HEADER,
+    // eslint-disable-next-line object-shorthand
+    sidebar: sidebar,
+    current: { file: 'index', title: 'Dashboard' },
+  });
+});
+
 sidebar.forEach(item => {
   app.get(`/${item.file}`, (req, res) => {
     res.render(path.join(`${__dirname}/../client/${item.file}`), {
+      header: HEADER,
       // eslint-disable-next-line object-shorthand
       sidebar: sidebar,
-      current: item.file,
+      current: item,
     });
   });
 });
