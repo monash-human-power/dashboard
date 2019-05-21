@@ -1,0 +1,18 @@
+<div id="sidebar" class="sidebar-offcanvas">
+  <div class="col-md-12">
+    <ul class="nav flex-column">
+      <% for(let i =0; i < sidebar.length; i++){ %>
+      <li class="nav-item">
+        <a class=<%if (sidebar[i].file == current.file) { %>
+            "nav-link active"
+            <% } else { %>
+              "nav-link"
+            <% } %>
+        href="<%= sidebar[i].file %>">
+          <%= sidebar[i].title %>
+        </a>
+      </li>
+      <% } %>
+    </ul>
+  </div>
+</div>

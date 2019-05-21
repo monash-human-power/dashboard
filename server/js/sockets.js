@@ -3,7 +3,6 @@
  */
 const sockets = {};
 const mqtt = require('mqtt');
-const io = require('socket.io');
 const os = require('os');
 
 function publicMqttConnected() {
@@ -75,7 +74,8 @@ sockets.init = function socketInit(server) {
     publicMqttClient.on('connect', publicMqttConnected);
   }
 
-  io.listen(server);
+  // eslint-disable-next-line global-require
+  const io = require('socket.io').listen(server);
   io.on('connection', function ioConnection(socket) {
     mqttClient.on('message', function mqttMessage(topic, payload) {
       const payloadString = payload.toString();

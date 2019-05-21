@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
+app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, '..', '/client')));
 
 // Create a data folder if it is not created already
@@ -36,13 +36,38 @@ sockets.init(server);
 server.listen(PORT, () => {
   console.log('Example app listening at', server.address().port);
 });
+const HEADER = 'MHP DAShboard';
+const sidebar = [
+  { file: 'index', title: 'Dashboard' },
+  { file: 'download-files', title: 'Download Files' },
+  { file: 'status', title: 'Sensor Status' },
+  { file: 'power-model', title: 'Power Model Start/Stop' },
+  { file: 'power-zone', title: 'Generate Power Map' },
+  { file: 'power-calibration', title: 'Power Model Calibration' },
+];
 
 /*
  * Server endpoints
  */
 app.get('/', (req, res) => {
   // Send back the index.html document
-  res.sendFile(path.join(`${__dirname}/../client/index.html`));
+  res.render(path.join(`${__dirname}/../client/index`), {
+    header: HEADER,
+    // eslint-disable-next-line object-shorthand
+    sidebar: sidebar,
+    current: { file: 'index', title: 'Dashboard' },
+  });
+});
+
+sidebar.forEach(item => {
+  app.get(`/${item.file}`, (req, res) => {
+    res.render(path.join(`${__dirname}/../client/${item.file}`), {
+      header: HEADER,
+      // eslint-disable-next-line object-shorthand
+      sidebar: sidebar,
+      current: item,
+    });
+  });
 });
 
 // Endpoint to get a list of files stored on the server
