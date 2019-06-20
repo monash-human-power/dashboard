@@ -118,3 +118,7 @@ app.get('/server/status', (req, res) => {
   const outputJson = { status: 'True' };
   res.status(200).send(outputJson);
 });
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', '/client', '/page_404.html'));
+});
