@@ -53,8 +53,7 @@ app.get('/', (req, res) => {
   // Send back the index.html document
   res.render(path.join(`${__dirname}/../client/index`), {
     header: HEADER,
-    // eslint-disable-next-line object-shorthand
-    sidebar: sidebar,
+    sidebar,
     current: { file: 'index', title: 'Dashboard' },
   });
 });
@@ -63,8 +62,7 @@ sidebar.forEach(item => {
   app.get(`/${item.file}`, (req, res) => {
     res.render(path.join(`${__dirname}/../client/${item.file}`), {
       header: HEADER,
-      // eslint-disable-next-line object-shorthand
-      sidebar: sidebar,
+      sidebar,
       current: item,
     });
   });
@@ -122,8 +120,7 @@ app.get('/server/status', (req, res) => {
 app.get('*', (req, res) => {
   res.render(path.join(__dirname, '..', 'client', 'page_404'), {
     header: 'Oops...',
-    // eslint-disable-next-line object-shorthand
-    sidebar: sidebar,
+    sidebar,
     current: { file: 'index', title: 'Dashboard' },
   });
 });
