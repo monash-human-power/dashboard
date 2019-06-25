@@ -120,7 +120,7 @@ app.get('/server/status', (req, res) => {
 });
 
 app.get('*', (req, res) => {
-  res.render(path.join(__dirname, '..', '/client', '/page_404'), {
+  res.render(path.join(__dirname, '..', 'client', 'page_404'), {
     header: 'Oops...',
     // eslint-disable-next-line object-shorthand
     sidebar: sidebar,
