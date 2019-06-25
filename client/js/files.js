@@ -30,9 +30,7 @@ function loadFiles() {
       // TODO: Account for no files found on the server
       for (let index = 0; index < files.length; index += 1) {
         $(
-          `<a class='list-group-item list-group-item-action' href='/files/${
-            files[index]
-          }'>${files[index]}</a>`,
+          `<a class='list-group-item list-group-item-action' href='/files/${files[index]}'>${files[index]}</a>`,
         )
           .appendTo($('#list-files'))
           .append(
