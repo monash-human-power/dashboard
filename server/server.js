@@ -120,5 +120,10 @@ app.get('/server/status', (req, res) => {
 });
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', '/client', '/page_404.html'));
+  res.render(path.join(__dirname, '..', '/client', '/page_404'), {
+    header: 'Oops...',
+    // eslint-disable-next-line object-shorthand
+    sidebar: sidebar,
+    current: { file: 'index', title: 'Dashboard' },
+  });
 });
