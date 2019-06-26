@@ -119,7 +119,7 @@ app.get('/server/status', (req, res) => {
 
 app.get('*', (req, res) => {
   res.render(path.join(__dirname, '..', 'client', 'page_404'), {
-    header: 'Oops...',
+    header: 'MHP DaShboard',
     sidebar,
     current: { file: 'index', title: 'Dashboard' },
   });
