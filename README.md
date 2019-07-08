@@ -12,12 +12,13 @@ The node.js + Express HTTP REST server is used to host the real-time dashboard w
 
 Set up environment variables using a `.env` file. Create a `.env` file at the root of this project. Add the following variables:
 
-| Environment Variable | Description                |
-| -------------------- | -------------------------- |
-| MQTT_USERNAME        | MQTT username              |
-| MQTT_PASSWORD        | MQTT password              |
-| MQTT_SERVER          | Address of the MQTT broker |
-| MQTT_PORT            | Port of the MQTT broker    |
+| Environment Variable | Description                                         |
+| -------------------- | --------------------------------------------------- |
+| MQTT_USERNAME        | MQTT username                                       |
+| MQTT_PASSWORD        | MQTT password                                       |
+| MQTT_SERVER          | Address of the MQTT broker                          |
+| MQTT_PORT            | Port of the MQTT broker                             |
+| HEROKU               | Define this **only** if you are the Heroku instance |
 
 ### Installation guide
 
