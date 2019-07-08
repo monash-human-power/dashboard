@@ -1,6 +1,8 @@
 /*
  * Socket.io (Server-side)
  */
+require('dotenv').config();
+
 const sockets = {};
 const mqtt = require('mqtt');
 const os = require('os');
@@ -43,16 +45,15 @@ sockets.init = function socketInit(server) {
     clientId: `publicMqttClient-${os.hostname()}`,
     username: process.env.MQTT_USERNAME,
     password: process.env.MQTT_PASSWORD,
+    host: process.env.MQTT_SERVER,
+    port: process.env.MQTT_PORT,
   };
 
   let mqttClient = null;
   if (process.env.HEROKU) {
     console.log('I am using a Heroku instance');
     publicMqttOptions.clientId += '-HEROKU';
-    mqttClient = mqtt.connect(
-      'mqtt://m16.cloudmqtt.com:10421',
-      publicMqttOptions,
-    );
+    mqttClient = mqtt.connect(publicMqttOptions);
   } else {
     mqttClient = mqtt.connect('mqtt://localhost:1883', mqttOptions);
   }
@@ -67,10 +68,7 @@ sockets.init = function socketInit(server) {
   let publicMqttClient = null;
   if (process.env.HEROKU === undefined) {
     console.log('Not a heroku instance');
-    publicMqttClient = mqtt.connect(
-      'mqtt://m16.cloudmqtt.com:10421',
-      publicMqttOptions,
-    );
+    publicMqttClient = mqtt.connect(publicMqttOptions);
     publicMqttClient.on('connect', publicMqttConnected);
   }
 
