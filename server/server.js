@@ -39,6 +39,7 @@ server.listen(PORT, () => {
 const HEADER = 'MHP DAShboard';
 const sidebar = [
   { file: 'index', title: 'Dashboard' },
+  { file: 'text-dashboard', title: 'Text Dashboard' },
   { file: 'download-files', title: 'Download Files' },
   { file: 'status', title: 'Sensor Status' },
   { file: 'power-model', title: 'Power Model Start/Stop' },

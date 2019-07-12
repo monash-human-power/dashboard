@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/bootstrap.bundle.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="css/files.css">
+
+		<title>DAS</title>
+	</head>
+
+	<body>
+		<% include ./partials/header %>
+
+		<% include ./partials/sidebar %>
+
+		<div id="main">
+			<div class="col-md-12">
+				<h1>Text Dashboard</h1>
+
+				<div class="row">
+					<div class="col-md-6">
+						<ul class="list-group">
+							<li class="list-group-item d-flex justify-content-between align-items-center">
+								Time <div><span id="timeValue">0</span> s</div>
+							</li>
+							<li class="list-group-item d-flex justify-content-between align-items-center">
+								Velocity <div><span id="velocityValue">0</span> ms<sup>-1</sup></div>
+							</li>
+							<li class="list-group-item d-flex justify-content-between align-items-center">
+								Power <div><span id="powerValue">0</span> W</div>
+							</li>
+							<li class="list-group-item d-flex justify-content-between align-items-center">
+								Cadence <div><span id="cadenceValue">0</span> rpm</div>
+							</li>
+							<li class="list-group-item d-flex justify-content-between align-items-center">
+								GPS <div>Latitude<br>Longitude<br>Altitude</div>
+								<div>
+									<span id="gpsValueX">0</span> N<br>
+									<span id="gpsValueY">0</span> E<br>
+									<span id="gpsValueZ">0</span> m
+								</div>
+							</li>
+							<li class="list-group-item d-flex justify-content-between align-items-center">
+								Accelerometer <div>x<br>y<br>z</div>
+								<div>
+									<span id="accelerometerValueX">0</span> g<br>
+									<span id="accelerometerValueY">0</span> g<br>
+									<span id="accelerometerValueZ">0</span> g
+								</div>
+							</li>
+							<li class="list-group-item d-flex justify-content-between align-items-center">
+								Gyroscope <div>x<br>y<br>z</div>
+								<div>
+									<span id="gyroscopeValueX">0</span> deg s<sup>-1</sup><br>
+									<span id="gyroscopeValueY">0</span> deg s<sup>-1</sup><br>
+									<span id="gyroscopeValueZ">0</span> deg s<sup>-1</sup>
+								</div>
+							</li>
+							<li class="list-group-item d-flex justify-content-between align-items-center">
+								Potentiometer <div><span id="potentiometerValue">0</span></div>
+							</li>
+							<li class="list-group-item d-flex justify-content-between align-items-center">
+								Thermometer <div><span id="thermometerValue">0</span> &deg;C</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="/socket.io/socket.io.js"></script>
+
+	<script src="js/text-dashboard.js"></script>
+</html>
