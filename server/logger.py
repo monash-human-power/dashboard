@@ -3,7 +3,7 @@ import sys
 import csv
 import paho.mqtt.client as mqtt
 
-CSV_FIELDNAMES = ["time", "gps", "gps_location", "gps_course", "gps_speed", "gps_satellites", \
+CSV_FIELDNAMES = ["time", "gps", "gps_lat", "gps_long", "gps_alt", "gps_course", "gps_speed", "gps_satellites", \
     "aX", "aY", "aZ",\
     "gX", "gY", "gZ",\
     "thermoC", "thermoF",\
