@@ -78,18 +78,18 @@ setInterval(updateGraphs, 1000);
 
 // Set the value of a sensor
 function setSensorValue(elementId, value) {
-  inputElement = document.getElementById(elementId);
+  const inputElement = document.getElementById(elementId);
   inputElement.innerHTML = value;
 }
 
 // Set the value of a sensor with 3 components - e.g. accelerometer
 // Appends X, Y, and Z to the supplied element ID
 function setSensorValueVector(elementIdPrefix, valueX, valueY, valueZ) {
-  inputElementX = document.getElementById(elementIdPrefix + "X");
+  const inputElementX = document.getElementById(`${elementIdPrefix}X`);
   inputElementX.innerHTML = valueX;
-  inputElementY = document.getElementById(elementIdPrefix + "Y");
+  const inputElementY = document.getElementById(`${elementIdPrefix}Y`);
   inputElementY.innerHTML = valueY;
-  inputElementZ = document.getElementById(elementIdPrefix + "Z");
+  const inputElementZ = document.getElementById(`${elementIdPrefix}Z`);
   inputElementZ.innerHTML = valueZ;
 }
 
@@ -117,9 +117,24 @@ function dataHandler(inputData) {
   setSensorValue('velocityValue', inputData.gps_speed);
   setSensorValue('powerValue', inputData.power);
   setSensorValue('cadenceValue', inputData.cadence);
-  setSensorValueVector('gpsValue', inputData.gps_lat, inputData.gps_long, inputData.gps_alt);
-  setSensorValueVector('accelerometerValue', inputData.aX, inputData.aY, inputData.aZ);
-  setSensorValueVector('gyroscopeValue', inputData.gX, inputData.gY, inputData.gZ);
+  setSensorValueVector(
+    'gpsValue',
+    inputData.gps_lat,
+    inputData.gps_long,
+    inputData.gps_alt,
+  );
+  setSensorValueVector(
+    'accelerometerValue',
+    inputData.aX,
+    inputData.aY,
+    inputData.aZ,
+  );
+  setSensorValueVector(
+    'gyroscopeValue',
+    inputData.gX,
+    inputData.gY,
+    inputData.gZ,
+  );
   setSensorValue('potentiometerValue', inputData.pot);
   setSensorValue('thermometerValue', inputData.thermoC);
 }
@@ -133,16 +148,15 @@ socket.on('start', startHandler);
 socket.on('data', dataHandler);
 socket.on('stop', stopHandler);
 
-
 function updateTextMode() {
-  let textDiv = document.getElementById("textDiv");
-  let chartDiv = document.getElementById("chartDiv");
-  if (document.getElementById("textModeToggle").checked) {
-    chartDiv.classList.add("d-none")
-    textDiv.classList.remove("d-none")
+  const textDiv = document.getElementById('textDiv');
+  const chartDiv = document.getElementById('chartDiv');
+  if (document.getElementById('textModeToggle').checked) {
+    chartDiv.classList.add('d-none');
+    textDiv.classList.remove('d-none');
   } else {
-    chartDiv.classList.remove("d-none")
-    textDiv.classList.add("d-none")
+    chartDiv.classList.remove('d-none');
+    textDiv.classList.add('d-none');
   }
 }
-updateTextMode() // State of switch is kept after refresh, so check on page load
+updateTextMode(); // State of switch is kept after refresh, so check on page load
