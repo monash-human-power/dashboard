@@ -19,51 +19,72 @@
 				<h1>Text Dashboard</h1>
 
 				<div class="row">
-					<div class="col-md-6">
-						<ul class="list-group">
-							<li class="list-group-item d-flex justify-content-between align-items-center">
-								Time <div><span id="timeValue">0</span> s</div>
-							</li>
-							<li class="list-group-item d-flex justify-content-between align-items-center">
-								Velocity <div><span id="velocityValue">0</span> ms<sup>-1</sup></div>
-							</li>
-							<li class="list-group-item d-flex justify-content-between align-items-center">
-								Power <div><span id="powerValue">0</span> W</div>
-							</li>
-							<li class="list-group-item d-flex justify-content-between align-items-center">
-								Cadence <div><span id="cadenceValue">0</span> rpm</div>
-							</li>
-							<li class="list-group-item d-flex justify-content-between align-items-center">
-								GPS <div>Latitude<br>Longitude<br>Altitude</div>
-								<div>
-									<span id="gpsValueX">0</span> N<br>
-									<span id="gpsValueY">0</span> E<br>
-									<span id="gpsValueZ">0</span> m
-								</div>
-							</li>
-							<li class="list-group-item d-flex justify-content-between align-items-center">
-								Accelerometer <div>x<br>y<br>z</div>
-								<div>
-									<span id="accelerometerValueX">0</span> g<br>
-									<span id="accelerometerValueY">0</span> g<br>
-									<span id="accelerometerValueZ">0</span> g
-								</div>
-							</li>
-							<li class="list-group-item d-flex justify-content-between align-items-center">
-								Gyroscope <div>x<br>y<br>z</div>
-								<div>
-									<span id="gyroscopeValueX">0</span> deg s<sup>-1</sup><br>
-									<span id="gyroscopeValueY">0</span> deg s<sup>-1</sup><br>
-									<span id="gyroscopeValueZ">0</span> deg s<sup>-1</sup>
-								</div>
-							</li>
-							<li class="list-group-item d-flex justify-content-between align-items-center">
-								Potentiometer <div><span id="potentiometerValue">0</span></div>
-							</li>
-							<li class="list-group-item d-flex justify-content-between align-items-center">
-								Thermometer <div><span id="thermometerValue">0</span> &deg;C</div>
-							</li>
-						</ul>
+					<div class="col-lg-6">
+						<table class="table">
+							<tr>
+								<td colspan="2">Time</td>
+								<td><span id="timeValue">0</span> s</td>
+							</tr>
+							<tr>
+								<td colspan="2">Velocity</td>
+								<td><span id="velocityValue">0</span> ms<sup>-1</sup></td>
+							</tr>
+							<tr>
+								<td colspan="2">Power</td>
+								<td><span id="powerValue">0</span> W</td>
+							</tr>
+							<tr>
+								<td colspan="2">Cadence</td>
+								<td><span id="cadenceValue">0</span> rpm</td>
+							</tr>
+							<tr>
+								<td rowspan="3">GPS<br></td>
+								<td>Latitude</td>
+								<td><span id="gpsValueX">0</span> N</td>
+							</tr>
+							<tr>
+								<td>Longitude</td>
+								<td><span id="gpsValueY">0</span> E</td>
+							</tr>
+							<tr>
+								<td>Altitude</td>
+								<td><span id="gpsValueZ">0</span> m</td>
+							</tr>
+							<tr>
+								<td rowspan="3">Accelerometer</td>
+								<td>x</td>
+								<td><span id="accelerometerValueX">0</span> g</td>
+							</tr>
+							<tr>
+								<td>y</td>
+								<td><span id="accelerometerValueY">0</span> g</td>
+							</tr>
+							<tr>
+								<td>z</td>
+								<td><span id="accelerometerValueZ">0</span> g</td>
+							</tr>
+							<tr>
+								<td rowspan="3">Gyroscope</td>
+								<td>x<br></td>
+								<td><span id="gyroscopeValueX">0</span> deg s<sup>-1</sup></td>
+							</tr>
+							<tr>
+								<td>y</td>
+								<td><span id="gyroscopeValueY">0</span> deg s<sup>-1</sup></td>
+							</tr>
+							<tr>
+								<td>z</td>
+								<td><span id="gyroscopeValueZ">0</span> deg s<sup>-1</sup></td>
+							</tr>
+							<tr>
+								<td colspan="2">Potentiometer</td>
+								<td><span id="potentiometerValue">0</span></td>
+							</tr>
+							<tr>
+								<td colspan="2">Thermometer</td>
+								<td><span id="thermometerValue">0</span> &deg;C</td>
+							</tr>
+						</table>
 					</div>
 				</div>
 			</div>
