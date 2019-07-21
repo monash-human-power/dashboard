@@ -77,20 +77,24 @@ function updateGraphs() {
 setInterval(updateGraphs, 1000);
 
 // Set the value of a sensor
-function setSensorValue(elementId, value) {
+function setSensorValue(elementId, value, decimalPlaces = -1) {
   const inputElement = document.getElementById(elementId);
-  inputElement.innerHTML = value;
+  if (decimalPlaces === -1) inputElement.innerHTML = value;
+  else inputElement.innerHTML = Number(value).toFixed(decimalPlaces);
 }
 
 // Set the value of a sensor with 3 components - e.g. accelerometer
 // Appends X, Y, and Z to the supplied element ID
-function setSensorValueVector(elementIdPrefix, valueX, valueY, valueZ) {
-  const inputElementX = document.getElementById(`${elementIdPrefix}X`);
-  inputElementX.innerHTML = valueX;
-  const inputElementY = document.getElementById(`${elementIdPrefix}Y`);
-  inputElementY.innerHTML = valueY;
-  const inputElementZ = document.getElementById(`${elementIdPrefix}Z`);
-  inputElementZ.innerHTML = valueZ;
+function setSensorValueVector(
+  elementIdPrefix,
+  valueX,
+  valueY,
+  valueZ,
+  decimalPlaces = -1,
+) {
+  setSensorValue(`${elementIdPrefix}X`, valueX, decimalPlaces);
+  setSensorValue(`${elementIdPrefix}Y`, valueY, decimalPlaces);
+  setSensorValue(`${elementIdPrefix}Z`, valueZ, decimalPlaces);
 }
 
 function dataHandler(inputData) {
@@ -113,8 +117,8 @@ function dataHandler(inputData) {
   }
 
   // Update text mode
-  setSensorValue('timeValue', inputData.time / 1000);
-  setSensorValue('velocityValue', inputData.gps_speed);
+  setSensorValue('timeValue', inputData.time / 1000, 0);
+  setSensorValue('velocityValue', inputData.gps_speed, 2);
   setSensorValue('powerValue', inputData.power);
   setSensorValue('cadenceValue', inputData.cadence);
   setSensorValueVector(
@@ -128,15 +132,17 @@ function dataHandler(inputData) {
     inputData.aX,
     inputData.aY,
     inputData.aZ,
+    2,
   );
   setSensorValueVector(
     'gyroscopeValue',
     inputData.gX,
     inputData.gY,
     inputData.gZ,
+    1,
   );
   setSensorValue('potentiometerValue', inputData.pot);
-  setSensorValue('thermometerValue', inputData.thermoC);
+  setSensorValue('thermometerValue', inputData.thermoC, 1);
 }
 
 function stopHandler() {
