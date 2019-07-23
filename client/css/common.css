@@ -1,0 +1,70 @@
+/* Overwriting Bootstrap CSS */
+.nav-link {
+    color: #333;
+}
+
+.nav-link.active {
+    color: #007bff;
+}
+
+.row {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
+
+/* Top bar */
+#top-bar {
+    padding-bottom: 0px;
+    padding-top: 0px;
+}
+
+/* Sidebar */
+#sidebar {
+    width: inherit;
+    min-width: 220px;
+    max-width: 220px;
+    background-color: #f5f5f5;
+	opacity: 1;
+    float: left;
+    height: 100%;
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+	z-index: 10;
+
+    /* Smooth transition in and out */
+    -webkit-transition: margin .25s ease-out;
+    -moz-transition: margin .25s ease-out;
+    -o-transition: margin .25s ease-out;
+    transition: margin .25s ease-out;
+}
+
+#sidebar.active {
+    margin-left: -250px;
+}
+
+@media (max-width: 768px) {
+    #sidebar {
+        margin-left: -250px;
+        position: fixed;
+    }
+    #sidebar.active {
+        margin-left: 0;
+    }
+}
+
+#sidebar-toggle {
+	margin-right: 10px;
+}
+
+/* Reposition main content */
+body {
+    padding-top: 40px;
+}
+
+#main {
+    height:100%;
+    overflow:auto;
+	display: block;
+}
+
