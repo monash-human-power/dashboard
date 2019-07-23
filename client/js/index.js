@@ -76,7 +76,29 @@ function updateGraphs() {
 }
 setInterval(updateGraphs, 1000);
 
+// Set the value of a sensor
+function setSensorValue(elementId, value, decimalPlaces = -1) {
+  const inputElement = document.getElementById(elementId);
+  if (decimalPlaces === -1) inputElement.innerHTML = value;
+  else inputElement.innerHTML = Number(value).toFixed(decimalPlaces);
+}
+
+// Set the value of a sensor with 3 components - e.g. accelerometer
+// Appends X, Y, and Z to the supplied element ID
+function setSensorValueVector(
+  elementIdPrefix,
+  valueX,
+  valueY,
+  valueZ,
+  decimalPlaces = -1,
+) {
+  setSensorValue(`${elementIdPrefix}X`, valueX, decimalPlaces);
+  setSensorValue(`${elementIdPrefix}Y`, valueY, decimalPlaces);
+  setSensorValue(`${elementIdPrefix}Z`, valueZ, decimalPlaces);
+}
+
 function dataHandler(inputData) {
+  // Update graphs
   dataCount += 1;
   const keys = Object.keys(inputData);
   for (let index = 0; index < keys.length; index += 1) {
@@ -93,6 +115,34 @@ function dataHandler(inputData) {
     isInitialData = false;
     updateGraphs();
   }
+
+  // Update text mode
+  setSensorValue('timeValue', inputData.time / 1000, 0);
+  setSensorValue('velocityValue', inputData.gps_speed, 2);
+  setSensorValue('powerValue', inputData.power);
+  setSensorValue('cadenceValue', inputData.cadence);
+  setSensorValueVector(
+    'gpsValue',
+    inputData.gps_lat,
+    inputData.gps_long,
+    inputData.gps_alt,
+  );
+  setSensorValueVector(
+    'accelerometerValue',
+    inputData.aX,
+    inputData.aY,
+    inputData.aZ,
+    2,
+  );
+  setSensorValueVector(
+    'gyroscopeValue',
+    inputData.gX,
+    inputData.gY,
+    inputData.gZ,
+    1,
+  );
+  setSensorValue('potentiometerValue', inputData.pot);
+  setSensorValue('thermometerValue', inputData.thermoC, 1);
 }
 
 function stopHandler() {
@@ -103,3 +153,16 @@ function stopHandler() {
 socket.on('start', startHandler);
 socket.on('data', dataHandler);
 socket.on('stop', stopHandler);
+
+function updateTextMode() {
+  const textDiv = document.getElementById('textDiv');
+  const chartDiv = document.getElementById('chartDiv');
+  if (document.getElementById('textModeToggle').checked) {
+    chartDiv.classList.add('d-none');
+    textDiv.classList.remove('d-none');
+  } else {
+    chartDiv.classList.remove('d-none');
+    textDiv.classList.add('d-none');
+  }
+}
+updateTextMode(); // State of switch is kept after refresh, so check on page load

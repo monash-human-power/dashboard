@@ -3,6 +3,11 @@ body,html {
 }
 
 #filenameElement {
-    display: none;
-    padding: 15px;
+	display: none;
+    padding-top: 15px;
+}
+
+#textModeToggleElement {
+    padding-top: 15px;
+	margin-bottom: 8px;
 }
