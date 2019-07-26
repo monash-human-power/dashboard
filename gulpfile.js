@@ -2,7 +2,8 @@ const gulp = require('gulp');
 const sass = require('gulp-sass');
 
 const bootstrapScssPath = 'node_modules/bootstrap/scss/bootstrap.scss';
-const fontAwesomeCssPath = 'node_modules/@fortawesome/fontawesome-free/css/all.min.css';
+const fontAwesomeCssPath =
+  'node_modules/@fortawesome/fontawesome-free/css/all.min.css';
 gulp.task('sass', () => {
   return gulp
     .src([bootstrapScssPath, fontAwesomeCssPath])
@@ -20,11 +21,10 @@ gulp.task('js', () => {
     .pipe(gulp.dest('client/js'));
 });
 
-const fontAwesomePath = 'node_modules/@fortawesome/fontawesome-free/webfonts/**.*';
+const fontAwesomePath =
+  'node_modules/@fortawesome/fontawesome-free/webfonts/**.*';
 gulp.task('icons', () => {
-  return gulp
-    .src(fontAwesomePath)
-    .pipe(gulp.dest('client/webfonts/'));
+  return gulp.src(fontAwesomePath).pipe(gulp.dest('client/webfonts/'));
 });
 
 gulp.task('default', gulp.parallel('sass', 'js', 'icons'));
