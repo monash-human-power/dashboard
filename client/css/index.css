@@ -1,13 +1,9 @@
-body,html {
-    height:100%;
-}
-
 #filenameElement {
-	display: none;
+    display: none;
     padding-top: 15px;
 }
 
 #textModeToggleElement {
     padding-top: 15px;
-	margin-bottom: 8px;
+    margin-bottom: 8px;
 }

@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars */
+// eslint-disable-next-line no-unused-vars
 function toggleSidebar() {
-  /* eslint-enable no-unused-vars */
   document.getElementById('sidebar').classList.toggle('active');
   document.getElementById('sidebar-overlay').classList.toggle('active');
 }
