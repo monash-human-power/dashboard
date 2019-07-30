@@ -242,3 +242,7 @@ function prefillDefault() {
 
   prefill(config, zone);
 }
+
+socket.on('power-plan-generated', function notifyPowerPlanGeneration() {
+  console.log('Power plan finished generation!');
+})

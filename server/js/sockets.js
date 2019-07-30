@@ -62,6 +62,7 @@ sockets.init = function socketInit(server) {
   mqttClient.subscribe('data');
   mqttClient.subscribe('power_model/max_speed');
   mqttClient.subscribe('power_model/recommended_SP');
+  mqttClient.subscribe('power_model/plan_generated');
   mqttClient.on('connect', mqttConnected);
 
   // Not a heroku instance
@@ -91,6 +92,8 @@ sockets.init = function socketInit(server) {
         topic === 'power_model/recommended_SP'
       ) {
         socket.emit('power-model-running');
+      } else if (topic === 'power_model/plan_generated') {
+        socket.emit('power-plan-generated');
       }
     });
 
