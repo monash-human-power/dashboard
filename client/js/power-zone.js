@@ -147,13 +147,93 @@ function formSubmitHandler(event) {
 }
 
 // eslint-disable-next-line no-unused-vars
+function prefill(config, zone) {
+  document.getElementById('numZones').selectedIndex = config.numZones;
+  numZoneHandler(config.numZones);
+  document.getElementById('inputFileName').value = config.filename;
+  document.getElementById('inputLowerBound').value = config.lowerBound;
+  document.getElementById('inputUpperBound').value = config.upperBound;
+  document.getElementById('inputStep').value = config.step;
+  document.getElementById('inputStartTrap').value = config.startTrap;
+  document.getElementById('inputEndTrap').value = config.endTrap;
+
+  // Prefill zone values
+  if (zone.one) {
+    document.getElementById('zone1RecPower').value = zone.one.recPower;
+    document.getElementById('zone1MaxTime').value = zone.one.maxTime;
+    document.getElementById('zone1SpentTime').value = zone.one.spentTime;
+  }
+
+  if (zone.two) {
+    document.getElementById('zone2RecPower').value = zone.two.recPower;
+    document.getElementById('zone2MaxTime').value = zone.two.maxTime;
+    document.getElementById('zone2SpentTime').value = zone.two.spentTime;
+  }
+
+  if (zone.three) {
+    document.getElementById('zone3RecPower').value = zone.three.recPower;
+    document.getElementById('zone3MaxTime').value = zone.three.maxTime;
+    document.getElementById('zone3SpentTime').value = zone.three.spentTime;
+  }
+
+  if (zone.four) {
+    document.getElementById('zone4RecPower').value = zone.four.recPower;
+    document.getElementById('zone4MaxTime').value = zone.four.maxTime;
+    document.getElementById('zone4SpentTime').value = zone.four.spentTime;
+  }
+
+  if (zone.five) {
+    document.getElementById('zone5RecPower').value = zone.five.recPower;
+    document.getElementById('zone5MaxTime').value = zone.five.maxTime;
+    document.getElementById('zone5SpentTime').value = zone.five.spentTime;
+  }
+
+  if (zone.six) {
+    document.getElementById('zone6RecPower').value = zone.six.recPower;
+    document.getElementById('zone6MaxTime').value = zone.six.maxTime;
+    document.getElementById('zone6SpentTime').value = zone.six.spentTime;
+  }
+}
+
+// eslint-disable-next-line no-unused-vars
 function prefillDefault() {
-  document.getElementById('numZones').selectedIndex = 6;
-  numZoneHandler(6);
-  document.getElementById('inputFileName').value = 'default';
-  document.getElementById('inputLowerBound').value = 1000;
-  document.getElementById('inputUpperBound').value = 1200;
-  document.getElementById('inputStep').value = 100;
-  document.getElementById('inputStartTrap').value = 4682;
-  document.getElementById('inputEndTrap').value = 4882;
+  const config = {
+    numZones: 6,
+    filename: 'default',
+    lowerBound: 1000,
+    upperBound: 1200,
+    step: 100,
+    startTrap: 4682,
+    endTrap: 4882,
+  };
+
+  const zone = {
+    one: {
+      recPower: 100,
+      maxTime: 100,
+      spentTime: 0,
+    },
+    two: {
+      recPower: 210,
+      maxTime: 90,
+      spentTime: 0,
+    },
+    three: {
+      recPower: 280,
+      maxTime: 45,
+      spentTime: 0,
+    },
+    four: {
+      recPower: 350,
+      maxTime: 45,
+      spentTime: 0,
+    },
+    five: {
+      recPower: 450,
+      maxTime: 60,
+      spentTime: 0,
+    },
+  };
+
+  prefill(config, zone);
 }
