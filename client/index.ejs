@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+		<% include ./partials/head %>
 		<link rel="stylesheet" type="text/css" href="css/index.css">
 		<title>DAS</title>
 	</head>
@@ -26,10 +26,14 @@
 				</div>
 			</div>
 
-			<div class="row" id="chartDiv">
-				<div class="col-xl-4" id="velocityChartDiv"><canvas id="velocityTimeChart"></canvas></div>
-				<div class="col-xl-4" id="powerChartDiv"><canvas id="powerTimeChart"></canvas></div>
-				<div class="col-xl-4" id="cadenceChartDiv"><canvas id="cadenceTimeChart"></canvas></div>
+			<div id="chartDiv">
+				<div class="row">
+					<div class="col-lg-6" id="velocityChartDiv"><canvas id="velocityTimeChart"></canvas></div>
+					<div class="col-lg-6" id="powerChartDiv"><canvas id="powerTimeChart"></canvas></div>
+				</div>
+				<div class="row">
+					<div class="col-lg-6" id="cadenceChartDiv"><canvas id="cadenceTimeChart"></canvas></div>
+				</div>
 			</div>
 
 			<div class="row" id="textDiv">
@@ -106,6 +110,7 @@
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.bundle.min.js"></script>
 	<script src="js/Chart.bundle.min.js"></script>
+	<script src="js/regular.min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
 
 	<script type="text/javascript" src="js/charts.js"></script>

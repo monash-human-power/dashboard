@@ -1,55 +1,9 @@
-body,html {
-    height:100%;
-}
-
-body {
-    padding-top: 40px;
-}
-
-/* Overwriting Bootstrap CSS */
-.nav-link {
-    color: #333;
-}
-
-.nav-link.active {
-    color: #007bff;
-}
-
-.row {
-    margin-left: 0px !important;
-    margin-right: 0px !important;
-}
-
-
-/* Other CSS */
-#top-bar {
-    padding-bottom: 0px;
-    padding-top: 0px;
-}
-
-#sidebar {
-    width: inherit;
-    min-width: 220px;
-    max-width: 220px;
-    background-color:#f5f5f5;
-    float: left;
-    height:100%;
-    position:relative;
-    overflow-y:auto;
-    overflow-x:hidden;
-}
-
-#main {
-    height:100%;
-    overflow:auto;
-}
-
 #filenameElement {
-	display: none;
+    display: none;
     padding-top: 15px;
 }
 
 #textModeToggleElement {
     padding-top: 15px;
-	margin-bottom: 8px;
+    margin-bottom: 8px;
 }
