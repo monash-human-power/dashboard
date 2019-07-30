@@ -75,7 +75,7 @@ function renderZoneCards(numZones) {
   const submitButton = document.createElement('button');
   submitButton.setAttribute('type', 'submit');
   submitButton.className = 'btn btn-primary';
-  submitButton.id = 'submit-button';
+  submitButton.id = 'submitButton';
   submitButton.innerHTML = 'Submit';
 
   const formRow = document.createElement('div');
@@ -144,4 +144,16 @@ function formSubmitHandler(event) {
   // Submit form input here
   // TODO: Confirmation alert/modal that tells user that they have created a power plan
   socket.emit('create-power-plan', outputDict);
+}
+
+// eslint-disable-next-line no-unused-vars
+function prefillDefault() {
+  document.getElementById('numZones').selectedIndex = 6;
+  numZoneHandler(6);
+  document.getElementById('inputFileName').value = 'default';
+  document.getElementById('inputLowerBound').value = 1000;
+  document.getElementById('inputUpperBound').value = 1200;
+  document.getElementById('inputStep').value = 100;
+  document.getElementById('inputStartTrap').value = 4682;
+  document.getElementById('inputEndTrap').value = 4882;
 }
