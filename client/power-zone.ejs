@@ -1,100 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<% include ./partials/head %>
-		<script src="js/jquery.min.js"></script>
-		<script src="js/bootstrap.bundle.min.js"></script>
-		<link rel="stylesheet" type="text/css" href="css/power-zone.css">
+  <head>
+    <% include ./partials/head %>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/power-zone.css" />
 
-		<title>DAS</title>
-	</head>
+    <title>DAS</title>
+  </head>
 
-	<body>
-		<% include ./partials/header %>
+  <body>
+    <% include ./partials/header %> <% include ./partials/sidebar %>
 
-		<% include ./partials/sidebar %>
+    <div id="main">
+      <div class="col-md-12">
+        <h1>Generate Power Map</h1>
+        <div class="row">
+          <div class="col-lg-8">
+            <form id="powerZoneForm" onsubmit="formSubmitHandler(event)">
+              <div class="card">
+                <div class="card-body">
+                  <div class="form-row">
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label for="numZones">Number of Zones</label>
+                        <select
+                          id="numZones"
+                          class="form-control"
+                          onchange="numZoneHandler(value)"
+                          onfocus="this.selectedIndex = -1;"
+                        >
+                          <option selected value="default"
+                            >Select number of zones</option
+                          >
+                          <option>1</option>
+                          <option>2</option>
+                          <option>3</option>
+                          <option>4</option>
+                          <option>5</option>
+                          <option>6</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label for="inputFileName">Power Plan File Name</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="inputFileName"
+                          placeholder="Filename"
+                          required
+                        />
+                        <span>.pkl</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label for="inputLowerBound">Lower Bound</label>
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="inputLowerBound"
+                          placeholder="Lower Bound"
+                          required
+                        />
+                      </div>
+                    </div>
 
-		<div id="main">
-			<div class="col-md-12">
-				<h1>Generate Power Map</h1>
-				<div class="row">
-					<div class="col-lg-8">
-						<form id="powerZoneForm" onsubmit="formSubmitHandler(event)">
-						<div class="card">
-							<div class="card-body">
-								<div class="form-row">
-									<div class="col-lg-6">
-										<div class="form-group">
-											<label for="numZones">Number of Zones</label>
-											<select id="numZones" class="form-control" onchange="numZoneHandler(value)" onfocus="this.selectedIndex = -1;">
-												<option selected value="default">Select number of zones</option>
-												<option>1</option>
-												<option>2</option>
-												<option>3</option>
-												<option>4</option>
-												<option>5</option>
-												<option>6</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div class="form-row">
-									<div class="col-lg-6">
-										<div class="form-group">
-											<label for="inputFileName">Power Plan File Name</label>
-											<input type="text" class="form-control" id="inputFileName" placeholder="Filename">
-											<span>.pkl</span>
-										</div>
-									</div>
-								</div>
-								<div class="form-row">
-									<div class="col-lg-6">
-										<div class="form-group">
-											<label for="inputLowerBound">Lower Bound</label>
-											<input type="number" class="form-control" id="inputLowerBound" placeholder="Lower Bound">
-										</div>
-									</div>
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label for="inputUpperBound">Upper Bound</label>
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="inputUpperBound"
+                          placeholder="Upper Bound"
+                          required
+                        />
+                      </div>
+                    </div>
+                  </div>
 
-									<div class="col-lg-6">
-										<div class="form-group">
-											<label for="inputUpperBound">Upper Bound</label>
-											<input type="number" class="form-control" id="inputUpperBound" placeholder="Upper Bound">
-										</div>
-									</div>
-								</div>
+                  <div class="form-row">
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label for="inputStep">Step</label>
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="inputStep"
+                          placeholder="Step"
+                          required
+                        />
+                      </div>
+                    </div>
+                  </div>
 
-								<div class="form-row">
-									<div class="col-lg-6">
-										<div class="form-group">
-											<label for="inputStep">Step</label>
-											<input type="number" class="form-control" id="inputStep" placeholder="Step">
-										</div>
-									</div>
-								</div>
+                  <div class="form-row">
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label for="inputStartTrap">Start Trap</label>
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="inputStartTrap"
+                          placeholder="Start Trap"
+                          required
+                        />
+                      </div>
+                    </div>
 
-								<div class="form-row">
-									<div class="col-lg-6">
-										<div class="form-group">
-											<label for="inputStartTrap">Start Trap</label>
-											<input type="number" class="form-control" id="inputStartTrap" placeholder="Start Trap">
-										</div>
-									</div>
-
-									<div class="col-lg-6">
-										<div class="form-group">
-											<label for="inputEndTrap">End Trap</label>
-											<input type="number" class="form-control" id="inputEndTrap" placeholder="End Trap">
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</body>
-	<script src="/socket.io/socket.io.js"></script>
-	<script src="js/power-zone.js"></script>
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label for="inputEndTrap">End Trap</label>
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="inputEndTrap"
+                          placeholder="End Trap"
+                          required
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="js/power-zone.js"></script>
 </html>
