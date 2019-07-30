@@ -129,6 +129,10 @@ function formSubmitHandler(event) {
         if (outputDict[zoneInputMatch.groups.zone]) {
           zoneDict = outputDict[zoneInputMatch.groups.zone];
         }
+        // If user does not place any value, default value of zero.
+        if (form.elements[index].value === '') {
+          form.elements[index].value = 0;
+        }
         zoneDict[zoneInputMatch.groups.value] = form.elements[index].value;
         outputDict[zoneInputMatch.groups.zone] = zoneDict;
       } else {
