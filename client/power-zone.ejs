@@ -26,8 +26,8 @@
 									<div class="col-lg-6">
 										<div class="form-group">
 											<label for="numZones">Number of Zones</label>
-											<select id="numZones" class="form-control" onclick="numZoneHandler(value)">
-												<option selected>Select number of zones</option>
+											<select id="numZones" class="form-control" onchange="numZoneHandler(value)" onfocus="this.selectedIndex = -1;">
+												<option selected value="default">Select number of zones</option>
 												<option>1</option>
 												<option>2</option>
 												<option>3</option>

@@ -90,7 +90,11 @@ function renderZoneCards(numZones) {
 
 // eslint-disable-next-line no-unused-vars
 function numZoneHandler(zoneValue) {
-  if (numberOfZones === zoneValue || Number.isNaN(zoneValue)) {
+  if (
+    zoneValue === 'default' ||
+    numberOfZones === zoneValue ||
+    Number.isNaN(zoneValue)
+  ) {
     return;
   }
   numberOfZones = zoneValue;
