@@ -75,6 +75,7 @@ function renderZoneCards(numZones) {
   const submitButton = document.createElement('button');
   submitButton.setAttribute('type', 'submit');
   submitButton.className = 'btn btn-primary';
+  submitButton.id = 'submit-button';
   submitButton.innerHTML = 'Submit';
 
   const formRow = document.createElement('div');
