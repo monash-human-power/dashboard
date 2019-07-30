@@ -233,6 +233,11 @@ function prefillDefault() {
       maxTime: 60,
       spentTime: 0,
     },
+    six: {
+      recPower: 0,
+      maxTime: 0,
+      spentTime: 0,
+    },
   };
 
   prefill(config, zone);
