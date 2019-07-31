@@ -23,6 +23,10 @@ function pushOverlayHandler(data) {
 socket.on('push-overlays', pushOverlayHandler);
 socket.emit('get-overlays');
 
+function hideSaveIndicator() {
+  $('p#overlay-save-indicator').addClass('d-none');
+}
+
 // eslint-disable-next-line no-unused-vars
 function setOverlays() {
   socket.emit(
@@ -32,4 +36,6 @@ function setOverlays() {
       secondary: $('input[name=secondary-overlay]:checked').val(),
     }),
   );
+  $('p#overlay-save-indicator').removeClass('d-none');
+  setTimeout(hideSaveIndicator, 5000);
 }
