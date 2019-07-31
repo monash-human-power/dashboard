@@ -17,6 +17,8 @@ function pushOverlayHandler(data) {
   });
 
   $(`div#${device}-overlay`).html(radioButtonHtml);
+  $('h6#overlay-loading').addClass('d-none');
+  $('div#overlay-form').removeClass('d-none');
 }
 socket.on('push-overlays', pushOverlayHandler);
 socket.emit('get-overlays');
