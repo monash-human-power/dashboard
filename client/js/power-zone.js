@@ -15,12 +15,12 @@ function clearForm() {
 
 function removeZoneCards() {
   const zoneCards = document.getElementsByClassName('zone');
-  zoneCards.forEach((zoneCard) => zoneCard.remove());
+  Array.from(zoneCards).forEach((zoneCard) => zoneCard.remove());
 }
 
 function removeAlerts() {
   const alerts = document.getElementsByClassName('alert');
-  alerts.forEach((alert) => alert.remove());
+  Array.from(alerts).forEach((alert) => alert.remove());
 }
 
 function removeSpinners() {
