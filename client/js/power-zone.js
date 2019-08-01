@@ -1,12 +1,38 @@
 /* global io */
 const socket = io();
-let numberOfZones = 0;
+let NUMBER_OF_ZONES = 0;
+
+function clearForm() {
+  document.getElementById('powerZoneForm').reset();
+  NUMBER_OF_ZONES = 0;
+  document.getElementById('inputFileName').value = '';
+  document.getElementById('inputLowerBound').value = '';
+  document.getElementById('inputUpperBound').value = '';
+  document.getElementById('inputStep').value = '';
+  document.getElementById('inputStartTrap').value = '';
+  document.getElementById('inputEndTrap').value = '';
+}
 
 function removeZoneCards() {
   const zoneCards = document.getElementsByClassName('zone');
-  for (let index = 0; index < zoneCards.length; index += 1) {
-    zoneCards[index].remove();
+  Array.from(zoneCards).forEach(zoneCard => zoneCard.remove());
+}
+
+function removeAlerts() {
+  const alerts = document.getElementsByClassName('alert');
+  Array.from(alerts).forEach(alert => alert.remove());
+}
+
+function removeSpinners() {
+  const spinner = document.getElementById('spinnerContainer');
+  if (spinner) {
+    spinner.remove();
   }
+}
+
+function resetForm() {
+  clearForm();
+  removeZoneCards();
 }
 
 /*
@@ -15,6 +41,8 @@ function removeZoneCards() {
 function renderZoneCards(numZones) {
   const formElement = document.getElementById('powerZoneForm');
   removeZoneCards();
+  removeAlerts();
+  removeSpinners();
   const zoneCardsElement = document.createElement('div');
   zoneCardsElement.className = 'zone';
 
@@ -93,12 +121,12 @@ function renderZoneCards(numZones) {
 function numZoneHandler(zoneValue) {
   if (
     zoneValue === 'default' ||
-    numberOfZones === zoneValue ||
+    NUMBER_OF_ZONES === zoneValue ||
     Number.isNaN(zoneValue)
   ) {
     return;
   }
-  numberOfZones = zoneValue;
+  NUMBER_OF_ZONES = zoneValue;
   renderZoneCards(zoneValue);
 }
 
@@ -142,8 +170,29 @@ function formSubmitHandler(event) {
     }
   }
   // Submit form input here
-  // TODO: Confirmation alert/modal that tells user that they have created a power plan
   socket.emit('create-power-plan', outputDict);
+
+  // Remove submit button
+  const submitButton = document.getElementById('submitButton');
+  submitButton.parentNode.removeChild(submitButton);
+
+  resetForm();
+  const defaultButton = document.getElementById('defaultButton');
+  defaultButton.disabled = true;
+
+  // Add spinner
+  const spinnerContainer = document.createElement('div');
+  spinnerContainer.id = 'spinnerContainer';
+  const spinnerdiv = document.createElement('div');
+  spinnerdiv.className = 'spinner-border text-primary';
+  spinnerdiv.role = 'status';
+  const spinner = document.createElement('span');
+  spinner.className = 'sr-only';
+  spinner.textContent = 'Loading...';
+  spinnerdiv.appendChild(spinner);
+  spinnerContainer.appendChild(spinnerdiv);
+
+  form.appendChild(spinnerContainer);
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -242,3 +291,24 @@ function prefillDefault() {
 
   prefill(config, zone);
 }
+
+socket.on('power-plan-generated', function notifyPowerPlanGeneration() {
+  // Remove spinner
+  const spinner = document.getElementById('spinnerContainer');
+  if (spinner) {
+    spinner.parentNode.removeChild(spinner);
+    const defaultButton = document.getElementById('defaultButton');
+    defaultButton.disabled = false;
+  }
+
+  removeAlerts();
+
+  // Replace with an alert
+  const alert = document.createElement('div');
+  alert.className = 'alert alert-success';
+  alert.role = 'alert';
+  alert.textContent = 'Power plan finished generation!';
+
+  const form = document.getElementById('powerZoneForm');
+  form.appendChild(alert);
+});

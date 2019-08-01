@@ -14,7 +14,7 @@
 
     <div id="main">
       <div class="col-md-12">
-        <h1>Generate Power Map</h1>
+        <h1 id="powerZoneHeader">Generate Power Map</h1>
         <div class="row">
           <div class="col-lg-8">
             <form id="powerZoneForm" onsubmit="formSubmitHandler(event)">
@@ -27,6 +27,7 @@
                         <button
                           type="button"
                           class="btn btn-outline-primary"
+                          id="defaultButton"
                           onclick="prefillDefault()"
                         >
                           Default
@@ -36,6 +37,7 @@
                   </div>
                 </div>
               </div>
+              <button type="button" class="btn btn-danger btn-lg btn-block" onclick="resetForm()">Reset Form</button>
               <div class="card">
                 <div class="card-body">
                   <div class="form-row">
