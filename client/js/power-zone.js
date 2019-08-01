@@ -34,6 +34,11 @@ function removeSpinners() {
   }
 }
 
+function resetForm() {
+  clearForm();
+  removeZoneCards();
+}
+
 /*
     Dynamically generate zone cards
 */
@@ -175,8 +180,7 @@ function formSubmitHandler(event) {
   const submitButton = document.getElementById('submitButton');
   submitButton.parentNode.removeChild(submitButton);
 
-  removeZoneCards();
-  clearForm();
+  resetForm();
   const defaultButton = document.getElementById('defaultButton');
   defaultButton.disabled = true;
 
