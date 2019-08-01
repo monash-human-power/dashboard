@@ -44,6 +44,7 @@ const sidebar = [
   { file: 'power-model', title: 'Power Model Start/Stop' },
   { file: 'power-zone', title: 'Generate Power Map' },
   { file: 'power-calibration', title: 'Power Model Calibration' },
+  { file: 'camera', title: 'Camera Settings' },
 ];
 
 /*

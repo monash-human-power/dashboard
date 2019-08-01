@@ -63,6 +63,7 @@ sockets.init = function socketInit(server) {
   mqttClient.subscribe('power_model/max_speed');
   mqttClient.subscribe('power_model/recommended_SP');
   mqttClient.subscribe('power_model/plan_generated');
+  mqttClient.subscribe('camera/push_overlays');
   mqttClient.on('connect', mqttConnected);
 
   // Not a heroku instance
@@ -94,6 +95,8 @@ sockets.init = function socketInit(server) {
         socket.emit('power-model-running');
       } else if (topic === 'power_model/plan_generated') {
         socket.emit('power-plan-generated');
+      } else if (topic === 'camera/push_overlays') {
+        socket.emit('push-overlays', payloadString);
       }
     });
 
@@ -124,6 +127,14 @@ sockets.init = function socketInit(server) {
         'power_model/generate_power_plan',
         JSON.stringify(inputPowerPlan),
       );
+    });
+
+    socket.on('get-overlays', () => {
+      mqttClient.publish('camera/get_overlays', 'true');
+    });
+
+    socket.on('set-overlays', selectedOverlays => {
+      mqttClient.publish('camera/set_overlays', selectedOverlays);
     });
   });
 };
