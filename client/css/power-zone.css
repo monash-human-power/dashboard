@@ -5,3 +5,8 @@
 #submitButton {
   margin-top: 1em;
 }
+
+#spinnerContainer {
+  padding-top: 1em;
+  text-align: center;
+}
