@@ -1,5 +1,6 @@
 # Monash Human Power - Data Acquisition System Web Server
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/801356f5a7bf4e84a9229f13b31a081f)](https://app.codacy.com/app/mhp-admin/MHP-DAS-Web-Server?utm_source=github.com&utm_medium=referral&utm_content=Monash-Human-Power/MHP-DAS-Web-Server&utm_campaign=Badge_Grade_Dashboard)
 [![Build Status](https://www.travis-ci.org/Monash-Human-Power/MHP-DAS-Web-Server.svg?branch=master)](https://www.travis-ci.org/Monash-Human-Power/MHP-DAS-Web-Server)
 
 A web server for the Data Acquisition System (DAS) for Monash Human Power.
