@@ -10,8 +10,8 @@ function pushOverlayHandler(data) {
     const checkedString = activeOverlay === overlay.file ? 'checked' : '';
     radioButtonHtml += `
       <div class="form-check">
-        <input class="form-check-input" type="radio" name="${device}-overlay" id="${device}-${overlay.file}" value="${overlay.file}" ${checkedString}>
-        <label class="form-check-label" for="${device}-${overlay.file}">${overlay.name}</label>
+        <input class="form-check-input" type="radio" name="${device}-overlay" id="${device}-${overlay}" value="${overlay}" ${checkedString}>
+        <label class="form-check-label" for="${device}-${overlay}">${overlay}</label>
       </div>
     `;
   });
