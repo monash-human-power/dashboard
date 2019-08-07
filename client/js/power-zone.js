@@ -149,7 +149,8 @@ function formSubmitHandler(event) {
       if (outputDict.inputs) {
         inputDict = outputDict.inputs;
       }
-      inputDict[id.substring(inputPrefix.length)] = form.elements[index].value;
+      const inputName = id.substring(inputPrefix.length);
+      inputDict[inputName] = form.elements[index].value;
       outputDict.inputs = inputDict;
     } else if (
       // Group up 'zone' information
