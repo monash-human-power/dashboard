@@ -7,3 +7,8 @@
     padding-top: 15px;
     margin-bottom: 8px;
 }
+
+#map {
+    height: 400px;
+    width: 100%;
+}

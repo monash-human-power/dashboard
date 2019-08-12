@@ -3,6 +3,7 @@
   setupVelocityTimeChart,
   setupPowerTimeChart,
   addData,
+  ol,
   */
 const socket = io();
 let cadenceTimeChart = setupCadenceTimeChart();
@@ -166,3 +167,17 @@ function updateTextMode() {
   }
 }
 updateTextMode(); // State of switch is kept after refresh, so check on page load
+
+// eslint-disable-next-line no-unused-vars
+const map = new ol.Map({
+  target: 'map',
+  layers: [
+    new ol.layer.Tile({
+      source: new ol.source.OSM(),
+    }),
+  ],
+  view: new ol.View({
+    center: ol.proj.fromLonLat([145, -37.8]),
+    zoom: 8,
+  }),
+});
