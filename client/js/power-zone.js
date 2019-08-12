@@ -141,37 +141,39 @@ function formSubmitHandler(event) {
   const outputDict = {};
   const inputPrefix = 'input';
   const zonePrefix = 'zone';
-  for (let index = 1; index < form.elements.length - 1; index += 1) {
-    // Group up 'inputs' information
-    const { id } = form.elements[index];
-    if (id.startsWith(inputPrefix)) {
-      let inputDict = {};
-      if (outputDict.inputs) {
-        inputDict = outputDict.inputs;
+  for (let index = 0; index < form.elements.length - 1; index += 1) {
+    if (form.elements[index].tagName !== 'BUTTON') {
+      // Group up 'inputs' information
+      const { id } = form.elements[index];
+      if (id.startsWith(inputPrefix)) {
+        let inputDict = {};
+        if (outputDict.inputs) {
+          inputDict = outputDict.inputs;
+        }
+        const inputName = id.substring(inputPrefix.length);
+        inputDict[inputName] = form.elements[index].value;
+        outputDict.inputs = inputDict;
+      } else if (
+        // Group up 'zone' information
+        id.startsWith(zonePrefix) &&
+        isNumericString(id.charAt(zonePrefix.length))
+      ) {
+        let zoneDict = {};
+        const zone = id.substring(0, zonePrefix.length + 1);
+        const value = id.substring(zonePrefix.length + 1);
+        // Check if there is existing dict already
+        if (outputDict[zone]) {
+          zoneDict = outputDict[zone];
+        }
+        // If user does not place any value, default value of zero.
+        if (form.elements[index].value === '') {
+          form.elements[index].value = 0;
+        }
+        zoneDict[value] = form.elements[index].value;
+        outputDict[zone] = zoneDict;
+      } else {
+        outputDict[form.elements[index].id] = form.elements[index].value;
       }
-      const inputName = id.substring(inputPrefix.length);
-      inputDict[inputName] = form.elements[index].value;
-      outputDict.inputs = inputDict;
-    } else if (
-      // Group up 'zone' information
-      id.startsWith(zonePrefix) &&
-      isNumericString(id.charAt(zonePrefix.length))
-    ) {
-      let zoneDict = {};
-      const zone = id.substring(0, zonePrefix.length + 1);
-      const value = id.substring(zonePrefix.length + 1);
-      // Check if there is existing dict already
-      if (outputDict[zone]) {
-        zoneDict = outputDict[zone];
-      }
-      // If user does not place any value, default value of zero.
-      if (form.elements[index].value === '') {
-        form.elements[index].value = 0;
-      }
-      zoneDict[value] = form.elements[index].value;
-      outputDict[zone] = zoneDict;
-    } else {
-      outputDict[form.elements[index].id] = form.elements[index].value;
     }
   }
   // Submit form input here
