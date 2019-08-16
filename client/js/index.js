@@ -14,6 +14,8 @@ let dataCount = 0;
 let storedData = {};
 let isInitialData = true;
 
+let mapVectorSource;
+
 function startHandler() {
   // eslint-disable-next-line no-console
   console.log('start');
@@ -144,6 +146,15 @@ function dataHandler(inputData) {
   );
   setSensorValue('potentiometerValue', inputData.pot);
   setSensorValue('thermometerValue', inputData.thermoC, 1);
+
+  // Update map
+  const locationMarker = new ol.Feature({
+    geometry: new ol.geom.Point(
+      ol.proj.fromLonLat([inputData.gps_long, inputData.gps_lat]),
+    ),
+  });
+  mapVectorSource.clear();
+  mapVectorSource.addFeature(locationMarker);
 }
 
 function stopHandler() {
@@ -168,16 +179,35 @@ function updateTextMode() {
 }
 updateTextMode(); // State of switch is kept after refresh, so check on page load
 
-// eslint-disable-next-line no-unused-vars
-const map = new ol.Map({
-  target: 'map',
-  layers: [
-    new ol.layer.Tile({
-      source: new ol.source.OSM(),
+function setupMap() {
+  const style = new ol.style.Style({
+    image: new ol.style.Circle({
+      radius: 7,
+      fill: new ol.style.Fill({ color: 'blue' }),
+      stroke: new ol.style.Stroke({
+        color: 'white',
+        width: 2,
+      }),
     }),
-  ],
-  view: new ol.View({
-    center: ol.proj.fromLonLat([145, -37.8]),
-    zoom: 8,
-  }),
-});
+  });
+
+  const mapSource = new ol.source.OSM();
+  const mapLayer = new ol.layer.Tile({ source: mapSource });
+
+  mapVectorSource = new ol.source.Vector();
+  const vectorLayer = new ol.layer.Vector({
+    source: mapVectorSource,
+    style,
+  });
+
+  // eslint-disable-next-line no-unused-vars
+  const map = new ol.Map({
+    target: 'map',
+    layers: [mapLayer, vectorLayer],
+    view: new ol.View({
+      center: ol.proj.fromLonLat([144.4104, -37.8898]),
+      zoom: 15,
+    }),
+  });
+}
+setupMap();
