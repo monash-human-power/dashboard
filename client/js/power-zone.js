@@ -130,40 +130,47 @@ function numZoneHandler(zoneValue) {
   renderZoneCards(zoneValue);
 }
 
+function isNumericString(str) {
+  return !Number.isNaN(str);
+}
+
 // eslint-disable-next-line no-unused-vars
 function formSubmitHandler(event) {
   event.preventDefault();
   const form = document.getElementById('powerZoneForm');
   const outputDict = {};
-  for (let index = 1; index < form.elements.length - 1; index += 1) {
-    // Group up 'inputs' information
-    const inputMatch = form.elements[index].id.match(
-      /(?<input>input)(?<value>.*)/,
-    );
-    if (inputMatch) {
-      let inputDict = {};
-      if (outputDict.inputs) {
-        inputDict = outputDict.inputs;
-      }
-      inputDict[inputMatch.groups.value] = form.elements[index].value;
-      outputDict.inputs = inputDict;
-    } else {
-      // Group up 'zone' information
-      const zoneInputMatch = form.elements[index].id.match(
-        /(?<zone>zone\d*)(?<value>.*)/,
-      );
-      if (zoneInputMatch) {
+  const inputPrefix = 'input';
+  const zonePrefix = 'zone';
+  for (let index = 0; index < form.elements.length - 1; index += 1) {
+    if (form.elements[index].tagName !== 'BUTTON') {
+      // Group up 'inputs' information
+      const { id } = form.elements[index];
+      if (id.startsWith(inputPrefix)) {
+        let inputDict = {};
+        if (outputDict.inputs) {
+          inputDict = outputDict.inputs;
+        }
+        const inputName = id.substring(inputPrefix.length);
+        inputDict[inputName] = form.elements[index].value;
+        outputDict.inputs = inputDict;
+      } else if (
+        // Group up 'zone' information
+        id.startsWith(zonePrefix) &&
+        isNumericString(id.charAt(zonePrefix.length))
+      ) {
         let zoneDict = {};
+        const zone = id.substring(0, zonePrefix.length + 1);
+        const value = id.substring(zonePrefix.length + 1);
         // Check if there is existing dict already
-        if (outputDict[zoneInputMatch.groups.zone]) {
-          zoneDict = outputDict[zoneInputMatch.groups.zone];
+        if (outputDict[zone]) {
+          zoneDict = outputDict[zone];
         }
         // If user does not place any value, default value of zero.
         if (form.elements[index].value === '') {
           form.elements[index].value = 0;
         }
-        zoneDict[zoneInputMatch.groups.value] = form.elements[index].value;
-        outputDict[zoneInputMatch.groups.zone] = zoneDict;
+        zoneDict[value] = form.elements[index].value;
+        outputDict[zone] = zoneDict;
       } else {
         outputDict[form.elements[index].id] = form.elements[index].value;
       }
