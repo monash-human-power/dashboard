@@ -12,3 +12,12 @@
     height: 400px;
     width: 100%;
 }
+
+#map .ol-zoom-in,
+#map .ol-zoom-out {
+    background-color: #343a40;
+}
+
+#map .ol-scale-line {
+  background-color: #343a4090;
+}

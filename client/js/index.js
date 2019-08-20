@@ -227,6 +227,7 @@ function setupMap() {
       center: ol.proj.fromLonLat([144.4104, -37.8898]),
       zoom: 15,
     }),
+    controls: ol.control.defaults().extend([new ol.control.ScaleLine()]),
   });
 }
 setupMap();
