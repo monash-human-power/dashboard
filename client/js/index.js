@@ -15,7 +15,8 @@ let storedData = {};
 let isInitialData = true;
 
 let mapVectorSource;
-const bikePath = new ol.geom.LineString([]);
+let bikePath = new ol.geom.LineString([]);
+const bikePathFeature = new ol.Feature({ type: 'path', geometry: bikePath });
 const bikePositionFeature = new ol.Feature({ type: 'point' });
 
 function startHandler() {
@@ -32,6 +33,11 @@ function startHandler() {
 
   powerTimeChart.destroy();
   powerTimeChart = setupPowerTimeChart();
+
+  // Clear map
+  bikePath = new ol.geom.LineString([]);
+  bikePathFeature.setGeometry(bikePath);
+  bikePositionFeature.unset('geometry');
 }
 
 function updateFigures() {
@@ -203,8 +209,6 @@ function setupMap() {
       }),
     }),
   };
-
-  const bikePathFeature = new ol.Feature({ type: 'path', geometry: bikePath });
 
   const mapSource = new ol.source.OSM();
   const mapLayer = new ol.layer.Tile({ source: mapSource });
