@@ -9,8 +9,15 @@
 }
 
 #map {
-    height: 400px;
+    height: 100%;
     width: 100%;
+    padding: 15px;
+}
+
+@media (max-width: 576px) {
+  #map {
+    height: 400px;
+  }
 }
 
 #map .ol-zoom-in,
