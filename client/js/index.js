@@ -18,6 +18,7 @@ let mapVectorSource;
 let bikePath = new ol.geom.LineString([]);
 const bikePathFeature = new ol.Feature({ type: 'path', geometry: bikePath });
 const bikePositionFeature = new ol.Feature({ type: 'point' });
+let map;
 
 function startHandler() {
   // eslint-disable-next-line no-console
@@ -135,6 +136,12 @@ function dataHandler(inputData) {
   if (isInitialData) {
     isInitialData = false;
     updateFigures();
+    map.setView(
+      new ol.View({
+        center: ol.proj.fromLonLat([inputData.gps_long, inputData.gps_lat]),
+        zoom: 15,
+      }),
+    );
   }
 
   // Update text mode
@@ -224,12 +231,13 @@ function setupMap() {
   });
 
   // eslint-disable-next-line no-unused-vars
-  const map = new ol.Map({
+  map = new ol.Map({
     target: 'map',
     layers: [mapLayer, vectorLayer],
     view: new ol.View({
-      center: ol.proj.fromLonLat([144.4104, -37.8898]),
-      zoom: 15,
+      // MHP workshop coordinates
+      center: ol.proj.fromLonLat([145.13404, -37.908756]),
+      zoom: 17,
     }),
     controls: ol.control.defaults().extend([new ol.control.ScaleLine()]),
   });
