@@ -3,6 +3,7 @@
   setupVelocityTimeChart,
   setupPowerTimeChart,
   addData,
+  ol,
   */
 const socket = io();
 let cadenceTimeChart = setupCadenceTimeChart();
@@ -12,6 +13,12 @@ let powerTimeChart = setupPowerTimeChart();
 let dataCount = 0;
 let storedData = {};
 let isInitialData = true;
+
+let mapVectorSource;
+let bikePath = new ol.geom.LineString([]);
+const bikePathFeature = new ol.Feature({ type: 'path', geometry: bikePath });
+const bikePositionFeature = new ol.Feature({ type: 'point' });
+let map;
 
 function startHandler() {
   // eslint-disable-next-line no-console
@@ -27,9 +34,14 @@ function startHandler() {
 
   powerTimeChart.destroy();
   powerTimeChart = setupPowerTimeChart();
+
+  // Clear map
+  bikePath = new ol.geom.LineString([]);
+  bikePathFeature.setGeometry(bikePath);
+  bikePositionFeature.unset('geometry');
 }
 
-function updateGraphs() {
+function updateFigures() {
   // Do nothing if there is no data
   if (dataCount === 0) {
     return;
@@ -73,8 +85,18 @@ function updateGraphs() {
     y: data.power,
   };
   addData(powerTimeChart, powerData);
+
+  // Update map
+  if (data.gps_long !== undefined && data.gps_lat !== undefined) {
+    bikePositionFeature.setGeometry(
+      new ol.geom.Point(ol.proj.fromLonLat([data.gps_long, data.gps_lat])),
+    );
+    bikePath.appendCoordinate(
+      ol.proj.fromLonLat([data.gps_long, data.gps_lat]),
+    );
+  }
 }
-setInterval(updateGraphs, 1000);
+setInterval(updateFigures, 1000);
 
 // Set the value of a sensor
 function setSensorValue(elementId, value, decimalPlaces = -1) {
@@ -113,7 +135,13 @@ function dataHandler(inputData) {
   }
   if (isInitialData) {
     isInitialData = false;
-    updateGraphs();
+    updateFigures();
+    map.setView(
+      new ol.View({
+        center: ol.proj.fromLonLat([inputData.gps_long, inputData.gps_lat]),
+        zoom: 15,
+      }),
+    );
   }
 
   // Update text mode
@@ -166,3 +194,52 @@ function updateTextMode() {
   }
 }
 updateTextMode(); // State of switch is kept after refresh, so check on page load
+
+function setupMap() {
+  // .nav-link.active from common.css
+  const highlightColor = '#007bff';
+  const styles = {
+    point: new ol.style.Style({
+      image: new ol.style.Circle({
+        radius: 7,
+        fill: new ol.style.Fill({ color: highlightColor }),
+        stroke: new ol.style.Stroke({
+          color: 'white',
+          width: 2,
+        }),
+      }),
+    }),
+    path: new ol.style.Style({
+      stroke: new ol.style.Stroke({
+        color: highlightColor,
+        width: 4,
+      }),
+    }),
+  };
+
+  const mapSource = new ol.source.OSM();
+  const mapLayer = new ol.layer.Tile({ source: mapSource });
+
+  mapVectorSource = new ol.source.Vector({
+    features: [bikePathFeature, bikePositionFeature],
+  });
+  const vectorLayer = new ol.layer.Vector({
+    source: mapVectorSource,
+    style: feature => {
+      return styles[feature.get('type')];
+    },
+  });
+
+  // eslint-disable-next-line no-unused-vars
+  map = new ol.Map({
+    target: 'map',
+    layers: [mapLayer, vectorLayer],
+    view: new ol.View({
+      // MHP workshop coordinates
+      center: ol.proj.fromLonLat([145.13404, -37.908756]),
+      zoom: 17,
+    }),
+    controls: ol.control.defaults().extend([new ol.control.ScaleLine()]),
+  });
+}
+setupMap();
