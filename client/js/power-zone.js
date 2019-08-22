@@ -209,6 +209,8 @@ function prefill(config, zone) {
   document.getElementById('numZones').selectedIndex = config.numZones;
   numZoneHandler(config.numZones);
   document.getElementById('inputFileName').value = config.filename;
+  document.getElementById('inputMass').value = config.mass;
+  document.getElementById('inputStartAdjust').value = config.startAdjust;
   document.getElementById('inputLowerBound').value = config.lowerBound;
   document.getElementById('inputUpperBound').value = config.upperBound;
   document.getElementById('inputStep').value = config.step;
@@ -259,6 +261,8 @@ function prefillDefault() {
   const config = {
     numZones: 6,
     filename: 'default',
+    mass: 75,
+    startAdjust: 130,
     lowerBound: 1000,
     upperBound: 1200,
     step: 100,

@@ -121,7 +121,7 @@ sockets.init = function socketInit(server) {
 
     socket.on('create-power-plan', inputPowerPlan => {
       console.log(
-        `Generated new power plan - ${inputPowerPlan.inputs.FileName}.pkl`,
+        `Generated new power plan - ${inputPowerPlan.inputs.fileName}.pkl`,
       );
       mqttClient.publish(
         'power_model/generate_power_plan',
