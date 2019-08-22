@@ -1,4 +1,6 @@
-/* global io */
+/* global io,
+  removeCapitalLetter,
+  */
 const socket = io();
 let NUMBER_OF_ZONES = 0;
 
@@ -150,7 +152,7 @@ function formSubmitHandler(event) {
         if (outputDict.inputs) {
           inputDict = outputDict.inputs;
         }
-        const inputName = id.substring(inputPrefix.length);
+        const inputName = removeCapitalLetter(id.substring(inputPrefix.length));
         inputDict[inputName] = form.elements[index].value;
         outputDict.inputs = inputDict;
       } else if (
