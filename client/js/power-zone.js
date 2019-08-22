@@ -253,6 +253,7 @@ function prefill(config, zone) {
   }
 }
 
+// TODO: Move these configs to another file
 // eslint-disable-next-line no-unused-vars
 function prefillDefault() {
   const config = {
