@@ -65,7 +65,7 @@ function renderZoneCards(numZones) {
 
     // Recommended Power
     const recPowerFormGroup = document.createElement('div');
-    recPowerFormGroup.className = 'form-group col-md-4';
+    recPowerFormGroup.className = 'form-group col-lg-4';
     const recPowerInput = document.createElement('input');
     recPowerInput.className = 'form-control';
     recPowerInput.id = `zone${zoneNumber}RecPower`;
@@ -75,7 +75,7 @@ function renderZoneCards(numZones) {
 
     // Max Time
     const maxTimeFormGroup = document.createElement('div');
-    maxTimeFormGroup.className = 'form-group col-md-4';
+    maxTimeFormGroup.className = 'form-group col-lg-4';
     const maxTimeInput = document.createElement('input');
     maxTimeInput.className = 'form-control';
     maxTimeInput.id = `zone${zoneNumber}MaxTime`;
@@ -85,7 +85,7 @@ function renderZoneCards(numZones) {
 
     // Spent Time
     const spentTimeFormGroup = document.createElement('div');
-    spentTimeFormGroup.className = 'form-group col-md-4';
+    spentTimeFormGroup.className = 'form-group col-lg-4';
     const spentTimeInput = document.createElement('input');
     spentTimeInput.className = 'form-control';
     spentTimeInput.id = `zone${zoneNumber}SpentTime`;
