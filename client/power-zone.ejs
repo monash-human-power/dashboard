@@ -37,7 +37,13 @@
                   </div>
                 </div>
               </div>
-              <button type="button" class="btn btn-danger btn-lg btn-block" onclick="resetForm()">Reset Form</button>
+              <button
+                type="button"
+                class="btn btn-danger btn-lg btn-block"
+                onclick="resetForm()"
+              >
+                Reset Form
+              </button>
               <div class="card">
                 <div class="card-body">
                   <div class="form-row">
@@ -76,9 +82,28 @@
                             required
                           />
                           <div class="input-group-append">
-                            <span class="input-group-text" id="inputFileExtension">.json</span>
+                            <span
+                              class="input-group-text"
+                              id="inputFileExtension"
+                              >.json</span
+                            >
                           </div>
                         </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label for="inputMass">Mass</label>
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="inputMass"
+                          placeholder="Mass"
+                          min="0"
+                          required
+                        />
                       </div>
                     </div>
                   </div>
