@@ -67,14 +67,18 @@
                     <div class="col-lg-6">
                       <div class="form-group">
                         <label for="inputFileName">Power Plan File Name</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="inputFileName"
-                          placeholder="Filename"
-                          required
-                        />
-                        <span>.pkl</span>
+                        <div class="input-group">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="inputFileName"
+                            placeholder="Filename"
+                            required
+                          />
+                          <div class="input-group-append">
+                            <span class="input-group-text" id="inputFileExtension">.json</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
