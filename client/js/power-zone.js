@@ -1,4 +1,6 @@
-/* global io */
+/* global io,
+  removeCapitalLetter,
+  */
 const socket = io();
 let NUMBER_OF_ZONES = 0;
 
@@ -63,7 +65,7 @@ function renderZoneCards(numZones) {
 
     // Recommended Power
     const recPowerFormGroup = document.createElement('div');
-    recPowerFormGroup.className = 'form-group col-md-4';
+    recPowerFormGroup.className = 'form-group col-lg-4';
     const recPowerInput = document.createElement('input');
     recPowerInput.className = 'form-control';
     recPowerInput.id = `zone${zoneNumber}RecPower`;
@@ -73,7 +75,7 @@ function renderZoneCards(numZones) {
 
     // Max Time
     const maxTimeFormGroup = document.createElement('div');
-    maxTimeFormGroup.className = 'form-group col-md-4';
+    maxTimeFormGroup.className = 'form-group col-lg-4';
     const maxTimeInput = document.createElement('input');
     maxTimeInput.className = 'form-control';
     maxTimeInput.id = `zone${zoneNumber}MaxTime`;
@@ -83,7 +85,7 @@ function renderZoneCards(numZones) {
 
     // Spent Time
     const spentTimeFormGroup = document.createElement('div');
-    spentTimeFormGroup.className = 'form-group col-md-4';
+    spentTimeFormGroup.className = 'form-group col-lg-4';
     const spentTimeInput = document.createElement('input');
     spentTimeInput.className = 'form-control';
     spentTimeInput.id = `zone${zoneNumber}SpentTime`;
@@ -150,7 +152,7 @@ function formSubmitHandler(event) {
         if (outputDict.inputs) {
           inputDict = outputDict.inputs;
         }
-        const inputName = id.substring(inputPrefix.length);
+        const inputName = removeCapitalLetter(id.substring(inputPrefix.length));
         inputDict[inputName] = form.elements[index].value;
         outputDict.inputs = inputDict;
       } else if (
@@ -207,6 +209,8 @@ function prefill(config, zone) {
   document.getElementById('numZones').selectedIndex = config.numZones;
   numZoneHandler(config.numZones);
   document.getElementById('inputFileName').value = config.filename;
+  document.getElementById('inputMass').value = config.mass;
+  document.getElementById('inputStartAdjust').value = config.startAdjust;
   document.getElementById('inputLowerBound').value = config.lowerBound;
   document.getElementById('inputUpperBound').value = config.upperBound;
   document.getElementById('inputStep').value = config.step;
@@ -251,11 +255,14 @@ function prefill(config, zone) {
   }
 }
 
+// TODO: Move these configs to another file
 // eslint-disable-next-line no-unused-vars
 function prefillDefault() {
   const config = {
     numZones: 6,
     filename: 'default',
+    mass: 75,
+    startAdjust: 130,
     lowerBound: 1000,
     upperBound: 1200,
     step: 100,
