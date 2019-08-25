@@ -162,7 +162,7 @@ function formSubmitHandler(event) {
       ) {
         let zoneDict = {};
         const zone = id.substring(0, zonePrefix.length + 1);
-        const value = id.substring(zonePrefix.length + 1);
+        const value = removeCapitalLetter(id.substring(zonePrefix.length + 1));
         // Check if there is existing dict already
         if (outputDict[zone]) {
           zoneDict = outputDict[zone];
@@ -174,7 +174,8 @@ function formSubmitHandler(event) {
         zoneDict[value] = form.elements[index].value;
         outputDict[zone] = zoneDict;
       } else {
-        outputDict[form.elements[index].id] = form.elements[index].value;
+        const key = removeCapitalLetter(form.elements[index].id);
+        outputDict[key] = form.elements[index].value;
       }
     }
   }
