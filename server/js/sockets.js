@@ -60,7 +60,7 @@ sockets.init = function socketInit(server) {
   mqttClient.subscribe('start');
   mqttClient.subscribe('stop');
   mqttClient.subscribe('data');
-  mqttClient.subscribe('power_model/max_speed');
+  mqttClient.subscribe('power_model/predicted_max_speed');
   mqttClient.subscribe('power_model/recommended_SP');
   mqttClient.subscribe('power_model/plan_generated');
   mqttClient.subscribe('camera/push_overlays');
@@ -79,24 +79,51 @@ sockets.init = function socketInit(server) {
   io.on('connection', function ioConnection(socket) {
     mqttClient.on('message', function mqttMessage(topic, payload) {
       const payloadString = payload.toString();
-      if (topic === 'start') {
-        socket.emit('start');
-      } else if (topic === 'stop') {
-        socket.emit('stop');
-      } else if (topic === 'data') {
-        mqttDataTopicHandler(socket, payloadString);
-        if (process.env.HEROKU === undefined) {
-          publicMqttClient.publish('data', payloadString);
+      const topicString = topic.split('/');
+      if (topicString.length === 1) {
+        switch (topic) {
+          case 'start':
+            socket.emit('start');
+            break;
+          case 'stop':
+            socket.emit('stop');
+            break;
+          case 'data':
+            mqttDataTopicHandler(socket, payloadString);
+            if (process.env.HEROKU === undefined) {
+              publicMqttClient.publish('data', payloadString);
+            }
+            break;
+          default:
+            console.error(`Unhandled topic - ${topic}`);
+            break;
         }
-      } else if (
-        topic === 'power_model/max_speed' ||
-        topic === 'power_model/recommended_SP'
-      ) {
-        socket.emit('power-model-running');
-      } else if (topic === 'power_model/plan_generated') {
-        socket.emit('power-plan-generated');
-      } else if (topic === 'camera/push_overlays') {
-        socket.emit('push-overlays', payloadString);
+      } else if (topicString[0] === 'power_model') {
+        switch (topicString[1]) {
+          case 'predicted_max_speed':
+            socket.emit('power-model-running');
+            break;
+          case 'recommended_SP':
+            socket.emit('power-model-running');
+            break;
+          case 'plan_generated':
+            socket.emit('power-plan-generated');
+            break;
+          default:
+            console.error(`Unhandled topic - ${topic}`);
+            break;
+        }
+      } else if (topicString[0] === 'camera') {
+        switch (topicString[1]) {
+          case 'push_overlays':
+            socket.emit('push-overlays', payloadString);
+            break;
+          default:
+            console.error(`Unhandled topic - ${topic}`);
+            break;
+        }
+      } else {
+        console.error(`Unhandled topic - ${topic}`);
       }
     });
 
