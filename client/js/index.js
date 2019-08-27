@@ -154,6 +154,7 @@ function dataHandler(inputData) {
     inputData.gps_lat,
     inputData.gps_long,
     inputData.gps_alt,
+    4,
   );
   setSensorValueVector(
     'accelerometerValue',
@@ -178,9 +179,23 @@ function stopHandler() {
   console.log('stop');
 }
 
+function maxSpeedHandler(inputData) {
+  setSensorValue('powerModelPredMaxSpeed', inputData.predicted_max_speed, 2);
+}
+
+function recSPHandler(inputData) {
+  setSensorValue('powerModelRecSpeed', inputData.rec_speed, 2);
+  setSensorValue('powerModelRecPower', inputData.rec_power, 2);
+  setSensorValue('zDistanceLeft', inputData.zdist, 2);
+  setSensorValue('distanceOffset', inputData.distance_offset, 2);
+  setSensorValue('totalDistanceLeft', inputData.distance_left, 2);
+}
+
 socket.on('start', startHandler);
 socket.on('data', dataHandler);
 socket.on('stop', stopHandler);
+socket.on('power-model-max-speed', maxSpeedHandler);
+socket.on('power-model-recommended-SP', recSPHandler);
 
 function updateTextMode() {
   const textDiv = document.getElementById('textDiv');

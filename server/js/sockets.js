@@ -15,8 +15,7 @@ function mqttConnected() {
   console.log('Connected to mqtt broker');
 }
 
-function mqttDataTopicHandler(socket, payload) {
-  // Parse data
+function mqttDataConverter(payload) {
   const message = {};
   const dataArray = payload.split('&');
   for (let index = 0; index < dataArray.length; index += 1) {
@@ -30,6 +29,11 @@ function mqttDataTopicHandler(socket, payload) {
       message[key] = Number(value);
     }
   }
+  return message;
+}
+
+function mqttDataTopicHandler(socket, payload) {
+  const message = mqttDataConverter(payload);
   socket.emit('data', message);
 }
 
@@ -99,12 +103,14 @@ sockets.init = function socketInit(server) {
             break;
         }
       } else if (topicString[0] === 'power_model') {
+        socket.emit('power-model-running');
+        const message = mqttDataConverter(payloadString);
         switch (topicString[1]) {
           case 'predicted_max_speed':
-            socket.emit('power-model-running');
+            socket.emit('power-model-max-speed', message);
             break;
           case 'recommended_SP':
-            socket.emit('power-model-running');
+            socket.emit('power-model-recommended-SP', message);
             break;
           case 'plan_generated':
             socket.emit('power-plan-generated');
