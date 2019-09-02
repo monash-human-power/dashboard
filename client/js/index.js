@@ -2,6 +2,7 @@
   setupCadenceTimeChart,
   setupVelocityTimeChart,
   setupPowerTimeChart,
+  setHorizontalLabel,
   addData,
   ol,
   */
@@ -12,6 +13,11 @@ let powerTimeChart = setupPowerTimeChart();
 
 let dataCount = 0;
 let storedData = {};
+let maxData = {
+  cadence: 0,
+  velocity: 0,
+  power: 0,
+};
 let isInitialData = true;
 
 let mapVectorSource;
@@ -73,19 +79,30 @@ function updateFigures() {
     y: data.cadence.toFixed(2),
   };
   addData(cadenceTimeChart, cadenceData);
+  if (parseFloat(cadenceData.y) > maxData.cadence) {
+    maxData.cadence = parseFloat(cadenceData.y);
+    setHorizontalLabel(cadenceTimeChart, 'cadence', maxData.cadence);
+  }
 
   const velocityData = {
     x: time,
     y: data.gps_speed.toFixed(2),
   };
   addData(velocityTimeChart, velocityData);
+  if (parseFloat(velocityData.y) > maxData.velocity) {
+    maxData.velocity = parseFloat(velocityData.y);
+    setHorizontalLabel(velocityTimeChart, 'velocity', maxData.velocity);
+  }
 
   const powerData = {
     x: time,
     y: data.power.toFixed(2),
   };
   addData(powerTimeChart, powerData);
-
+  if (parseFloat(powerData.y) > maxData.power) {
+    maxData.power = parseFloat(powerData.y);
+    setHorizontalLabel(powerTimeChart, 'power', maxData.power);
+  }
   // Update map
   if (data.gps_long !== undefined && data.gps_lat !== undefined) {
     bikePositionFeature.setGeometry(
