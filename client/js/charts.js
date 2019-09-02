@@ -35,7 +35,6 @@ function setupCadenceTimeChart() {
           },
           ticks: {
             beginAtZero: true,
-            max: 175,
           },
         },
       ],
@@ -91,7 +90,6 @@ function setupVelocityTimeChart() {
           },
           ticks: {
             beginAtZero: true,
-            max: 175,
           },
         },
       ],
@@ -150,7 +148,6 @@ function setupPowerTimeChart() {
           },
           ticks: {
             beginAtZero: true,
-            max: 175,
           },
         },
       ],
