@@ -2,12 +2,6 @@
 
 // TODO: Make this into a module
 // eslint-disable-next-line no-unused-vars
-let chartLabels = {
-  cadence: [],
-  velocity: [],
-  power: [],
-};
-
 function setupCadenceTimeChart() {
   const cadenceTimeChartElement = document.getElementById('cadenceTimeChart');
 
@@ -245,6 +239,7 @@ function addData(chart, data) {
   chart.update();
 }
 
+/* eslint-disable no-param-reassign */
 // eslint-disable-next-line no-unused-vars
 function setHorizontalLabel(chart, chartType, value) {
   let chartID = '';
@@ -269,3 +264,4 @@ function setHorizontalLabel(chart, chartType, value) {
   chart.annotation.elements[chartID].options.label.content = label;
   chart.update();
 }
+/* eslint-enable no-param-reassign */

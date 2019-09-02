@@ -13,7 +13,7 @@ let powerTimeChart = setupPowerTimeChart();
 
 let dataCount = 0;
 let storedData = {};
-let maxData = {
+const maxData = {
   cadence: 0,
   velocity: 0,
   power: 0,
