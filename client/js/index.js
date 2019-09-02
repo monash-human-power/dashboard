@@ -67,22 +67,22 @@ function updateFigures() {
   document.getElementById('filenameText').innerHTML = data.filename;
   document.getElementById('filenameElement').style.display = 'block';
 
-  const time = data.time / 1000;
+  const time = (data.time / 1000).toFixed(2);
   const cadenceData = {
     x: time,
-    y: data.cadence,
+    y: data.cadence.toFixed(2),
   };
   addData(cadenceTimeChart, cadenceData);
 
   const velocityData = {
     x: time,
-    y: data.gps_speed,
+    y: data.gps_speed.toFixed(2),
   };
   addData(velocityTimeChart, velocityData);
 
   const powerData = {
     x: time,
-    y: data.power,
+    y: data.power.toFixed(2),
   };
   addData(powerTimeChart, powerData);
 
