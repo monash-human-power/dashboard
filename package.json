@@ -23,17 +23,18 @@
   },
   "homepage": "https://github.com/khanguslee/MHP-DAS-Web-Server#readme",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.9.0",
     "body-parser": "^1.18.3",
     "bootstrap": "^4.2.1",
     "chart.js": "^2.8.0",
+    "chartjs-plugin-annotation": "^0.5.7",
     "dotenv": "^8.0.0",
     "ejs": "^2.6.2",
     "express": "^4.17.1",
     "jquery": "^3.3.1",
     "mqtt": "^2.18.8",
     "path": "^0.12.7",
-    "socket.io": "^2.2.0",
-    "@fortawesome/fontawesome-free": "^5.9.0"
+    "socket.io": "^2.2.0"
   },
   "devDependencies": {
     "eslint": "^5.16.0",
