@@ -35,7 +35,25 @@ function setupCadenceTimeChart() {
           },
           ticks: {
             beginAtZero: true,
-            max: 175,
+          },
+        },
+      ],
+    },
+    annotation: {
+      drawTime: 'afterDraw',
+      annotations: [
+        {
+          type: 'line',
+          id: 'max-cadence-annotation',
+          mode: 'horizontal',
+          scaleID: 'y-axis-1',
+          value: 0,
+          borderColor: '#57606f',
+          borderDash: [10, 10],
+          label: {
+            enabled: true,
+            content: 'Max Cadence',
+            yAdjust: 15,
           },
         },
       ],
@@ -91,7 +109,25 @@ function setupVelocityTimeChart() {
           },
           ticks: {
             beginAtZero: true,
-            max: 175,
+          },
+        },
+      ],
+    },
+    annotation: {
+      drawTime: 'afterDraw',
+      annotations: [
+        {
+          type: 'line',
+          id: 'max-velocity-annotation',
+          mode: 'horizontal',
+          scaleID: 'y-axis-1',
+          value: 0,
+          borderColor: '#57606f',
+          borderDash: [10, 10],
+          label: {
+            enabled: true,
+            content: 'Max Velocity',
+            yAdjust: 15,
           },
         },
       ],
@@ -150,7 +186,25 @@ function setupPowerTimeChart() {
           },
           ticks: {
             beginAtZero: true,
-            max: 175,
+          },
+        },
+      ],
+    },
+    annotation: {
+      drawTime: 'afterDraw',
+      annotations: [
+        {
+          type: 'line',
+          id: 'max-power-annotation',
+          mode: 'horizontal',
+          scaleID: 'y-axis-1',
+          value: 0,
+          borderColor: '#57606f',
+          borderDash: [10, 10],
+          label: {
+            enabled: true,
+            content: 'Max Power',
+            yAdjust: 15,
           },
         },
       ],
@@ -184,3 +238,30 @@ function addData(chart, data) {
   });
   chart.update();
 }
+
+/* eslint-disable no-param-reassign */
+// eslint-disable-next-line no-unused-vars
+function setHorizontalLabel(chart, chartType, value) {
+  let chartID = '';
+  let label = '';
+  switch (chartType) {
+    case 'cadence':
+      chartID = 'max-cadence-annotation';
+      label = `${value} RPM`;
+      break;
+    case 'velocity':
+      chartID = 'max-velocity-annotation';
+      label = `${value} km/h`;
+      break;
+    case 'power':
+      chartID = 'max-power-annotation';
+      label = `${value} W`;
+      break;
+    default:
+      throw Error('Invalid chart type.');
+  }
+  chart.annotation.elements[chartID].options.value = value;
+  chart.annotation.elements[chartID].options.label.content = label;
+  chart.update();
+}
+/* eslint-enable no-param-reassign */
