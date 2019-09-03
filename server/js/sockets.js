@@ -7,12 +7,43 @@ const sockets = {};
 const mqtt = require('mqtt');
 const os = require('os');
 
-function publicMqttConnected() {
-  console.log('Connected to public mqtt broker');
+// Public MQTT broker
+let PUBLISH_ONLINE = false;
+let PUBLIC_MQTT_CLIENT;
+
+function connectToPublicMQTTBroker(clientID = '') {
+  const publicMqttOptions = {
+    reconnectPeriod: 1000,
+    connectTimeout: 5000,
+    clientId: `publicMqttClient-${clientID}`,
+    username: process.env.MQTT_USERNAME,
+    password: process.env.MQTT_PASSWORD,
+    host: process.env.MQTT_SERVER,
+    port: process.env.MQTT_PORT,
+  };
+  const mqttInstance = mqtt.connect(publicMqttOptions);
+  mqttInstance.on('connect', function publicMqttConnected(connack) {
+    console.log(`Connected to public mqtt broker - ${JSON.stringify(connack)}`);
+  });
+  mqttInstance.on('error', function publicMqttError(error) {
+    console.error(`Public MQTT Error: ${error}`);
+  });
+  mqttInstance.on('reconnect', function publicMqttError() {
+    console.log('Reconnecting to public MQTT broker...');
+  });
+  return mqttInstance;
+}
+
+function sendToPublicMQTTBroker() {
+  return process.env.HEROKU === undefined && PUBLISH_ONLINE;
 }
 
 function mqttConnected() {
   console.log('Connected to mqtt broker');
+}
+
+function mqttError(error) {
+  console.error(`MQTT Error: ${error}`);
 }
 
 function mqttDataConverter(payload) {
@@ -43,21 +74,11 @@ sockets.init = function socketInit(server) {
     connectTimeout: 5000,
     clientId: 'mqttClient',
   };
-  const publicMqttOptions = {
-    reconnectPeriod: 1000,
-    connectTimeout: 5000,
-    clientId: `publicMqttClient-${os.hostname()}`,
-    username: process.env.MQTT_USERNAME,
-    password: process.env.MQTT_PASSWORD,
-    host: process.env.MQTT_SERVER,
-    port: process.env.MQTT_PORT,
-  };
 
   let mqttClient = null;
   if (process.env.HEROKU) {
     console.log('I am using a Heroku instance');
-    publicMqttOptions.clientId += '-HEROKU';
-    mqttClient = mqtt.connect(publicMqttOptions);
+    mqttClient = connectToPublicMQTTBroker(`${os.hostname()}-HEROKU`);
   } else {
     mqttClient = mqtt.connect('mqtt://localhost:1883', mqttOptions);
   }
@@ -69,13 +90,11 @@ sockets.init = function socketInit(server) {
   mqttClient.subscribe('power_model/plan_generated');
   mqttClient.subscribe('camera/push_overlays');
   mqttClient.on('connect', mqttConnected);
-
+  mqttClient.on('error', mqttError);
   // Not a heroku instance
-  let publicMqttClient = null;
-  if (process.env.HEROKU === undefined) {
+  if (sendToPublicMQTTBroker()) {
     console.log('Not a heroku instance');
-    publicMqttClient = mqtt.connect(publicMqttOptions);
-    publicMqttClient.on('connect', publicMqttConnected);
+    PUBLIC_MQTT_CLIENT = connectToPublicMQTTBroker(os.hostname());
   }
 
   // eslint-disable-next-line global-require
@@ -94,8 +113,8 @@ sockets.init = function socketInit(server) {
             break;
           case 'data':
             mqttDataTopicHandler(socket, payloadString);
-            if (process.env.HEROKU === undefined) {
-              publicMqttClient.publish('data', payloadString);
+            if (sendToPublicMQTTBroker()) {
+              PUBLIC_MQTT_CLIENT.publish('data', payloadString);
             }
             break;
           default:
@@ -133,6 +152,7 @@ sockets.init = function socketInit(server) {
       }
     });
 
+    // TODO: Fix up below socket.io handlers
     socket.on('start-power-model', () => {
       mqttClient.publish('power_model/start', 'true');
     });
@@ -168,6 +188,26 @@ sockets.init = function socketInit(server) {
 
     socket.on('set-overlays', selectedOverlays => {
       mqttClient.publish('camera/set_overlays', selectedOverlays);
+    });
+
+    socket.on('publish-data-on', () => {
+      PUBLISH_ONLINE = true;
+      // Connect to public MQTT broker if not connected already
+      if (PUBLIC_MQTT_CLIENT === undefined) {
+        PUBLIC_MQTT_CLIENT = connectToPublicMQTTBroker(os.hostname());
+      }
+    });
+
+    socket.on('publish-data-off', () => {
+      PUBLISH_ONLINE = false;
+      // Disconnect from public MQTT broker
+      if (PUBLIC_MQTT_CLIENT !== undefined) {
+        PUBLIC_MQTT_CLIENT.end(true);
+      }
+    });
+
+    socket.on('get-server-settings', () => {
+      socket.emit('server-settings', { publishOnline: PUBLISH_ONLINE });
     });
   });
 };
