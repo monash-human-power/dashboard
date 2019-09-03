@@ -27,6 +27,7 @@
                       name="options"
                       id="option1"
                       autocomplete="off"
+                      onchange="turnOnPublishData()"
                     />
                     On
                   </label>
@@ -36,6 +37,7 @@
                       name="options"
                       id="option2"
                       autocomplete="off"
+                      onchange="turnOffPublishData()"
                       checked
                     />
                     Off
@@ -49,4 +51,6 @@
     </div>
   </body>
   <script src="/socket.io/socket.io.js"></script>
+
+  <script src="js/options.js"></script>
 </html>
