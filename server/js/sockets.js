@@ -15,7 +15,9 @@ function connectToPublicMQTTBroker(clientID = '') {
   const publicMqttOptions = {
     reconnectPeriod: 1000,
     connectTimeout: 5000,
-    clientId: `publicMqttClient-${clientID}`,
+    clientId: `publicMqttClient-${clientID}-${Math.random()
+      .toString(16)
+      .substr(2, 8)}`,
     username: process.env.MQTT_USERNAME,
     password: process.env.MQTT_PASSWORD,
     host: process.env.MQTT_SERVER,
@@ -202,7 +204,8 @@ sockets.init = function socketInit(server) {
       PUBLISH_ONLINE = false;
       // Disconnect from public MQTT broker
       if (PUBLIC_MQTT_CLIENT !== undefined) {
-        PUBLIC_MQTT_CLIENT.end(true);
+        PUBLIC_MQTT_CLIENT.end();
+        PUBLIC_MQTT_CLIENT = undefined;
       }
     });
 
