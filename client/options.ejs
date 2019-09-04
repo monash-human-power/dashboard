@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include ./partials/head %>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <title>DAS</title>
+  </head>
+
+  <body>
+    <% include ./partials/header %> <% include ./partials/sidebar %>
+
+    <div id="main">
+      <div class="col-md-12">
+        <h1>Options</h1>
+        <div class="row">
+          <div class="col-md-4">
+            <ul class="list-group">
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center"
+              >
+                Publish data online
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                  <label class="btn btn-outline-success">
+                    <input
+                      type="radio"
+                      name="options"
+                      id="turnOnPublishDatabutton"
+                      autocomplete="off"
+                      onchange="turnOnPublishData()"
+                    />
+                    On
+                  </label>
+                  <label class="btn btn-outline-danger active">
+                    <input
+                      type="radio"
+                      name="options"
+                      id="turnOffPublishDatabutton"
+                      autocomplete="off"
+                      onchange="turnOffPublishData()"
+                      checked
+                    />
+                    Off
+                  </label>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="/socket.io/socket.io.js"></script>
+
+  <script src="js/options.js"></script>
+</html>
