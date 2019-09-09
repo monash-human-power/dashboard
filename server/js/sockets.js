@@ -189,7 +189,7 @@ sockets.init = function socketInit(server) {
     });
 
     socket.on('set-overlays', selectedOverlays => {
-      mqttClient.publish('camera/set_overlays', selectedOverlays);
+      mqttClient.publish('camera/set_overlay', selectedOverlays);
     });
 
     socket.on('publish-data-on', () => {
