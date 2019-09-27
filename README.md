@@ -1,4 +1,5 @@
 # Monash Human Power - Data Acquisition System Web Server
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/801356f5a7bf4e84a9229f13b31a081f)](https://app.codacy.com/app/mhp-admin/MHP-DAS-Web-Server?utm_source=github.com&utm_medium=referral&utm_content=Monash-Human-Power/MHP-DAS-Web-Server&utm_campaign=Badge_Grade_Dashboard)
 [![Build Status](https://www.travis-ci.org/Monash-Human-Power/MHP-DAS-Web-Server.svg?branch=master)](https://www.travis-ci.org/Monash-Human-Power/MHP-DAS-Web-Server)
@@ -42,3 +43,19 @@ Set up environment variables using a `.env` file. Create a `.env` file at the ro
 - [ ] Add Map display
 - [ ] Add power model graph/output
 - [ ] Options page that saves options to browser storage
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+<table>
+  <tr>
+    <td align="center"><a href="https://khlee.me"><img src="https://avatars3.githubusercontent.com/u/18709969?v=4" width="100px;" alt="Angus Lee"/><br /><sub><b>Angus Lee</b></sub></a><br /><a href="https://github.com/monash-human-power/MHP-DAS-Web-Server/commits?author=khanguslee" title="Code">💻</a></td>
+  </tr>
+</table>
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
