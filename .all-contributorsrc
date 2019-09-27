@@ -1,0 +1,23 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "khanguslee",
+      "name": "Angus Lee",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/18709969?v=4",
+      "profile": "https://khlee.me",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "MHP-DAS-Web-Server",
+  "projectOwner": "monash-human-power",
+  "repoType": "github",
+  "repoHost": "https://github.com"
+}
