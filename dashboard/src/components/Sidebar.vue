@@ -2,53 +2,13 @@
   <b-collapse id="nav-collapse">
     <b-list-group flush>
       <b-list-group-item
+        v-for="(item, index) in sidebar"
+        :key="index"
         active-class="active"
         exact
-        to="/"
+        :to="item.link"
       >
-        Dashboard
-      </b-list-group-item>
-      <b-list-group-item
-        active-class="active"
-        to="/download-files"
-      >
-        Download Files
-      </b-list-group-item>
-      <b-list-group-item
-        active-class="active"
-        to="/status"
-      >
-        Sensor Status
-      </b-list-group-item>
-      <b-list-group-item
-        active-class="active"
-        to="/power-model"
-      >
-        Power Model Start/Stop
-      </b-list-group-item>
-      <b-list-group-item
-        active-class="active"
-        to="/power-zone"
-      >
-        Generate Power Map
-      </b-list-group-item>
-      <b-list-group-item
-        active-class="active"
-        to="/power-calibration"
-      >
-        Power Model Calibration
-      </b-list-group-item>
-      <b-list-group-item
-        active-class="active"
-        to="/camera"
-      >
-        Camera Settings
-      </b-list-group-item>
-      <b-list-group-item
-        active-class="active"
-        to="/options"
-      >
-        Options
+        {{ item.title }}
       </b-list-group-item>
     </b-list-group>
   </b-collapse>
@@ -56,7 +16,20 @@
 
 <script>
 export default {
-
+  data() {
+    return {
+      sidebar: [
+        { link: '/', title: 'Dashboard' },
+        { link: '/download-files', title: 'Download Files' },
+        { link: '/status', title: 'Sensor Status' },
+        { link: '/power-model', title: 'Power Model Start/Stop' },
+        { link: '/power-zone', title: 'Generate Power Map' },
+        { link: '/power-calibration', title: 'Power Model Calibration' },
+        { link: '/camera', title: 'Camera Settings' },
+        { link: '/options', title: 'Options' },
+      ],
+    };
+  },
 };
 </script>
 
