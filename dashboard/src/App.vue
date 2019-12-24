@@ -20,7 +20,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .app-body {
   display: flex;
   flex-direction: row;
