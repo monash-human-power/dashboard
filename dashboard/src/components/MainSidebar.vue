@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  name: 'sidebar',
+  name: 'main-sidebar',
   data() {
     return {
       sidebar: [
