@@ -43,7 +43,7 @@
 import { getFiles, deleteFile } from '@/api/files';
 
 export default {
-  name: 'dashboard-files',
+  name: 'dashboard-files-view',
   data() {
     return {
       files: null,
