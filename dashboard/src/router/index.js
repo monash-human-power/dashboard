@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Dashboard from '@/views/Dashboard.vue';
+import DashboardView from '@/views/DashboardView.vue';
 import DownloadFiles from '@/views/DownloadFiles.vue';
 
 Vue.use(VueRouter);
@@ -8,8 +8,8 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: '/',
-    name: 'dashboard',
-    component: Dashboard,
+    name: 'dashboard-view',
+    component: DashboardView,
   },
   {
     path: '/download-files',
