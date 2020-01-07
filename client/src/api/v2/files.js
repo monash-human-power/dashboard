@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 export async function getFiles() {
   const response = await fetch('/files');
@@ -20,10 +20,10 @@ export function useFiles() {
     fetchData();
   }, []);
 
-  async function deleteFileHandler(fileName) {
+  const deleteFileHandler = useCallback(async (fileName) => {
     await deleteFile(fileName);
     setFiles(await getFiles());
-  }
+  }, []);
 
   return [files, deleteFileHandler];
 }
