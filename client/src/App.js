@@ -6,12 +6,14 @@ import {
 } from 'react-router-dom';
 import './App.css';
 
+import NavBar from 'components/NavBar';
 import DashboardView from 'views/DashboardView';
 
 function App() {
   return (
     <Router>
       <div>
+        <NavBar />
         <Switch>
           <Route exact path="/">
             <DashboardView />
