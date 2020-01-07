@@ -109,6 +109,7 @@ app.delete('/files/:filename', (req, res) => {
     if (err) {
       res.status(404).send('File not found');
     }
+    res.status(200).send();
   });
 });
 
