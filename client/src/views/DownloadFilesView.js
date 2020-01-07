@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Container, ListGroup, Button } from 'react-bootstrap';
 import DeleteModal from 'components/DeleteModal';
 import { useFiles } from 'api/v2/files';
@@ -11,15 +11,15 @@ export default function DownloadFilesView() {
     setDeletingFile(null);
   }
 
-  function handleDelete(event, fileName) {
+  const handleDelete = useCallback((event, fileName) => {
     event.preventDefault();
     setDeletingFile(fileName);
-  }
+  }, []);
 
-  function handleConfirmDelete() {
+  const handleConfirmDelete = useCallback(() => {
     deleteFile(deletingFile);
     hideConfirmDelete();
-  }
+  }, [deleteFile, deletingFile]);
 
   const fileList = files.map((fileName) => (
     <ListGroup.Item
