@@ -9,6 +9,7 @@ import './App.css';
 import NavBar from 'components/NavBar';
 import DashboardView from 'views/DashboardView';
 import DownloadFilesView from 'views/DownloadFilesView';
+import SensorStatusView from 'views/SensorStatusView';
 
 function App() {
   return (
@@ -21,6 +22,9 @@ function App() {
           </Route>
           <Route path="/download-files">
             <DownloadFilesView />
+          </Route>
+          <Route path="/status">
+            <SensorStatusView />
           </Route>
         </Switch>
       </div>
