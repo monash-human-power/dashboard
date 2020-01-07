@@ -8,6 +8,7 @@ import './App.css';
 
 import NavBar from 'components/NavBar';
 import DashboardView from 'views/DashboardView';
+import DownloadFilesView from 'views/DownloadFilesView';
 
 function App() {
   return (
@@ -17,6 +18,9 @@ function App() {
         <Switch>
           <Route exact path="/">
             <DashboardView />
+          </Route>
+          <Route path="/download-files">
+            <DownloadFilesView />
           </Route>
         </Switch>
       </div>
