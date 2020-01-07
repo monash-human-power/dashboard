@@ -14,13 +14,23 @@ export default function NavBar() {
     ['Options', '/options'],
   ];
 
+  const linkItems = links.map(([label, link]) => (
+    <Nav.Link
+      as={Link}
+      to={link}
+      key={link}
+    >
+      {label}
+    </Nav.Link>
+  ));
+
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Navbar.Brand>MHP DAShboard</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="ml-auto">
-          {links.map(([label, link]) => <Nav.Link as={Link} to={link}>{label}</Nav.Link>)}
+          {linkItems}
         </Nav>
       </Navbar.Collapse>
     </Navbar>
