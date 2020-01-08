@@ -3,6 +3,7 @@ import DownloadFilesView from 'views/DownloadFilesView';
 import SensorStatusView from 'views/SensorStatusView';
 import PowerModelView from 'views/PowerModelView';
 import PowerMapView from 'views/PowerMapView';
+import PowerModelCalibrationView from 'views/PowerModelCalibrationView';
 
 export const routes = [
   {
@@ -39,7 +40,7 @@ export const routes = [
     name: 'Power Model Calibration',
     path: '/power-calibration',
     exact: true,
-    component: null,
+    component: PowerModelCalibrationView,
   },
   {
     name: 'Camera',

@@ -20,3 +20,11 @@ export function usePowerModelState() {
 
   return [running, setState];
 }
+
+export function setCalibration(distance) {
+  emit('submit-calibration', distance);
+}
+
+export function resetCalibration() {
+  emit('reset-calibration');
+}
