@@ -1,28 +1,18 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
+import { routes } from 'router';
 
 export default function NavBar() {
-  const links = [
-    ['Dashboard', '/'],
-    ['Files', '/download-files'],
-    ['Sensors', '/status'],
-    ['Power Model', '/power-model'],
-    ['Power Map', '/power-zone'],
-    ['Power Model Calibration', '/power-calibration'],
-    ['Camera', '/camera'],
-    ['Options', '/options'],
-  ];
-
-  const linkItems = links.map(([label, link]) => (
+  const linkItems = routes.map(({ name, path, exact }) => (
     <Nav.Link
       as={NavLink}
-      to={link}
-      exact
+      to={path}
+      exact={exact}
       activeClassName="active"
-      key={link}
+      key={path}
     >
-      {label}
+      {name}
     </Nav.Link>
   ));
 

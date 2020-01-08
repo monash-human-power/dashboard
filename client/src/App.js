@@ -4,32 +4,26 @@ import {
   Switch,
   Route,
 } from 'react-router-dom';
+import NavBar from 'components/NavBar';
+import { routes } from 'router';
 import './App.css';
 
-import NavBar from 'components/NavBar';
-import DashboardView from 'views/DashboardView';
-import DownloadFilesView from 'views/DownloadFilesView';
-import SensorStatusView from 'views/SensorStatusView';
-import PowerModelView from 'views/PowerModelView';
-
 function App() {
+  const routeItems = routes.map(({ path, exact, component }) => {
+    const View = component;
+    return (
+      <Route exact={exact} path={path} key={path}>
+        {View ? <View /> : null}
+      </Route>
+    );
+  });
+
   return (
     <Router>
       <div>
         <NavBar />
         <Switch>
-          <Route exact path="/">
-            <DashboardView />
-          </Route>
-          <Route path="/download-files">
-            <DownloadFilesView />
-          </Route>
-          <Route path="/status">
-            <SensorStatusView />
-          </Route>
-          <Route path="/power-model">
-            <PowerModelView />
-          </Route>
+          {routeItems}
         </Switch>
       </div>
     </Router>
