@@ -2,6 +2,7 @@ import DashboardView from 'views/DashboardView';
 import DownloadFilesView from 'views/DownloadFilesView';
 import SensorStatusView from 'views/SensorStatusView';
 import PowerModelView from 'views/PowerModelView';
+import PowerMapView from 'views/PowerMapView';
 
 export const routes = [
   {
@@ -32,7 +33,7 @@ export const routes = [
     name: 'Power Map',
     path: '/power-zone',
     exact: true,
-    component: null,
+    component: PowerMapView,
   },
   {
     name: 'Power Model Calibration',
