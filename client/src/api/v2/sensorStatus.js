@@ -1,7 +1,7 @@
-import { useData } from './socket';
+import { useChannel } from './socket';
 
 export function useSensorStatus() {
-  const data = useData();
+  const data = useChannel('data');
 
   if (!data) {
     return {

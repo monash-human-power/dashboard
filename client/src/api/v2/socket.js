@@ -9,7 +9,7 @@ export default function getSocket() {
   return socket;
 }
 
-export function useData() {
+export function useChannel(channel) {
   const [data, setData] = useState(null);
 
   useEffect(() => {
@@ -18,12 +18,12 @@ export function useData() {
     }
 
     const localSocket = getSocket();
-    localSocket.on('data', dataHandler);
+    localSocket.on(channel, dataHandler);
 
     return () => {
-      localSocket.off('data', dataHandler);
+      localSocket.off(channel, dataHandler);
     };
-  }, []);
+  }, [channel]);
 
   return data;
 }
