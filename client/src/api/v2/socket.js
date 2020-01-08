@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import io from 'socket.io-client';
 
 let socket;
@@ -9,21 +9,17 @@ export default function getSocket() {
   return socket;
 }
 
-export function useChannel(channel) {
-  const [data, setData] = useState(null);
+export function emit(channel, payload) {
+  getSocket().emit(channel, payload);
+}
 
+export function useChannel(channel, callback) {
   useEffect(() => {
-    function dataHandler(newData) {
-      setData(newData);
-    }
-
     const localSocket = getSocket();
-    localSocket.on(channel, dataHandler);
+    localSocket.on(channel, callback);
 
     return () => {
-      localSocket.off(channel, dataHandler);
+      localSocket.off(channel, callback);
     };
-  }, [channel]);
-
-  return data;
+  }, [channel, callback]);
 }
