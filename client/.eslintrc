@@ -1,8 +1,9 @@
 {
   "extends": ["react-app", "airbnb"],
   "rules": {
+    "no-console": "off",
     "react/jsx-filename-extension": [1, { "extensions": [".js"] }],
     "import/no-unresolved": "off",
-    "import/prefer-default-export": "off",
+    "import/prefer-default-export": "off"
   }
 }
