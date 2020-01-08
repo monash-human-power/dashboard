@@ -15,12 +15,10 @@ export default function PowerModelCalibrationView() {
 
   const handleDistanceSubmit = useCallback((event) => {
     const { form } = event.currentTarget;
-    if (!form.checkValidity()) {
-      return;
+    if (form.checkValidity()) {
+      setCalibration(distanceEl.current.value);
+      setDistanceSet(true);
     }
-
-    setCalibration(distanceEl.current.value);
-    setDistanceSet(true);
   }, []);
 
   const handleResetDistance = useCallback(() => {
