@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
 
 export default function NavBar() {
@@ -16,8 +16,10 @@ export default function NavBar() {
 
   const linkItems = links.map(([label, link]) => (
     <Nav.Link
-      as={Link}
+      as={NavLink}
       to={link}
+      exact
+      activeClassName="active"
       key={link}
     >
       {label}
