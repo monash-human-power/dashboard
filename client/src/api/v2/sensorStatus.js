@@ -1,6 +1,26 @@
 import { useState, useCallback } from 'react';
 import { useChannel } from './socket';
 
+/** Transform sensor data from an object to a list of sensors */
+function formatData(data) {
+  const sensors = [
+    ['GPS', 'gps'],
+    ['Power', 'power'],
+    ['Cadence', 'cadence'],
+    ['Reed Switch', 'reed'],
+    ['Accelerometer', 'accelerometer'],
+    ['Gyroscope', 'gyroscope'],
+    ['Potentiometer', 'potentiometer'],
+    ['Thermometer', 'thermometer'],
+  ];
+
+  return sensors.map(([label, name]) => ({
+    label,
+    name,
+    state: data[key],
+  }));
+}
+
 export function useSensorStatus() {
   const [sensors, setSensors] = useState({
     gps: false,
@@ -27,5 +47,5 @@ export function useSensorStatus() {
   }, []);
   useChannel('data', handleData);
 
-  return sensors;
+  return formatData(sensors);
 }
