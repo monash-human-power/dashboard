@@ -17,7 +17,7 @@ function formatData(data) {
   return sensors.map(([label, name]) => ({
     label,
     name,
-    state: data[key],
+    state: data[name],
   }));
 }
 
