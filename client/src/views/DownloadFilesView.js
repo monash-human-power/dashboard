@@ -11,9 +11,9 @@ export default function DownloadFilesView() {
     setDeletingFile(null);
   }
 
-  const handleDelete = useCallback((event, fileName) => {
+  const handleDelete = useCallback((event, file) => {
     event.preventDefault();
-    setDeletingFile(fileName);
+    setDeletingFile(file);
   }, []);
 
   const handleConfirmDelete = useCallback(() => {
@@ -21,19 +21,19 @@ export default function DownloadFilesView() {
     hideConfirmDelete();
   }, [deleteFile, deletingFile]);
 
-  const fileList = files.map((fileName) => (
+  const fileList = files.map((file) => (
     <ListGroup.Item
-      key={fileName}
+      key={file.fileName}
       action
-      href={`/files/${fileName}`}
+      href={file.url}
       target="_blank"
     >
-      {fileName}
+      {file.fileName}
       <Button
         variant="danger"
         size="sm"
         className="float-right"
-        onClick={(e) => handleDelete(e, fileName)}
+        onClick={(e) => handleDelete(e, file)}
       >
         Delete
       </Button>
@@ -49,7 +49,7 @@ export default function DownloadFilesView() {
 
       <DeleteModal
         show={deletingFile !== null}
-        name={deletingFile || ''}
+        name={deletingFile ? deletingFile.fileName : ''}
         onCancel={hideConfirmDelete}
         onDelete={handleConfirmDelete}
       />

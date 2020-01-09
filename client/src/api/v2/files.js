@@ -3,11 +3,15 @@ import { useState, useEffect, useCallback } from 'react';
 export async function getFiles() {
   const response = await fetch('/files');
   const data = await response.json();
-  return data.files;
+  const files = data.files.map((fileName) => ({
+    fileName,
+    url: `/files/${fileName}`,
+  }));
+  return files;
 }
 
-export async function deleteFile(fileName) {
-  await fetch(`/files/${fileName}`, { method: 'DELETE' });
+export async function deleteFile(file) {
+  await fetch(file.url, { method: 'DELETE' });
 }
 
 export function useFiles() {
@@ -20,8 +24,8 @@ export function useFiles() {
     fetchData();
   }, []);
 
-  const deleteFileHandler = useCallback(async (fileName) => {
-    await deleteFile(fileName);
+  const deleteFileHandler = useCallback(async (file) => {
+    await deleteFile(file);
     setFiles(await getFiles());
   }, []);
 
