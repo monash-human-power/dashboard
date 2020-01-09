@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Container, ListGroup, Button } from 'react-bootstrap';
 import DeleteModal from 'components/DeleteModal';
-import WidgetListItem from 'components/WidgetListItem';
+import WidgetListGroupItem from 'components/WidgetListGroupItem';
 import { useFiles } from 'api/v2/files';
 
 export default function DownloadFilesView() {
@@ -23,7 +23,7 @@ export default function DownloadFilesView() {
   }, [deleteFile, deletingFile, hideConfirmDelete]);
 
   const fileList = files.map((file) => (
-    <WidgetListItem
+    <WidgetListGroupItem
       key={file.url}
       title={file.fileName}
       action
@@ -37,7 +37,7 @@ export default function DownloadFilesView() {
       >
         Delete
       </Button>
-    </WidgetListItem>
+    </WidgetListGroupItem>
   ));
 
   return (

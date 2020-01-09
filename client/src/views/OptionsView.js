@@ -5,7 +5,7 @@ import {
   Container,
   ListGroup,
 } from 'react-bootstrap';
-import WidgetListItem from 'components/WidgetListItem';
+import WidgetListGroupItem from 'components/WidgetListGroupItem';
 import { usePublishOnlineState } from 'api/v2/settings';
 
 export default function OptionsView() {
@@ -23,7 +23,7 @@ export default function OptionsView() {
     <Container>
       <h1>Options</h1>
       <ListGroup>
-        <WidgetListItem title="Publish data online">
+        <WidgetListGroupItem title="Publish data online">
           <ButtonGroup>
             <Button
               onClick={handlePublishOn}
@@ -38,7 +38,7 @@ export default function OptionsView() {
               Off
             </Button>
           </ButtonGroup>
-        </WidgetListItem>
+        </WidgetListGroupItem>
       </ListGroup>
     </Container>
   );

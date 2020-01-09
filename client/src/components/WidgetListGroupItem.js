@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ListGroupItem } from 'react-bootstrap';
-import styles from './WidgetListItem.module.css';
+import styles from './WidgetListGroupItem.module.css';
 
-export default function WidgetListItem({ title, children, ...props }) {
+export default function WidgetListGroupItem({ title, children, ...props }) {
   return (
     <>
       <ListGroupItem className={styles.item} {...props}>
@@ -14,7 +14,7 @@ export default function WidgetListItem({ title, children, ...props }) {
   );
 }
 
-WidgetListItem.propTypes = {
+WidgetListGroupItem.propTypes = {
   title: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
 };
