@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, ListGroup, Badge } from 'react-bootstrap';
+import WidgetListItem from 'components/WidgetListItem';
 import { useSensorStatus } from 'api/v2/sensorStatus';
-import styles from './SensorStatusView.module.css';
 
 export default function SensorStatusView() {
   const sensorStatus = useSensorStatus();
@@ -18,12 +18,11 @@ export default function SensorStatusView() {
   ];
 
   const sensorItems = sensors.map(([label, key]) => (
-    <ListGroup.Item className={styles.sensor} key={key}>
-      {label}
+    <WidgetListItem title={label} key={key}>
       <Badge pill variant={sensorStatus[key] ? 'success' : 'danger'}>
         {sensorStatus[key] ? 'ON' : 'OFF'}
       </Badge>
-    </ListGroup.Item>
+    </WidgetListItem>
   ));
 
   return (
