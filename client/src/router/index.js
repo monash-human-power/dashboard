@@ -4,6 +4,7 @@ import SensorStatusView from 'views/SensorStatusView';
 import PowerModelView from 'views/PowerModelView';
 import PowerMapView from 'views/PowerMapView';
 import PowerModelCalibrationView from 'views/PowerModelCalibrationView';
+import OptionsView from 'views/OptionsView';
 
 export const routes = [
   {
@@ -52,6 +53,6 @@ export const routes = [
     name: 'Options',
     path: '/options',
     exact: true,
-    component: null,
+    component: OptionsView,
   },
 ];
