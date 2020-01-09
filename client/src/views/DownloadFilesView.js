@@ -8,9 +8,9 @@ export default function DownloadFilesView() {
   const [files, deleteFile] = useFiles();
   const [deletingFile, setDeletingFile] = useState(null);
 
-  function hideConfirmDelete() {
+  const hideConfirmDelete = useCallback(() => {
     setDeletingFile(null);
-  }
+  }, []);
 
   const handleDelete = useCallback((event, file) => {
     event.preventDefault();
@@ -20,7 +20,7 @@ export default function DownloadFilesView() {
   const handleConfirmDelete = useCallback(() => {
     deleteFile(deletingFile);
     hideConfirmDelete();
-  }, [deleteFile, deletingFile]);
+  }, [deleteFile, deletingFile, hideConfirmDelete]);
 
   const fileList = files.map((file) => (
     <WidgetListItem
