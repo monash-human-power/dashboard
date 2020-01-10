@@ -16,7 +16,7 @@ export default function RadioSelector({ options, value, onChange }) {
       key={option}
       label={option}
       value={option}
-      id={`${uid}-${index}`}
+      id={`RadioSelector-${uid}-${index}`}
       checked={value === option}
       onChange={handleChange}
     />
