@@ -19,6 +19,8 @@ const LabelledControl = React.forwardRef(({ label, error, ...props }, ref) => (
   </Form.Group>
 ));
 
+LabelledControl.displayName = 'LabelledControl';
+
 LabelledControl.propTypes = {
   label: PropTypes.string.isRequired,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
