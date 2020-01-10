@@ -12,10 +12,64 @@ import { useForm } from 'react-hook-form';
 import LabelledControl from 'components/LabelledControl';
 
 export default function PowerMapView() {
-  // eslint-disable-next-line
-  const { register, handleSubmit, watch, errors } = useForm();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    errors,
+  } = useForm();
+
   const onSubmit = (data) => { console.log(data); };
-  console.log(errors);
+
+  const zoneCount = parseInt(watch('numZones') || '0', 10);
+  const zones = [...Array(zoneCount)].map((_, index) => {
+    const fieldname = `zones[${index}]`;
+    const zoneErrors = errors.zones?.[index];
+
+    return (
+      <fieldset name={fieldname} key={fieldname}>
+        <Card>
+          <Card.Body>
+            <Card.Title>
+              {`Zone ${index + 1}`}
+            </Card.Title>
+            <Form.Row>
+              <Col lg={4}>
+                <LabelledControl
+                  type="number"
+                  label="Recommended Power"
+                  error={!!zoneErrors?.recommendedPower}
+                  placeholder="Recommended Power"
+                  name={`${fieldname}.recommendedPower`}
+                  ref={register({ required: true })}
+                />
+              </Col>
+              <Col lg={4}>
+                <LabelledControl
+                  type="number"
+                  label="Max Time"
+                  error={!!zoneErrors?.maxTime}
+                  placeholder="Max Time"
+                  name={`${fieldname}.maxTime`}
+                  ref={register({ required: true })}
+                />
+              </Col>
+              <Col lg={4}>
+                <LabelledControl
+                  type="number"
+                  label="Spent Time"
+                  error={!!zoneErrors?.spentTime}
+                  placeholder="Spent Time"
+                  name={`${fieldname}.spentTime`}
+                  ref={register({ required: true })}
+                />
+              </Col>
+            </Form.Row>
+          </Card.Body>
+        </Card>
+      </fieldset>
+    );
+  });
 
   return (
     <Container>
@@ -26,9 +80,9 @@ export default function PowerMapView() {
         </Card.Body>
       </Card>
       <Button block variant="danger">Reset Form</Button>
-      <Card>
-        <Card.Body>
-          <Form onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <Card>
+          <Card.Body>
             <Form.Row>
               <Col sm={6}>
                 <LabelledControl
@@ -152,12 +206,11 @@ export default function PowerMapView() {
                 />
               </Col>
             </Form.Row>
-            <Form.Row>
-              <Button type="submit">Submit</Button>
-            </Form.Row>
-          </Form>
-        </Card.Body>
-      </Card>
+          </Card.Body>
+        </Card>
+        {zones}
+        <Button type="submit">Submit</Button>
+      </Form>
     </Container>
   );
 }
