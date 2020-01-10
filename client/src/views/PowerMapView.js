@@ -38,9 +38,9 @@ export default function PowerMapView() {
                 <LabelledControl
                   type="number"
                   label="Recommended Power"
-                  error={!!zoneErrors?.recommendedPower}
+                  error={!!zoneErrors?.recPower}
                   placeholder="Recommended Power"
-                  name={`${fieldname}.recommendedPower`}
+                  name={`${fieldname}.recPower`}
                   ref={register({ required: true })}
                 />
               </Col>
