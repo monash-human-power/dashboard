@@ -4,6 +4,7 @@ import SensorStatusView from 'views/SensorStatusView';
 import PowerModelView from 'views/PowerModelView';
 import PowerMapView from 'views/PowerMapView';
 import PowerModelCalibrationView from 'views/PowerModelCalibrationView';
+import CameraSettingsView from 'views/CameraSettingsView';
 import OptionsView from 'views/OptionsView';
 
 export const routes = [
@@ -47,7 +48,7 @@ export const routes = [
     name: 'Camera',
     path: '/camera',
     exact: true,
-    component: null,
+    component: CameraSettingsView,
   },
   {
     name: 'Options',
