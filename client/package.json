@@ -16,11 +16,13 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.3.0",
     "react-uid": "^2.2.0",
-    "socket.io-client": "^2.3.0"
+    "socket.io-client": "^2.3.0",
+    "source-map-explorer": "^2.2.2"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
