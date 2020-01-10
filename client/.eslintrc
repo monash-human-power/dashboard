@@ -4,6 +4,10 @@
     "no-console": "off",
     "react/jsx-filename-extension": [1, { "extensions": [".js"] }],
     "react/jsx-props-no-spreading": "off",
+    "jsx-a11y/label-has-associated-control": [ 2, {
+      "controlComponents": ["Form.Control", "FormControl"],
+      "depth": 3
+    }],
     "import/no-unresolved": "off",
     "import/prefer-default-export": "off"
   }
