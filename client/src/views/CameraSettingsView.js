@@ -34,25 +34,25 @@ export default function CameraSettingsView() {
 
   // Only render controls when overlay data is available
   const primary = primaryOverlays ? (
-    <div>
+    <Col>
       Primary display
       <RadioSelector
         options={primaryOverlays.overlays}
         value={primarySelected}
         onChange={setPrimarySelected}
       />
-    </div>
+    </Col>
   ) : null;
 
   const secondary = secondaryOverlays ? (
-    <div>
+    <Col>
       Secondary display
       <RadioSelector
         options={secondaryOverlays.overlays}
         value={secondarySelected}
         onChange={setSecondarySelected}
       />
-    </div>
+    </Col>
   ) : null;
 
   return (
@@ -65,12 +65,8 @@ export default function CameraSettingsView() {
             <Card.Subtitle>Waiting for response...</Card.Subtitle>
           ) : null}
           <Row>
-            <Col>
-              {primary}
-            </Col>
-            <Col>
-              {secondary}
-            </Col>
+            {primary}
+            {secondary}
           </Row>
         </Card.Body>
         <Card.Footer>
