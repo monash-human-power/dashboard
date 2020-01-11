@@ -13,26 +13,23 @@ import { Form } from 'react-bootstrap';
  * Form control with label and error message
  *
  * @param {LabelledControlProps} props Props
- * @param {React.MutableRefObject} ref Ref
- * @returns {React.RefForwardingComponent} Component
+ * @returns {React.Component<LabelledControl>} Component
  */
-function LabelledControl({ label, error, ...props }, ref) {
-  return (
-    <Form.Group>
-      <Form.Label>{label}</Form.Label>
-      <Form.Control
-        ref={ref}
-        className={classNames(error && 'is-invalid')}
-        {...props}
-      />
-      {error ? (
-        <Form.Control.Feedback type="invalid">
-          {typeof error === 'string' ? error : `${label} is invalid`}
-        </Form.Control.Feedback>
-      ) : null}
-    </Form.Group>
-  );
-}
+const LabelledControl = React.forwardRef(({ label, error, ...props }, ref) => (
+  <Form.Group>
+    <Form.Label>{label}</Form.Label>
+    <Form.Control
+      ref={ref}
+      className={classNames(error && 'is-invalid')}
+      {...props}
+    />
+    {error ? (
+      <Form.Control.Feedback type="invalid">
+        {typeof error === 'string' ? error : `${label} is invalid`}
+      </Form.Control.Feedback>
+    ) : null}
+  </Form.Group>
+));
 
 LabelledControl.displayName = 'LabelledControl';
 
@@ -45,4 +42,4 @@ LabelledControl.defaultProps = {
   error: null,
 };
 
-export default React.forwardRef(LabelledControl);
+export default LabelledControl;
