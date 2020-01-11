@@ -1,6 +1,6 @@
 ## Description
 
-<!--- What does your pull request change? What should we expect from this? --->
+<!--- What does your pull request change? What changes are expected? --->
 
 ## Screenshots
 
@@ -8,4 +8,4 @@
 
 ## Steps to Test
 
-<!--- How do I test your change? --->
+<!--- How does someone check your change? --->
