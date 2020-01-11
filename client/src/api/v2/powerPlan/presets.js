@@ -1,8 +1,7 @@
 const defaultPreset = {
   name: 'Default',
   value: {
-    numZones: 6,
-    filename: 'default',
+    fileName: 'default',
     mass: 75,
     startAdjust: 130,
     lowerBound: 1000,
