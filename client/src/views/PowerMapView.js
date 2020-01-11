@@ -10,6 +10,7 @@ import {
 } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import LabelledControl from 'components/LabelledControl';
+import { getPresets } from 'api/v2/powerMap';
 
 export default function PowerMapView() {
   const {
@@ -17,9 +18,20 @@ export default function PowerMapView() {
     handleSubmit,
     watch,
     errors,
+    reset,
   } = useForm();
 
   const onSubmit = (data) => { console.log(data); };
+
+  const presetButtons = getPresets().map((preset) => (
+    <Button
+      variant="outline-primary"
+      onClick={() => reset(preset.value)}
+      key={preset.name}
+    >
+      {preset.name}
+    </Button>
+  ));
 
   const zoneCount = parseInt(watch('numZones') || '0', 10);
   const zones = [...Array(zoneCount)].map((_, index) => {
@@ -77,9 +89,16 @@ export default function PowerMapView() {
       <Card>
         <Card.Body>
           <Card.Title>Pre-fill Plans</Card.Title>
+          {presetButtons}
         </Card.Body>
       </Card>
-      <Button block variant="danger">Reset Form</Button>
+      <Button
+        block
+        variant="danger"
+        onClick={reset}
+      >
+        Reset Form
+      </Button>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Card>
           <Card.Body>
@@ -109,10 +128,10 @@ export default function PowerMapView() {
                   <InputGroup className={classNames(errors.fileName && 'is-invalid')}>
                     <Form.Control
                       id="inputFileName"
-                      name="fileName"
+                      name="filename"
                       ref={register({ required: true, pattern: /^[\w\-. ]+$/ })}
                       placeholder="Filename"
-                      className={classNames(errors.fileName && 'is-invalid')}
+                      className={classNames(errors.filename && 'is-invalid')}
                     />
                     <InputGroup.Append>
                       <InputGroup.Text>.json</InputGroup.Text>
