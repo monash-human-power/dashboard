@@ -1,3 +1,30 @@
+/**
+ * @typedef {object} PowerPlanZone
+ * @property {number} recPower  Recommended power
+ * @property {number} maxTime   Maximum time
+ * @property {number} spentTime Spent time
+ */
+
+/**
+ * @typedef {object} PowerPlan
+ * @property {string}           fileName    Power plan file name
+ * @property {number}           mass        Mass
+ * @property {number}           startAdjust Start adjust
+ * @property {number}           lowerBound  Lower bound
+ * @property {number}           upperBound  Upper bound
+ * @property {number}           step        Step
+ * @property {number}           startTrap   Start trap
+ * @property {number}           endTrap     End trap
+ * @property {PowerPlanZone[]}  zones       Zones
+ */
+
+/**
+ * @typedef {object} PowerPlanPreset
+ * @property {string} name Preset name
+ * @property {PowerPlan} value Preset power plan
+ */
+
+/** @type {PowerPlanPreset} */
 const defaultPreset = {
   name: 'Default',
   value: {
@@ -44,6 +71,7 @@ const defaultPreset = {
   },
 };
 
+/** @type {PowerPlanPreset[]} */
 const presets = [
   defaultPreset,
 ];

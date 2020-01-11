@@ -14,8 +14,13 @@ import { useForm } from 'react-hook-form';
 import LabelledControl from 'components/LabelledControl';
 import { getPresets, useGeneratePowerPlan } from 'api/v2/powerPlan';
 
+/**
+ * Power Map page component
+ *
+ * @returns {React.Component} Component
+ */
 export default function PowerMapView() {
-  const [generatePowerPlan, generating, generated] = useGeneratePowerPlan();
+  const { generate: generatePowerPlan, generating, generated } = useGeneratePowerPlan();
   const {
     register,
     handleSubmit,

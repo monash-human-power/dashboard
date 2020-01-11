@@ -7,6 +7,11 @@ import {
 } from 'react-bootstrap';
 import { usePowerModelState } from 'api/v2/powerModel';
 
+/**
+ * Power Model page component
+ *
+ * @returns {React.Component} Component
+ */
 export default function PowerModelView() {
   const [powerModelState, setPowerModelState] = usePowerModelState();
   const [successAlert, setSuccessAlert] = useState(null);

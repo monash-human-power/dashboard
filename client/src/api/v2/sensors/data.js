@@ -2,34 +2,35 @@ import { useState, useCallback } from 'react';
 import { useChannel } from '../socket';
 
 /**
- * @typedef {Object} SensorData
- * @property {number} gps
- * @property {number} gps_lat
- * @property {number} gps_long
- * @property {number} gps_alt
- * @property {number} gps_course
- * @property {number} gps_speed
- * @property {number} gps_satellites
- * @property {number} aX
- * @property {number} aY
- * @property {number} aZ
- * @property {number} gX
- * @property {number} gY
- * @property {number} gZ
- * @property {number} thermoC
- * @property {number} thermoF
- * @property {number} pot
- * @property {number} reed_velocity
- * @property {number} reed_distance
- * @property {string} filename
- * @property {number} time
- * @property {number} power
- * @property {number} cadence
+ * @typedef {object} SensorData
+ * @property {number} gps             GPS sensor on
+ * @property {number} gps_lat         GPS lattitude
+ * @property {number} gps_long        GPS longitude
+ * @property {number} gps_alt         GPS altitude
+ * @property {number} gps_course      GPS course
+ * @property {number} gps_speed       GPS speed
+ * @property {number} gps_satellites  Number of GPS satellites
+ * @property {number} aX              Acceleration X
+ * @property {number} aY              Acceleration Y
+ * @property {number} aZ              Acceleration Z
+ * @property {number} gX              Gyroscope X
+ * @property {number} gY              Gyroscope Y
+ * @property {number} gZ              Gyroscope Z
+ * @property {number} thermoC         Temperature (celsius)
+ * @property {number} thermoF         Temperature (farenheit)
+ * @property {number} pot             Potentiometer
+ * @property {number} reed_velocity   Reed switch velocity
+ * @property {number} reed_distance   Reed switch distance
+ * @property {string} filename        Log file name
+ * @property {number} time            Time
+ * @property {number} power           Power
+ * @property {number} cadence         Cadence
  */
 
 /**
  * Use current sensor data
- * @returns {SensorData}
+ *
+ * @returns {?SensorData} Sensor data
  */
 export function useData() {
   const [data, setData] = useState(null);

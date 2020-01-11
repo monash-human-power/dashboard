@@ -4,6 +4,17 @@ import { Scatter } from 'react-chartjs-2';
 import AnnotationPlugin from 'chartjs-plugin-annotation';
 import { useSensorTimeSeries } from 'api/v2/sensors';
 
+/**
+ * @typedef {object} CadenceTimeChartProps
+ * @property {number} interval Time between updates in ms
+ */
+
+/**
+ * Cadence-Time chart component
+ *
+ * @param {CadenceTimeChartProps} props Props
+ * @returns {React.Component<CadenceTimeChartProps>} Component
+ */
 export default function CadenceTimeChart({ interval }) {
   const { series, max } = useSensorTimeSeries('cadence', interval);
 

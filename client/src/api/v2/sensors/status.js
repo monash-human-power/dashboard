@@ -1,13 +1,18 @@
 import { useData } from './data';
 
 /**
- * @typedef {Object} SensorStatus
+ * @typedef {object} SensorStatus
  * @property {string}   name  Sensor name
  * @property {string}   label Human readable sensor name
  * @property {boolean}  state Whether sensor is on/off
  */
 
-/** Transform sensor data from an object to a list of sensors */
+/**
+ * Transform sensor data from an object to a list of sensors
+ *
+ * @param {object} data Unformatted sensor status
+ * @returns {SensorStatus[]} Sensor statuses
+ */
 function formatData(data) {
   const sensors = [
     ['GPS', 'gps'],
@@ -29,7 +34,8 @@ function formatData(data) {
 
 /**
  * Use sensor statuses
- * @returns {SensorStatus[]}
+ *
+ * @returns {SensorStatus[]} Sensor statuses
  */
 export function useStatus() {
   const data = useData();

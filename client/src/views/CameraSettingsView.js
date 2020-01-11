@@ -8,9 +8,14 @@ import {
 import RadioSelector from 'components/RadioSelector';
 import { useOverlays } from 'api/v2/camera';
 
+/**
+ * Camera Settings page component
+ *
+ * @returns {React.Component} Component
+ */
 export default function CameraSettingsView() {
-  const [primaryOverlays, setPrimaryActive] = useOverlays('primary');
-  const [secondaryOverlays, setSecondaryActive] = useOverlays('secondary');
+  const { overlays: primaryOverlays, setActiveOverlay: setPrimaryActive } = useOverlays('primary');
+  const { overlays: secondaryOverlays, setActiveOverlay: setSecondaryActive } = useOverlays('secondary');
   const [primarySelected, setPrimarySelected] = useState(null);
   const [secondarySelected, setSecondarySelected] = useState(null);
 

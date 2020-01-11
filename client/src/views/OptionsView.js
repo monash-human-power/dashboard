@@ -8,8 +8,13 @@ import {
 import WidgetListGroupItem from 'components/WidgetListGroupItem';
 import { usePublishOnlineState } from 'api/v2/settings';
 
+/**
+ * Options page component
+ *
+ * @returns {React.Component} Component
+ */
 export default function OptionsView() {
-  const [publishOnline, setPublishOnline] = usePublishOnlineState();
+  const { publishOnline, setPublishOnline } = usePublishOnlineState();
 
   const handlePublishOn = useCallback(() => {
     setPublishOnline(true);

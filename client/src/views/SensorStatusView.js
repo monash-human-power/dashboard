@@ -3,6 +3,11 @@ import { Container, ListGroup, Badge } from 'react-bootstrap';
 import WidgetListGroupItem from 'components/WidgetListGroupItem';
 import { useStatus } from 'api/v2/sensors';
 
+/**
+ * Sensor Status page component
+ *
+ * @returns {React.Component} Component
+ */
 export default function SensorStatusView() {
   const sensorStatus = useStatus();
 

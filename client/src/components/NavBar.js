@@ -3,6 +3,11 @@ import { NavLink } from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
 import { routes } from 'router';
 
+/**
+ * Navigation bar component
+ *
+ * @returns {React.Component} Component
+ */
 export default function NavBar() {
   const linkItems = routes.map(({ name, path, exact }) => (
     <Nav.Link

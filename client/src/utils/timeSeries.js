@@ -5,29 +5,36 @@ import {
   useRef,
 } from 'react';
 
+/**
+ * Checks if a value is a real number
+ *
+ * @returns {boolean} is valid
+ * @param {number} value Value to check
+ */
 function isValid(value) {
   return typeof value === 'number' && !Number.isNaN(value) && Number.isFinite(value);
 }
 
 /**
- * @typedef {Object} TimeSeriesPoint
+ * @typedef {object} TimeSeriesPoint
  * @property {number} time    Time since started running in ms
  * @property {number} value   Average value at this time
  */
 
 /**
- * @typedef {Object} TimeSeriesHook
+ * @typedef {object} TimeSeriesHook
  * @property {TimeSeriesPoint[]}  series  Time-series data points
  * @property {number}             max     Maximum recorded raw value
  * @property {function(number)}   add     Add a raw data point
- * @property {function}           reset   Remove recorded values
+ * @property {Function}           reset   Remove recorded values
  */
 
 /**
  * Create a value-time record, averaged every interval
- * @param {*} interval Time in ms between points
- * @param {*} running  Whether to record values
- * @returns {TimeSeriesHook}
+ *
+ * @param {number}  interval Time in ms between points
+ * @param {boolean} running  Whether to record values
+ * @returns {TimeSeriesHook} Hook
  */
 export function useTimeSeries(interval, running) {
   const [series, setSeries] = useState([]);
@@ -56,6 +63,9 @@ export function useTimeSeries(interval, running) {
   }, []);
 
   useEffect(() => {
+    /**
+     * Batch up accumulated results
+     */
     function batch() {
       if (pointCount.current > 0) {
         const avg = intermediateCount.current / pointCount.current;

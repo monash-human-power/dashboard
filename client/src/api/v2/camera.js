@@ -1,6 +1,18 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useChannel, emit } from './socket';
 
+/**
+ * @typedef {object} OverlaysHook
+ * @property {?Array.<string>}  overlays          List of available overlays
+ * @property {function(string)} setActiveOverlay  Set the active overlay
+ */
+
+/**
+ * Use a list of camera overlays
+ *
+ * @param {'primary'|'secondary'} device Camera screen
+ * @returns {OverlaysHook} Hook
+ */
 export function useOverlays(device) {
   const [overlays, setOverlays] = useState(null);
 
@@ -25,5 +37,5 @@ export function useOverlays(device) {
     }));
   }, [device]);
 
-  return [overlays, setActiveOverlay];
+  return { overlays, setActiveOverlay };
 }

@@ -8,6 +8,11 @@ import NavBar from 'components/NavBar';
 import { routes } from 'router';
 import './App.css';
 
+/**
+ * Main App component
+ *
+ * @returns {React.Component} Component
+ */
 function App() {
   const routeItems = routes.map(({ path, exact, component }) => {
     const View = component;

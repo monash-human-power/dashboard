@@ -1,6 +1,16 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useChannel, emit } from './socket';
 
+/**
+ * @typedef {object} DASSettings
+ * @property {boolean} publishOnline Whether to publish data to online broker
+ */
+
+/**
+ * Use DAS settings
+ *
+ * @returns {?DASSettings} DAS settings
+ */
 export function useSettings() {
   const [settings, setSettings] = useState(null);
 
@@ -17,6 +27,17 @@ export function useSettings() {
   return settings;
 }
 
+/**
+ * @typedef {object} PublishOnlineStateHook
+ * @property {boolean}            publishOnline     Whether 'publish online' is enabled
+ * @property {function(boolean)}  setPublishOnline  Set the 'publish online' setting
+ */
+
+/**
+ * Use "publish online" setting state
+ *
+ * @returns {PublishOnlineStateHook} Hook
+ */
 export function usePublishOnlineState() {
   const settings = useSettings();
   const [publishOnline, setPublishOnline] = useState(false);
@@ -36,5 +57,5 @@ export function usePublishOnlineState() {
     setPublishOnline(state);
   }, []);
 
-  return [publishOnline, setPublishState];
+  return { publishOnline, setPublishOnline: setPublishState };
 }

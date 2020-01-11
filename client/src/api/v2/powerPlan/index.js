@@ -2,10 +2,34 @@ import { useState, useCallback } from 'react';
 import { useChannel, emit } from '../socket';
 import presets from './presets';
 
+/**
+ * @typedef {import('./presets').PowerPlanPreset} PowerPlanPreset
+ */
+/**
+ * @typedef {import('./presets').PowerPlan} PowerPlan
+ */
+
+/**
+ * Get power plan presets
+ *
+ * @returns {PowerPlanPreset[]} presets
+ */
 export function getPresets() {
   return presets;
 }
 
+/**
+ * @typedef {object} GeneratePowerPlanHook
+ * @property {function(PowerPlan)}  generate    Generate a new power plan
+ * @property {boolean}              generating  Currently generating a power plan
+ * @property {boolean}              generated   Finished generating a power plan
+ */
+
+/**
+ * Use power plan generator
+ *
+ * @returns {GeneratePowerPlanHook} Hook
+ */
 export function useGeneratePowerPlan() {
   const [generating, setGenerating] = useState(false);
   const [generated, setGenerated] = useState(false);
@@ -52,5 +76,5 @@ export function useGeneratePowerPlan() {
     emit('create-power-plan', payload);
   }, []);
 
-  return [generate, generating, generated];
+  return { generate, generating, generated };
 }

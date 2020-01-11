@@ -9,6 +9,11 @@ import {
 } from 'react-bootstrap';
 import { setCalibration, resetCalibration } from 'api/v2/powerModel';
 
+/**
+ * Power Model Calibration page component
+ *
+ * @returns {React.Component} Component
+ */
 export default function PowerModelCalibrationView() {
   const distanceEl = useRef(null);
   const [distanceSet, setDistanceSet] = useState(false);

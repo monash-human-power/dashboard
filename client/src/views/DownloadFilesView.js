@@ -4,8 +4,13 @@ import DeleteModal from 'components/DeleteModal';
 import WidgetListGroupItem from 'components/WidgetListGroupItem';
 import { useFiles } from 'api/v2/files';
 
+/**
+ * Download Files page component
+ *
+ * @returns {React.Component} Component
+ */
 export default function DownloadFilesView() {
-  const [files, deleteFile] = useFiles();
+  const { files, deleteFile } = useFiles();
   const [deletingFile, setDeletingFile] = useState(null);
 
   const hideConfirmDelete = useCallback(() => {

@@ -1,11 +1,19 @@
 import { useState, useCallback } from 'react';
-import { useTimeSeries } from 'utils/timeSeries';
+import { useTimeSeries, TimeSeriesPoint } from 'utils/timeSeries';
 import { useChannel } from '../socket';
 
 /**
+ * @typedef {object} SensorTimeSeriesHook
+ * @property {TimeSeriesPoint[]}  series  Sensor time-series readings
+ * @property {number}             max     Maximum recorded value
+ */
+
+/**
  * Use time-series averaged sensor data
+ *
  * @param {string} sensor    Sensor to monitor
  * @param {number} interval  Time between data points
+ * @returns {SensorTimeSeriesHook} Hook
  */
 export function useSensorTimeSeries(sensor, interval) {
   const [running, setRunning] = useState(false);
