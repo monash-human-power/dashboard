@@ -1,6 +1,17 @@
 import { useState, useCallback } from 'react';
 import { useChannel } from './socket';
 
+export function useData() {
+  const [data, setData] = useState(null);
+
+  const handler = useCallback((newData) => {
+    setData(newData);
+  }, []);
+  useChannel('data', handler);
+
+  return data;
+}
+
 /** Transform sensor data from an object to a list of sensors */
 function formatData(data) {
   const sensors = [
@@ -21,20 +32,11 @@ function formatData(data) {
   }));
 }
 
-export function useSensorStatus() {
-  const [sensors, setSensors] = useState({
-    gps: false,
-    power: false,
-    cadence: false,
-    reed: false,
-    accelerometer: false,
-    gyroscope: false,
-    potentiometer: false,
-    thermometer: false,
-  });
-
-  const handleData = useCallback((data) => {
-    setSensors({
+export function useStatus() {
+  const data = useData();
+  let sensors;
+  if (data) {
+    sensors = {
       gps: !!data.gps,
       power: !!data.power,
       cadence: !!data.cadence,
@@ -43,9 +45,19 @@ export function useSensorStatus() {
       gyroscope: !!data.gX || !!data.gY || !!data.gZ,
       potentiometer: !!data.pot,
       thermometer: !!data.thermoC,
-    });
-  }, []);
-  useChannel('data', handleData);
+    };
+  } else {
+    sensors = {
+      gps: false,
+      power: false,
+      cadence: false,
+      reed: false,
+      accelerometer: false,
+      gyroscope: false,
+      potentiometer: false,
+      thermometer: false,
+    };
+  }
 
   return formatData(sensors);
 }
