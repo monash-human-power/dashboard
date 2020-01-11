@@ -1,18 +1,21 @@
 import React, { useCallback } from 'react';
 import classNames from 'classnames';
 import {
+  Alert,
   Button,
   Card,
   Col,
   Container,
   Form,
   InputGroup,
+  Spinner,
 } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import LabelledControl from 'components/LabelledControl';
-import { getPresets } from 'api/v2/powerPlan';
+import { getPresets, useGeneratePowerPlan } from 'api/v2/powerPlan';
 
 export default function PowerMapView() {
+  const [generatePowerPlan, generating, generated] = useGeneratePowerPlan();
   const {
     register,
     handleSubmit,
@@ -22,9 +25,8 @@ export default function PowerMapView() {
   } = useForm();
 
   const onSubmit = useCallback((data) => {
-    const parsedData = {
-      numZones: parseInt(data.numZones, 10),
-      filename: data.filename,
+    const plan = {
+      fileName: data.fileName,
       mass: parseInt(data.mass, 10),
       startAdjust: parseInt(data.startAdjust, 10),
       lowerBound: parseInt(data.lowerBound, 10),
@@ -39,13 +41,16 @@ export default function PowerMapView() {
       })),
     };
 
-    console.log(parsedData);
-  }, []);
+    generatePowerPlan(plan);
+  }, [generatePowerPlan]);
 
   const presetButtons = getPresets().map((preset) => (
     <Button
       variant="outline-primary"
-      onClick={() => reset(preset.value)}
+      onClick={() => reset({
+        ...preset.value,
+        numZones: preset.value.zones.length,
+      })}
       key={preset.name}
     >
       {preset.name}
@@ -147,10 +152,10 @@ export default function PowerMapView() {
                   <InputGroup className={classNames(errors.fileName && 'is-invalid')}>
                     <Form.Control
                       id="inputFileName"
-                      name="filename"
+                      name="fileName"
                       ref={register({ required: true, pattern: /^[\w\-. ]+$/ })}
                       placeholder="Filename"
-                      className={classNames(errors.filename && 'is-invalid')}
+                      className={classNames(errors.fileName && 'is-invalid')}
                     />
                     <InputGroup.Append>
                       <InputGroup.Text>.json</InputGroup.Text>
@@ -247,8 +252,15 @@ export default function PowerMapView() {
           </Card.Body>
         </Card>
         {zones}
-        <Button type="submit">Submit</Button>
+        <Button type="submit" disabled={generating}>
+          {generating ? (
+            <Spinner animation="border" />
+          ) : 'Submit'}
+        </Button>
       </Form>
+      {generated && (
+        <Alert variant="success">Power plan finished generation!</Alert>
+      )}
     </Container>
   );
 }
