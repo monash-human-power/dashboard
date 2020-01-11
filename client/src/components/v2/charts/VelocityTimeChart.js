@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Scatter } from 'react-chartjs-2';
-import AnnotationPlugin from 'chartjs-plugin-annotation';
+import ScatterChart from 'components/ScatterChart';
 import { useSensorTimeSeries } from 'api/v2/sensors';
 
 /**
@@ -18,78 +17,19 @@ import { useSensorTimeSeries } from 'api/v2/sensors';
 export default function VelocityTimeChart({ interval }) {
   const { series, max } = useSensorTimeSeries('gps_speed', interval);
 
-  const options = {
-    title: {
-      display: true,
-      text: 'Velocity-Time',
-      maintainAspectRatio: true,
-      fontSize: 14,
-    },
-    legend: {
-      display: false,
-    },
-    scales: {
-      xAxes: [
-        {
-          display: true,
-          scaleLabel: {
-            display: true,
-            labelString: 'Time (s)',
-          },
-        },
-      ],
-      yAxes: [
-        {
-          display: true,
-          scaleLabel: {
-            display: true,
-            labelString: 'Velocity (km/h)',
-          },
-          ticks: {
-            beginAtZero: true,
-          },
-        },
-      ],
-    },
-    annotation: {
-      drawTime: 'afterDraw',
-      annotations: [
-        {
-          type: 'line',
-          mode: 'horizontal',
-          scaleID: 'y-axis-1',
-          value: max,
-          borderColor: '#57606f',
-          borderDash: [10, 10],
-          label: {
-            enabled: true,
-            content: `${max.toFixed(2)} km/h`,
-            yAdjust: 15,
-          },
-        },
-      ],
-    },
-    plugins: [AnnotationPlugin],
-  };
-
-  const data = {
-    label: 'Scatter Dataset',
-    datasets: [
-      {
-        data: series.map((point) => ({
-          x: point.time / 1000,
-          y: point.value,
-        })),
-        backgroundColor: ['rgba(165, 105, 189, 0.6)'],
-        showLine: true,
-      },
-    ],
-  };
-
+  const data = series.map((point) => ({
+    x: point.time / 1000,
+    y: point.value,
+  }));
   return (
-    <Scatter
-      options={options}
+    <ScatterChart
+      title="Velocity-Time"
+      xAxis={{ label: 'Time', unit: 's' }}
+      yAxis={{ label: 'Velocity', unit: 'km/h' }}
       data={data}
+      dataColour="rgba(165, 105, 189, 0.6)"
+      max={max}
+      maxColour="#57606f"
     />
   );
 }
