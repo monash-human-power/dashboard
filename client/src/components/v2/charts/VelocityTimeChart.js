@@ -63,7 +63,7 @@ export default function VelocityTimeChart({ interval }) {
           borderDash: [10, 10],
           label: {
             enabled: true,
-            content: `${max} km/h`,
+            content: `${max.toFixed(2)} km/h`,
             yAdjust: 15,
           },
         },

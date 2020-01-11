@@ -64,7 +64,7 @@ export default function CadenceTimeChart({ interval }) {
           borderDash: [10, 10],
           label: {
             enabled: true,
-            content: `${max} RPM`,
+            content: `${max.toFixed(2)} RPM`,
             yAdjust: 15,
           },
         },

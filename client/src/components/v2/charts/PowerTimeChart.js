@@ -64,7 +64,7 @@ export default function PowerTimeChart({ interval }) {
           borderDash: [10, 10],
           label: {
             enabled: true,
-            content: `${max} W`,
+            content: `${max.toFixed(2)} W`,
             yAdjust: 15,
           },
         },
