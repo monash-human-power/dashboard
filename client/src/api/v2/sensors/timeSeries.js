@@ -25,6 +25,7 @@ export function useSensorTimeSeries(sensor, interval) {
   } = useTimeSeries(interval, running);
 
   const handleData = useCallback((data) => {
+    setRunning(true);
     add(data[sensor]);
   }, [add, sensor]);
   useChannel('data', handleData);
