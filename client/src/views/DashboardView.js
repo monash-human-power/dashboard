@@ -13,7 +13,7 @@ export default function DashboardView() {
   const updateInterval = 1000;
 
   return (
-    <Container>
+    <Container fluid>
       <Row>
         <Col lg={6}>
           <VelocityTimeChart interval={updateInterval} />
