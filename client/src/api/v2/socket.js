@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import io from 'socket.io-client';
 
 let socket;
-export default function getSocket() {
+export function getSocket() {
   if (!socket) {
     socket = io();
   }
