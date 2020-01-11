@@ -2,6 +2,11 @@ import { useState, useCallback } from 'react';
 import { useTimeSeries } from 'utils/timeSeries';
 import { useChannel } from '../socket';
 
+/**
+ * Use time-series averaged sensor data
+ * @param {string} sensor    Sensor to monitor
+ * @param {number} interval  Time between data points
+ */
 export function useSensorTimeSeries(sensor, interval) {
   const [running, setRunning] = useState(false);
   const {
