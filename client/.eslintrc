@@ -1,5 +1,5 @@
 {
-  "extends": ["react-app", "airbnb"],
+  "extends": ["react-app", "airbnb", "plugin:jsdoc/recommended"],
   "rules": {
     "no-console": "off",
     "react/jsx-filename-extension": [1, { "extensions": [".js"] }],
