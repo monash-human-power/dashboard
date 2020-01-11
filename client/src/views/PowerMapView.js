@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import classNames from 'classnames';
 import {
   Button,
@@ -10,7 +10,7 @@ import {
 } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import LabelledControl from 'components/LabelledControl';
-import { getPresets } from 'api/v2/powerMap';
+import { getPresets } from 'api/v2/powerPlan';
 
 export default function PowerMapView() {
   const {
@@ -21,7 +21,26 @@ export default function PowerMapView() {
     reset,
   } = useForm();
 
-  const onSubmit = (data) => { console.log(data); };
+  const onSubmit = useCallback((data) => {
+    const parsedData = {
+      numZones: parseInt(data.numZones, 10),
+      filename: data.filename,
+      mass: parseInt(data.mass, 10),
+      startAdjust: parseInt(data.startAdjust, 10),
+      lowerBound: parseInt(data.lowerBound, 10),
+      upperBound: parseInt(data.upperBound, 10),
+      step: parseInt(data.step, 10),
+      startTrap: parseInt(data.startTrap, 10),
+      endTrap: parseInt(data.endTrap, 10),
+      zones: data.zones.map((zone) => ({
+        recPower: parseInt(zone.recPower, 10),
+        maxTime: parseInt(zone.maxTime, 10),
+        spentTime: parseInt(zone.spentTime, 10),
+      })),
+    };
+
+    console.log(parsedData);
+  }, []);
 
   const presetButtons = getPresets().map((preset) => (
     <Button
