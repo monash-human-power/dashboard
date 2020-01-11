@@ -42,7 +42,8 @@ export default function PowerMapView() {
     };
 
     generatePowerPlan(plan);
-  }, [generatePowerPlan]);
+    reset({});
+  }, [generatePowerPlan, reset]);
 
   const presetButtons = getPresets().map((preset) => (
     <Button
