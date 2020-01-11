@@ -10,11 +10,17 @@ import AnnotationPlugin from 'chartjs-plugin-annotation';
  */
 
 /**
+ * @typedef {object} DataProps
+ * @property {number} x X-Axis value
+ * @property {number} y Y-Axis value
+ */
+
+/**
  * @typedef {object} ScatterChartProps
  * @property {string}     title       Chart title
  * @property {AxisProps}  xAxis       X-Axis config
  * @property {AxisProps}  yAxis       Y-Axis config
- * @property {number[]}   data        Data values
+ * @property {DataProps[]}   data        Data values
  * @property {string}     dataColour  Data background colour
  * @property {number}     max         Max line value
  * @property {string}     maxColour   Max line colour
@@ -119,7 +125,10 @@ ScatterChart.propTypes = {
     label: PropTypes.string.isRequired,
     unit: PropTypes.string.isRequired,
   }).isRequired,
-  data: PropTypes.arrayOf(PropTypes.number).isRequired,
+  data: PropTypes.arrayOf(PropTypes.shape({
+    x: PropTypes.number.isRequired,
+    y: PropTypes.number.isRequired,
+  })).isRequired,
   dataColour: PropTypes.string.isRequired,
   max: PropTypes.number.isRequired,
   maxColour: PropTypes.string.isRequired,
