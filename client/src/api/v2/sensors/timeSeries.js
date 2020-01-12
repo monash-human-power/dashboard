@@ -5,8 +5,8 @@ import { useChannel } from '../socket';
 
 /**
  * @typedef {object} MultiSensorTimeSeriesHook
- * @property {TimeSeriesPoint[][]}  series  Time-series readings for sensors
- * @property {number[]}             max     Maximum recorded values
+ * @property {object.<string, TimeSeriesPoint>[]} series Time-series readings for sensors
+ * @property {object.<string, number>} max Maximum recorded values
  */
 
 /**
