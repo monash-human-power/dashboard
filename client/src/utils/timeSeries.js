@@ -23,43 +23,50 @@ function isValid(value) {
 
 /**
  * @typedef {object} TimeSeriesHook
- * @property {TimeSeriesPoint[]}  series  Time-series data points
- * @property {number}             max     Maximum recorded raw value
- * @property {function(number)}   add     Add a raw data point
- * @property {Function}           reset   Remove recorded values
+ * @property {TimeSeriesPoint[][]}  series  Time-series data points for each dimension
+ * @property {number[]}             max     Maximum recorded raw value for each dimension
+ * @property {function(number[])}   add     Add a raw data point
+ * @property {Function}             reset   Remove recorded values
  */
 
 /**
  * Create a value-time record, averaged every interval
  *
- * @param {number}  interval Time in ms between points
- * @param {boolean} running  Whether to record values
+ * @param {number}  dimensions  Dimensions of data to record
+ * @param {number}  interval    Time in ms between points
+ * @param {boolean} running     Whether to record values
  * @returns {TimeSeriesHook} Hook
  */
-export function useTimeSeries(interval, running) {
+export function useTimeSeries(dimensions, interval, running) {
   const [series, setSeries] = useState([]);
-  const max = useRef(0);
-  const intermediateCount = useRef(0);
+  const max = useRef(Array(dimensions).fill(0));
+  const intermediateCount = useRef(Array(dimensions).fill(0));
   const pointCount = useRef(0);
   const time = useRef(0);
 
-  const add = useCallback((value) => {
-    if (isValid(value)) {
-      intermediateCount.current += value;
-      pointCount.current += 1;
-
-      if (value > max.current) {
-        max.current = value;
-      }
-    }
-  }, []);
+  const resetCounters = useCallback(() => {
+    intermediateCount.current = Array(dimensions).fill(0);
+    pointCount.current = 0;
+  }, [dimensions]);
 
   const reset = useCallback(() => {
+    resetCounters();
     setSeries([]);
-    max.current = 0;
-    intermediateCount.current = 0;
-    pointCount.current = 0;
+    max.current = Array(dimensions).fill(0);
     time.current = 0;
+  }, [resetCounters, dimensions]);
+
+  const add = useCallback((values) => {
+    if (values.every(isValid)) {
+      values.forEach((value, index) => {
+        intermediateCount.current[index] += value;
+
+        if (value > max.current[index]) {
+          max.current[index] = value;
+        }
+      });
+      pointCount.current += 1;
+    }
   }, []);
 
   useEffect(() => {
@@ -68,13 +75,15 @@ export function useTimeSeries(interval, running) {
      */
     function batch() {
       if (pointCount.current > 0) {
-        const avg = intermediateCount.current / pointCount.current;
-        setSeries((prevState) => [...prevState, {
-          time: time.current,
-          value: avg,
-        }]);
-        intermediateCount.current = 0;
-        pointCount.current = 0;
+        const averages = intermediateCount.current.map((sum) => sum / pointCount.current);
+        setSeries((prevState) => [
+          ...prevState,
+          averages.map((average) => ({
+            time: time.current,
+            value: average,
+          })),
+        ]);
+        resetCounters();
       }
       time.current += interval;
     }
@@ -86,16 +95,14 @@ export function useTimeSeries(interval, running) {
       };
     }
     return () => null;
-  }, [interval, running]);
+  }, [interval, running, resetCounters]);
 
+  // On resume, discard values added when not running
   useEffect(() => {
     if (running) {
-      max.current = 0;
-      intermediateCount.current = 0;
-      pointCount.current = 0;
-      time.current = 0;
+      resetCounters();
     }
-  }, [running]);
+  }, [running, resetCounters]);
 
   return {
     series,
