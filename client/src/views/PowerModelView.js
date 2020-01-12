@@ -3,8 +3,8 @@ import {
   Alert,
   Button,
   Card,
-  Container,
 } from 'react-bootstrap';
+import ContentPage from 'components/ContentPage';
 import { usePowerModelState } from 'api/v2/powerModel';
 
 /**
@@ -27,8 +27,7 @@ export default function PowerModelView() {
   }, [setPowerModelState]);
 
   return (
-    <Container>
-      <h1>Power Model</h1>
+    <ContentPage title="Power Model">
       <Alert variant="warning">
         Make sure power model is not running before you start it!
       </Alert>
@@ -49,6 +48,6 @@ export default function PowerModelView() {
           <Button variant="danger" onClick={stop}>Stop</Button>
         </Card.Body>
       </Card>
-    </Container>
+    </ContentPage>
   );
 }

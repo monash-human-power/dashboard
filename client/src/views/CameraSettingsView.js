@@ -2,9 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import {
   Card,
   Col,
-  Container,
   Row,
 } from 'react-bootstrap';
+import ContentPage from 'components/ContentPage';
 import RadioSelector from 'components/RadioSelector';
 import { useOverlays } from 'api/v2/camera';
 
@@ -61,8 +61,7 @@ export default function CameraSettingsView() {
   ) : null;
 
   return (
-    <Container>
-      <h1>Camera Settings</h1>
+    <ContentPage title="Camera Settings">
       <Card>
         <Card.Body>
           <Card.Title>Camera Overlay</Card.Title>
@@ -78,6 +77,6 @@ export default function CameraSettingsView() {
           <Card.Link href="" onClick={handleSave}>Save</Card.Link>
         </Card.Footer>
       </Card>
-    </Container>
+    </ContentPage>
   );
 }

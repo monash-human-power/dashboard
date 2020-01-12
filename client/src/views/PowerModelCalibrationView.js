@@ -3,10 +3,10 @@ import {
   Alert,
   Button,
   Card,
-  Container,
   Form,
   InputGroup,
 } from 'react-bootstrap';
+import ContentPage from 'components/ContentPage';
 import { setCalibration, resetCalibration } from 'api/v2/powerModel';
 
 /**
@@ -32,8 +32,7 @@ export default function PowerModelCalibrationView() {
   }, []);
 
   return (
-    <Container>
-      <h1>Power Model Calibration</h1>
+    <ContentPage title="Power Model Calibration">
       <Card>
         <Card.Body>
           <Card.Title>Current Actual Distance</Card.Title>
@@ -67,6 +66,6 @@ export default function PowerModelCalibrationView() {
           <Button variant="danger" onClick={handleResetDistance}>Reset Calibrated Distance</Button>
         </Card.Body>
       </Card>
-    </Container>
+    </ContentPage>
   );
 }

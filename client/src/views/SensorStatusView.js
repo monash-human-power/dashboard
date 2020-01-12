@@ -1,5 +1,6 @@
 import React from 'react';
-import { Container, ListGroup, Badge } from 'react-bootstrap';
+import { Badge, ListGroup } from 'react-bootstrap';
+import ContentPage from 'components/ContentPage';
 import WidgetListGroupItem from 'components/WidgetListGroupItem';
 import { useStatus } from 'api/v2/sensors';
 
@@ -20,11 +21,10 @@ export default function SensorStatusView() {
   ));
 
   return (
-    <Container>
-      <h1>Sensor Status</h1>
+    <ContentPage title="Sensor Status">
       <ListGroup>
         {sensorItems}
       </ListGroup>
-    </Container>
+    </ContentPage>
   );
 }

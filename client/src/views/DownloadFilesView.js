@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
-import { Container, ListGroup, Button } from 'react-bootstrap';
+import { Button, ListGroup } from 'react-bootstrap';
+import ContentPage from 'components/ContentPage';
 import DeleteModal from 'components/DeleteModal';
 import WidgetListGroupItem from 'components/WidgetListGroupItem';
 import { useFiles } from 'api/v2/files';
@@ -46,8 +47,7 @@ export default function DownloadFilesView() {
   ));
 
   return (
-    <Container>
-      <h1>Files</h1>
+    <ContentPage title="Files">
       <ListGroup>
         {fileList}
       </ListGroup>
@@ -58,6 +58,6 @@ export default function DownloadFilesView() {
         onCancel={hideConfirmDelete}
         onDelete={handleConfirmDelete}
       />
-    </Container>
+    </ContentPage>
   );
 }

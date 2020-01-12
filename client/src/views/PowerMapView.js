@@ -5,12 +5,12 @@ import {
   Button,
   Card,
   Col,
-  Container,
   Form,
   InputGroup,
   Spinner,
 } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
+import ContentPage from 'components/ContentPage';
 import LabelledControl from 'components/LabelledControl';
 import { getPresets, useGeneratePowerPlan } from 'api/v2/powerPlan';
 
@@ -114,8 +114,7 @@ export default function PowerMapView() {
   });
 
   return (
-    <Container>
-      <h1>Generate Power Map</h1>
+    <ContentPage title="Generate Power Map">
       <Card>
         <Card.Body>
           <Card.Title>Pre-fill Plans</Card.Title>
@@ -267,6 +266,6 @@ export default function PowerMapView() {
       {generated && (
         <Alert variant="success">Power plan finished generation!</Alert>
       )}
-    </Container>
+    </ContentPage>
   );
 }

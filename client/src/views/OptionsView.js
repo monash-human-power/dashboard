@@ -2,9 +2,9 @@ import React, { useCallback } from 'react';
 import {
   Button,
   ButtonGroup,
-  Container,
   ListGroup,
 } from 'react-bootstrap';
+import ContentPage from 'components/ContentPage';
 import WidgetListGroupItem from 'components/WidgetListGroupItem';
 import { usePublishOnlineState } from 'api/v2/settings';
 
@@ -25,8 +25,7 @@ export default function OptionsView() {
   }, [setPublishOnline]);
 
   return (
-    <Container>
-      <h1>Options</h1>
+    <ContentPage title="Options">
       <ListGroup>
         <WidgetListGroupItem title="Publish data online">
           <ButtonGroup>
@@ -45,6 +44,6 @@ export default function OptionsView() {
           </ButtonGroup>
         </WidgetListGroupItem>
       </ListGroup>
-    </Container>
+    </ContentPage>
   );
 }
