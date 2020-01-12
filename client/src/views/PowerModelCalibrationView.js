@@ -33,7 +33,7 @@ export default function PowerModelCalibrationView() {
 
   return (
     <ContentPage title="Power Model Calibration">
-      <Card>
+      <Card className="mb-4">
         <Card.Body>
           <Card.Title>Current Actual Distance</Card.Title>
           <Form validated>

@@ -70,7 +70,7 @@ export default function PowerMapView() {
 
     return (
       <fieldset name={fieldname} key={fieldname}>
-        <Card>
+        <Card className="mb-4">
           <Card.Body>
             <Card.Title>
               {`Zone ${index + 1}`}
@@ -125,11 +125,12 @@ export default function PowerMapView() {
         block
         variant="danger"
         onClick={reset}
+        className="mb-4"
       >
         Reset Form
       </Button>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <Card>
+        <Card className="mb-4">
           <Card.Body>
             <Form.Row>
               <Col sm={6}>

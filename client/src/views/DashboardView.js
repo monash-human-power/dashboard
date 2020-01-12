@@ -28,7 +28,7 @@ export default function DashboardView() {
 
   return (
     <Container fluid>
-      <Row>
+      <Row className="align-items-center">
         <Col sm={8}>
           <h5 style={{ visibility: !data ? 'hidden' : 'visible' }}>
             {`Current Filename: ${data?.filename}`}
