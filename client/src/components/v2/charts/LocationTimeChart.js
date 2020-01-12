@@ -14,6 +14,7 @@ import {
   useInitialSensorData,
   useMultiSensorTimeSeries,
 } from 'api/v2/sensors';
+import styles from './LocationTimeChart.module.css';
 
 const MHP_WORKSHOP_LOCATION = [-37.908756, 145.13404];
 
@@ -67,7 +68,7 @@ export default function LocationTimeChart({ interval }) {
       center={initialLocation ?? MHP_WORKSHOP_LOCATION}
       zoom={17}
       attributionControl={false}
-      className="h-100"
+      className={styles.map}
     >
       <TileLayer
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
