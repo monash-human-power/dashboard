@@ -8,6 +8,7 @@ import {
 import VelocityTimeChart from 'components/v2/charts/VelocityTimeChart';
 import PowerTimeChart from 'components/v2/charts/PowerTimeChart';
 import CadenceTimeChart from 'components/v2/charts/CadenceTimeChart';
+import LocationTimeChart from 'components/v2/charts/LocationTimeChart';
 import { useData } from 'api/v2/sensors';
 
 /**
@@ -56,6 +57,9 @@ export default function DashboardView() {
           <Row>
             <Col lg={6}>
               <CadenceTimeChart interval={updateInterval} />
+            </Col>
+            <Col lg={6}>
+              <LocationTimeChart interval={updateInterval} />
             </Col>
           </Row>
         </div>
