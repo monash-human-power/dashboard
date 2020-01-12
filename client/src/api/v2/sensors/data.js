@@ -46,9 +46,10 @@ export function useData() {
 /**
  * Use only the first sensor reading
  *
- * @returns {?SensorData} Initial sensor data
+ * @param {string} sensor Sensor to watch
+ * @returns {?object} Initial sensor data
  */
-export function useInitialData() {
+export function useInitialSensorData(sensor) {
   const [data, setData] = useState(null);
   const [isInitial, setInitial] = useState(true);
 
@@ -58,11 +59,11 @@ export function useInitialData() {
   useChannel('start', startHandler);
 
   const handler = useCallback((newData) => {
-    if (isInitial) {
-      setData(newData);
+    if (isInitial && newData[sensor]) {
+      setData(newData[sensor]);
       setInitial(false);
     }
-  }, [isInitial]);
+  }, [sensor, isInitial]);
   useChannel('data', handler);
 
   return data;
