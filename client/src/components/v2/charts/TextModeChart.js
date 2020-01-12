@@ -40,7 +40,7 @@ export default function TextModeChart() {
    * @returns {string} Formatted value
    */
   function formatData(sensor, unit) {
-    return formatValue(data?.[sensor], unit);
+    return formatValue(data[sensor], unit);
   }
 
   return (

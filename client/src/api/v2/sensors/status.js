@@ -39,30 +39,14 @@ function formatData(data) {
  */
 export function useStatus() {
   const data = useData();
-  let sensors;
-  if (data) {
-    sensors = {
-      gps: !!data.gps,
-      power: !!data.power,
-      cadence: !!data.cadence,
-      reed: !!data.reed_velocity && !!data.reed_distance,
-      accelerometer: !!data.aX || !!data.aY || !!data.aZ,
-      gyroscope: !!data.gX || !!data.gY || !!data.gZ,
-      potentiometer: !!data.pot,
-      thermometer: !!data.thermoC,
-    };
-  } else {
-    sensors = {
-      gps: false,
-      power: false,
-      cadence: false,
-      reed: false,
-      accelerometer: false,
-      gyroscope: false,
-      potentiometer: false,
-      thermometer: false,
-    };
-  }
-
-  return formatData(sensors);
+  return formatData({
+    gps: !!data.gps,
+    power: !!data.power,
+    cadence: !!data.cadence,
+    reed: !!data.reed_velocity && !!data.reed_distance,
+    accelerometer: !!data.aX || !!data.aY || !!data.aZ,
+    gyroscope: !!data.gX || !!data.gY || !!data.gZ,
+    potentiometer: !!data.pot,
+    thermometer: !!data.thermoC,
+  });
 }
