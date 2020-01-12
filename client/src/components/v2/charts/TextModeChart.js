@@ -13,6 +13,13 @@ export default function TextModeChart() {
   const data = useData();
   const powerModelData = usePowerModel();
 
+  /**
+   * Format a value into text
+   *
+   * @param {?number} value Value to format. May be null
+   * @param {string}  unit  Unit of measurement
+   * @returns {string} Formatted value
+   */
   function formatValue(value, unit) {
     let displayValue;
     if (value !== null && value !== undefined) {
@@ -25,6 +32,13 @@ export default function TextModeChart() {
     return `${displayValue}${displayUnit}`;
   }
 
+  /**
+   * Format sensor output
+   *
+   * @param {string} sensor Sensor name
+   * @param {string} unit   Unit of measurement
+   * @returns {string} Formatted value
+   */
   function formatData(sensor, unit) {
     return formatValue(data?.[sensor], unit);
   }
