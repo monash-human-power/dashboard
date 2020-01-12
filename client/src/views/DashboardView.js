@@ -9,6 +9,7 @@ import VelocityTimeChart from 'components/v2/charts/VelocityTimeChart';
 import PowerTimeChart from 'components/v2/charts/PowerTimeChart';
 import CadenceTimeChart from 'components/v2/charts/CadenceTimeChart';
 import LocationTimeChart from 'components/v2/charts/LocationTimeChart';
+import TextModeChart from 'components/v2/charts/TextModeChart';
 import { useData } from 'api/v2/sensors';
 
 /**
@@ -63,7 +64,11 @@ export default function DashboardView() {
             </Col>
           </Row>
         </div>
-      ) : null}
+      ) : (
+        <Container>
+          <TextModeChart />
+        </Container>
+      )}
     </Container>
   );
 }
