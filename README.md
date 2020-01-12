@@ -22,18 +22,18 @@ Set up environment variables using a `.env` file. Create a `.env` file at the ro
 | MQTT_PORT            | Port of the MQTT broker                             |
 | HEROKU               | Define this **only** if you are the Heroku instance |
 
-### Installation guide - Backend
-
-1. `npm install` to install all dependencies and libraries
-2. `npm run build` when it's your first time running the application
-3. `npm run start` to start the server
-
 ### Installation guide - Frontend
 
 1. Go to `client/`
 2. `yarn install` to install all dependencies and libraries
 3. `yarn start` to start the development server
 4. `yarn build` to create an optimized production bundle
+
+### Installation guide - Backend
+
+1. `npm install` to install all dependencies and libraries
+2. Build the frontend production bundle
+3. `npm run start` to start the server
 
 ## Documentation
 
