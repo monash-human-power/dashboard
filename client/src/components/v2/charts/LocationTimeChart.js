@@ -10,8 +10,7 @@ import {
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import {
-  useData,
-  useInitialSensorData,
+  useSensorData,
   useMultiSensorTimeSeries,
 } from 'api/v2/sensors';
 import styles from './LocationTimeChart.module.css';
@@ -43,16 +42,15 @@ function validateLocation(location) {
  * @returns {React.Component} Component
  */
 export default function LocationTimeChart({ interval }) {
-  const data = useData();
   const { series: locationHistory } = useMultiSensorTimeSeries(['gps_lat', 'gps_long'], interval);
 
   const initialLocation = validateLocation([
-    useInitialSensorData('gps_lat'),
-    useInitialSensorData('gps_long'),
+    useSensorData('gps_lat').initialData,
+    useSensorData('gps_long').initialData,
   ]);
   const currentLocation = validateLocation([
-    data?.['gps_lat'],
-    data?.['gps_long'],
+    useSensorData('gps_lat').data,
+    useSensorData('gps_long').data,
   ]);
 
   const bikeHistory = locationHistory.map((time) => ([

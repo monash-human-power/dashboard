@@ -44,27 +44,35 @@ export function useData() {
 }
 
 /**
- * Use only the first sensor reading
+ * @typedef {object} SensorDataHook
+ * @property {?object} data         Current sensor value. Null if none yet
+ * @property {?object} initialData  First sensor reading. Null if none yet
+ */
+
+/**
+ * Use data from a single sensor
  *
  * @param {string} sensor Sensor to watch
- * @returns {?object} Initial sensor data
+ * @returns {SensorDataHook} Initial sensor data
  */
-export function useInitialSensorData(sensor) {
+export function useSensorData(sensor) {
   const [data, setData] = useState(null);
-  const [isInitial, setInitial] = useState(true);
+  const [initialData, setInitialData] = useState(null);
 
   const startHandler = useCallback(() => {
-    setInitial(true);
+    setInitialData(null);
+    setData(null);
   }, []);
   useChannel('start', startHandler);
 
   const handler = useCallback((newData) => {
-    if (isInitial && newData[sensor]) {
-      setData(newData[sensor]);
-      setInitial(false);
+    const value = newData?.[sensor];
+    if (initialData === null && value !== null && value !== undefined) {
+      setInitialData(value);
     }
-  }, [sensor, isInitial]);
+    setData(value);
+  }, [sensor, initialData]);
   useChannel('data', handler);
 
-  return data;
+  return { data, initialData };
 }
