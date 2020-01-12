@@ -4,7 +4,6 @@
   "description": "A web server for the Data Acquisition System (DAS) for Monash Human Power.",
   "main": "server/server.js",
   "scripts": {
-    "build": "gulp",
     "eslint": "eslint --ignore-path .gitignore",
     "eslint-check": "eslint --print-config . | eslint-config-prettier-check",
     "eslint-fix": "eslint --fix --ignore-path .gitignore .",
@@ -23,15 +22,10 @@
   },
   "homepage": "https://github.com/khanguslee/MHP-DAS-Web-Server#readme",
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.9.0",
     "body-parser": "^1.18.3",
-    "bootstrap": "^4.2.1",
-    "chart.js": "^2.8.0",
-    "chartjs-plugin-annotation": "^0.5.7",
     "dotenv": "^8.0.0",
     "ejs": "^2.6.2",
     "express": "^4.17.1",
-    "jquery": "^3.3.1",
     "mqtt": "^2.18.8",
     "path": "^0.12.7",
     "socket.io": "^2.2.0"
@@ -42,9 +36,6 @@
     "eslint-config-prettier": "^4.3.0",
     "eslint-plugin-import": "^2.18.0",
     "eslint-plugin-prettier": "^3.1.0",
-    "gulp": "^4.0.0",
-    "gulp-sass": "^4.0.2",
-    "node-sass": "^4.11.0",
     "prettier": "^1.18.2"
   }
 }
