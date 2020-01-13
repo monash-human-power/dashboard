@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { apiFetch } from './transport';
 
 /**
  * @typedef {object} LogFile
@@ -12,7 +13,7 @@ import { useState, useEffect, useCallback } from 'react';
  * @returns {Promise<LogFile[]>} List of log files
  */
 export async function getFiles() {
-  const response = await fetch('/files');
+  const response = await apiFetch('/files');
   const data = await response.json();
   const files = data.files.map((fileName) => ({
     fileName,
@@ -27,7 +28,7 @@ export async function getFiles() {
  * @param {LogFile} file Log file
  */
 export async function deleteFile(file) {
-  await fetch(file.url, { method: 'DELETE' });
+  await apiFetch(file.url, { method: 'DELETE' });
 }
 
 /**

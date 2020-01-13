@@ -1,18 +1,38 @@
 import { useEffect } from 'react';
-import io, { Socket } from 'socket.io-client';
+import path from 'path';
+import io from 'socket.io-client';
+import { Observable, useObservable } from 'utils/observable';
 
-let socket;
 /**
- * Get socket.io connection
+ * @typedef {import('socket.io-client').SocketIOClient.Socket} Socket
+ */
+
+const apiServer = new Observable('');
+
+/**
+ * Switch to a different API server
  *
+ * @param {string} newServer New API server URL
+ */
+export function setApiServer(newServer) {
+  apiServer.next(newServer);
+}
+
+/**
+ * Create a Socket.io socket
+ *
+ * @param {string} server API server address
  * @returns {Socket} Socket.io socket
  */
-export function getSocket() {
-  if (!socket) {
-    socket = io();
-  }
-  return socket;
+function createSocket(server) {
+  return io(path.join(server, '/'));
 }
+const socket = new Observable(createSocket(apiServer.get()));
+
+apiServer.subscribe((newServer) => {
+  socket.get().close();
+  socket.next(createSocket(newServer));
+});
 
 /**
  * Transmit payload to channel
@@ -21,7 +41,7 @@ export function getSocket() {
  * @param {object} payload Payload to send
  */
 export function emit(channel, payload) {
-  getSocket().emit(channel, payload);
+  socket.get().emit(channel, payload);
 }
 
 /**
@@ -31,12 +51,27 @@ export function emit(channel, payload) {
  * @param {Function}  callback  Callback on message
  */
 export function useChannel(channel, callback) {
+  const localSocket = useObservable(socket);
+
   useEffect(() => {
-    const localSocket = getSocket();
     localSocket.on(channel, callback);
 
     return () => {
       localSocket.off(channel, callback);
     };
-  }, [channel, callback]);
+  }, [localSocket, channel, callback]);
+}
+
+/**
+ * @typedef {import('typescript/lib/lib.dom.ts').RequestInit} RequestInit
+ */
+
+/**
+ * Perform a fetch to an API endpoint
+ *
+ * @param {string}      endpoint API endpoint
+ * @param {RequestInit} options  Fetch options
+ */
+export async function apiFetch(endpoint, options) {
+  return fetch(path.join(apiServer.get(), endpoint), options);
 }
