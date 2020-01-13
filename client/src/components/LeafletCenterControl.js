@@ -2,8 +2,8 @@ import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useLeaflet } from 'react-leaflet';
 import Control from 'react-leaflet-control';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationArrow } from '@fortawesome/free-solid-svg-icons';
+import FontAwesomeIcon from 'components/FontAwesomeIcon';
 
 /**
  * @typedef {object} LeafletCenterControlProps
