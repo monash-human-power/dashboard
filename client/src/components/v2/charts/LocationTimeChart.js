@@ -9,6 +9,7 @@ import {
   TileLayer,
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import LeafletCenterControl from 'components/LeafletCenterControl';
 import {
   useSensorData,
   useMultiSensorTimeSeries,
@@ -93,6 +94,7 @@ export default function LocationTimeChart({ interval }) {
       />
       <ScaleControl imperial={false} />
       <AttributionControl prefix={false} />
+      <LeafletCenterControl center={center} />
     </Map>
   );
 }
