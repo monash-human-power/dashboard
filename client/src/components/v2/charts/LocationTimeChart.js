@@ -43,14 +43,16 @@ function validateLocation(location) {
  */
 export default function LocationTimeChart({ interval }) {
   const { series: locationHistory } = useMultiSensorTimeSeries(['gps_lat', 'gps_long'], interval);
+  const latData = useSensorData('gps_lat');
+  const longData = useSensorData('gps_long');
 
   const initialLocation = validateLocation([
-    useSensorData('gps_lat').initialData,
-    useSensorData('gps_long').initialData,
+    latData.initialData,
+    latData.initialData,
   ]);
   const currentLocation = validateLocation([
-    useSensorData('gps_lat').data,
-    useSensorData('gps_long').data,
+    longData.data,
+    longData.data,
   ]);
 
   const bikeHistory = locationHistory.map((time) => ([
