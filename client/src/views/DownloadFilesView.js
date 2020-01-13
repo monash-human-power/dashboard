@@ -53,6 +53,7 @@ export default function DownloadFilesView() {
         <Button
           href={latestFileURL}
           target="_blank"
+          variant="secondary"
           className="mb-2"
         >
           Download latest
