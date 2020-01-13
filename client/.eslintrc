@@ -9,6 +9,7 @@
       "controlComponents": ["Form.Control", "FormControl"],
       "depth": 3
     }],
+    "jsx-a11y/anchor-is-valid": "off",
     "import/no-unresolved": "off",
     "import/prefer-default-export": "off"
   }
