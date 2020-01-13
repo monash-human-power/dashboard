@@ -19,6 +19,7 @@
     "http-proxy-middleware": "^0.20.0",
     "leaflet": "^1.6.0",
     "lodash": "^4.17.15",
+    "null-loader": "^3.0.0",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-app-rewired": "^2.1.5",
