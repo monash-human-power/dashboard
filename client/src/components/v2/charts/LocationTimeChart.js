@@ -48,12 +48,14 @@ export default function LocationTimeChart({ interval }) {
 
   const initialLocation = validateLocation([
     latData.initialData,
-    latData.initialData,
+    longData.initialData,
   ]);
   const currentLocation = validateLocation([
-    longData.data,
+    latData.data,
     longData.data,
   ]);
+
+  const center = initialLocation ?? MHP_WORKSHOP_LOCATION;
 
   const bikeHistory = locationHistory.map((time) => ([
     time.gps_lat.value,
@@ -65,7 +67,7 @@ export default function LocationTimeChart({ interval }) {
 
   return (
     <Map
-      center={initialLocation ?? MHP_WORKSHOP_LOCATION}
+      center={center}
       zoom={17}
       attributionControl={false}
       className={styles.map}
