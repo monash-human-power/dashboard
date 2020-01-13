@@ -19,7 +19,8 @@ import { faLocationArrow } from '@fortawesome/free-solid-svg-icons';
 export default function LeafletCenterControl({ center }) {
   const context = useLeaflet();
 
-  const handleClick = useCallback(() => {
+  const handleClick = useCallback((event) => {
+    event.preventDefault();
     context.map.panTo(center);
   }, [center, context]);
 
