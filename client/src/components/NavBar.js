@@ -2,6 +2,8 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
 import { routes } from 'router';
+import { ReactComponent as Logo } from 'assets/MHPLogo.svg';
+import styles from './NavBar.module.css';
 
 /**
  * Navigation bar component
@@ -23,7 +25,17 @@ export default function NavBar() {
 
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-      <Navbar.Brand>MHP DAShboard</Navbar.Brand>
+      <Navbar.Brand as={NavLink} to="/">
+        <div className="d-flex align-items-center">
+          <div className={styles.logo}>
+            <Logo />
+          </div>
+          <span>
+            <b>das</b>
+            hboard
+          </span>
+        </div>
+      </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="ml-auto">
