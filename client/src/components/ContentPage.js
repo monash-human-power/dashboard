@@ -12,7 +12,7 @@ import { Container } from 'react-bootstrap';
  * Content Page container component
  *
  * @param {ContentPageProps} props Props
- * @returns {React.Component} Component
+ * @returns {React.Component<ContentPageProps>} Component
  */
 export default function ContentPage({ title, children }) {
   return (
