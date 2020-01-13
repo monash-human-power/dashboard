@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useChannel, emit } from './socket';
+import { useChannel, emit } from './transport';
 
 /**
  * @typedef {object} OverlaysHook

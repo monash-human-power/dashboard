@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { emit, useChannel } from './socket';
+import { emit, useChannel } from './transport';
 
 /**
  * @typedef {object} PowerModelData

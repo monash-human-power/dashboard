@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { useChannel } from '../socket';
+import { useChannel } from '../transport';
 
 /**
  * @typedef {object} SensorData

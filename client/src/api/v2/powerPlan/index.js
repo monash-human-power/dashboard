@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { useChannel, emit } from '../socket';
+import { useChannel, emit } from '../transport';
 import presets from './presets';
 
 /**
