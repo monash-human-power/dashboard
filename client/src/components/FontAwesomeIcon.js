@@ -33,12 +33,10 @@ FontAwesomeIcon.propTypes = {
   icon: PropTypes.shape({
     prefix: PropTypes.string.isRequired,
     iconName: PropTypes.string.isRequired,
-    icon: PropTypes.shape([
-      PropTypes.number.isRequired,
-      PropTypes.number.isRequired,
-      PropTypes.array.isRequired,
-      PropTypes.string.isRequired,
-      PropTypes.string.isRequired,
-    ]).isRequired,
+    icon: PropTypes.arrayOf(PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.array,
+      PropTypes.string,
+    ])).isRequired,
   }).isRequired,
 };
