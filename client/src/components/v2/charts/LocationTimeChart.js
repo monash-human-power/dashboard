@@ -25,7 +25,10 @@ const MHP_WORKSHOP_LOCATION = [-37.908756, 145.13404];
  * @returns {?Array.<number>} LatLng array if location is valid. Null if invalid
  */
 function validateLocation(location) {
-  if (location[0] && location[1]) {
+  if (Array.isArray(location) && location.length === 2
+    && Number.isFinite(location[0]) && location[0] >= -180 && location[0] <= 180
+    && Number.isFinite(location[1]) && location[1] >= -180 && location[1] <= 180
+  ) {
     return location;
   }
   return null;
