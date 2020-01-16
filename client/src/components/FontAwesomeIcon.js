@@ -8,16 +8,26 @@ import styles from './FontAwesomeIcon.module.css';
 
 /**
  * @typedef {object} FontAwesomeIconProps
- * @property {IconDefinition} icon Icon
+ * @property {IconDefinition} icon FontAwesome Icon
  */
 
 /**
  * Lightweight FontAwesome icon component
  *
+ * @example ```js
+ * import { faLocationArrow } from '＠fortawesome/free-solid-svg-icons';
+ * const LocationArrow = () => <FontAwesomeIcon icon={faLocationArrow} />
+ * ```
+ *
  * @param {FontAwesomeIconProps} props Props
  * @returns {React.Component<FontAwesomeIconProps>} Component
  */
 export default function FontAwesomeIcon({ icon }) {
+  /*
+  The recommended @fortawesome/react-fontawesome library includes ~30kB of polyfills in the bundle.
+  This is a little excessive for embedding a couple of SVG icons. This component provides a
+  lightweight alternative.
+  */
   const [width, height] = icon.icon;
   const svgPathData = icon.icon[4];
   const viewBox = `0 0 ${width} ${height}`;
