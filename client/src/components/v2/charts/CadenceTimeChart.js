@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ScatterChart from 'components/ScatterChart';
 import { useSensorTimeSeries } from 'api/v2/sensors';
+import { GREEN, GREY } from './colours';
 
 /**
  * @typedef {object} CadenceTimeChartProps
@@ -27,9 +28,9 @@ export default function CadenceTimeChart({ interval }) {
       xAxis={{ label: 'Time', unit: 's' }}
       yAxis={{ label: 'Cadence', unit: 'RPM' }}
       data={data}
-      dataColour="rgba(88, 214, 141, 0.6)"
+      dataColour={GREEN}
       max={max}
-      maxColour="#57606f"
+      maxColour={GREY}
     />
   );
 }

@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ScatterChart from 'components/ScatterChart';
 import { useSensorTimeSeries } from 'api/v2/sensors';
+import { PURPLE, GREY } from './colours';
+
 
 /**
  * @typedef {object} VelocityTimeChartProps
@@ -27,9 +29,9 @@ export default function VelocityTimeChart({ interval }) {
       xAxis={{ label: 'Time', unit: 's' }}
       yAxis={{ label: 'Velocity', unit: 'km/h' }}
       data={data}
-      dataColour="rgba(165, 105, 189, 0.6)"
+      dataColour={PURPLE}
       max={max}
-      maxColour="#57606f"
+      maxColour={GREY}
     />
   );
 }

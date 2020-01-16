@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ScatterChart from 'components/ScatterChart';
 import { useSensorTimeSeries } from 'api/v2/sensors';
+import { BLUE, GREY } from './colours';
+
 
 /**
  * @typedef {object} PowerTimeChartProps
@@ -27,9 +29,9 @@ export default function PowerTimeChart({ interval }) {
       xAxis={{ label: 'Time', unit: 's' }}
       yAxis={{ label: 'Power', unit: 'W' }}
       data={data}
-      dataColour="rgba(93, 173, 226, 0.6)"
+      dataColour={BLUE}
       max={max}
-      maxColour="#57606f"
+      maxColour={GREY}
     />
   );
 }
