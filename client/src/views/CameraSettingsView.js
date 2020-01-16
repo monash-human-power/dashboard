@@ -19,7 +19,7 @@ export default function CameraSettingsView() {
   const [primarySelected, setPrimarySelected] = useState(null);
   const [secondarySelected, setSecondarySelected] = useState(null);
 
-  // On overlay data load, set selected to exising value
+  // On overlay data load, set selected to existing value
   useEffect(() => {
     setPrimarySelected(primaryOverlays?.active);
   }, [primaryOverlays]);
