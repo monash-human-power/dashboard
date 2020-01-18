@@ -26,6 +26,47 @@ export default function DashboardView() {
     setTextMode(event.currentTarget.checked);
   }, []);
 
+  /**
+   * Render dashboard with graphs
+   *
+   * @returns {React.Component} Component
+   * */
+  function renderGraphicalDashboard() {
+    return (
+      <div>
+        <Row>
+          <Col lg={6}>
+            <VelocityTimeChart interval={updateInterval} />
+          </Col>
+          <Col lg={6}>
+            <PowerTimeChart interval={updateInterval} />
+          </Col>
+        </Row>
+        <Row>
+          <Col lg={6}>
+            <CadenceTimeChart interval={updateInterval} />
+          </Col>
+          <Col lg={6}>
+            <LocationTimeChart interval={updateInterval} />
+          </Col>
+        </Row>
+      </div>
+    );
+  }
+
+  /**
+   * Render the text-mode dashboard
+   *
+   * @returns {React.Component} Component
+   * */
+  function renderTextDashboard() {
+    return (
+      <Container>
+        <TextModeChart />
+      </Container>
+    );
+  }
+
   return (
     <Container fluid>
       <Row className="align-items-center">
@@ -45,30 +86,7 @@ export default function DashboardView() {
           />
         </Col>
       </Row>
-      {!textMode ? (
-        <div>
-          <Row>
-            <Col lg={6}>
-              <VelocityTimeChart interval={updateInterval} />
-            </Col>
-            <Col lg={6}>
-              <PowerTimeChart interval={updateInterval} />
-            </Col>
-          </Row>
-          <Row>
-            <Col lg={6}>
-              <CadenceTimeChart interval={updateInterval} />
-            </Col>
-            <Col lg={6}>
-              <LocationTimeChart interval={updateInterval} />
-            </Col>
-          </Row>
-        </div>
-      ) : (
-        <Container>
-          <TextModeChart />
-        </Container>
-      )}
+      {textMode ? renderTextDashboard() : renderGraphicalDashboard()}
     </Container>
   );
 }
