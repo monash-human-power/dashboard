@@ -14,18 +14,18 @@ import { useOverlays } from 'api/v2/camera';
  * @returns {React.Component} Component
  */
 export default function CameraSettingsView() {
-  const { overlays: primaryOverlays, setActiveOverlay: setPrimaryActive } = useOverlays('primary');
-  const { overlays: secondaryOverlays, setActiveOverlay: setSecondaryActive } = useOverlays('secondary');
+  const { overlays: primaryControls, setActiveOverlay: setPrimaryActive } = useOverlays('primary');
+  const { overlays: secondaryControls, setActiveOverlay: setSecondaryActive } = useOverlays('secondary');
   const [primarySelected, setPrimarySelected] = useState(null);
   const [secondarySelected, setSecondarySelected] = useState(null);
 
   // On overlay data load, set selected to existing value
   useEffect(() => {
-    setPrimarySelected(primaryOverlays?.active);
-  }, [primaryOverlays]);
+    setPrimarySelected(primaryControls?.active);
+  }, [primaryControls]);
   useEffect(() => {
-    setSecondarySelected(secondaryOverlays?.active);
-  }, [secondaryOverlays]);
+    setSecondarySelected(secondaryControls?.active);
+  }, [secondaryControls]);
 
   const handleSave = useCallback((event) => {
     event.preventDefault();
@@ -38,22 +38,22 @@ export default function CameraSettingsView() {
   }, [primarySelected, secondarySelected, setPrimaryActive, setSecondaryActive]);
 
   // Only render controls when overlay data is available
-  const primary = primaryOverlays ? (
+  const primary = primaryControls ? (
     <Col>
       Primary display
       <RadioSelector
-        options={primaryOverlays.overlays}
+        options={primaryControls.overlays}
         value={primarySelected}
         onChange={setPrimarySelected}
       />
     </Col>
   ) : null;
 
-  const secondary = secondaryOverlays ? (
+  const secondary = secondaryControls ? (
     <Col>
       Secondary display
       <RadioSelector
-        options={secondaryOverlays.overlays}
+        options={secondaryControls.overlays}
         value={secondarySelected}
         onChange={setSecondarySelected}
       />
@@ -65,7 +65,7 @@ export default function CameraSettingsView() {
       <Card>
         <Card.Body>
           <Card.Title>Camera Overlay</Card.Title>
-          {!primaryOverlays && !secondaryOverlays ? (
+          {!primaryControls && !secondaryControls ? (
             <Card.Subtitle>Waiting for response...</Card.Subtitle>
           ) : null}
           <Row>
