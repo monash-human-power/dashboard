@@ -55,9 +55,9 @@ export default function PowerModelCalibrationView() {
               </InputGroup.Append>
             </InputGroup>
           </Form>
-          {distanceSet ? (
+          {!!distanceSet && (
             <Alert variant="success">Distance sent!</Alert>
-          ) : null}
+          )}
         </Card.Body>
       </Card>
       <Card>

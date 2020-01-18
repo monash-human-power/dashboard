@@ -31,11 +31,11 @@ export default function PowerModelView() {
       <Alert variant="warning">
         Make sure power model is not running before you start it!
       </Alert>
-      {successAlert ? (
+      {!!successAlert && (
         <Alert variant="success">
           {successAlert}
         </Alert>
-      ) : null}
+      )}
       <Card>
         <Card.Body className="text-center">
           <Card.Title>Start Power Model</Card.Title>
