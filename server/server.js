@@ -13,8 +13,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.set('view engine', 'ejs');
-app.use(express.static(path.join(__dirname, '..', '/client')));
+app.use(express.static(path.join(__dirname, '../client/build')));
 
 // Create a data folder if it is not created already
 const dataDirectory = path.join(__dirname, 'data');
@@ -36,39 +35,10 @@ sockets.init(server);
 server.listen(PORT, () => {
   console.log('Example app listening at', server.address().port);
 });
-const HEADER = 'MHP DAShboard';
-const sidebar = [
-  { file: 'index', title: 'Dashboard' },
-  { file: 'download-files', title: 'Download Files' },
-  { file: 'status', title: 'Sensor Status' },
-  { file: 'power-model', title: 'Power Model Start/Stop' },
-  { file: 'power-zone', title: 'Generate Power Map' },
-  { file: 'power-calibration', title: 'Power Model Calibration' },
-  { file: 'camera', title: 'Camera Settings' },
-  { file: 'options', title: 'Options' },
-];
 
 /*
  * Server endpoints
  */
-app.get('/', (req, res) => {
-  // Send back the index.html document
-  res.render(path.join(`${__dirname}/../client/index`), {
-    header: HEADER,
-    sidebar,
-    current: { file: 'index', title: 'Dashboard' },
-  });
-});
-
-sidebar.forEach(item => {
-  app.get(`/${item.file}`, (req, res) => {
-    res.render(path.join(`${__dirname}/../client/${item.file}`), {
-      header: HEADER,
-      sidebar,
-      current: item,
-    });
-  });
-});
 
 // Endpoint to get a list of files stored on the server
 app.get('/files', (req, res) => {
@@ -109,6 +79,7 @@ app.delete('/files/:filename', (req, res) => {
     if (err) {
       res.status(404).send('File not found');
     }
+    res.status(200).send();
   });
 });
 
@@ -119,10 +90,6 @@ app.get('/server/status', (req, res) => {
   res.status(200).send(outputJson);
 });
 
-app.get('*', (req, res) => {
-  res.render(path.join(__dirname, '..', 'client', 'page_404'), {
-    header: 'MHP DAShboard',
-    sidebar,
-    current: { file: 'index', title: 'Dashboard' },
-  });
+app.get('*', function(req, res, next) {
+  res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
 });

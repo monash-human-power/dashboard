@@ -1,0 +1,10 @@
+.map {
+  height: 100%;
+}
+
+/** Bootstrap grid lg breakpoint https://getbootstrap.com/docs/4.0/layout/overview/ **/
+@media (max-width: 992px) {
+  .map {
+    height: 300px;
+  }
+}
