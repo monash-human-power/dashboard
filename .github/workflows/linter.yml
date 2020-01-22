@@ -13,6 +13,7 @@ jobs:
         with:
           node-version: 12
       - run: rm -f .yarnclean
+      - run: cd client
       - run: yarn --frozen-lockfile --ignore-engines --ignore-optional --no-bin-links --non-interactive --silent --ignore-scripts --production=false
         env:
           HUSKY_SKIP_INSTALL: true
