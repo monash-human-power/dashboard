@@ -1,12 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import {
-  Card,
-  Col,
-  Row,
-} from 'react-bootstrap';
+import React from 'react';
 import ContentPage from 'components/ContentPage';
-import RadioSelector from 'components/RadioSelector';
-import { useOverlays } from 'api/v2/camera';
+import CameraSettings from 'components/v2/CameraSettings';
 
 /**
  * Camera Settings page component
@@ -14,69 +8,14 @@ import { useOverlays } from 'api/v2/camera';
  * @returns {React.Component} Component
  */
 export default function CameraSettingsView() {
-  const { overlays: primaryControls, setActiveOverlay: setPrimaryActive } = useOverlays('primary');
-  const { overlays: secondaryControls, setActiveOverlay: setSecondaryActive } = useOverlays('secondary');
-  const [primarySelected, setPrimarySelected] = useState(null);
-  const [secondarySelected, setSecondarySelected] = useState(null);
-
-  // On overlay data load, set selected to existing value
-  useEffect(() => {
-    setPrimarySelected(primaryControls?.active);
-  }, [primaryControls]);
-  useEffect(() => {
-    setSecondarySelected(secondaryControls?.active);
-  }, [secondaryControls]);
-
-  const handleSave = useCallback((event) => {
-    event.preventDefault();
-    if (primarySelected) {
-      setPrimaryActive(primarySelected);
-    }
-    if (secondarySelected) {
-      setSecondaryActive(secondarySelected);
-    }
-  }, [primarySelected, secondarySelected, setPrimaryActive, setSecondaryActive]);
-
-  // Only render controls when overlay data is available
-  const primary = primaryControls ? (
-    <Col>
-      Primary display
-      <RadioSelector
-        options={primaryControls.overlays}
-        value={primarySelected}
-        onChange={setPrimarySelected}
-      />
-    </Col>
-  ) : null;
-
-  const secondary = secondaryControls ? (
-    <Col>
-      Secondary display
-      <RadioSelector
-        options={secondaryControls.overlays}
-        value={secondarySelected}
-        onChange={setSecondarySelected}
-      />
-    </Col>
-  ) : null;
-
   return (
     <ContentPage title="Camera Settings">
-      <Card>
-        <Card.Body>
-          <Card.Title>Camera Overlay</Card.Title>
-          {!primaryControls && !secondaryControls ? (
-            <Card.Subtitle>Waiting for response...</Card.Subtitle>
-          ) : null}
-          <Row>
-            {primary}
-            {secondary}
-          </Row>
-        </Card.Body>
-        <Card.Footer>
-          <Card.Link href="" onClick={handleSave}>Save</Card.Link>
-        </Card.Footer>
-      </Card>
+      <div className="mb-4">
+        <CameraSettings device="primary" />
+      </div>
+      <div>
+        <CameraSettings device="secondary" />
+      </div>
     </ContentPage>
   );
 }
