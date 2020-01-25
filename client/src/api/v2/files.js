@@ -59,3 +59,10 @@ export function useFiles() {
 
   return { files, deleteFile: deleteFileHandler };
 }
+
+/**
+ * Use the latest file URL
+ */
+export function useLatestFile() {
+  return '/files/recent';
+}
