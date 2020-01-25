@@ -62,6 +62,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://khlee.me"><img src="https://avatars3.githubusercontent.com/u/18709969?v=4" width="100px;" alt=""/><br /><sub><b>Angus Lee</b></sub></a><br /><a href="https://github.com/monash-human-power/dashboard/commits?author=khanguslee" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/hallgchris"><img src="https://avatars2.githubusercontent.com/u/17876556?v=4" width="100px;" alt=""/><br /><sub><b>Christopher Hall</b></sub></a><br /><a href="https://github.com/monash-human-power/dashboard/commits?author=hallgchris" title="Code">💻</a></td>
+    <td align="center"><a href="https://angus.ws"><img src="https://avatars1.githubusercontent.com/u/13267947?v=4" width="100px;" alt=""/><br /><sub><b>Angus Trau</b></sub></a><br /><a href="https://github.com/monash-human-power/dashboard/commits?author=angustrau" title="Code">💻</a></td>
   </tr>
 </table>
 
