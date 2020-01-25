@@ -64,6 +64,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/hallgchris"><img src="https://avatars2.githubusercontent.com/u/17876556?v=4" width="100px;" alt=""/><br /><sub><b>Christopher Hall</b></sub></a><br /><a href="https://github.com/monash-human-power/dashboard/commits?author=hallgchris" title="Code">💻</a></td>
     <td align="center"><a href="https://angus.ws"><img src="https://avatars1.githubusercontent.com/u/13267947?v=4" width="100px;" alt=""/><br /><sub><b>Angus Trau</b></sub></a><br /><a href="https://github.com/monash-human-power/dashboard/commits?author=angustrau" title="Code">💻</a></td>
     <td align="center"><a href="https://twitter.com/harsilspatel"><img src="https://avatars1.githubusercontent.com/u/25992839?v=4" width="100px;" alt=""/><br /><sub><b>Harsil Patel</b></sub></a><br /><a href="https://github.com/monash-human-power/dashboard/commits?author=harsilspatel" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/rileyclarke"><img src="https://avatars1.githubusercontent.com/u/24428011?v=4" width="100px;" alt=""/><br /><sub><b>Riley Clarke</b></sub></a><br /><a href="https://github.com/monash-human-power/dashboard/commits?author=rileyclarke" title="Code">💻</a></td>
   </tr>
 </table>
 
