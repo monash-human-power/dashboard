@@ -31,9 +31,10 @@ Set up environment variables using a `.env` file. Create a `.env` file at the ro
 
 ### Installation guide - Backend
 
-1. `npm install` to install all dependencies and libraries
-2. Build the frontend production bundle
-3. `npm run start` to start the server
+1. Go to `server/`
+2. `yarn install` to install all dependencies and libraries
+3. Build the frontend production bundle
+4. `yarn start` to start the server
 
 ## Documentation
 
