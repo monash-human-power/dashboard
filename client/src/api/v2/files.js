@@ -22,6 +22,18 @@ export async function getFiles() {
 }
 
 /**
+ * Get the contents of a log file
+ *
+ * @param {LogFile} file Log file
+ * @returns {string} CSV content
+ */
+export async function downloadFile(file) {
+  const response = await fetch(file.url);
+  const content = await response.text();
+  return content;
+}
+
+/**
  * Delete a log file
  *
  * @param {LogFile} file Log file
