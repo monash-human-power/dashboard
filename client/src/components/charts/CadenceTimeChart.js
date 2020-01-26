@@ -1,12 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ScatterChart from 'components/ScatterChart';
-import { useSensorTimeSeries } from 'api/v2/sensors';
 import { GREEN, GREY } from './colours';
 
 /**
+ * @typedef {import('utils/timeSeries').TimeSeriesPoint} TimeSeriesPoint
+ */
+
+/**
  * @typedef {object} CadenceTimeChartProps
- * @property {number} interval Time between updates in ms
+ * @property {TimeSeriesPoint[]} series Time series to render
+ * @property {number} max The maximum value achieved
  */
 
 /**
@@ -15,9 +19,7 @@ import { GREEN, GREY } from './colours';
  * @param {CadenceTimeChartProps} props Props
  * @returns {React.Component<CadenceTimeChartProps>} Component
  */
-export default function CadenceTimeChart({ interval }) {
-  const { series, max } = useSensorTimeSeries('cadence', interval);
-
+export default function CadenceTimeChart({ series, max }) {
   const data = series.map((point) => ({
     x: point.time / 1000,
     y: point.value,
@@ -36,5 +38,9 @@ export default function CadenceTimeChart({ interval }) {
 }
 
 CadenceTimeChart.propTypes = {
-  interval: PropTypes.number.isRequired,
+  series: PropTypes.arrayOf(PropTypes.shape({
+    time: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
+  })).isRequired,
+  max: PropTypes.number.isRequired,
 };

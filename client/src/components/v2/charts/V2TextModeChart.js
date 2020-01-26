@@ -2,14 +2,14 @@ import React from 'react';
 import { Table } from 'react-bootstrap';
 import { useData } from 'api/v2/sensors';
 import { usePowerModel } from 'api/v2/powerModel';
-import styles from './TextModeChart.module.css';
+import styles from './V2TextModeChart.module.css';
 
 /**
  * Text Mode chart component
  *
  * @returns {React.Component} Component
  */
-export default function TextModeChart() {
+export default function V2TextModeChart() {
   const data = useData();
   const powerModelData = usePowerModel();
 

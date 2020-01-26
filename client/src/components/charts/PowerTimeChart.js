@@ -1,13 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ScatterChart from 'components/ScatterChart';
-import { useSensorTimeSeries } from 'api/v2/sensors';
 import { BLUE, GREY } from './colours';
 
+/**
+ * @typedef {import('utils/timeSeries').TimeSeriesPoint} TimeSeriesPoint
+ */
 
 /**
  * @typedef {object} PowerTimeChartProps
- * @property {number} interval Time between updates in ms
+ * @property {TimeSeriesPoint[]} series Time series to render
+ * @property {number} max The maximum value achieved
  */
 
 /**
@@ -16,9 +19,7 @@ import { BLUE, GREY } from './colours';
  * @param {PowerTimeChartProps} props Props
  * @returns {React.Component<PowerTimeChartProps>} Component
  */
-export default function PowerTimeChart({ interval }) {
-  const { series, max } = useSensorTimeSeries('power', interval);
-
+export default function PowerTimeChart({ series, max }) {
   const data = series.map((point) => ({
     x: point.time / 1000,
     y: point.value,
@@ -37,5 +38,9 @@ export default function PowerTimeChart({ interval }) {
 }
 
 PowerTimeChart.propTypes = {
-  interval: PropTypes.number.isRequired,
+  series: PropTypes.arrayOf(PropTypes.shape({
+    time: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
+  })).isRequired,
+  max: PropTypes.number.isRequired,
 };
