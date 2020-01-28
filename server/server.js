@@ -88,7 +88,7 @@ app.get('/files/recent', async (req, res) => {
 // Endpoint to download file from server
 app.get('/files/:filename', (req, res) => {
   const { filename } = req.params;
-  const filepath = path.join(__dirname, `data/${filename}`);
+  const filepath = path.join(__dirname, 'data', filename);
   res.download(filepath, err => {
     if (err) {
       res.status(404).send('File not found');
@@ -99,7 +99,7 @@ app.get('/files/:filename', (req, res) => {
 // Endpoint to delete file from server
 app.delete('/files/:filename', (req, res) => {
   const { filename } = req.params;
-  const filepath = path.join(__dirname, `data/${filename}`);
+  const filepath = path.join(__dirname, 'data', filename);
   fs.unlink(filepath, err => {
     if (err) {
       res.status(404).send('File not found');
