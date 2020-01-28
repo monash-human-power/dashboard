@@ -4,10 +4,10 @@
   "description": "A web server for the Data Acquisition System (DAS) for Monash Human Power.",
   "main": "server/server.js",
   "scripts": {
-    "eslint": "eslint --ignore-path .gitignore",
+    "eslint": "eslint",
     "eslint-check": "eslint --print-config . | eslint-config-prettier-check",
-    "eslint-fix": "eslint --fix --ignore-path .gitignore .",
-    "start": "node server/server.js",
+    "eslint-fix": "eslint --fix",
+    "start": "node server.js",
     "test": "npm run eslint ."
   },
   "repository": {
