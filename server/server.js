@@ -115,6 +115,6 @@ app.get('/server/status', (req, res) => {
   res.status(200).send(outputJson);
 });
 
-app.get('*', function(req, res, next) {
+app.get('*', function(req, res) {
   res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
