@@ -62,6 +62,8 @@ export function useFiles() {
 
 /**
  * Use the latest file URL
+ *
+ * @returns {string} Log file location
  */
 export function useLatestFile() {
   return '/files/recent';
