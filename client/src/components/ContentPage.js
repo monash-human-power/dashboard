@@ -25,7 +25,7 @@ export default function ContentPage({ title, children }) {
 
 ContentPage.propTypes = {
   title: PropTypes.string,
-  children: PropTypes.element.isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 ContentPage.defaultProps = {
