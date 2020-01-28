@@ -41,7 +41,7 @@ server.listen(PORT, () => {
  */
 
 async function getFiles() {
-  const dataFolderPath = path.join(__dirname, '/data');
+  const dataFolderPath = path.join(__dirname, 'data');
   const files = await fs.promises.readdir(dataFolderPath);
   return files;
 }
@@ -66,7 +66,7 @@ app.get('/files/recent', async (req, res) => {
     let latestAge = 0;
     for (let i=0; i<files.length; i++) {
       const file = files[i];
-      const filePath = path.join(__dirname, '/data', file);
+      const filePath = path.join(__dirname, 'data', file);
       const stats = await fs.promises.stat(filePath);
       const fileAge = stats.mtime;
 
@@ -88,7 +88,7 @@ app.get('/files/recent', async (req, res) => {
 // Endpoint to download file from server
 app.get('/files/:filename', (req, res) => {
   const { filename } = req.params;
-  const filepath = path.join(__dirname, `/data/${filename}`);
+  const filepath = path.join(__dirname, `data/${filename}`);
   res.download(filepath, err => {
     if (err) {
       res.status(404).send('File not found');
@@ -99,7 +99,7 @@ app.get('/files/:filename', (req, res) => {
 // Endpoint to delete file from server
 app.delete('/files/:filename', (req, res) => {
   const { filename } = req.params;
-  const filepath = path.join(__dirname, `/data/${filename}`);
+  const filepath = path.join(__dirname, `data/${filename}`);
   fs.unlink(filepath, err => {
     if (err) {
       res.status(404).send('File not found');
@@ -116,5 +116,5 @@ app.get('/server/status', (req, res) => {
 });
 
 app.get('*', function(req, res, next) {
-  res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+  res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
