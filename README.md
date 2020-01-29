@@ -36,6 +36,16 @@ Set up environment variables using a `.env` file. Create a `.env` file in the `s
 3. Build the frontend production bundle
 4. `yarn start` to start the server
 
+## Deploying
+
+This project is set up to automatically deploy from GitHub.
+
+|Branch       |Environment|URL                                   |
+|-------------|-----------|--------------------------------------|
+|`master`     |Staging    |http://mhp-board-staging.herokuapp.com|
+|`production` |Production |http://mhp-board.herokuapp.com        |
+|Pull requests|Review app |                                      |
+
 ## Documentation
 
 | Endpoint          | Method | Body | Description                                             |
