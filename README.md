@@ -40,11 +40,10 @@ Set up environment variables using a `.env` file. Create a `.env` file in the `s
 
 This project is set up to automatically deploy from GitHub.
 
-|Branch       |Environment|URL                                   |
-|-------------|-----------|--------------------------------------|
-|`master`     |Staging    |http://mhp-board-staging.herokuapp.com|
-|`production` |Production |http://mhp-board.herokuapp.com        |
-|Pull requests|Review app |                                      |
+|Branch       |Environment|URL                           |
+|-------------|-----------|------------------------------|
+|`master`     |Production |http://mhp-board.herokuapp.com|
+|Pull requests|Review app |                              |
 
 ## Documentation
 
