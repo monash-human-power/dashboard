@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "heroku-prebuild": "cd client && yarn install && yarn build && cd .. && cd server && yarn install",
+    "heroku-prebuild": "cd client && yarn install && CI=true yarn build && cd .. && cd server && yarn install",
     "start": "cd server && yarn start"
   },
   "cacheDirectories": ["client/node_modules", "server/node_modules"],
