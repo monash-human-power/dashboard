@@ -13,7 +13,6 @@ import { routes } from 'router';
  * @returns {React.Component} Component
  */
 function App() {
-  var hello = "world"
   const routeItems = routes.map(({ path, exact, component }) => {
     const View = component;
     return (
