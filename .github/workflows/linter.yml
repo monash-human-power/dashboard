@@ -11,6 +11,8 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: "13.x"
-      - run: cd client
-      - run: yarn
-      - run: yarn lint
+      - name: Run linter
+        run: |
+          cd client
+          yarn
+          yarn lint
