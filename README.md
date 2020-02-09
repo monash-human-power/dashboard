@@ -1,8 +1,7 @@
 # Monash Human Power - Data Acquisition System Web Server
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/801356f5a7bf4e84a9229f13b31a081f)](https://app.codacy.com/app/mhp-admin/MHP-DAS-Web-Server?utm_source=github.com&utm_medium=referral&utm_content=Monash-Human-Power/MHP-DAS-Web-Server&utm_campaign=Badge_Grade_Dashboard)
-[![Build Status](https://www.travis-ci.org/Monash-Human-Power/MHP-DAS-Web-Server.svg?branch=master)](https://www.travis-ci.org/Monash-Human-Power/MHP-DAS-Web-Server)
+![eslint Checker](https://github.com/monash-human-power/dashboard/workflows/eslint%20Checker/badge.svg)
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
 
 A web server for the Data Acquisition System (DAS) for Monash Human Power.
 
@@ -40,10 +39,10 @@ Set up environment variables using a `.env` file. Create a `.env` file in the `s
 
 This project is set up to automatically deploy from GitHub.
 
-|Branch       |Environment|URL                           |
-|-------------|-----------|------------------------------|
-|`master`     |Production |http://mhp-board.herokuapp.com|
-|Pull requests|Review app |                              |
+| Branch        | Environment | URL                            |
+| ------------- | ----------- | ------------------------------ |
+| `master`      | Production  | http://mhp-board.herokuapp.com |
+| Pull requests | Review app  |                                |
 
 ## Documentation
 
@@ -80,6 +79,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
