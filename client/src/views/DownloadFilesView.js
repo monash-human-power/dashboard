@@ -3,6 +3,7 @@ import { Button, ListGroup } from 'react-bootstrap';
 import ContentPage from 'components/ContentPage';
 import DeleteModal from 'components/DeleteModal';
 import WidgetListGroupItem from 'components/WidgetListGroupItem';
+import LogFileModal from 'components/v2/LogFileModal';
 import { useFiles } from 'api/v2/files';
 
 /**
@@ -13,6 +14,7 @@ import { useFiles } from 'api/v2/files';
 export default function DownloadFilesView() {
   const { files, deleteFile } = useFiles();
   const [deletingFile, setDeletingFile] = useState(null);
+  const [previewingFile, setPreviewingFile] = useState(null);
 
   const hideConfirmDelete = useCallback(() => {
     setDeletingFile(null);
@@ -28,6 +30,15 @@ export default function DownloadFilesView() {
     hideConfirmDelete();
   }, [deleteFile, deletingFile, hideConfirmDelete]);
 
+  const handlePreview = useCallback((event, file) => {
+    event.preventDefault();
+    setPreviewingFile(file);
+  }, []);
+
+  const handleHidePreview = useCallback(() => {
+    setPreviewingFile(null);
+  }, []);
+
   const fileList = files.map((file) => (
     <WidgetListGroupItem
       key={file.url}
@@ -36,13 +47,23 @@ export default function DownloadFilesView() {
       href={file.url}
       target="_blank"
     >
-      <Button
-        variant="danger"
-        size="sm"
-        onClick={(e) => handleDelete(e, file)}
-      >
-        Delete
-      </Button>
+      <span>
+        <Button
+          className="mr-2"
+          variant="secondary"
+          size="sm"
+          onClick={(e) => handlePreview(e, file)}
+        >
+          Preview
+        </Button>
+        <Button
+          variant="danger"
+          size="sm"
+          onClick={(e) => handleDelete(e, file)}
+        >
+          Delete
+        </Button>
+      </span>
     </WidgetListGroupItem>
   ));
 
@@ -57,6 +78,11 @@ export default function DownloadFilesView() {
         name={deletingFile ? deletingFile.fileName : ''}
         onCancel={hideConfirmDelete}
         onDelete={handleConfirmDelete}
+      />
+      <LogFileModal
+        show={previewingFile !== null}
+        file={previewingFile}
+        onHide={handleHidePreview}
       />
     </ContentPage>
   );

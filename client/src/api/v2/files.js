@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import parse from 'csv-parse/lib/sync';
 
 /**
  * @typedef {object} LogFile
@@ -25,12 +26,41 @@ export async function getFiles() {
  * Get the contents of a log file
  *
  * @param {LogFile} file Log file
- * @returns {string} CSV content
+ * @returns {Promise<string>} CSV content
  */
 export async function downloadFile(file) {
   const response = await fetch(file.url);
-  const content = await response.text();
-  return content;
+  const max = {};
+
+  let columns = [];
+  const series = parse(await response.text(), {
+    columns: (header) => {
+      columns = header;
+      return columns;
+    },
+    cast: (value, context) => {
+      if (context.column !== 'gps_location') {
+        return parseFloat(value);
+      }
+      return context;
+    },
+  });
+
+  columns.forEach((column) => {
+    max[column] = 0;
+  });
+
+  series.forEach((record) => {
+    columns.forEach((column) => {
+      const value = record[column];
+      if (value > max[column]) {
+        max[column] = value;
+      }
+    });
+    series.push(record);
+  });
+
+  return { series, max };
 }
 
 /**
