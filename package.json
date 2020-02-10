@@ -1,41 +1,10 @@
 {
-  "name": "MHP-DAS-Web-Server",
-  "version": "1.0.0",
-  "description": "A web server for the Data Acquisition System (DAS) for Monash Human Power.",
-  "main": "server/server.js",
   "scripts": {
-    "eslint": "eslint --ignore-path .gitignore",
-    "eslint-check": "eslint --print-config . | eslint-config-prettier-check",
-    "eslint-fix": "eslint --fix --ignore-path .gitignore .",
-    "start": "node server/server.js",
-    "test": "npm run eslint ."
+    "heroku-prebuild": "cd client && yarn install && CI=true yarn build && cd .. && cd server && yarn install",
+    "start": "cd server && yarn start"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/khanguslee/MHP-DAS-Web-Server.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/khanguslee/MHP-DAS-Web-Server/issues"
-  },
-  "homepage": "https://github.com/khanguslee/MHP-DAS-Web-Server#readme",
-  "dependencies": {
-    "body-parser": "^1.18.3",
-    "dotenv": "^8.0.0",
-    "ejs": "^2.6.2",
-    "express": "^4.17.1",
-    "mqtt": "^2.18.8",
-    "path": "^0.12.7",
-    "socket.io": "^2.2.0"
-  },
-  "devDependencies": {
-    "eslint": "^5.16.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-config-prettier": "^4.3.0",
-    "eslint-plugin-import": "^2.18.0",
-    "eslint-plugin-prettier": "^3.1.0",
-    "prettier": "^1.18.2"
+  "cacheDirectories": ["client/node_modules", "server/node_modules"],
+  "engines": {
+    "yarn": "1.x"
   }
 }

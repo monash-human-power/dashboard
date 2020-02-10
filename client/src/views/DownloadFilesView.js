@@ -4,7 +4,7 @@ import ContentPage from 'components/ContentPage';
 import DeleteModal from 'components/DeleteModal';
 import WidgetListGroupItem from 'components/WidgetListGroupItem';
 import LogFileModal from 'components/v2/LogFileModal';
-import { useFiles } from 'api/v2/files';
+import { useFiles, useLatestFile } from 'api/v2/files';
 
 /**
  * Download Files page component
@@ -13,6 +13,7 @@ import { useFiles } from 'api/v2/files';
  */
 export default function DownloadFilesView() {
   const { files, deleteFile } = useFiles();
+  const latestFileURL = useLatestFile();
   const [deletingFile, setDeletingFile] = useState(null);
   const [previewingFile, setPreviewingFile] = useState(null);
 
@@ -69,9 +70,21 @@ export default function DownloadFilesView() {
 
   return (
     <ContentPage title="Files">
+      {files.length > 0 && (
+        <Button
+          href={latestFileURL}
+          target="_blank"
+          variant="secondary"
+          className="mb-2"
+        >
+          Download latest
+        </Button>
+      )}
       <ListGroup>
         {fileList}
       </ListGroup>
+
+      {files.length === 0 ? 'No log files found.' : null}
 
       <DeleteModal
         show={deletingFile !== null}

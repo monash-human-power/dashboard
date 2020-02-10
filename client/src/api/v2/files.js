@@ -101,3 +101,12 @@ export function useFiles() {
 
   return { files, deleteFile: deleteFileHandler };
 }
+
+/**
+ * Use the latest file URL
+ *
+ * @returns {string} Log file location
+ */
+export function useLatestFile() {
+  return '/files/recent';
+}
