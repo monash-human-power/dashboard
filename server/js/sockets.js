@@ -70,7 +70,7 @@ function mqttDataTopicHandler(socket, payload) {
   socket.emit('data', message);
 }
 
-sockets.init = function socketInit(server) {
+sockets.init = function socketInit(server, mqttConfig) {
   const mqttOptions = {
     reconnectPeriod: 1000,
     connectTimeout: 5000,
@@ -84,13 +84,13 @@ sockets.init = function socketInit(server) {
   } else {
     mqttClient = mqtt.connect('mqtt://localhost:1883', mqttOptions);
   }
-  mqttClient.subscribe('start');
-  mqttClient.subscribe('stop');
-  mqttClient.subscribe('data');
-  mqttClient.subscribe('power_model/predicted_max_speed');
-  mqttClient.subscribe('power_model/recommended_SP');
-  mqttClient.subscribe('power_model/plan_generated');
-  mqttClient.subscribe('camera/push_overlays');
+
+  // Subscribe to mqtt topics
+  const { topics: mqttTopics } = mqttConfig;
+  mqttTopics.forEach(topic => {
+    mqttClient.subscribe(topic);
+  });
+
   mqttClient.on('connect', mqttConnected);
   mqttClient.on('error', mqttError);
   // Not a heroku instance

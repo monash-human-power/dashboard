@@ -1,0 +1,11 @@
+{
+  "topics": [
+    "start",
+    "stop",
+    "data",
+    "power_model/predicted_max_speed",
+    "power_model/recommended_SP",
+    "power_model/plan_generated",
+    "camera/push_overlays"
+  ]
+}

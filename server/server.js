@@ -22,12 +22,16 @@ if (!fs.existsSync(dataDirectory)) {
   fs.mkdirSync(dataDirectory);
 }
 
+// Get MQTT topics
+const rawMqttConfig = fs.readFileSync('mqttConfig.json');
+const mqttConfig = JSON.parse(rawMqttConfig);
+
 /*
  *  Initialise socket.io
  */
 // eslint-disable-next-line import/no-dynamic-require
 const sockets = require(path.join(__dirname, 'js', 'sockets.js'));
-sockets.init(server);
+sockets.init(server, mqttConfig);
 
 /*
  * Start the server
@@ -64,7 +68,7 @@ app.get('/files/recent', async (req, res) => {
   if (files.length > 0) {
     let latestFilePath = null;
     let latestAge = 0;
-    for (let i=0; i<files.length; i++) {
+    for (let i = 0; i < files.length; i++) {
       const file = files[i];
       const filePath = path.join(__dirname, 'data', file);
       const stats = await fs.promises.stat(filePath);
@@ -115,6 +119,6 @@ app.get('/server/status', (req, res) => {
   res.status(200).send(outputJson);
 });
 
-app.get('*', function(req, res) {
+app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
