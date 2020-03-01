@@ -21,7 +21,7 @@ export const routes = [
  *
  * @returns {import('./route').RouteInfo[]} Route list
  */
-export function useRouteList() {
+export function useVersionRoutes() {
   const match = useRouteMatch('/:version');
   const version = match?.params?.version;
   if (version && versionRoutes[version]) {
