@@ -10,33 +10,19 @@ import {
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import LeafletCenterControl from 'components/LeafletCenterControl';
-import {
-  useSensorData,
-  useMultiSensorTimeSeries,
-} from 'api/v2/sensors';
 import styles from './LocationTimeChart.module.css';
 
 const MHP_WORKSHOP_LOCATION = [-37.908756, 145.13404];
 
 /**
- * Checks if a given location is valid
- *
- * @param {number[]} location Location to check
- * @returns {?Array.<number>} LatLng array if location is valid. Null if invalid
+ * @typedef {object} LocationTimeSeriesPoint
+ * @property {number} lat   GPS latitude
+ * @property {number} long  GPS longitude
  */
-function validateLocation(location) {
-  if (Array.isArray(location) && location.length === 2
-    && Number.isFinite(location[0]) && location[0] >= -180 && location[0] <= 180
-    && Number.isFinite(location[1]) && location[1] >= -180 && location[1] <= 180
-  ) {
-    return location;
-  }
-  return null;
-}
 
 /**
  * @typedef {object} LocationTimeChartProps
- * @property {number} interval Time between updates in ms
+ * @property {LocationTimeSeriesPoint[]} series GPS location time series
  */
 
 /**
@@ -45,29 +31,16 @@ function validateLocation(location) {
  * @param {LocationTimeChartProps} props Props
  * @returns {React.Component} Component
  */
-export default function LocationTimeChart({ interval }) {
-  const { series: locationHistory } = useMultiSensorTimeSeries(['gps_lat', 'gps_long'], interval);
-  const latData = useSensorData('gps_lat');
-  const longData = useSensorData('gps_long');
+export default function LocationTimeChart({ series }) {
+  const bikeHistory = series.map(({ lat, long }) => ([
+    lat,
+    long,
+  ]));
 
-  const initialLocation = validateLocation([
-    latData.initialData,
-    longData.initialData,
-  ]);
-  const currentLocation = validateLocation([
-    latData.data,
-    longData.data,
-  ]);
+  const initialLocation = bikeHistory[0];
+  const currentLocation = bikeHistory[series.length - 1];
 
   const center = initialLocation ?? MHP_WORKSHOP_LOCATION;
-
-  const bikeHistory = locationHistory.map((time) => ([
-    time.gps_lat.value,
-    time.gps_long.value,
-  ]));
-  if (currentLocation) {
-    bikeHistory.push(currentLocation);
-  }
 
   return (
     <Map
@@ -103,5 +76,8 @@ export default function LocationTimeChart({ interval }) {
 }
 
 LocationTimeChart.propTypes = {
-  interval: PropTypes.number.isRequired,
+  series: PropTypes.arrayOf(PropTypes.shape({
+    lat: PropTypes.number.isRequired,
+    long: PropTypes.number.isRequired,
+  })).isRequired,
 };

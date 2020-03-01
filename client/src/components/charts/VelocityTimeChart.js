@@ -1,13 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ScatterChart from 'components/ScatterChart';
-import { useSensorTimeSeries } from 'api/v2/sensors';
 import { PURPLE, GREY } from './colours';
 
+/**
+ * @typedef {import('utils/timeSeries').TimeSeriesPoint} TimeSeriesPoint
+ */
 
 /**
  * @typedef {object} VelocityTimeChartProps
- * @property {number} interval Time between updates in ms
+ * @property {TimeSeriesPoint[]} series Time series to render
+ * @property {number} max The maximum value achieved
  */
 
 /**
@@ -16,9 +19,7 @@ import { PURPLE, GREY } from './colours';
  * @param {VelocityTimeChartProps} props Props
  * @returns {React.Component<VelocityTimeChartProps>} Component
  */
-export default function VelocityTimeChart({ interval }) {
-  const { series, max } = useSensorTimeSeries('gps_speed', interval);
-
+export default function VelocityTimeChart({ series, max }) {
   const data = series.map((point) => ({
     x: point.time / 1000,
     y: point.value,
@@ -37,5 +38,9 @@ export default function VelocityTimeChart({ interval }) {
 }
 
 VelocityTimeChart.propTypes = {
-  interval: PropTypes.number.isRequired,
+  series: PropTypes.arrayOf(PropTypes.shape({
+    time: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
+  })).isRequired,
+  max: PropTypes.number.isRequired,
 };
