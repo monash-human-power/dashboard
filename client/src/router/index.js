@@ -1,4 +1,5 @@
 import { useRouteMatch } from 'react-router-dom';
+import HomeView from 'views/HomeView';
 import { routes as V2Routes } from './v2';
 
 const versionRoutes = {
@@ -6,6 +7,12 @@ const versionRoutes = {
 };
 
 export const routes = [
+  {
+    name: 'Home',
+    path: '/',
+    exact: true,
+    component: HomeView,
+  },
   ...V2Routes,
 ];
 
