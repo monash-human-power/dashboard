@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
-import { routes } from 'router';
+import { useRouteList } from 'router';
 import { ReactComponent as Logo } from 'assets/MHPLogo.svg';
 import styles from './NavBar.module.css';
 
@@ -11,6 +11,7 @@ import styles from './NavBar.module.css';
  * @returns {React.Component} Component
  */
 export default function NavBar() {
+  const routes = useRouteList();
   const linkItems = routes.map(({ name, path, exact }) => (
     <Nav.Link
       as={NavLink}
