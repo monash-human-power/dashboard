@@ -13,11 +13,48 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "hallgchris",
+      "name": "Christopher Hall",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/17876556?v=4",
+      "profile": "https://github.com/hallgchris",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "angustrau",
+      "name": "Angus Trau",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/13267947?v=4",
+      "profile": "https://angus.ws",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "harsilspatel",
+      "name": "Harsil Patel",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/25992839?v=4",
+      "profile": "https://twitter.com/harsilspatel",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "rileyclarke",
+      "name": "Riley Clarke",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/24428011?v=4",
+      "profile": "https://github.com/rileyclarke",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
-  "projectName": "MHP-DAS-Web-Server",
+  "projectName": "dashboard",
   "projectOwner": "monash-human-power",
   "repoType": "github",
-  "repoHost": "https://github.com"
+  "repoHost": "https://github.com",
+  "skipCi": true
 }
