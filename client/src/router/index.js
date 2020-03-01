@@ -1,11 +1,11 @@
-import DashboardView from 'views/DashboardView';
-import DownloadFilesView from 'views/DownloadFilesView';
-import SensorStatusView from 'views/SensorStatusView';
-import PowerModelView from 'views/PowerModelView';
-import PowerMapView from 'views/PowerMapView';
-import PowerModelCalibrationView from 'views/PowerModelCalibrationView';
-import CameraSettingsView from 'views/CameraSettingsView';
-import OptionsView from 'views/OptionsView';
+import DashboardView from 'views/v2/DashboardView';
+import DownloadFilesView from 'views/v2/DownloadFilesView';
+import SensorStatusView from 'views/v2/SensorStatusView';
+import PowerModelView from 'views/v2/PowerModelView';
+import PowerMapView from 'views/v2/PowerMapView';
+import PowerModelCalibrationView from 'views/v2/PowerModelCalibrationView';
+import CameraSettingsView from 'views/v2/CameraSettingsView';
+import OptionsView from 'views/v2/OptionsView';
 
 export const routes = [
   {
