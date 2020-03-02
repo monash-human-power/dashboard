@@ -5,11 +5,11 @@ import {
   FormCheck,
   Row,
 } from 'react-bootstrap';
-import VelocityTimeChart from 'components/v2/charts/VelocityTimeChart';
-import PowerTimeChart from 'components/v2/charts/PowerTimeChart';
-import CadenceTimeChart from 'components/v2/charts/CadenceTimeChart';
-import LocationTimeChart from 'components/v2/charts/LocationTimeChart';
-import TextModeChart from 'components/v2/charts/TextModeChart';
+import V2VelocityTimeChart from 'components/v2/charts/V2VelocityTimeChart';
+import V2PowerTimeChart from 'components/v2/charts/V2PowerTimeChart';
+import V2CadenceTimeChart from 'components/v2/charts/V2CadenceTimeChart';
+import LocationTimeChart from 'components/v2/charts/V2LocationTimeChart';
+import V2TextModeChart from 'components/v2/charts/V2TextModeChart';
 import { useSensorData } from 'api/v2/sensors';
 
 /**
@@ -36,15 +36,15 @@ export default function DashboardView() {
       <div>
         <Row>
           <Col lg={6}>
-            <VelocityTimeChart interval={updateInterval} />
+            <V2VelocityTimeChart interval={updateInterval} />
           </Col>
           <Col lg={6}>
-            <PowerTimeChart interval={updateInterval} />
+            <V2PowerTimeChart interval={updateInterval} />
           </Col>
         </Row>
         <Row>
           <Col lg={6}>
-            <CadenceTimeChart interval={updateInterval} />
+            <V2CadenceTimeChart interval={updateInterval} />
           </Col>
           <Col lg={6}>
             <LocationTimeChart interval={updateInterval} />
@@ -62,7 +62,7 @@ export default function DashboardView() {
   function renderTextDashboard() {
     return (
       <Container>
-        <TextModeChart />
+        <V2TextModeChart />
       </Container>
     );
   }
