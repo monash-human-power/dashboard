@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Navbar, Nav } from 'react-bootstrap';
+import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { useVersionRoutes } from 'router';
 import { ReactComponent as Logo } from 'assets/MHPLogo.svg';
 import styles from './NavBar.module.css';
@@ -39,6 +39,12 @@ export default function NavBar() {
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
+        <Nav>
+          <NavDropdown title="Version" id="version-selector">
+            <NavDropdown.Item as={NavLink} to="/v2">Version 2 (Wombat)</NavDropdown.Item>
+            <NavDropdown.Item as={NavLink} to="/v3">Version 3 (V3)</NavDropdown.Item>
+          </NavDropdown>
+        </Nav>
         <Nav className="ml-auto">
           {linkItems}
         </Nav>
