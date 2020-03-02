@@ -1,59 +1,31 @@
-import DashboardView from 'views/DashboardView';
-import DownloadFilesView from 'views/DownloadFilesView';
-import SensorStatusView from 'views/SensorStatusView';
-import PowerModelView from 'views/PowerModelView';
-import PowerMapView from 'views/PowerMapView';
-import PowerModelCalibrationView from 'views/PowerModelCalibrationView';
-import CameraSettingsView from 'views/CameraSettingsView';
-import OptionsView from 'views/OptionsView';
+import { useRouteMatch } from 'react-router-dom';
+import HomeView from 'views/HomeView';
+import { routes as V2Routes } from './v2';
+
+const versionRoutes = {
+  v2: V2Routes,
+};
 
 export const routes = [
   {
-    name: 'Dashboard',
+    name: 'Home',
     path: '/',
     exact: true,
-    component: DashboardView,
+    component: HomeView,
   },
-  {
-    name: 'Files',
-    path: '/download-files',
-    exact: true,
-    component: DownloadFilesView,
-  },
-  {
-    name: 'Sensors',
-    path: '/status',
-    exact: true,
-    component: SensorStatusView,
-  },
-  {
-    name: 'Power Model',
-    path: '/power-model',
-    exact: true,
-    component: PowerModelView,
-  },
-  {
-    name: 'Power Map',
-    path: '/power-zone',
-    exact: true,
-    component: PowerMapView,
-  },
-  {
-    name: 'Power Model Calibration',
-    path: '/power-calibration',
-    exact: true,
-    component: PowerModelCalibrationView,
-  },
-  {
-    name: 'Camera',
-    path: '/camera',
-    exact: true,
-    component: CameraSettingsView,
-  },
-  {
-    name: 'Options',
-    path: '/options',
-    exact: true,
-    component: OptionsView,
-  },
+  ...V2Routes,
 ];
+
+/**
+ * Get the list of routes for the selected bike version
+ *
+ * @returns {import('./route').RouteInfo[]} Route list
+ */
+export function useVersionRoutes() {
+  const match = useRouteMatch('/:version');
+  const version = match?.params?.version;
+  if (version && versionRoutes[version]) {
+    return versionRoutes[version];
+  }
+  return [];
+}
