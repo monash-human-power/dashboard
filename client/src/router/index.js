@@ -1,59 +1,51 @@
-import DashboardView from 'views/DashboardView';
-import DownloadFilesView from 'views/DownloadFilesView';
-import SensorStatusView from 'views/SensorStatusView';
-import PowerModelView from 'views/PowerModelView';
-import PowerMapView from 'views/PowerMapView';
-import PowerModelCalibrationView from 'views/PowerModelCalibrationView';
-import CameraSettingsView from 'views/CameraSettingsView';
-import OptionsView from 'views/OptionsView';
+import { useRouteMatch } from 'react-router-dom';
+import HomeView from 'views/HomeView';
+import { routes as V2Routes } from './v2';
+
+/**
+ * @typedef {object} VersionInfo
+ * @property {string} name Bike version friendly name
+ * @property {string} rootPath Base path for the version
+ * @property {import('./route').RouteInfo[]} routes List of routes under this version
+ */
+
+/** @type {VersionInfo[]} */
+export const bikeVersions = [
+  {
+    name: 'Version 2 (Wombat)',
+    rootPath: '/v2',
+    routes: V2Routes,
+  },
+  {
+    name: 'Version 3 (V3)',
+    rootPath: '/v3',
+    routes: [],
+  },
+];
 
 export const routes = [
   {
-    name: 'Dashboard',
+    name: 'Home',
     path: '/',
     exact: true,
-    component: DashboardView,
-  },
-  {
-    name: 'Files',
-    path: '/download-files',
-    exact: true,
-    component: DownloadFilesView,
-  },
-  {
-    name: 'Sensors',
-    path: '/status',
-    exact: true,
-    component: SensorStatusView,
-  },
-  {
-    name: 'Power Model',
-    path: '/power-model',
-    exact: true,
-    component: PowerModelView,
-  },
-  {
-    name: 'Power Map',
-    path: '/power-zone',
-    exact: true,
-    component: PowerMapView,
-  },
-  {
-    name: 'Power Model Calibration',
-    path: '/power-calibration',
-    exact: true,
-    component: PowerModelCalibrationView,
-  },
-  {
-    name: 'Camera',
-    path: '/camera',
-    exact: true,
-    component: CameraSettingsView,
-  },
-  {
-    name: 'Options',
-    path: '/options',
-    exact: true,
-    component: OptionsView,
+    component: HomeView,
   },
 ];
+bikeVersions.forEach((v) => {
+  routes.push(...v.routes);
+});
+
+/**
+ * Get the route info for the selected bike version
+ *
+ * @returns {VersionInfo} Bike version route info
+ */
+export function useBikeVersion() {
+  const match = useRouteMatch('/:version');
+  const version = match?.params?.version;
+  const bikeVersion = bikeVersions.find((v) => v.rootPath === `/${version}`);
+  if (bikeVersion) {
+    return bikeVersion;
+  }
+  return null;
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Navbar, Nav } from 'react-bootstrap';
-import { routes } from 'router';
+import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { useBikeVersion, bikeVersions } from 'router';
 import { ReactComponent as Logo } from 'assets/MHPLogo.svg';
 import styles from './NavBar.module.css';
 
@@ -11,7 +11,9 @@ import styles from './NavBar.module.css';
  * @returns {React.Component} Component
  */
 export default function NavBar() {
-  const linkItems = routes.map(({ name, path, exact }) => (
+  const bikeVersion = useBikeVersion();
+  const bikeName = bikeVersion?.name;
+  const linkItems = bikeVersion?.routes.map(({ name, path, exact }) => (
     <Nav.Link
       as={NavLink}
       to={path}
@@ -21,6 +23,16 @@ export default function NavBar() {
     >
       {name}
     </Nav.Link>
+  ));
+
+  const versionDropdown = bikeVersions.map(({ name, rootPath }) => (
+    <NavDropdown.Item
+      as={NavLink}
+      to={rootPath}
+      activeClassName=""
+    >
+      {name}
+    </NavDropdown.Item>
   ));
 
   return (
@@ -38,6 +50,11 @@ export default function NavBar() {
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
+        <Nav>
+          <NavDropdown title={bikeName} id="version-selector">
+            {versionDropdown}
+          </NavDropdown>
+        </Nav>
         <Nav className="ml-auto">
           {linkItems}
         </Nav>
