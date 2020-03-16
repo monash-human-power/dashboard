@@ -2,13 +2,16 @@
   "extends": ["react-app", "airbnb", "plugin:jsdoc/recommended"],
   "rules": {
     "no-console": "off",
-    "dot-notation": [2, {"allowPattern": "^[a-z]+(_[a-z]+)+$"}],
+    "dot-notation": [2, { "allowPattern": "^[a-z]+(_[a-z]+)+$" }],
     "react/jsx-filename-extension": [1, { "extensions": [".js"] }],
     "react/jsx-props-no-spreading": "off",
-    "jsx-a11y/label-has-associated-control": [ 2, {
-      "controlComponents": ["Form.Control", "FormControl"],
-      "depth": 3
-    }],
+    "jsx-a11y/label-has-associated-control": [
+      2,
+      {
+        "controlComponents": ["Form.Control", "FormControl"],
+        "depth": 3
+      }
+    ],
     "jsx-a11y/anchor-is-valid": "off",
     "import/no-unresolved": "off",
     "import/prefer-default-export": "off"
