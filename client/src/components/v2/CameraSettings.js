@@ -1,9 +1,19 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { 
+  useState, 
+  useEffect, 
+  useCallback, 
+  useRef 
+} from 'react';
 import PropTypes from 'prop-types';
-import { Card } from 'react-bootstrap';
+import { 
+  Card,
+  InputGroup,
+  FormControl,
+  Button,
+} from 'react-bootstrap';
 import { useOverlays } from 'api/v2/camera';
 import RadioSelector from 'components/RadioSelector';
-
+import { sendMessage } from 'api/v2/powerModel';
 /**
  * @typedef {object} CameraSettingsProps
  * @property {'primary'|'secondary'} device Camera screen
@@ -32,6 +42,11 @@ export default function CameraSettings({ device }) {
     }
   }, [selectedOverlay, setActiveOverlay]);
 
+  const handleMessageSubmit = useCallback(() => {
+    sendMessage(message.current.value);
+    message.current.value = '';
+  }, []);
+
   return (
     <Card>
       <Card.Body>
@@ -45,6 +60,20 @@ export default function CameraSettings({ device }) {
         ) : (
           <Card.Subtitle>Waiting for response...</Card.Subtitle>
         )}
+        <InputGroup className="mt-3">
+          <FormControl
+            ref={message}
+            placeholder="Type Message Here"
+          />
+          <InputGroup.Append>
+            <Button
+              variant="outline-secondary"
+              onClick={handleMessageSubmit}
+            >
+              Send
+            </Button>
+          </InputGroup.Append>
+        </InputGroup>
       </Card.Body>
       <Card.Footer>
         <Card.Link href="#" onClick={handleSave}>Save</Card.Link>
