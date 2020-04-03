@@ -90,3 +90,10 @@ export function setCalibration(distance) {
 export function resetCalibration() {
   emit('reset-calibration');
 }
+
+/**
+ * Send Message
+ */
+export function sendMessage(message) {
+  emit('send-message', message);
+}
