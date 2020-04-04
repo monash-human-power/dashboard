@@ -188,6 +188,10 @@ sockets.init = function socketInit(server) {
       mqttClient.publish('camera/get_overlays', 'true');
     });
 
+    socket.on('send-message', () => {
+      mqttClient.publish('/v3/camera/primary/message', 'true');
+    });
+
     socket.on('set-overlays', selectedOverlays => {
       mqttClient.publish('camera/set_overlay', selectedOverlays);
     });
