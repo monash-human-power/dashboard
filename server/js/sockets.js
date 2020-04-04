@@ -174,6 +174,13 @@ sockets.init = function socketInit(server) {
       );
     });
 
+    socket.on('send-message', message => {
+      mqttClient.publish(
+        '/v3/camera/primary/message',
+        `message=${message}`,
+      );
+    });
+
     socket.on('create-power-plan', inputPowerPlan => {
       console.log(
         `Generated new power plan - ${inputPowerPlan.inputs.fileName}.json`,
@@ -186,10 +193,6 @@ sockets.init = function socketInit(server) {
 
     socket.on('get-overlays', () => {
       mqttClient.publish('camera/get_overlays', 'true');
-    });
-
-    socket.on('send-message', () => {
-      mqttClient.publish('/v3/camera/primary/message', 'true');
     });
 
     socket.on('set-overlays', selectedOverlays => {

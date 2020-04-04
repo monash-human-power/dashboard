@@ -29,6 +29,7 @@ export default function CameraSettings({ device }) {
   const { overlays: controls, setActiveOverlay } = useOverlays(device);
   const [selectedOverlay, setSelectedOverlay] = useState(null);
   const name = device === 'primary' ? 'Primary' : 'Secondary';
+  const message = useRef(null);
 
   // On overlay data load, set selected to existing value
   useEffect(() => {
