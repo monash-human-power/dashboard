@@ -11,9 +11,9 @@ import {
   FormControl,
   Button,
 } from 'react-bootstrap';
-import { useOverlays } from 'api/v2/camera';
+import { useOverlays, sendMessage } from 'api/v2/camera';
 import RadioSelector from 'components/RadioSelector';
-import { sendMessage } from 'api/v2/powerModel';
+
 /**
  * @typedef {object} CameraSettingsProps
  * @property {'primary'|'secondary'} device Camera screen
