@@ -39,3 +39,10 @@ export function useOverlays(device) {
 
   return { overlays, setActiveOverlay };
 }
+
+/**
+ * Send Message
+ */
+export function sendMessage(message) {
+  emit('send-message', message);
+}
