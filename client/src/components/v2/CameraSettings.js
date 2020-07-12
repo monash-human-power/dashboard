@@ -48,39 +48,50 @@ export default function CameraSettings({ device }) {
     message.current.value = '';
   }, []);
 
-  return (
-    <Card>
-      <Card.Body>
-        <Card.Title>{`${name} display`}</Card.Title>
-        {controls ? (
-          <RadioSelector
-            options={controls.overlays}
-            value={selectedOverlay}
-            onChange={setSelectedOverlay}
-          />
-        ) : (
-          <Card.Subtitle>Waiting for response...</Card.Subtitle>
-        )}
-        <InputGroup className="mt-3">
-          <FormControl
-            ref={message}
-            placeholder="Type Message Here"
-          />
-          <InputGroup.Append>
-            <Button
-              variant="outline-secondary"
-              onClick={handleMessageSubmit}
-            >
-              Send
-            </Button>
-          </InputGroup.Append>
-        </InputGroup>
-      </Card.Body>
-      <Card.Footer>
-        <Card.Link href="#" onClick={handleSave}>Save</Card.Link>
-      </Card.Footer>
-    </Card>
-  );
+  return ([
+    <div>
+      <Card>
+        <Card.Body>
+          <Card.Title>{`${name} display`}</Card.Title>
+          {controls ? (
+            <RadioSelector
+              options={controls.overlays}
+              value={selectedOverlay}
+              onChange={setSelectedOverlay}
+            />
+          ) : (
+            <Card.Subtitle>Waiting for response...</Card.Subtitle>
+          )}
+        </Card.Body>
+        <Card.Footer>
+          <Card.Link href="#" onClick={handleSave}>Save</Card.Link>
+        </Card.Footer>
+      </Card>
+    </div>,
+    <div>
+      <Card>
+        <Card.Body>
+          <Card.Title>{`${name} Message`}</Card.Title>
+          <InputGroup className="mt-3">
+            <FormControl
+              ref={message}
+              placeholder="Type Message Here"
+            />
+            <InputGroup.Append>
+              <Button
+                variant="outline-secondary"
+                onClick={handleMessageSubmit}
+              >
+                Send
+              </Button>
+            </InputGroup.Append>
+          </InputGroup>
+        </Card.Body>
+        <Card.Footer>
+        </Card.Footer>
+      </Card>
+    </div>,
+  ]);
 }
 
 CameraSettings.propTypes = {
