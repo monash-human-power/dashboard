@@ -42,6 +42,7 @@ export function useOverlays(device) {
 
 /**
  * Send Message
+ * @param {string} message - message to be displayed.
  */
 export function sendMessage(message) {
   emit('send-message', message);

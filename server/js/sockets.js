@@ -177,7 +177,7 @@ sockets.init = function socketInit(server) {
     socket.on('send-message', message => {
       mqttClient.publish(
         '/v3/camera/primary/message',
-        `message=${message}`,
+        `${message}`,
       );
     });
 
