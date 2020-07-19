@@ -2,6 +2,7 @@ version: '3.4'
 
 services:
   client:
+    image: docker.pkg.github.com/monash-human-power/dashboard/client
     build:
       context: .
       target: client
@@ -14,6 +15,7 @@ services:
     depends_on:
       - server
   server:
+    image: docker.pkg.github.com/monash-human-power/dashboard/server
     build:
       context: .
       target: server
