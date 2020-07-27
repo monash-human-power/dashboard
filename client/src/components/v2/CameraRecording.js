@@ -1,8 +1,14 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import { Card } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
-import { emit, useChannel } from 'api/v2/socket';
-import formatBytes from 'utils/formatBytes';
+import { emit } from 'api/v2/socket';
+import PropTypes from 'prop-types';
+import CameraRecordingStatus from './CameraRecordingStatus';
+
+/**
+ * @typedef {object} CameraRecordingProps
+ * @property {string} devices Comma separated values of devices
+ */
 
 /**
  * Camera recording buttons for starting and stopping video recording.
@@ -11,11 +17,10 @@ import formatBytes from 'utils/formatBytes';
  *
  * This is a feature intended for V3 but is current in V2 for testing.
  *
- * @returns {React.Component} Component
+ * @param {CameraRecordingProps} props Props
+ * @returns {React.Component<CameraRecordingProps>} Component
  */
-export default function CameraRecording() {
-  const [status, setStatus] = useState(<div>Waiting for status...</div>);
-
+export default function CameraRecording({ devices }) {
   const startRecording = () => {
     emit('start-camera-recording');
   };
@@ -24,56 +29,18 @@ export default function CameraRecording() {
     emit('stop-camera-recording');
   };
 
-  const updateStatus = useCallback((payload) => {
-    /*
-      payload structure is defined in https://www.notion.so/V3-MQTT-Topics-66e6715d0e1941ffaa82020e5868fbae
-      See /v3/camera/recording/status/<primary/>secondary>
-    */
-    const data = JSON.parse(payload);
-    let info;
-    let mins; // only used for status "recording"
-    let secs; // only used for status "recording"
-    switch (data.status) {
-      case 'off':
-        info = null;
-        break;
-
-      case 'recording':
-        mins = Math.floor(data.recordingMinutes);
-        secs = (data.recordingMinutes - mins) * 60;
-        info = (
-          <div>
-            <p>{`File Name: ${data.recordingFile}`}</p>
-            <p>{`Time: ${mins} minutes ${secs} seconds`}</p>
-          </div>
-        );
-        break;
-
-      case 'error':
-        info = <p>{data.error}</p>;
-        break;
-
-      default:
-        console.error(`Invalid recording status: ${data.status}`);
-        break;
-    }
-
-    setStatus((
-      <div>
-        <p>{`Status: ${data.status}`}</p>
-        {info}
-        <div>{`Disk Space Remaining: ${formatBytes(data.diskSpaceRemaining)}`}</div>
-      </div>
-    ));
-  }, []);
-
-  useChannel('camera-recording-status', updateStatus);
-
   return (
     <Card>
       <Card.Body>
         <Card.Title>Recording Controls</Card.Title>
-        <Card.Subtitle>{status}</Card.Subtitle>
+        {
+          devices.split(',').map((device) => (
+            <p>
+              <Card.Subtitle>{device[0].toUpperCase() + device.substring(1)}</Card.Subtitle>
+              <CameraRecordingStatus device={device} />
+            </p>
+          ))
+        }
       </Card.Body>
       <Card.Footer>
         <Button variant="outline-success" onClick={startRecording}>Start</Button>
@@ -83,3 +50,7 @@ export default function CameraRecording() {
     </Card>
   );
 }
+
+CameraRecording.propTypes = {
+  devices: PropTypes.string.isRequired,
+};

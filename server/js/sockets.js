@@ -152,10 +152,12 @@ sockets.init = function socketInit(server) {
             break;
         }
       } else if (
-        topic === '/v3/camera/recording/status/primary' ||
-        topic === '/v3/camera/recording/status/secondary'
+        topicString.slice(0, -1).join('/') === '/v3/camera/recording/status'
       ) {
-        socket.emit('camera-recording-status', payloadString);
+        socket.emit(
+          `camera-recording-status-${topicString[topicString.length - 1]}`,
+          payloadString,
+        );
       } else {
         console.error(`Unhandled topic - ${topic}`);
       }
