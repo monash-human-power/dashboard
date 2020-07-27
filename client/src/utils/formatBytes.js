@@ -1,6 +1,8 @@
 /**
  * Converts number of bytes to a more human readable unit.
  *
+ * By StackOverflow's community https://stackoverflow.com/questions/15900485/correct-way-to-convert-size-in-bytes-to-kb-mb-gb-in-javascript
+ *
  * @param {number} bytes -- Number of bytes
  * @param {number} digits -- Number of decimal places to round to
  * @returns {string} bytes represented in a format with units
