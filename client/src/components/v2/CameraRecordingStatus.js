@@ -16,9 +16,12 @@ import PropTypes from 'prop-types';
  */
 export default function CameraRecordingStatus({ device }) {
   /**
-   * Format a camera recording status payload into JSX
+   * Format a camera recording status payload into JSX.
    *
-   * @param {string} payload Payload structure is defined in https://www.notion.so/V3-MQTT-Topics-66e6715d0e1941ffaa82020e5868fbae. See /v3/camera/recording/status/<primary/>secondary>
+   * Payload structure is defined in the 'V3 MQTT Topics' page on Notion.
+   * Topic is /v3/camera/recording/status/<primary/>secondary>.
+   *
+   * @param {string} payload Payload from MQTT topic
    * @returns {React.Component} Component
    */
   function formatPayload(payload) {
