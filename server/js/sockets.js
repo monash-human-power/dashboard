@@ -155,8 +155,7 @@ sockets.init = function socketInit(server) {
         topic === '/v3/camera/recording/status/primary' ||
         topic === '/v3/camera/recording/status/secondary'
       ) {
-        console.log(`emit status ${payloadString}`);
-        socket.emit('camera-recording-status');
+        socket.emit('camera-recording-status', payloadString);
       } else {
         console.error(`Unhandled topic - ${topic}`);
       }
