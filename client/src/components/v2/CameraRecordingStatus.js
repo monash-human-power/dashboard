@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { useChannel } from 'api/v2/socket';
+import { useChannel, emit } from 'api/v2/socket';
 import formatBytes from 'utils/formatBytes';
 // import { Card } from 'react-bootstrap';
 import PropTypes from 'prop-types';
@@ -16,14 +16,16 @@ import PropTypes from 'prop-types';
  * @returns {React.Component<CameraRecordingStatusProps>} Component
  */
 export default function CameraRecordingStatus({ device }) {
-  const [status, setStatus] = useState(<div>Waiting for status...</div>);
-
-  const updateStatus = useCallback((payload) => {
-    /*
-      payload structure is defined in https://www.notion.so/V3-MQTT-Topics-66e6715d0e1941ffaa82020e5868fbae
-      See /v3/camera/recording/status/<primary/>secondary>
-    */
+  /**
+   * Format a camera recording status payload into JSX
+   *
+   * @param {string} payload Payload structure is defined in https://www.notion.so/V3-MQTT-Topics-66e6715d0e1941ffaa82020e5868fbae. See /v3/camera/recording/status/<primary/>secondary>
+   * @returns {React.Component} Component
+   */
+  function formatPayload(payload) {
     const data = JSON.parse(payload);
+    if (!data) return null;
+
     let info;
     let mins; // only used for status "recording"
     let secs; // only used for status "recording"
@@ -52,16 +54,34 @@ export default function CameraRecordingStatus({ device }) {
         break;
     }
 
-    setStatus((
+    return (
       <div>
         <p>{`Status: ${data.status}`}</p>
         {info}
         <div>{`Disk Space Remaining: ${formatBytes(data.diskSpaceRemaining)}`}</div>
       </div>
-    ));
-  }, []);
+    );
+  }
+
+  const lastPayload = sessionStorage.getItem(`camera-recording-last-payload-${device}`);
+  const [status, setStatus] = useState((
+    <div>
+      {
+        lastPayload ? formatPayload(lastPayload) : 'Waiting for status...'
+      }
+    </div>
+  ));
+
+  const updateStatus = useCallback((payload) => {
+    // store payload for session
+    sessionStorage.setItem(`camera-recording-last-payload-${device}`, payload);
+
+    setStatus(formatPayload(payload));
+  }, [device]);
 
   useChannel(`camera-recording-status-${device}`, updateStatus);
+
+  emit('camera-recording-init');
 
   return (
     <div>{status}</div>

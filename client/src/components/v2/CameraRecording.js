@@ -35,10 +35,10 @@ export default function CameraRecording({ devices }) {
         <Card.Title>Recording Controls</Card.Title>
         {
           devices.split(',').map((device) => (
-            <p>
+            <div style={{ marginBottom: '10px' }} key={device}>
               <Card.Subtitle>{device[0].toUpperCase() + device.substring(1)}</Card.Subtitle>
               <CameraRecordingStatus device={device} />
-            </p>
+            </div>
           ))
         }
       </Card.Body>
