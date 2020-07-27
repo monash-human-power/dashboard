@@ -12,7 +12,7 @@ export default function CameraSettingsView() {
   return (
     <ContentPage title="Camera Settings">
       <div className="mb-4">
-        <CameraRecording devices="primary,secondary" />
+        <CameraRecording devices={['primary', 'secondary']} />
       </div>
       <div className="mb-4">
         <CameraSettings device="primary" />

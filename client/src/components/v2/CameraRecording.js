@@ -7,7 +7,7 @@ import CameraRecordingStatus from './CameraRecordingStatus';
 
 /**
  * @typedef {object} CameraRecordingProps
- * @property {string} devices Comma separated values of devices
+ * @property {Array} devices Array of strings of device names
  */
 
 /**
@@ -34,7 +34,7 @@ export default function CameraRecording({ devices }) {
       <Card.Body>
         <Card.Title>Recording Controls</Card.Title>
         {
-          devices.split(',').map((device) => (
+          devices.map((device) => (
             <div style={{ marginBottom: '10px' }} key={device}>
               <Card.Subtitle>{device[0].toUpperCase() + device.substring(1)}</Card.Subtitle>
               <CameraRecordingStatus device={device} />
@@ -52,5 +52,5 @@ export default function CameraRecording({ devices }) {
 }
 
 CameraRecording.propTypes = {
-  devices: PropTypes.string.isRequired,
+  devices: PropTypes.arrayOf(String).isRequired,
 };
