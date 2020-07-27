@@ -91,7 +91,7 @@ sockets.init = function socketInit(server) {
   mqttClient.subscribe('power_model/recommended_SP');
   mqttClient.subscribe('power_model/plan_generated');
   mqttClient.subscribe('camera/push_overlays');
-  // camera recording status subscription occurs when 'camera-recording-init' is received
+  // Camera recording status subscription occurs when 'camera-recording-init' is received
   mqttClient.on('connect', mqttConnected);
   mqttClient.on('error', mqttError);
   // Not a heroku instance
@@ -153,7 +153,7 @@ sockets.init = function socketInit(server) {
       } else if (
         topicString.slice(0, -1).join('/') === '/v3/camera/recording/status'
       ) {
-        // send mqtt payload on corresponding channel
+        // Send mqtt payload on corresponding channel
         socket.emit(
           `camera-recording-status-${topicString[topicString.length - 1]}`,
           payloadString,
