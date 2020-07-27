@@ -91,6 +91,8 @@ sockets.init = function socketInit(server) {
   mqttClient.subscribe('power_model/recommended_SP');
   mqttClient.subscribe('power_model/plan_generated');
   mqttClient.subscribe('camera/push_overlays');
+  mqttClient.subscribe('/v3/camera/recording/status/primary');
+  mqttClient.subscribe('/v3/camera/recording/status/secondary');
   mqttClient.on('connect', mqttConnected);
   mqttClient.on('error', mqttError);
   // Not a heroku instance
@@ -149,6 +151,12 @@ sockets.init = function socketInit(server) {
             console.error(`Unhandled topic - ${topic}`);
             break;
         }
+      } else if (
+        topic === '/v3/camera/recording/status/primary' ||
+        topic === '/v3/camera/recording/status/secondary'
+      ) {
+        console.log(`emit status ${payloadString}`);
+        socket.emit('camera-recording-status');
       } else {
         console.error(`Unhandled topic - ${topic}`);
       }
@@ -211,6 +219,14 @@ sockets.init = function socketInit(server) {
 
     socket.on('get-server-settings', () => {
       socket.emit('server-settings', { publishOnline: PUBLISH_ONLINE });
+    });
+
+    socket.on('start-camera-recording', () => {
+      mqttClient.publish('/v3/camera/recording/start');
+    });
+
+    socket.on('stop-camera-recording', () => {
+      mqttClient.publish('/v3/camera/recording/stop');
     });
   });
 };
