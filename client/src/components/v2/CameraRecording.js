@@ -3,6 +3,7 @@ import { Card } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { emit } from 'api/v2/socket';
 import PropTypes from 'prop-types';
+import { capitalize } from 'lodash';
 import CameraRecordingStatus from './CameraRecordingStatus';
 
 /**
@@ -36,7 +37,7 @@ export default function CameraRecording({ devices }) {
         {
           devices.map((device) => (
             <div style={{ marginBottom: '10px' }} key={device}>
-              <Card.Subtitle>{device[0].toUpperCase() + device.substring(1)}</Card.Subtitle>
+              <Card.Subtitle>{capitalize(device)}</Card.Subtitle>
               <CameraRecordingStatus device={device} />
             </div>
           ))
