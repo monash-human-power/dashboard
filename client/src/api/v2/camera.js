@@ -39,3 +39,17 @@ export function useOverlays(device) {
 
   return { overlays, setActiveOverlay };
 }
+
+/**
+ * Send a message to server to start recording video
+ */
+export function startRecording() {
+  emit('start-camera-recording');
+}
+
+/**
+ * Send a message to server to stop recording video
+ */
+export function stopRecording() {
+  emit('stop-camera-recording');
+}

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
-import { emit } from 'api/v2/socket';
 import PropTypes from 'prop-types';
 import { capitalize } from 'lodash';
+import { startRecording, stopRecording } from 'api/v2/camera';
 import CameraRecordingStatus from './CameraRecordingStatus';
 
 /**
@@ -22,14 +22,6 @@ import CameraRecordingStatus from './CameraRecordingStatus';
  * @returns {React.Component<CameraRecordingProps>} Component
  */
 export default function CameraRecording({ devices }) {
-  const startRecording = () => {
-    emit('start-camera-recording');
-  };
-
-  const stopRecording = () => {
-    emit('stop-camera-recording');
-  };
-
   return (
     <Card>
       <Card.Body>
