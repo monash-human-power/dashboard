@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { capitalize } from 'lodash';
 import { startRecording, stopRecording } from 'api/v2/camera';
 import CameraRecordingStatus from './CameraRecordingStatus';
+import styles from './CameraRecordingStatus.module.css';
 
 /**
  * @typedef {object} CameraRecordingProps
@@ -28,7 +29,7 @@ export default function CameraRecording({ devices }) {
         <Card.Title>Recording Controls</Card.Title>
         {
           devices.map((device) => (
-            <div style={{ marginBottom: '10px' }} key={device}>
+            <div styles={styles.device} key={device}>
               <Card.Subtitle>{capitalize(device)}</Card.Subtitle>
               <CameraRecordingStatus device={device} />
             </div>
