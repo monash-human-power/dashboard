@@ -16,7 +16,7 @@ import CameraRecordingStatus from './CameraRecordingStatus';
  *
  * Starts/stops recording for both displays.
  *
- * This is a feature intended for V3 but is current in V2 for testing.
+ * This is a feature intended for V3 but is currently in V2 for testing.
  *
  * @param {CameraRecordingProps} props Props
  * @returns {React.Component<CameraRecordingProps>} Component
