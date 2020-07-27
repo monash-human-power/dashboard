@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { useChannel, emit } from 'api/v2/socket';
 import formatBytes from 'utils/formatBytes';
-// import { Card } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
 /**
