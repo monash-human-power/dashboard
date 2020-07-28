@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import formatBytes from 'utils/formatBytes';
-import { camelCaseToStartCase } from 'utils/string';
+import { camelCaseToStartCase, capitalise } from 'utils/string';
 import { useChannel, emit } from './socket';
 
 /**
@@ -78,68 +78,50 @@ export function storeLastPayload(device, payloadString) {
 }
 
 /**
- * Parse the payload to get the status
- *
- * @param {string} payload Payload
- * @returns {string} Status
- */
-export function getStatusFromPayload(payload) {
-  const data = JSON.parse(payload);
-  if (!data) return null;
-  return data.status;
-}
-
-/**
- * Parse the payload to get the information (fields other than status)
+ * Format the payload information (fields other than status)
  *
  * Payload structure is defined in the 'V3 MQTT Topics' page on Notion.
  * Topic is /v3/camera/recording/status/<primary/>secondary>.
  *
- * @param {string} payload Payload
- * @returns {React.Component} Component
+ * @param {string | object} payload Payload
+ * @returns {object} Formatted payload without status
  */
-export function getInfoFromPayload(payload) {
-  const data = JSON.parse(payload);
+export function formatPayload(payload) {
+  const data = typeof payload === 'string' ? JSON.parse(payload) : payload;
   if (!data) return null;
 
-  const format = (field) => {
-    let name = camelCaseToStartCase(field);
-    let value = '';
+  return Object.keys(data)
+    .reduce((acc, field) => {
+      let name = camelCaseToStartCase(field);
+      let value = '';
 
-    // format field value
-    switch (field) {
-      case 'diskSpaceRemaining':
-        value = formatBytes(data.diskSpaceRemaining);
-        break;
+      // format field value
+      switch (field) {
+        case 'status':
+          value = capitalise(data[field]);
+          break;
 
-      case 'recordingMinutes':
-        {
-          const mins = Math.floor(data.recordingMinutes);
-          const secs = (data.recordingMinutes - mins) * 60;
-          value = `${mins} minutes ${secs} seconds`;
-          name = 'Recording Time';
-        }
-        break;
+        case 'diskSpaceRemaining':
+          value = formatBytes(data.diskSpaceRemaining);
+          break;
 
-      default:
-        value = data[field];
-        break;
-    }
+        case 'recordingMinutes':
+          {
+            const mins = Math.floor(data.recordingMinutes);
+            const secs = (data.recordingMinutes - mins) * 60;
+            value = `${mins} minutes ${secs} seconds`;
+            name = 'Recording Time';
+          }
+          break;
 
-    return `${name}: ${value}`;
-  };
-
-  return (
-    <>
-      {
-        Object.keys(data)
-          .filter((field) => field !== 'status')
-          .map((field) => (
-            <p key={field}>{format(field)}</p>
-          ))
+        default:
+          value = data[field];
+          break;
       }
-    </>
-  );
+
+      acc[name] = value;
+      return acc;
+    }, {});
 }
 
 /**
