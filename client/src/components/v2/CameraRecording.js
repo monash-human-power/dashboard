@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { capitalize } from 'lodash';
 import { startRecording, stopRecording } from 'api/v2/camera';
 import CameraRecordingStatus from './CameraRecordingStatus';
-import styles from './CameraRecordingStatus.module.css';
+import styles from './CameraRecording.module.css';
 
 /**
  * @typedef {object} CameraRecordingProps
