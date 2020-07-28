@@ -29,7 +29,7 @@ export default function CameraRecording({ devices }) {
         <Card.Title>Recording Controls</Card.Title>
         {
           devices.map((device) => (
-            <div styles={styles.device} key={device}>
+            <div key={device}>
               <Card.Subtitle>{capitalize(device)}</Card.Subtitle>
               <CameraRecordingStatus device={device} />
             </div>
@@ -37,9 +37,8 @@ export default function CameraRecording({ devices }) {
         }
       </Card.Body>
       <Card.Footer>
-        <Button variant="outline-success" onClick={startRecording}>Start</Button>
-        {' '}
-        <Button variant="outline-danger" onClick={stopRecording}>Stop</Button>
+        <Button style={styles.Button} variant="outline-success" onClick={startRecording}>Start</Button>
+        <Button style={styles.Button} variant="outline-danger" onClick={stopRecording}>Stop</Button>
       </Card.Footer>
     </Card>
   );
