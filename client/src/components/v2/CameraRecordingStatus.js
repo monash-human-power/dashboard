@@ -20,11 +20,7 @@ export default function CameraRecordingStatus({ device }) {
 
   return (
     <div>
-      <p>
-        Status:
-        {' '}
-        {status}
-      </p>
+      <p>{`Status: ${status}`}</p>
       {getInfoFromPayload(lastPayload)}
     </div>
   );
