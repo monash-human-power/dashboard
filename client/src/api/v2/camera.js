@@ -141,3 +141,40 @@ export function getInfoFromPayload(payload) {
     </>
   );
 }
+
+/**
+ * @typedef {object} StatusPayload
+ * @property {string} status Status of payload
+ * @property {string} payload Last payload published
+ */
+
+/**
+ * Returns the status of the camera and the last payload published
+ *
+ * @param {string} device Device
+ * @returns {StatusPayload} Status and payload
+ */
+export function useCameraRecordingStatus(device) {
+  const [lastPayload, setLastPayload] = useState(getLastPayload(device));
+  const [status, setStatus] = useState(getStatusFromPayload(lastPayload) || 'Waiting for status...');
+
+  const update = useCallback((newPayload) => {
+    // update last payload
+    storeLastPayload(device, newPayload);
+    setLastPayload(newPayload);
+
+    // update status
+    setStatus(getStatusFromPayload(newPayload));
+  }, [device]);
+
+  useChannel(`camera-recording-status-${device}`, update);
+
+  return { status, lastPayload };
+}
+
+/**
+ * Initiate receiving camera recording statuses
+ */
+export function initCameraStatus() {
+  emit('camera-recording-init');
+}
