@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getInfoFromPayload, useCameraRecordingStatus, initCameraStatus } from 'api/v2/camera';
+import {
+  getInfoFromPayload, useCameraRecordingStatus, initCameraStatus, getStatusFromPayload,
+} from 'api/v2/camera';
+
+const defaultStatus = 'Waiting for status...';
 
 /**
  * @typedef {object} CameraRecordingStatusProps
@@ -14,13 +18,13 @@ import { getInfoFromPayload, useCameraRecordingStatus, initCameraStatus } from '
  * @returns {React.Component<CameraRecordingStatusProps>} Component
  */
 export default function CameraRecordingStatus({ device }) {
-  const { status, lastPayload } = useCameraRecordingStatus(device);
+  const lastPayload = useCameraRecordingStatus(device);
 
   initCameraStatus();
 
   return (
     <div>
-      <p>{`Status: ${status}`}</p>
+      <p>{`Status: ${getStatusFromPayload(lastPayload) || defaultStatus}`}</p>
       {getInfoFromPayload(lastPayload)}
     </div>
   );
