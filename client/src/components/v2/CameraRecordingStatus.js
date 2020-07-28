@@ -25,9 +25,7 @@ export default function CameraRecordingStatus({ device }) {
         {' '}
         {status}
       </p>
-      <div>
-        <p>{getInfoFromPayload(lastPayload)}</p>
-      </div>
+      {getInfoFromPayload(lastPayload)}
     </div>
   );
 }

@@ -135,7 +135,7 @@ export function getInfoFromPayload(payload) {
         Object.keys(data)
           .filter((field) => field !== 'status')
           .map((field) => (
-            <p>{ format(field) }</p>
+            <p key={field}>{format(field)}</p>
           ))
       }
     </>
