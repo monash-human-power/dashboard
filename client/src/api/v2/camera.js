@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { startCase } from 'lodash';
 import formatBytes from 'utils/formatBytes';
+import { camelCaseToStartCase } from 'utils/string';
 import { useChannel, emit } from './socket';
 
 /**
@@ -103,7 +103,7 @@ export function getInfoFromPayload(payload) {
   if (!data) return null;
 
   const format = (field) => {
-    let name = startCase(field);
+    let name = camelCaseToStartCase(field);
     let value = '';
 
     // format field value

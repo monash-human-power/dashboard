@@ -2,8 +2,8 @@ import React from 'react';
 import { Card } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import PropTypes from 'prop-types';
-import { capitalize } from 'lodash';
 import { startRecording, stopRecording } from 'api/v2/camera';
+import { capitalise } from 'utils/string';
 import CameraRecordingStatus from './CameraRecordingStatus';
 import styles from './CameraRecording.module.css';
 
@@ -30,7 +30,7 @@ export default function CameraRecording({ devices }) {
         {
           devices.map((device) => (
             <div key={device}>
-              <Card.Subtitle>{capitalize(device)}</Card.Subtitle>
+              <Card.Subtitle>{capitalise(device)}</Card.Subtitle>
               <CameraRecordingStatus device={device} />
             </div>
           ))
