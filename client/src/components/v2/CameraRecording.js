@@ -27,10 +27,14 @@ export default function CameraRecording({ devices }) {
     <Card>
       <Card.Body>
         <Card.Title>Recording Controls</Card.Title>
-        <Row>
+        <Row className={styles.topMarginContainer}>
           {
             devices.map((device) => (
-              <Col key={device} sm={Math.floor(12 / devices.length)}>
+              <Col
+                className={styles.topMargin}
+                key={device}
+                sm={Math.floor(12 / devices.length)}
+              >
                 <Card.Subtitle>{getPrettyDeviceName(device)}</Card.Subtitle>
                 <CameraRecordingStatus device={device} />
               </Col>
