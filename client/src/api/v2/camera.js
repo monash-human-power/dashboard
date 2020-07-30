@@ -143,3 +143,15 @@ export function useCameraRecordingStatus(device) {
 
   return parsePayload(lastPayload);
 }
+
+/**
+ * Makes the device name pretty.
+ *
+ * Hardcoded for efficiency. If you don't like it, complain to Angus Trau :).
+ *
+ * @param {'primary' | 'secondary'} device Device
+ * @returns {'Primary' | 'Secondary'} Prettied device name
+ */
+export function getPrettyDeviceName(device) {
+  return device === 'primary' ? 'Primary' : 'Secondary';
+}

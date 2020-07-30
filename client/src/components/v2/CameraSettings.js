@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Card } from 'react-bootstrap';
-import { useOverlays } from 'api/v2/camera';
+import { useOverlays, getPrettyDeviceName } from 'api/v2/camera';
 import RadioSelector from 'components/RadioSelector';
 
 /**
@@ -18,7 +18,7 @@ import RadioSelector from 'components/RadioSelector';
 export default function CameraSettings({ device }) {
   const { overlays: controls, setActiveOverlay } = useOverlays(device);
   const [selectedOverlay, setSelectedOverlay] = useState(null);
-  const name = device === 'primary' ? 'Primary' : 'Secondary';
+  const name = getPrettyDeviceName(device);
 
   // On overlay data load, set selected to existing value
   useEffect(() => {
