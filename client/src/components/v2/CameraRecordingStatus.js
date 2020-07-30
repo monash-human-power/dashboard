@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  useCameraRecordingStatus, initCameraStatus, formatPayload,
-} from 'api/v2/camera';
+import { useCameraRecordingStatus } from 'api/v2/camera';
 
 const defaultStatus = 'Waiting for status...';
 
@@ -18,19 +16,15 @@ const defaultStatus = 'Waiting for status...';
  * @returns {React.Component<CameraRecordingStatusProps>} Component
  */
 export default function CameraRecordingStatus({ device }) {
-  initCameraStatus();
-
-  const fPayload = formatPayload(useCameraRecordingStatus(device));
-
-  console.log(fPayload);
+  const payload = useCameraRecordingStatus(device);
 
   return (
     <div>
       {
-        fPayload
-          ? Object.keys(fPayload)
+        payload
+          ? Object.keys(payload)
             .map((field) => (
-              <p key={field}>{`${field}: ${fPayload[field]}`}</p>
+              <p key={field}>{`${field}: ${payload[field]}`}</p>
             ))
           : <p>{`Status: ${defaultStatus}`}</p>
       }

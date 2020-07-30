@@ -57,36 +57,24 @@ export function stopRecording() {
 }
 
 /**
- * Get the last MQTT payload for the status of a camera recording
- *
- * @param {string} device Camera
- * @returns {string} Payload
+ * @typedef {object} CameraRecordingStatusPayload
+ * @property {string} status Status of recording
+ * @property {?string} recordingMinutes Length of recording
+ * @property {?string} recordingFile File name of recording
+ * @property {?string} diskSpaceRemaining Remaining space on disk
+ * @property {?string} error Error message from camera
  */
-export function getLastPayload(device) {
-  return sessionStorage.getItem(`camera-recording-last-payload-${device}`);
-}
 
 /**
- * Store the last MQTT payload for the status of a camera recording
- *
- * @param {string} device Camera
- * @param {string} payloadString String representation of payload
- * @returns {string} Payload
- */
-export function storeLastPayload(device, payloadString) {
-  return sessionStorage.setItem(`camera-recording-last-payload-${device}`, payloadString);
-}
-
-/**
- * Format the payload information (fields other than status)
+ * Parse the payload into an object and format the values
  *
  * Payload structure is defined in the 'V3 MQTT Topics' page on Notion.
  * Topic is /v3/camera/recording/status/<primary/>secondary>.
  *
- * @param {string | object} payload Payload
- * @returns {object} Formatted payload without status
+ * @param {string} payload Payload
+ * @returns {CameraRecordingStatusPayload} Formatted payload without status
  */
-export function formatPayload(payload) {
+function parsePayload(payload) {
   const data = typeof payload === 'string' ? JSON.parse(payload) : payload;
   if (!data) return null;
 
@@ -125,28 +113,33 @@ export function formatPayload(payload) {
 }
 
 /**
- * Returns the last status payload published
- *
- * @param {string} device Device
- * @returns {string} Payload
+ * Initiate receiving camera recording statuses
  */
-export function useCameraRecordingStatus(device) {
-  const [lastPayload, setLastPayload] = useState(getLastPayload(device));
-
-  const update = useCallback((newPayload) => {
-    // update last payload
-    storeLastPayload(device, newPayload);
-    setLastPayload(newPayload);
-  }, [device]);
-
-  useChannel(`camera-recording-status-${device}`, update);
-
-  return lastPayload;
+function initCameraStatus() {
+  emit('send-last-received-camera-recording-payloads');
 }
 
 /**
- * Initiate receiving camera recording statuses
+ * Returns the last status payload published
+ *
+ * @param {string} device Device
+ * @returns {CameraRecordingStatusPayload} Payload
  */
-export function initCameraStatus() {
-  emit('camera-recording-init');
+export function useCameraRecordingStatus(device) {
+  // only run init once per render
+  useEffect(() => {
+    initCameraStatus();
+    return () => {};
+  }, []);
+
+  const [lastPayload, setLastPayload] = useState(null);
+
+  const update = useCallback((newPayload) => {
+    // update last payload
+    setLastPayload(newPayload);
+  }, []);
+
+  useChannel(`camera-recording-status-${device}`, update);
+
+  return parsePayload(lastPayload);
 }
