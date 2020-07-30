@@ -1,6 +1,7 @@
 import React from 'react';
-import { Card } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
+import {
+  Button, Card, Col, Row,
+} from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { startRecording, stopRecording, getPrettyDeviceName } from 'api/v2/camera';
 import CameraRecordingStatus from './CameraRecordingStatus';
@@ -26,18 +27,20 @@ export default function CameraRecording({ devices }) {
     <Card>
       <Card.Body>
         <Card.Title>Recording Controls</Card.Title>
-        {
-          devices.map((device) => (
-            <div key={device}>
-              <Card.Subtitle>{getPrettyDeviceName(device)}</Card.Subtitle>
-              <CameraRecordingStatus device={device} />
-            </div>
-          ))
-        }
+        <Row>
+          {
+            devices.map((device) => (
+              <Col key={device} sm={Math.floor(12 / devices.length)}>
+                <Card.Subtitle>{getPrettyDeviceName(device)}</Card.Subtitle>
+                <CameraRecordingStatus device={device} />
+              </Col>
+            ))
+          }
+        </Row>
       </Card.Body>
-      <Card.Footer>
-        <Button style={styles.Button} variant="outline-success" onClick={startRecording}>Start</Button>
-        <Button style={styles.Button} variant="outline-danger" onClick={stopRecording}>Stop</Button>
+      <Card.Footer className={styles.footer}>
+        <Button className={styles.button} variant="outline-success" onClick={startRecording}>Start</Button>
+        <Button className={styles.button} variant="outline-danger" onClick={stopRecording}>Stop</Button>
       </Card.Footer>
     </Card>
   );

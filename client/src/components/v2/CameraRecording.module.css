@@ -1,3 +1,9 @@
-Button {
-    margin-right: 10px;
+.button {
+  margin-right: 10px;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center
 }
