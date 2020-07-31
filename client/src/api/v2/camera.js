@@ -96,7 +96,7 @@ function parsePayload(payload) {
         case 'recordingMinutes':
           {
             const mins = Math.floor(data.recordingMinutes);
-            const secs = (data.recordingMinutes - mins) * 60;
+            const secs = Math.floor((data.recordingMinutes - mins) * 60);
             value = `${mins}m ${secs}s`;
             name = 'Recording Time';
           }
