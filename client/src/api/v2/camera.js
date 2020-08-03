@@ -132,7 +132,6 @@ export function useCameraRecordingStatus(device) {
   // only run init once per render
   useEffect(() => {
     initCameraStatus();
-    return () => {};
   }, []);
 
   const [lastPayload, setLastPayload] = useState(null);
