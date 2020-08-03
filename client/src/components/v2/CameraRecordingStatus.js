@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useCameraRecordingStatus } from 'api/v2/camera';
+import classNames from 'classnames';
 import styles from './CameraRecordingStatus.module.css';
 
 const defaultStatus = 'Waiting for status...';
@@ -26,7 +27,7 @@ export default function CameraRecordingStatus({ device }) {
           ? Object.keys(payload)
             .map((field) => (
               <div
-                className={`${styles.bottomMargin} ${styles.flex}`}
+                className={classNames(styles.bottomMargin, styles.flex)}
                 key={field}
               >
                 <span>{`${field}:`}</span>
