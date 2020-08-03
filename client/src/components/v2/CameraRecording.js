@@ -33,7 +33,7 @@ export default function CameraRecording({ devices }) {
               <Col
                 className={styles.topMargin}
                 key={device}
-                sm={Math.floor(12 / devices.length)}
+                sm={6}
               >
                 <Card.Subtitle>{getPrettyDeviceName(device)}</Card.Subtitle>
                 <CameraRecordingStatus device={device} />
