@@ -75,11 +75,13 @@ export function stopRecording() {
  * @returns {CameraRecordingStatusPayload} Formatted payload without status
  */
 function parsePayload(payload) {
-  const data = typeof payload === 'string' ? JSON.parse(payload) : payload;
+  const data = JSON.parse(payload);
   if (!data) return null;
 
-  return Object.keys(data)
-    .reduce((acc, field) => {
+  const fData = {};
+
+  Object.keys(data)
+    .forEach((field) => {
       let name = camelCaseToStartCase(field);
       let value = '';
 
@@ -107,9 +109,10 @@ function parsePayload(payload) {
           break;
       }
 
-      acc[name] = value;
-      return acc;
-    }, {});
+      fData[name] = value;
+    });
+
+  return fData;
 }
 
 /**
