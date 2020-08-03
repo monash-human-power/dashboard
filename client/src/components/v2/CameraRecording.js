@@ -9,7 +9,7 @@ import styles from './CameraRecording.module.css';
 
 /**
  * @typedef {object} CameraRecordingProps
- * @property {Array} devices Array of strings of device names
+ * @property {string[]} devices Device names
  */
 
 /**

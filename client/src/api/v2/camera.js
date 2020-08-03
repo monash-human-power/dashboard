@@ -152,7 +152,7 @@ export function useCameraRecordingStatus(device) {
  * Hardcoded for efficiency. If you don't like it, complain to Angus Trau :).
  *
  * @param {'primary' | 'secondary'} device Device
- * @returns {'Primary' | 'Secondary'} Prettied device name
+ * @returns {string} Prettied device name
  */
 export function getPrettyDeviceName(device) {
   return device === 'primary' ? 'Primary' : 'Secondary';
