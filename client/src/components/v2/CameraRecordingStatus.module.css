@@ -1,8 +1,5 @@
-.bottomMargin {
+.statusRow {
     margin-bottom: 0.3em;
-}
-
-.flex {
     display: flex;
 }
 
