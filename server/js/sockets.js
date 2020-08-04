@@ -194,14 +194,14 @@ sockets.init = function socketInit(server) {
       mqttClient.publish('power_model/calibrate/reset', 'true');
     });
 
-    socket.on('submit-calibration', calibratedDistance => {
+    socket.on('submit-calibration', (calibratedDistance) => {
       mqttClient.publish(
         'power_model/calibrate',
         `calibrate=${calibratedDistance}`,
       );
     });
 
-    socket.on('create-power-plan', inputPowerPlan => {
+    socket.on('create-power-plan', (inputPowerPlan) => {
       console.log(
         `Generated new power plan - ${inputPowerPlan.inputs.fileName}.json`,
       );
@@ -215,7 +215,7 @@ sockets.init = function socketInit(server) {
       mqttClient.publish('camera/get_overlays', 'true');
     });
 
-    socket.on('set-overlays', selectedOverlays => {
+    socket.on('set-overlays', (selectedOverlays) => {
       mqttClient.publish('camera/set_overlay', selectedOverlays);
     });
 
@@ -242,7 +242,7 @@ sockets.init = function socketInit(server) {
 
     socket.on('send-last-received-camera-recording-payloads', () => {
       // Send mqtt payload on corresponding channel for each device
-      Object.keys(global.lastRecordingPayloads).forEach(device => {
+      Object.keys(global.lastRecordingPayloads).forEach((device) => {
         socket.emit(
           `camera-recording-status-${device}`,
           global.lastRecordingPayloads[device],

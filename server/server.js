@@ -64,7 +64,7 @@ app.get('/files/recent', async (req, res) => {
   if (files.length > 0) {
     let latestFilePath = null;
     let latestAge = 0;
-    for (let i=0; i<files.length; i++) {
+    for (let i = 0; i < files.length; i++) {
       const file = files[i];
       const filePath = path.join(__dirname, 'data', file);
       const stats = await fs.promises.stat(filePath);
@@ -75,7 +75,7 @@ app.get('/files/recent', async (req, res) => {
         latestFilePath = filePath;
       }
     }
-    res.download(latestFilePath, err => {
+    res.download(latestFilePath, (err) => {
       if (err) {
         res.status(404).send('File not found');
       }
@@ -89,7 +89,7 @@ app.get('/files/recent', async (req, res) => {
 app.get('/files/:filename', (req, res) => {
   const { filename } = req.params;
   const filepath = path.join(__dirname, 'data', filename);
-  res.download(filepath, err => {
+  res.download(filepath, (err) => {
     if (err) {
       res.status(404).send('File not found');
     }
@@ -100,7 +100,7 @@ app.get('/files/:filename', (req, res) => {
 app.delete('/files/:filename', (req, res) => {
   const { filename } = req.params;
   const filepath = path.join(__dirname, 'data', filename);
-  fs.unlink(filepath, err => {
+  fs.unlink(filepath, (err) => {
     if (err) {
       res.status(404).send('File not found');
     }
