@@ -1,0 +1,8 @@
+.statusRow {
+    margin-bottom: 0.3em;
+    display: flex;
+}
+
+.push {
+    margin-left: auto;
+}
