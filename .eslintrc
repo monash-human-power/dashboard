@@ -1,5 +1,5 @@
 {
-  "extends": ["react-app", "airbnb", "plugin:jsdoc/recommended"],
+  "extends": ["react-app", "airbnb", "plugin:jsdoc/recommended", "prettier"],
   "rules": {
     "no-console": "off",
     "dot-notation": [2, { "allowPattern": "^[a-z]+(_[a-z]+)+$" }],
