@@ -2,16 +2,10 @@
   margin-right: 10px;
 }
 
-.footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.topMargin {
+.col {
   margin-top: 1em;
 }
 
-.topMarginContainer {
+.row {
   margin-top: -1em;
 }

@@ -27,11 +27,11 @@ export default function CameraRecording({ devices }) {
     <Card>
       <Card.Body>
         <Card.Title>Recording Controls</Card.Title>
-        <Row className={styles.topMarginContainer}>
+        <Row className={styles.row}>
           {
             devices.map((device) => (
               <Col
-                className={styles.topMargin}
+                className={styles.col}
                 key={device}
                 sm={6}
               >
@@ -42,7 +42,7 @@ export default function CameraRecording({ devices }) {
           }
         </Row>
       </Card.Body>
-      <Card.Footer className={styles.footer}>
+      <Card.Footer>
         <Button className={styles.button} variant="outline-success" onClick={startRecording}>Start</Button>
         <Button className={styles.button} variant="outline-danger" onClick={stopRecording}>Stop</Button>
       </Card.Footer>
