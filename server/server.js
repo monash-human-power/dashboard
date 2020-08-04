@@ -32,8 +32,9 @@ sockets.init(server);
 /*
  * Start the server
  */
-server.listen(PORT, () => {
-  console.log('Example app listening at', server.address().port);
+server.listen(PORT, '0.0.0.0', () => {
+  const { address, port } = server.address();
+  console.log(`Example app listening at ${address}:${port}`);
 });
 
 /*

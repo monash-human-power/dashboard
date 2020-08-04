@@ -1,0 +1,25 @@
+version: '3.4'
+
+services:
+  client:
+    image: docker.pkg.github.com/monash-human-power/dashboard/client
+    build:
+      context: .
+      target: client
+    ports:
+      - 3000:3000
+    volumes:
+      - ./client:/app/client
+    environment:
+      DASHBOARD_SERVER_ADDRESS: 'server:5000'
+    depends_on:
+      - server
+  server:
+    image: docker.pkg.github.com/monash-human-power/dashboard/server
+    build:
+      context: .
+      target: server
+    ports:
+      - 5000:5000
+    volumes:
+      - ./server:/app/server

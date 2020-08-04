@@ -11,6 +11,14 @@ The node.js + Express HTTP REST server is used to host the real-time dashboard w
 
 ### Environment variable setup
 
+#### Client
+
+| Environment Variable     | Description                                                     |
+| ------------------------ | --------------------------------------------------------------- |
+| DASHBOARD_SERVER_ADDRESS | Define this **only** if you need to change the server's address |
+
+#### Server
+
 Set up environment variables using a `.env` file. Create a `.env` file in the `server/` directory. Add the following variables:
 
 | Environment Variable | Description                                         |
@@ -19,21 +27,17 @@ Set up environment variables using a `.env` file. Create a `.env` file in the `s
 | MQTT_PASSWORD        | MQTT password                                       |
 | MQTT_SERVER          | Address of the MQTT broker                          |
 | MQTT_PORT            | Port of the MQTT broker                             |
-| HEROKU               | Define this **only** if you are the Heroku instance |
+| HEROKU               | Define this **only** if you are the Heroku instance | 
 
-### Installation guide - Frontend
+**Important:** `localhost` does not work inside of Docker containers (eg. when specifying a local MQTT broker). On Windows and Mac, `host.docker.internal` can be used instead. On Linux, use the address of the `docker0` interface.
 
-1. Go to `client/`
-2. `yarn install` to install all dependencies and libraries
-3. `yarn start` to start the development server
-4. `yarn build` to create an optimized production bundle
+### Installation guide
 
-### Installation guide - Backend
+1. Install [Docker](https://docs.docker.com/get-docker/) and [docker-compose](https://docs.docker.com/compose/install/).
+2. Build the images. `docker-compose build`
+3. Download dependencies. `docker-compose run client yarn install && docker-compose run server yarn install`
+4. Start the development server. `docker-compose up`
 
-1. Go to `server/`
-2. `yarn install` to install all dependencies and libraries
-3. Build the frontend production bundle
-4. `yarn start` to start the server
 
 ## Deploying
 

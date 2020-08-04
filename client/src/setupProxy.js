@@ -1,17 +1,19 @@
 const proxy = require('http-proxy-middleware');
 
+const server = process.env.DASHBOARD_SERVER_ADDRESS || 'localhost:5000';
+
 module.exports = function(app) {
   app.use(
     ['/files', '/server/status'],
     proxy({
-      target: 'http://localhost:5000',
+      target: 'http://' + server,
     })
   );
 
   app.use(
     '/socket.io',
     proxy({
-      target: 'ws://localhost:5000',
+      target: 'ws://' + server,
       ws: true,
     })
   );
