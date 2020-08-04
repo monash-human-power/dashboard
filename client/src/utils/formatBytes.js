@@ -9,8 +9,18 @@
  */
 export default function formatBytes(bytes, digits = 2) {
   if (bytes === 0) return '0 Bytes';
-  const units = ['Bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+  const units = [
+    'Bytes',
+    'KiB',
+    'MiB',
+    'GiB',
+    'TiB',
+    'PiB',
+    'EiB',
+    'ZiB',
+    'YiB',
+  ];
   const d = digits < 0 ? 0 : digits;
   const mag = Math.floor(Math.log(bytes) / Math.log(1024));
-  return `${parseFloat((bytes / (1024 ** mag)).toFixed(d))} ${units[mag]}`;
+  return `${parseFloat((bytes / 1024 ** mag).toFixed(d))} ${units[mag]}`;
 }
