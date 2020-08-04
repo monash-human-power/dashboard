@@ -18,26 +18,35 @@ import { useChannel, emit } from './socket';
 export function useOverlays(device) {
   const [overlays, setOverlays] = useState(null);
 
-  const handleData = useCallback((data) => {
-    const json = JSON.parse(data);
-    if (json.device === device) {
-      setOverlays({
-        active: json.activeOverlay,
-        overlays: json.overlays,
-      });
-    }
-  }, [device]);
+  const handleData = useCallback(
+    (data) => {
+      const json = JSON.parse(data);
+      if (json.device === device) {
+        setOverlays({
+          active: json.activeOverlay,
+          overlays: json.overlays,
+        });
+      }
+    },
+    [device],
+  );
   useChannel('push-overlays', handleData);
 
   useEffect(() => {
     emit('get-overlays');
   }, [device]);
 
-  const setActiveOverlay = useCallback((activeOverlay) => {
-    emit('set-overlays', JSON.stringify({
-      [device]: activeOverlay,
-    }));
-  }, [device]);
+  const setActiveOverlay = useCallback(
+    (activeOverlay) => {
+      emit(
+        'set-overlays',
+        JSON.stringify({
+          [device]: activeOverlay,
+        }),
+      );
+    },
+    [device],
+  );
 
   return { overlays, setActiveOverlay };
 }
@@ -80,37 +89,36 @@ function parsePayload(payload) {
 
   const formattedData = {};
 
-  Object.keys(data)
-    .forEach((field) => {
-      let name = camelCaseToStartCase(field);
-      let value = '';
+  Object.keys(data).forEach((field) => {
+    let name = camelCaseToStartCase(field);
+    let value = '';
 
-      // format field value
-      switch (field) {
-        case 'status':
-          value = capitalise(data[field]);
-          break;
+    // format field value
+    switch (field) {
+      case 'status':
+        value = capitalise(data[field]);
+        break;
 
-        case 'diskSpaceRemaining':
-          value = formatBytes(data.diskSpaceRemaining);
-          break;
+      case 'diskSpaceRemaining':
+        value = formatBytes(data.diskSpaceRemaining);
+        break;
 
-        case 'recordingMinutes':
-          {
-            const mins = Math.floor(data.recordingMinutes);
-            const secs = Math.floor((data.recordingMinutes - mins) * 60);
-            value = `${mins}m ${secs}s`;
-            name = 'Recording Time';
-          }
-          break;
+      case 'recordingMinutes':
+        {
+          const mins = Math.floor(data.recordingMinutes);
+          const secs = Math.floor((data.recordingMinutes - mins) * 60);
+          value = `${mins}m ${secs}s`;
+          name = 'Recording Time';
+        }
+        break;
 
-        default:
-          value = data[field];
-          break;
-      }
+      default:
+        value = data[field];
+        break;
+    }
 
-      formattedData[name] = value;
-    });
+    formattedData[name] = value;
+  });
 
   return formattedData;
 }
