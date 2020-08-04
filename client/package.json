@@ -13,7 +13,6 @@
     "chartjs-plugin-annotation": "^0.5.7",
     "classnames": "^2.2.6",
     "customize-cra": "^0.9.1",
-    "eslint": "^7.6.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-jsdoc": "^20.0.5",
@@ -58,6 +57,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {}
+  }
 }
