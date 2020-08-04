@@ -31,3 +31,10 @@ jobs:
           yarn
           yarn lint
           cd ..
+
+      - name: Run linter on server
+        run: |
+          cd server
+          yarn
+          yarn eslint-check
+          cd ..
