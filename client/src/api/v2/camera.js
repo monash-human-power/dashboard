@@ -78,7 +78,7 @@ function parsePayload(payload) {
   const data = JSON.parse(payload);
   if (!data) return null;
 
-  const fData = {};
+  const formattedData = {};
 
   Object.keys(data)
     .forEach((field) => {
@@ -109,10 +109,10 @@ function parsePayload(payload) {
           break;
       }
 
-      fData[name] = value;
+      formattedData[name] = value;
     });
 
-  return fData;
+  return formattedData;
 }
 
 /**
