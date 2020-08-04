@@ -20,43 +20,46 @@ import { getPresets, useGeneratePowerPlan } from 'api/v2/powerPlan';
  * @returns {React.Component} Component
  */
 export default function PowerMapView() {
-  const { generate: generatePowerPlan, generating, generated } = useGeneratePowerPlan();
   const {
-    register,
-    handleSubmit,
-    watch,
-    errors,
-    reset,
-  } = useForm();
+    generate: generatePowerPlan,
+    generating,
+    generated,
+  } = useGeneratePowerPlan();
+  const { register, handleSubmit, watch, errors, reset } = useForm();
 
-  const onSubmit = useCallback((data) => {
-    const plan = {
-      fileName: data.fileName,
-      mass: parseInt(data.mass, 10),
-      startAdjust: parseInt(data.startAdjust, 10),
-      lowerBound: parseInt(data.lowerBound, 10),
-      upperBound: parseInt(data.upperBound, 10),
-      step: parseInt(data.step, 10),
-      startTrap: parseInt(data.startTrap, 10),
-      endTrap: parseInt(data.endTrap, 10),
-      zones: data.zones.map((zone) => ({
-        recPower: parseInt(zone.recPower, 10),
-        maxTime: parseInt(zone.maxTime, 10),
-        spentTime: parseInt(zone.spentTime, 10),
-      })),
-    };
+  const onSubmit = useCallback(
+    (data) => {
+      const plan = {
+        fileName: data.fileName,
+        mass: parseInt(data.mass, 10),
+        startAdjust: parseInt(data.startAdjust, 10),
+        lowerBound: parseInt(data.lowerBound, 10),
+        upperBound: parseInt(data.upperBound, 10),
+        step: parseInt(data.step, 10),
+        startTrap: parseInt(data.startTrap, 10),
+        endTrap: parseInt(data.endTrap, 10),
+        zones: data.zones.map((zone) => ({
+          recPower: parseInt(zone.recPower, 10),
+          maxTime: parseInt(zone.maxTime, 10),
+          spentTime: parseInt(zone.spentTime, 10),
+        })),
+      };
 
-    generatePowerPlan(plan);
-    reset({});
-  }, [generatePowerPlan, reset]);
+      generatePowerPlan(plan);
+      reset({});
+    },
+    [generatePowerPlan, reset],
+  );
 
   const presetButtons = getPresets().map((preset) => (
     <Button
       variant="outline-primary"
-      onClick={() => reset({
-        ...preset.value,
-        numZones: preset.value.zones.length,
-      })}
+      onClick={() =>
+        reset({
+          ...preset.value,
+          numZones: preset.value.zones.length,
+        })
+      }
       key={preset.name}
     >
       {preset.name}
@@ -72,9 +75,7 @@ export default function PowerMapView() {
       <fieldset name={fieldname} key={fieldname}>
         <Card className="mb-4">
           <Card.Body>
-            <Card.Title>
-              {`Zone ${index + 1}`}
-            </Card.Title>
+            <Card.Title>{`Zone ${index + 1}`}</Card.Title>
             <Form.Row>
               <Col lg={4}>
                 <LabelledControl
@@ -121,12 +122,7 @@ export default function PowerMapView() {
           {presetButtons}
         </Card.Body>
       </Card>
-      <Button
-        block
-        variant="danger"
-        onClick={reset}
-        className="mb-4"
-      >
+      <Button block variant="danger" onClick={reset} className="mb-4">
         Reset Form
       </Button>
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -154,8 +150,12 @@ export default function PowerMapView() {
             <Form.Row>
               <Col sm={6}>
                 <Form.Group>
-                  <Form.Label htmlFor="inputFileName">Power Plan File Name</Form.Label>
-                  <InputGroup className={classNames(errors.fileName && 'is-invalid')}>
+                  <Form.Label htmlFor="inputFileName">
+                    Power Plan File Name
+                  </Form.Label>
+                  <InputGroup
+                    className={classNames(errors.fileName && 'is-invalid')}
+                  >
                     <Form.Control
                       id="inputFileName"
                       name="fileName"
@@ -259,9 +259,7 @@ export default function PowerMapView() {
         </Card>
         {zones}
         <Button type="submit" disabled={generating}>
-          {generating ? (
-            <Spinner animation="border" />
-          ) : 'Submit'}
+          {generating ? <Spinner animation="border" /> : 'Submit'}
         </Button>
       </Form>
       {generated && (
