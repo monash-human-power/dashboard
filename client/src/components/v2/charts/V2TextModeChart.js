@@ -47,23 +47,33 @@ export default function V2TextModeChart() {
     <Table responsive className={styles.chart}>
       <tbody>
         <tr>
-          <td colSpan="2"><b>Time</b></td>
+          <td colSpan="2">
+            <b>Time</b>
+          </td>
           <td>{formatData('time', 's')}</td>
         </tr>
         <tr>
-          <td colSpan="2"><b>Velocity</b></td>
+          <td colSpan="2">
+            <b>Velocity</b>
+          </td>
           <td>{formatData('gps_speed', 'km/h')}</td>
         </tr>
         <tr>
-          <td colSpan="2"><b>Power</b></td>
+          <td colSpan="2">
+            <b>Power</b>
+          </td>
           <td>{formatData('power', 'W')}</td>
         </tr>
         <tr>
-          <td colSpan="2"><b>Cadence</b></td>
+          <td colSpan="2">
+            <b>Cadence</b>
+          </td>
           <td>{formatData('cadence', 'rpm')}</td>
         </tr>
         <tr>
-          <td rowSpan="6"><b>BOOST</b></td>
+          <td rowSpan="6">
+            <b>BOOST</b>
+          </td>
           <td>Recommended Speed</td>
           <td>{formatValue(powerModelData.rec_speed, 'km/h')}</td>
         </tr>
@@ -88,7 +98,9 @@ export default function V2TextModeChart() {
           <td>{formatValue(powerModelData.distance_left, 'm')}</td>
         </tr>
         <tr>
-          <td rowSpan="3"><b>GPS</b></td>
+          <td rowSpan="3">
+            <b>GPS</b>
+          </td>
           <td>Latitude</td>
           <td>{formatData('gps_lat', 'N')}</td>
         </tr>
@@ -101,7 +113,9 @@ export default function V2TextModeChart() {
           <td>{formatData('gps_alt', 'm')}</td>
         </tr>
         <tr>
-          <td rowSpan="3"><b>Accelerometer</b></td>
+          <td rowSpan="3">
+            <b>Accelerometer</b>
+          </td>
           <td>x</td>
           <td>{formatData('aX', 'g')}</td>
         </tr>
@@ -114,7 +128,9 @@ export default function V2TextModeChart() {
           <td>{formatData('aZ', 'g')}</td>
         </tr>
         <tr>
-          <td rowSpan="3"><b>Gyroscope</b></td>
+          <td rowSpan="3">
+            <b>Gyroscope</b>
+          </td>
           <td>x</td>
           <td>{formatData('gX', 'deg/s')}</td>
         </tr>
@@ -127,11 +143,15 @@ export default function V2TextModeChart() {
           <td>{formatData('gZ', 'deg/s')}</td>
         </tr>
         <tr>
-          <td colSpan="2"><b>Potentiometer</b></td>
+          <td colSpan="2">
+            <b>Potentiometer</b>
+          </td>
           <td>{formatData('pot')}</td>
         </tr>
         <tr>
-          <td colSpan="2"><b>Thermometer</b></td>
+          <td colSpan="2">
+            <b>Thermometer</b>
+          </td>
           <td>{formatData('thermoC', '°C')}</td>
         </tr>
       </tbody>
