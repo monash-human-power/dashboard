@@ -19,9 +19,12 @@ import FormCheck from 'react-bootstrap/FormCheck';
 export default function RadioSelector({ options, value, onChange }) {
   const uid = useUID();
 
-  const handleChange = useCallback((event) => {
-    onChange(event.currentTarget.value);
-  }, [onChange]);
+  const handleChange = useCallback(
+    (event) => {
+      onChange(event.currentTarget.value);
+    },
+    [onChange],
+  );
 
   return options.map((option, index) => (
     <FormCheck

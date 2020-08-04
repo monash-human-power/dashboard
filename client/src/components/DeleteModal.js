@@ -16,17 +16,9 @@ import { Modal, Button } from 'react-bootstrap';
  * @param {DeleteModalProps} props Props
  * @returns {React.Component<DeleteModalProps>} Component
  */
-export default function DeleteModal({
-  name,
-  show,
-  onDelete,
-  onCancel,
-}) {
+export default function DeleteModal({ name, show, onDelete, onCancel }) {
   return (
-    <Modal
-      show={show}
-      onHide={onCancel}
-    >
+    <Modal show={show} onHide={onCancel}>
       <Modal.Header closeButton>
         <Modal.Title>Confirm Deletion</Modal.Title>
       </Modal.Header>

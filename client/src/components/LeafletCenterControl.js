@@ -19,10 +19,13 @@ import FontAwesomeIcon from 'components/FontAwesomeIcon';
 export default function LeafletCenterControl({ center }) {
   const context = useLeaflet();
 
-  const handleClick = useCallback((event) => {
-    event.preventDefault();
-    context.map.panTo(center);
-  }, [center, context]);
+  const handleClick = useCallback(
+    (event) => {
+      event.preventDefault();
+      context.map.panTo(center);
+    },
+    [center, context],
+  );
 
   return (
     <Control position="bottomright" className="leaflet-bar">
