@@ -25,12 +25,15 @@ export default function CameraSettings({ device }) {
     setSelectedOverlay(controls?.active);
   }, [controls]);
 
-  const handleSave = useCallback((event) => {
-    event.preventDefault();
-    if (selectedOverlay) {
-      setActiveOverlay(selectedOverlay);
-    }
-  }, [selectedOverlay, setActiveOverlay]);
+  const handleSave = useCallback(
+    (event) => {
+      event.preventDefault();
+      if (selectedOverlay) {
+        setActiveOverlay(selectedOverlay);
+      }
+    },
+    [selectedOverlay, setActiveOverlay],
+  );
 
   return (
     <Card>
@@ -47,7 +50,9 @@ export default function CameraSettings({ device }) {
         )}
       </Card.Body>
       <Card.Footer>
-        <Card.Link href="#" onClick={handleSave}>Save</Card.Link>
+        <Card.Link href="#" onClick={handleSave}>
+          Save
+        </Card.Link>
       </Card.Footer>
     </Card>
   );
