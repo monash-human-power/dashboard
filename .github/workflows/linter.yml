@@ -1,11 +1,12 @@
-name: eslint Checker
+name: Lint
 
 on: [pull_request]
 
 jobs:
-  lint:
+  run-linters:
     runs-on: ubuntu-latest
-    name: Run eslint
+    name: Run linters
+
     steps:
       - uses: actions/checkout@v2
 
@@ -24,8 +25,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
-      - name: Run linter
-        run: |
-          cd client
-          yarn
-          yarn lint
+      - name: Run linters
+        uses: samuelmeuli/lint-action@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          # Enable linters
+          eslint: true
+          prettier: true
