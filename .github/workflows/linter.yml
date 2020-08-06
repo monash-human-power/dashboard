@@ -36,5 +36,5 @@ jobs:
         run: |
           cd server
           yarn
-          yarn eslint-check
+          yarn lint
           cd ..

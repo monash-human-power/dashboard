@@ -5,8 +5,8 @@
   "main": "server/server.js",
   "scripts": {
     "eslint": "eslint",
-    "eslint-check": "eslint --print-config . | eslint-config-prettier-check",
-    "eslint-fix": "eslint --fix",
+    "lint": "eslint --print-config . | eslint-config-prettier-check",
+    "lint:fix": "eslint --fix",
     "start": "node server.js",
     "test": "npm run eslint ."
   },
