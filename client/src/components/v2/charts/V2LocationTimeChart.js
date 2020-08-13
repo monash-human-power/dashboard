@@ -1,9 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  useSensorData,
-  useMultiSensorTimeSeries,
-} from 'api/v2/sensors';
+import { useSensorData, useMultiSensorTimeSeries } from 'api/v2/sensors';
 import LocationTimeChart from 'components/charts/LocationTimeChart';
 
 /**
@@ -13,8 +10,13 @@ import LocationTimeChart from 'components/charts/LocationTimeChart';
  * @returns {?object} LatLng object if location is valid. Null if invalid
  */
 function validateLocation(location) {
-  if (Number.isFinite(location.lat) && location.lat >= -180 && location.lat <= 180
-    && Number.isFinite(location.long) && location.long >= -180 && location.long <= 180
+  if (
+    Number.isFinite(location.lat) &&
+    location.lat >= -180 &&
+    location.lat <= 180 &&
+    Number.isFinite(location.long) &&
+    location.long >= -180 &&
+    location.long <= 180
   ) {
     return location;
   }
@@ -33,7 +35,10 @@ function validateLocation(location) {
  * @returns {React.Component} Component
  */
 export default function V2LocationTimeChart({ interval }) {
-  const { series: locationHistory } = useMultiSensorTimeSeries(['gps_lat', 'gps_long'], interval);
+  const { series: locationHistory } = useMultiSensorTimeSeries(
+    ['gps_lat', 'gps_long'],
+    interval,
+  );
   const latData = useSensorData('gps_lat');
   const longData = useSensorData('gps_long');
 

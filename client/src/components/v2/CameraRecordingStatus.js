@@ -21,20 +21,16 @@ export default function CameraRecordingStatus({ device }) {
 
   return (
     <div>
-      {
-        payload
-          ? Object.keys(payload)
-            .map((field) => (
-              <div
-                className={styles.statusRow}
-                key={field}
-              >
-                <span>{`${field}:`}</span>
-                <span className={styles.push}>{payload[field]}</span>
-              </div>
-            ))
-          : <div className={styles.p}>{`Status: ${defaultStatus}`}</div>
-      }
+      {payload ? (
+        Object.keys(payload).map((field) => (
+          <div className={styles.statusRow} key={field}>
+            <span>{`${field}:`}</span>
+            <span className={styles.push}>{payload[field]}</span>
+          </div>
+        ))
+      ) : (
+        <div className={styles.p}>{`Status: ${defaultStatus}`}</div>
+      )}
     </div>
   );
 }

@@ -38,9 +38,11 @@ export default function CadenceTimeChart({ series, max }) {
 }
 
 CadenceTimeChart.propTypes = {
-  series: PropTypes.arrayOf(PropTypes.shape({
-    time: PropTypes.number.isRequired,
-    value: PropTypes.number.isRequired,
-  })).isRequired,
+  series: PropTypes.arrayOf(
+    PropTypes.shape({
+      time: PropTypes.number.isRequired,
+      value: PropTypes.number.isRequired,
+    }),
+  ).isRequired,
   max: PropTypes.number.isRequired,
 };

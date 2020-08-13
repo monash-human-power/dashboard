@@ -32,10 +32,7 @@ const MHP_WORKSHOP_LOCATION = [-37.908756, 145.13404];
  * @returns {React.Component} Component
  */
 export default function LocationTimeChart({ series }) {
-  const bikeHistory = series.map(({ lat, long }) => ([
-    lat,
-    long,
-  ]));
+  const bikeHistory = series.map(({ lat, long }) => [lat, long]);
 
   const initialLocation = bikeHistory[0];
   const currentLocation = bikeHistory[series.length - 1];
@@ -63,11 +60,7 @@ export default function LocationTimeChart({ series }) {
           fillOpacity={1}
         />
       ) : null}
-      <Polyline
-        positions={bikeHistory}
-        color="#007bff"
-        weight={4}
-      />
+      <Polyline positions={bikeHistory} color="#007bff" weight={4} />
       <ScaleControl imperial={false} />
       <AttributionControl prefix={false} />
       <LeafletCenterControl center={center} />
@@ -76,8 +69,10 @@ export default function LocationTimeChart({ series }) {
 }
 
 LocationTimeChart.propTypes = {
-  series: PropTypes.arrayOf(PropTypes.shape({
-    lat: PropTypes.number.isRequired,
-    long: PropTypes.number.isRequired,
-  })).isRequired,
+  series: PropTypes.arrayOf(
+    PropTypes.shape({
+      lat: PropTypes.number.isRequired,
+      long: PropTypes.number.isRequired,
+    }),
+  ).isRequired,
 };

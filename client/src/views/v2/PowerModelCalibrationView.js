@@ -1,11 +1,5 @@
 import React, { useState, useCallback, useRef } from 'react';
-import {
-  Alert,
-  Button,
-  Card,
-  Form,
-  InputGroup,
-} from 'react-bootstrap';
+import { Alert, Button, Card, Form, InputGroup } from 'react-bootstrap';
 import ContentPage from 'components/ContentPage';
 import { setCalibration, resetCalibration } from 'api/v2/powerModel';
 
@@ -55,15 +49,15 @@ export default function PowerModelCalibrationView() {
               </InputGroup.Append>
             </InputGroup>
           </Form>
-          {!!distanceSet && (
-            <Alert variant="success">Distance sent!</Alert>
-          )}
+          {!!distanceSet && <Alert variant="success">Distance sent!</Alert>}
         </Card.Body>
       </Card>
       <Card>
         <Card.Body>
           <Card.Title>Reset Distance</Card.Title>
-          <Button variant="danger" onClick={handleResetDistance}>Reset Calibrated Distance</Button>
+          <Button variant="danger" onClick={handleResetDistance}>
+            Reset Calibrated Distance
+          </Button>
         </Card.Body>
       </Card>
     </ContentPage>

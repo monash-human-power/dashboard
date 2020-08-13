@@ -18,17 +18,19 @@ import { useChannel } from '../socket';
  */
 export function useMultiSensorTimeSeries(sensors, interval) {
   const [running, setRunning] = useState(false);
-  const {
-    series,
-    max,
-    add,
-    reset,
-  } = useTimeSeries(sensors.length, interval, running);
+  const { series, max, add, reset } = useTimeSeries(
+    sensors.length,
+    interval,
+    running,
+  );
 
-  const handleData = useCallback((data) => {
-    setRunning(true);
-    add(sensors.map((sensor) => data[sensor]));
-  }, [add, sensors]);
+  const handleData = useCallback(
+    (data) => {
+      setRunning(true);
+      add(sensors.map((sensor) => data[sensor]));
+    },
+    [add, sensors],
+  );
   useChannel('data', handleData);
 
   const handleStart = useCallback(() => {

@@ -1,9 +1,4 @@
-import {
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
-} from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 /**
  * Checks if a value is a real number
@@ -12,7 +7,9 @@ import {
  * @param {number} value Value to check
  */
 function isValid(value) {
-  return typeof value === 'number' && !Number.isNaN(value) && Number.isFinite(value);
+  return (
+    typeof value === 'number' && !Number.isNaN(value) && Number.isFinite(value)
+  );
 }
 
 /**
@@ -75,7 +72,9 @@ export function useTimeSeries(dimensions, interval, running) {
      */
     function batch() {
       if (pointCount.current > 0) {
-        const averages = intermediateCount.current.map((sum) => sum / pointCount.current);
+        const averages = intermediateCount.current.map(
+          (sum) => sum / pointCount.current,
+        );
         setSeries((prevState) => [
           ...prevState,
           averages.map((average) => ({

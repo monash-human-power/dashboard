@@ -1,7 +1,4 @@
-const {
-  override,
-  addWebpackExternals,
-} = require('customize-cra');
+const { override, addWebpackExternals } = require('customize-cra');
 
 module.exports = override(
   // Chart.js has a required dependency on moment.js. However this dependency is only required when

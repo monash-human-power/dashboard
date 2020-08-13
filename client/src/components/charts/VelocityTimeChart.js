@@ -38,9 +38,11 @@ export default function VelocityTimeChart({ series, max }) {
 }
 
 VelocityTimeChart.propTypes = {
-  series: PropTypes.arrayOf(PropTypes.shape({
-    time: PropTypes.number.isRequired,
-    value: PropTypes.number.isRequired,
-  })).isRequired,
+  series: PropTypes.arrayOf(
+    PropTypes.shape({
+      time: PropTypes.number.isRequired,
+      value: PropTypes.number.isRequired,
+    }),
+  ).isRequired,
   max: PropTypes.number.isRequired,
 };
