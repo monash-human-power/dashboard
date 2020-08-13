@@ -41,7 +41,8 @@
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "lint:fix": "eslint --fix"
   },
   "eslintConfig": {
     "extends": "react-app"
