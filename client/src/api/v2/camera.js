@@ -138,7 +138,7 @@ function initCameraStatus() {
  * @returns {CameraRecordingStatusPayload} Payload
  */
 export function useCameraRecordingStatus(device) {
-  // only run init once per render
+  // Only run init once per render
   useEffect(() => {
     initCameraStatus();
   }, []);
@@ -146,7 +146,7 @@ export function useCameraRecordingStatus(device) {
   const [lastPayload, setLastPayload] = useState(null);
 
   const update = useCallback((newPayload) => {
-    // update last payload
+    // Update last payload
     setLastPayload(newPayload);
   }, []);
 
@@ -185,12 +185,12 @@ function initVideoFeedStatus() {
  * @returns {object.<string, VideoFeedStatus>} A VideoFeedStatus for each device
  */
 export function useVideoFeedStatus() {
-  // only run init once per render
+  // Only run init once per render
   useEffect(() => {
     initVideoFeedStatus();
   }, []);
 
-  const [payloads, setPayloads] = useState({}); // payloads is Object.<string, string payload>
+  const [payloads, setPayloads] = useState({}); // Payloads is Object.<string, string payload>
 
   const handler = useCallback((newPayloads) => {
     setPayloads(newPayloads);

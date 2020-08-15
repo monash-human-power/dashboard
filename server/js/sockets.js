@@ -176,14 +176,14 @@ sockets.init = function socketInit(server) {
           payloadString,
         );
 
-        // store last received payload for device globally
+        // Store last received payload for device globally
         global.lastRecordingPayloads[
           topicString[topicString.length - 1]
         ] = payloadString;
       } else if (
         topicString.slice(0, -1).join('/') === '/v3/camera/video-feed/status'
       ) {
-        // store last received payload for device globally
+        // Store last received payload for device globally
         global.lastVideoFeedPayloads[
           topicString[topicString.length - 1]
         ] = payloadString;
