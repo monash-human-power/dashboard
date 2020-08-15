@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import { useCameraRecordingStatus } from 'api/v2/camera';
+import PropTypes from 'prop-types';
+import React from 'react';
 import styles from './CameraRecordingStatus.module.css';
 
 const defaultStatus = 'Waiting for status...';
@@ -29,7 +29,7 @@ export default function CameraRecordingStatus({ device }) {
           </div>
         ))
       ) : (
-        <div className={styles.p}>{`Status: ${defaultStatus}`}</div>
+        <div className={styles.p}>{`Recording Status: ${defaultStatus}`}</div>
       )}
     </div>
   );

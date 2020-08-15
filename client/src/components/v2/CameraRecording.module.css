@@ -9,3 +9,8 @@
 .row {
   margin-top: -1em;
 }
+
+/* This is not getting applied to OnlineIndicator for some reason */
+.indicator {
+  margin-right: 4px;
+}

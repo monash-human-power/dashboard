@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import formatBytes from 'utils/formatBytes';
 import { camelCaseToStartCase, capitalise } from 'utils/string';
-import { useChannel, emit } from './socket';
+import { emit, useChannel } from './socket';
 
 /**
  * @typedef {object} OverlaysHook
@@ -96,6 +96,7 @@ function parsePayload(payload) {
     // format field value
     switch (field) {
       case 'status':
+        name = "Recording Status";
         value = capitalise(data[field]);
         break;
 

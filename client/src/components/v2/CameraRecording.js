@@ -1,13 +1,13 @@
+import {
+  getPrettyDeviceName, startRecording,
+  stopRecording
+} from 'api/v2/camera';
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
-import PropTypes from 'prop-types';
-import {
-  startRecording,
-  stopRecording,
-  getPrettyDeviceName,
-} from 'api/v2/camera';
-import CameraRecordingStatus from './CameraRecordingStatus';
 import styles from './CameraRecording.module.css';
+import CameraRecordingStatus from './CameraRecordingStatus';
+import OnlineIndicator from './OnlineIndicator';
 
 /**
  * @typedef {object} CameraRecordingProps
@@ -32,7 +32,10 @@ export default function CameraRecording({ devices }) {
         <Row className={styles.row}>
           {devices.map((device) => (
             <Col className={styles.col} key={device} sm={6}>
-              <Card.Subtitle>{getPrettyDeviceName(device)}</Card.Subtitle>
+              <Card.Subtitle>
+                <OnlineIndicator className={styles.indicator} online />
+                <span>{`${getPrettyDeviceName(device)} Camera`}</span>
+              </Card.Subtitle>
               <CameraRecordingStatus device={device} />
             </Col>
           ))}
