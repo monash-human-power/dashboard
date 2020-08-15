@@ -8,7 +8,6 @@ import React from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
 import styles from './CameraRecording.module.css';
 import CameraRecordingStatus from './CameraRecordingStatus';
-import OnlineIndicator from './OnlineIndicator';
 
 /**
  * @typedef {object} CameraRecordingProps
@@ -36,17 +35,12 @@ export default function CameraRecording({ devices }) {
       <Card.Body>
         <Card.Title>Recording Controls</Card.Title>
         <Row className={styles.row}>
-          {devices.map((device) => {
-            return (
-              <Col className={styles.col} key={device} sm={6}>
-                <Card.Subtitle>
-                  <OnlineIndicator className={styles.indicator} online={!!status[device]?.online} />
-                  <span>{`${getPrettyDeviceName(device)} Camera`}</span>
-                </Card.Subtitle>
-                <CameraRecordingStatus device={device} />
-              </Col>
-            );
-          })}
+          {devices.map((device) => (
+            <Col className={styles.col} key={device} sm={6}>
+              <Card.Subtitle>{getPrettyDeviceName(device)}</Card.Subtitle>
+              <CameraRecordingStatus device={device} />
+            </Col>
+          ))}
         </Row>
       </Card.Body>
       <Card.Footer>
