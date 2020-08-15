@@ -13,6 +13,7 @@ let PUBLIC_MQTT_CLIENT;
 
 // global vars
 global.lastRecordingPayloads = {};
+global.lastVideoFeedPayloads = {};
 
 function connectToPublicMQTTBroker(clientID = '') {
   const publicMqttOptions = {
@@ -95,6 +96,7 @@ sockets.init = function socketInit(server) {
   mqttClient.subscribe('power_model/plan_generated');
   mqttClient.subscribe('camera/push_overlays');
   // Camera recording status subscription occurs when mqttClient message handler is set
+  // Camera video feed status subscription occurs when mqttClient message handler is set
   mqttClient.on('connect', mqttConnected);
   mqttClient.on('error', mqttError);
   // Not a heroku instance
@@ -115,6 +117,8 @@ sockets.init = function socketInit(server) {
     */
     mqttClient.subscribe('/v3/camera/recording/status/primary');
     mqttClient.subscribe('/v3/camera/recording/status/secondary');
+    mqttClient.subscribe('/v3/camera/video-feed/status/primary');
+    mqttClient.subscribe('/v3/camera/video-feed/status/secondary');
 
     mqttClient.on('message', function mqttMessage(topic, payload) {
       const payloadString = payload.toString();
@@ -176,6 +180,16 @@ sockets.init = function socketInit(server) {
         global.lastRecordingPayloads[
           topicString[topicString.length - 1]
         ] = payloadString;
+      } else if (
+        topicString.slice(0, -1).join('/') === '/v3/camera/video-feed/status'
+      ) {
+        // store last received payload for device globally
+        global.lastVideoFeedPayloads[
+          topicString[topicString.length - 1]
+        ] = payloadString;
+
+        // Send mqtt payload on corresponding channel
+        socket.emit(`camera-video-feed-status`, global.lastVideoFeedPayloads);
       } else {
         console.error(`Unhandled topic - ${topic}`);
       }
@@ -248,6 +262,10 @@ sockets.init = function socketInit(server) {
           global.lastRecordingPayloads[device],
         );
       });
+    });
+
+    socket.on('send-last-received-camera-video-feed-payloads', () => {
+      socket.emit(`camera-video-feed-status`, global.lastVideoFeedPayloads);
     });
 
     socket.on('start-camera-recording', () => {

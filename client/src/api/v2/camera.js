@@ -75,7 +75,7 @@ export function stopRecording() {
  */
 
 /**
- * Parse the payload into an object and format the values
+ * Parse the recording payload into an object and format the values
  *
  * Payload structure is defined in the 'V3 MQTT Topics' page on Notion.
  * Topic is /v3/camera/recording/status/<primary/>secondary>.
@@ -83,7 +83,7 @@ export function stopRecording() {
  * @param {string} payload Payload
  * @returns {CameraRecordingStatusPayload} Formatted payload without status
  */
-function parsePayload(payload) {
+function parseRecordingPayload(payload) {
   const data = JSON.parse(payload);
   if (!data) return null;
 
@@ -152,7 +152,7 @@ export function useCameraRecordingStatus(device) {
 
   useChannel(`camera-recording-status-${device}`, update);
 
-  return parsePayload(lastPayload);
+  return parseRecordingPayload(lastPayload);
 }
 
 /**
@@ -165,4 +165,41 @@ export function useCameraRecordingStatus(device) {
  */
 export function getPrettyDeviceName(device) {
   return device === 'primary' ? 'Primary' : 'Secondary';
+}
+
+/**
+ * Initiate receiving camera video feed statuses
+ */
+function initVideoFeedStatus() {
+  emit('send-last-received-camera-video-feed-payloads');
+}
+
+/**
+ * @typedef {object} VideoFeedStatus
+ * @property {boolean}  online Whether video feed is on/off
+ */
+
+/**
+ * Returns the last received status of the video feeds from `/v3/camera/video-feed/status/<primary/secondary>`
+ *
+ * @returns {object.<string, VideoFeedStatus>} A VideoFeedStatus for each device
+ */
+export function useVideoFeedStatus() {
+  // only run init once per render
+  useEffect(() => {
+    initVideoFeedStatus();
+  }, []);
+
+  const [payloads, setPayloads] = useState({}); // payloads is Object.<string, string payload>
+
+  const handler = useCallback((newPayloads) => {
+    setPayloads(newPayloads);
+  }, []);
+
+  useChannel(`camera-video-feed-status`, handler);
+
+  return Object.keys(payloads).reduce((acc, key) => {
+    acc[key] = JSON.parse(payloads[key]);
+    return acc;
+  }, {});
 }

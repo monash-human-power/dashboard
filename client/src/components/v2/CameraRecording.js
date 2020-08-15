@@ -1,6 +1,7 @@
 import {
   getPrettyDeviceName, startRecording,
-  stopRecording
+  stopRecording,
+  useVideoFeedStatus
 } from 'api/v2/camera';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -25,20 +26,24 @@ import OnlineIndicator from './OnlineIndicator';
  * @returns {React.Component<CameraRecordingProps>} Component
  */
 export default function CameraRecording({ devices }) {
+  const status = useVideoFeedStatus();
+
   return (
     <Card>
       <Card.Body>
         <Card.Title>Recording Controls</Card.Title>
         <Row className={styles.row}>
-          {devices.map((device) => (
-            <Col className={styles.col} key={device} sm={6}>
-              <Card.Subtitle>
-                <OnlineIndicator className={styles.indicator} online />
-                <span>{`${getPrettyDeviceName(device)} Camera`}</span>
-              </Card.Subtitle>
-              <CameraRecordingStatus device={device} />
-            </Col>
-          ))}
+          {devices.map((device) => {
+            return (
+              <Col className={styles.col} key={device} sm={6}>
+                <Card.Subtitle>
+                  <OnlineIndicator className={styles.indicator} online={!!status[device]?.online} />
+                  <span>{`${getPrettyDeviceName(device)} Camera`}</span>
+                </Card.Subtitle>
+                <CameraRecordingStatus device={device} />
+              </Col>
+            );
+          })}
         </Row>
       </Card.Body>
       <Card.Footer>
