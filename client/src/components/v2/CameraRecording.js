@@ -5,7 +5,7 @@ import {
 } from 'api/v2/camera';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Button, Card, Col, Row } from 'react-bootstrap';
+import { Badge, Button, Card, Col, Row } from 'react-bootstrap';
 import styles from './CameraRecording.module.css';
 import CameraRecordingStatus from './CameraRecordingStatus';
 
@@ -28,7 +28,7 @@ export default function CameraRecording({ devices }) {
   const status = useVideoFeedStatus();
 
   // Check if at least one camera's video feed is online
-  const canRecord = Object.keys(status).reduce((acc, device) => !!status[device]?.online || acc, false);
+  const canRecord = Object.keys(status).reduce((acc, device) => status[device]?.online || acc, false);
 
   return (
     <Card>
@@ -37,7 +37,14 @@ export default function CameraRecording({ devices }) {
         <Row className={styles.row}>
           {devices.map((device) => (
             <Col className={styles.col} key={device} sm={6}>
-              <Card.Subtitle>{getPrettyDeviceName(device)}</Card.Subtitle>
+              <Card.Subtitle>
+                <Badge pill variant={status[device]?.online ? 'success' : 'danger'}>
+                  {status[device]?.online ? 'ON' : 'OFF'}
+                </Badge>
+                <span className={styles.deviceName}>
+                  {`${getPrettyDeviceName(device)} Camera`}
+                </span>
+              </Card.Subtitle>
               <CameraRecordingStatus device={device} />
             </Col>
           ))}

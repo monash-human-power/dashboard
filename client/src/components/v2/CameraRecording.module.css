@@ -9,3 +9,7 @@
 .row {
   margin-top: -1em;
 }
+
+.deviceName {
+  margin-left: 4px;
+}
