@@ -20,7 +20,6 @@
     ],
     "jsx-a11y/anchor-is-valid": "off",
     "import/no-unresolved": "off",
-    "import/prefer-default-export": "off",
-    "semi": "error"
+    "import/prefer-default-export": "off"
   }
 }
