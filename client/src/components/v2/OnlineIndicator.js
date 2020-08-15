@@ -5,6 +5,8 @@ import Indicator from './Indicator';
 /**
  * @typedef {object} OnlineIndicatorProps
  * @property {string}           online State of the indicator
+ * @property {?string}          on Text to display for "online" status
+ * @property {?string}          off Text to display for "offline" status
  */
 
 /**
@@ -13,14 +15,21 @@ import Indicator from './Indicator';
  * @param {OnlineIndicatorProps} props Props
  * @returns {React.Component<OnlineIndicatorProps>} Component
  */
-export default function OnlineIndicator({ online }) {
+export default function OnlineIndicator({ online, on, off }) {
     return (
         <Indicator variant={online ? 'success' : 'danger'}>
-            {online ? 'ON' : 'OFF'}
+            {online ? on : off}
         </Indicator>
     );
 }
 
+OnlineIndicator.defaultProps = {
+    on: 'ON',
+    off: 'OFF'
+};
+
 OnlineIndicator.propTypes = {
-    online: PropTypes.bool.isRequired
+    online: PropTypes.bool.isRequired,
+    on: PropTypes.string,
+    off: PropTypes.string
 };
