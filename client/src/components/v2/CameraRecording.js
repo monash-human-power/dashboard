@@ -28,6 +28,9 @@ import OnlineIndicator from './OnlineIndicator';
 export default function CameraRecording({ devices }) {
   const status = useVideoFeedStatus();
 
+  // Check if at least one camera's video feed is online
+  const canRecord = Object.keys(status).reduce((acc, device) => !!status[device]?.online || acc, false);
+
   return (
     <Card>
       <Card.Body>
@@ -51,6 +54,7 @@ export default function CameraRecording({ devices }) {
           className={styles.button}
           variant="outline-success"
           onClick={startRecording}
+          disabled={!canRecord}
         >
           Start
         </Button>
@@ -58,6 +62,7 @@ export default function CameraRecording({ devices }) {
           className={styles.button}
           variant="outline-danger"
           onClick={stopRecording}
+          disabled={!canRecord}
         >
           Stop
         </Button>
