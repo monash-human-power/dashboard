@@ -1,5 +1,6 @@
 import {
-  getPrettyDeviceName, startRecording,
+  getPrettyDeviceName,
+  startRecording,
   stopRecording,
   useVideoFeedStatus
 } from 'api/v2/camera';
