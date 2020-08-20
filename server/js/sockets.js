@@ -115,10 +115,8 @@ sockets.init = function socketInit(server) {
         Subscribe with the other topics and add a new message handler
         for the topics
     */
-    mqttClient.subscribe('/v3/camera/recording/status/primary');
-    mqttClient.subscribe('/v3/camera/recording/status/secondary');
-    mqttClient.subscribe('/v3/camera/video-feed/status/primary');
-    mqttClient.subscribe('/v3/camera/video-feed/status/secondary');
+    mqttClient.subscribe('/v3/camera/recording/status/+');
+    mqttClient.subscribe('/v3/camera/video-feed/status/+');
 
     mqttClient.on('message', function mqttMessage(topic, payload) {
       const payloadString = payload.toString();
