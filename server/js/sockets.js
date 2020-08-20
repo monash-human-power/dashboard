@@ -168,16 +168,16 @@ sockets.init = function socketInit(server) {
       } else if (
         topicString.slice(0, -1).join('/') === '/v3/camera/recording/status'
       ) {
-        // Send mqtt payload on corresponding channel
-        socket.emit(
-          `camera-recording-status-${topicString[topicString.length - 1]}`,
-          payloadString,
-        );
+        const deviceName = topicString[topicString.length - 1];
 
         // Store last received payload for device globally
-        global.lastRecordingPayloads[
-          topicString[topicString.length - 1]
-        ] = JSON.parse(payloadString);
+        global.lastRecordingPayloads[deviceName] = JSON.parse(payloadString);
+
+        // Send mqtt payload on corresponding channel
+        socket.emit(
+          `camera-recording-status-${deviceName}`,
+          global.lastRecordingPayloads[deviceName],
+        );
       } else if (
         topicString.slice(0, -1).join('/') === '/v3/camera/video-feed/status'
       ) {
@@ -252,7 +252,7 @@ sockets.init = function socketInit(server) {
       socket.emit('server-settings', { publishOnline: PUBLISH_ONLINE });
     });
 
-    socket.on('send-last-received-camera-recording-payloads', () => {
+    socket.on('send-camera-recording-payloads', () => {
       // Send mqtt payload on corresponding channel for each device
       Object.keys(global.lastRecordingPayloads).forEach((device) => {
         socket.emit(
@@ -262,7 +262,7 @@ sockets.init = function socketInit(server) {
       });
     });
 
-    socket.on('send-last-received-camera-video-feed-payloads', () => {
+    socket.on('send-video-feed-payloads', () => {
       socket.emit(`camera-video-feed-status`, global.lastVideoFeedPayloads);
     });
 

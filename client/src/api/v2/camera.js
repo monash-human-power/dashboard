@@ -84,6 +84,7 @@ export function stopRecording() {
  * @returns {CameraRecordingStatusPayload} Formatted payload without status
  */
 function parseRecordingPayloadData(data) {
+  console.log(data);
   if (!data) return null;
 
   const formattedData = {};
@@ -126,7 +127,7 @@ function parseRecordingPayloadData(data) {
  * Initiate receiving camera recording statuses
  */
 function initCameraStatus() {
-  emit('send-last-received-camera-recording-payloads');
+  emit('send-camera-recording-payloads');
 }
 
 /**
@@ -169,7 +170,7 @@ export function getPrettyDeviceName(device) {
  * Initiate receiving camera video feed statuses
  */
 function initVideoFeedStatus() {
-  emit('send-last-received-camera-video-feed-payloads');
+  emit('send-video-feed-payloads');
 }
 
 /**
