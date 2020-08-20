@@ -28,8 +28,6 @@ import CameraRecordingStatus from './CameraRecordingStatus';
 export default function CameraRecording({ devices }) {
   const status = useVideoFeedStatus();
 
-  console.log(status);
-
   // Check if at least one camera's video feed is online
   const canRecord = Object.keys(status).find((device) => status[device]?.online);
 

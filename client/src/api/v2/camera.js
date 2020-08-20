@@ -84,7 +84,6 @@ export function stopRecording() {
  * @returns {CameraRecordingStatusPayload} Formatted payload without status
  */
 function parseRecordingPayloadData(data) {
-  console.log(data);
   if (!data) return null;
 
   const formattedData = {};
