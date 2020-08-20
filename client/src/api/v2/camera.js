@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import formatBytes from 'utils/formatBytes';
 import { camelCaseToStartCase, capitalise } from 'utils/string';
-import { useChannel, emit } from './socket';
+import { emit, useChannel } from './socket';
 
 /**
  * @typedef {object} OverlaysHook
@@ -80,11 +80,10 @@ export function stopRecording() {
  * Payload structure is defined in the 'V3 MQTT Topics' page on Notion.
  * Topic is /v3/camera/recording/status/<primary/>secondary>.
  *
- * @param {string} payload Payload
+ * @param {string} data Payload in JSON form
  * @returns {CameraRecordingStatusPayload} Formatted payload without status
  */
-function parseRecordingPayload(payload) {
-  const data = JSON.parse(payload);
+function parseRecordingPayloadData(data) {
   if (!data) return null;
 
   const formattedData = {};
@@ -151,7 +150,7 @@ export function useCameraRecordingStatus(device) {
 
   useChannel(`camera-recording-status-${device}`, update);
 
-  return parseRecordingPayload(lastPayload);
+  return parseRecordingPayloadData(lastPayload);
 }
 
 /**
@@ -197,8 +196,5 @@ export function useVideoFeedStatus() {
 
   useChannel(`camera-video-feed-status`, handler);
 
-  return Object.keys(payloads).reduce((acc, key) => {
-    acc[key] = JSON.parse(payloads[key]);
-    return acc;
-  }, {});
+  return payloads;
 }

@@ -179,14 +179,14 @@ sockets.init = function socketInit(server) {
         // Store last received payload for device globally
         global.lastRecordingPayloads[
           topicString[topicString.length - 1]
-        ] = payloadString;
+        ] = JSON.parse(payloadString);
       } else if (
         topicString.slice(0, -1).join('/') === '/v3/camera/video-feed/status'
       ) {
         // Store last received payload for device globally
         global.lastVideoFeedPayloads[
           topicString[topicString.length - 1]
-        ] = payloadString;
+        ] = JSON.parse(payloadString);
 
         // Send mqtt payload on corresponding channel
         socket.emit(`camera-video-feed-status`, global.lastVideoFeedPayloads);
