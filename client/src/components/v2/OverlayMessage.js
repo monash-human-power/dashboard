@@ -10,13 +10,19 @@ import { useMessageState } from 'api/v2/camera';
 export default function OverlayMessage() {
   const { state, setMessage, sendMessage } = useMessageState();
 
-  const handleMessageChange = useCallback((event) => {
-    setMessage(event.target.value);
-  });
+  const handleMessageChange = useCallback(
+    (event) => {
+      setMessage(event.target.value);
+    },
+    [setMessage],
+  );
 
-  const handleKeyPressed = useCallback((event) => {
-    if (event.key === 'Enter') sendMessage();
-  });
+  const handleKeyPressed = useCallback(
+    (event) => {
+      if (event.key === 'Enter') sendMessage();
+    },
+    [sendMessage],
+  );
 
   return (
     <Card>

@@ -102,12 +102,15 @@ export function useMessageState() {
 
   useChannel('send-message-received', receivedCallback);
 
-  const setMessage = useCallback((message) => {
-    setState({
-      ...state,
-      message,
-    });
-  });
+  const setMessage = useCallback(
+    (message) => {
+      setState({
+        ...state,
+        message,
+      });
+    },
+    [state, setState],
+  );
 
   const sendMessage = useCallback(() => {
     if (!state.message) return;
@@ -117,7 +120,7 @@ export function useMessageState() {
       ...state,
       sending: true,
     });
-  });
+  }, [state, setState]);
 
   return { state, setMessage, sendMessage };
 }
