@@ -202,10 +202,8 @@ sockets.init = function socketInit(server) {
     });
 
     socket.on('send-message', (message) => {
-      mqttClient.publish(
-        '/v3/camera/primary/message',
-        `${message}`,
-      );
+      mqttClient.publish('/v3/camera/message', `${message}`);
+      socket.emit('send-message-received');
     });
 
     socket.on('create-power-plan', (inputPowerPlan) => {

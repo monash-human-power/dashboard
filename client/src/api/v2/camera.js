@@ -53,10 +53,30 @@ export function useOverlays(device) {
 
 /**
  * Send Message
- * @param {string} message - message to be displayed.
+ * @param {string} message The message to be sent.
  */
 export function sendMessage(message) {
   emit('send-message', message);
+}
+
+/**
+ * TODO: docs
+ */
+export function useMessageReceived() {
+  const [received, setReceived] = useState(false);
+  let receivedTimeout;
+
+  const update = useCallback(() => {
+    clearTimeout(receivedTimeout);
+    setReceived(true);
+    receivedTimeout = setTimeout(() => {
+      setReceived(false);
+    }, 5000);
+  }, []);
+
+  useChannel('send-message-received', update);
+
+  return received;
 }
 
 /**

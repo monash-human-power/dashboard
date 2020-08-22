@@ -1,12 +1,13 @@
 import React, { useCallback, useRef } from 'react';
 import { Button, Card, FormControl, InputGroup } from 'react-bootstrap';
-import { sendMessage } from 'api/v2/camera';
+import { sendMessage, useMessageReceived } from 'api/v2/camera';
 
 /**
  * Text field for sending messages to the rider via the active overlay.
  */
 export default function OverlayMessage() {
   const message = useRef(null);
+  const messageReceived = useMessageReceived();
 
   const handleMessageSubmit = useCallback(() => {
     sendMessage(message.current.value);
@@ -35,6 +36,7 @@ export default function OverlayMessage() {
             </Button>
           </InputGroup.Append>
         </InputGroup>
+        {messageReceived ? 'Message sent!' : ''}
       </Card.Body>
     </Card>
   );
