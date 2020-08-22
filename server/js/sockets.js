@@ -202,7 +202,8 @@ sockets.init = function socketInit(server) {
     });
 
     socket.on('send-message', (message) => {
-      mqttClient.publish('/v3/camera/message', `${message}`);
+      const payload = JSON.stringify({ message });
+      mqttClient.publish('/v3/camera/message', payload);
       socket.emit('send-message-received');
     });
 
