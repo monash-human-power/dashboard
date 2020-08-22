@@ -1,7 +1,8 @@
 import React from 'react';
-import ContentPage from 'components/ContentPage';
-import CameraSettings from 'components/v2/CameraSettings';
 import CameraRecording from 'components/v2/CameraRecording';
+import CameraSettings from 'components/v2/CameraSettings';
+import ContentPage from 'components/ContentPage';
+import OverlayMessage from 'components/v2/OverlayMessage';
 
 /**
  * Camera Settings page component
@@ -13,6 +14,9 @@ export default function CameraSettingsView() {
     <ContentPage title="Camera Settings">
       <div className="mb-4">
         <CameraRecording devices={['primary', 'secondary']} />
+      </div>
+      <div className="mb-4">
+        <OverlayMessage />
       </div>
       <div className="mb-4">
         <CameraSettings device="primary" />
