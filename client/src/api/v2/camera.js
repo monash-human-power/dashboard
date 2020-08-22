@@ -86,6 +86,7 @@ export function useMessageState() {
     clearTimeout(receivedTimeout);
     setState({
       ...state,
+      message: '',
       received: true,
       sending: false,
     });
@@ -94,7 +95,6 @@ export function useMessageState() {
     receivedTimeout = setTimeout(() => {
       setState({
         ...state,
-        message: '',
         received: false,
       });
     }, 5000);
