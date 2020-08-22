@@ -72,7 +72,5 @@ const defaultPreset = {
 };
 
 /** @type {PowerPlanPreset[]} */
-const presets = [
-  defaultPreset,
-];
+const presets = [defaultPreset];
 export default presets;

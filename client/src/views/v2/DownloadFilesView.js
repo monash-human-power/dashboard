@@ -37,11 +37,7 @@ export default function DownloadFilesView() {
       href={file.url}
       target="_blank"
     >
-      <Button
-        variant="danger"
-        size="sm"
-        onClick={(e) => handleDelete(e, file)}
-      >
+      <Button variant="danger" size="sm" onClick={(e) => handleDelete(e, file)}>
         Delete
       </Button>
     </WidgetListGroupItem>
@@ -59,9 +55,7 @@ export default function DownloadFilesView() {
           Download latest
         </Button>
       )}
-      <ListGroup>
-        {fileList}
-      </ListGroup>
+      <ListGroup>{fileList}</ListGroup>
 
       {files.length === 0 ? 'No log files found.' : null}
 

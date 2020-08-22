@@ -11,6 +11,9 @@ const os = require('os');
 let PUBLISH_ONLINE = false;
 let PUBLIC_MQTT_CLIENT;
 
+// global vars
+global.lastRecordingPayloads = {};
+
 function connectToPublicMQTTBroker(clientID = '') {
   const publicMqttOptions = {
     reconnectPeriod: 1000,
@@ -91,6 +94,7 @@ sockets.init = function socketInit(server) {
   mqttClient.subscribe('power_model/recommended_SP');
   mqttClient.subscribe('power_model/plan_generated');
   mqttClient.subscribe('camera/push_overlays');
+  // Camera recording status subscription occurs when mqttClient message handler is set
   mqttClient.on('connect', mqttConnected);
   mqttClient.on('error', mqttError);
   // Not a heroku instance
@@ -102,6 +106,16 @@ sockets.init = function socketInit(server) {
   // eslint-disable-next-line global-require
   const io = require('socket.io').listen(server);
   io.on('connection', function ioConnection(socket) {
+    /*
+      Must subscribe to these when the mqtt message handler is set
+      otherwise the retained payloads will not be handled.
+      Alternative implementation:
+        Subscribe with the other topics and add a new message handler
+        for the topics
+    */
+    mqttClient.subscribe('/v3/camera/recording/status/primary');
+    mqttClient.subscribe('/v3/camera/recording/status/secondary');
+
     mqttClient.on('message', function mqttMessage(topic, payload) {
       const payloadString = payload.toString();
       const topicString = topic.split('/');
@@ -149,6 +163,19 @@ sockets.init = function socketInit(server) {
             console.error(`Unhandled topic - ${topic}`);
             break;
         }
+      } else if (
+        topicString.slice(0, -1).join('/') === '/v3/camera/recording/status'
+      ) {
+        // Send mqtt payload on corresponding channel
+        socket.emit(
+          `camera-recording-status-${topicString[topicString.length - 1]}`,
+          payloadString,
+        );
+
+        // store last received payload for device globally
+        global.lastRecordingPayloads[
+          topicString[topicString.length - 1]
+        ] = payloadString;
       } else {
         console.error(`Unhandled topic - ${topic}`);
       }
@@ -167,21 +194,21 @@ sockets.init = function socketInit(server) {
       mqttClient.publish('power_model/calibrate/reset', 'true');
     });
 
-    socket.on('submit-calibration', calibratedDistance => {
+    socket.on('submit-calibration', (calibratedDistance) => {
       mqttClient.publish(
         'power_model/calibrate',
         `calibrate=${calibratedDistance}`,
       );
     });
 
-    socket.on('send-message', message => {
+    socket.on('send-message', (message) => {
       mqttClient.publish(
         '/v3/camera/primary/message',
         `${message}`,
       );
     });
 
-    socket.on('create-power-plan', inputPowerPlan => {
+    socket.on('create-power-plan', (inputPowerPlan) => {
       console.log(
         `Generated new power plan - ${inputPowerPlan.inputs.fileName}.json`,
       );
@@ -195,7 +222,7 @@ sockets.init = function socketInit(server) {
       mqttClient.publish('camera/get_overlays', 'true');
     });
 
-    socket.on('set-overlays', selectedOverlays => {
+    socket.on('set-overlays', (selectedOverlays) => {
       mqttClient.publish('camera/set_overlay', selectedOverlays);
     });
 
@@ -218,6 +245,24 @@ sockets.init = function socketInit(server) {
 
     socket.on('get-server-settings', () => {
       socket.emit('server-settings', { publishOnline: PUBLISH_ONLINE });
+    });
+
+    socket.on('send-last-received-camera-recording-payloads', () => {
+      // Send mqtt payload on corresponding channel for each device
+      Object.keys(global.lastRecordingPayloads).forEach((device) => {
+        socket.emit(
+          `camera-recording-status-${device}`,
+          global.lastRecordingPayloads[device],
+        );
+      });
+    });
+
+    socket.on('start-camera-recording', () => {
+      mqttClient.publish('/v3/camera/recording/start');
+    });
+
+    socket.on('stop-camera-recording', () => {
+      mqttClient.publish('/v3/camera/recording/stop');
     });
   });
 };

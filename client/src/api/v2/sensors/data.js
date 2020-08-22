@@ -91,13 +91,16 @@ export function useSensorData(sensor) {
   }, []);
   useChannel('start', startHandler);
 
-  const handler = useCallback((newData) => {
-    const value = newData?.[sensor];
-    if (initialData === null && value !== null && value !== undefined) {
-      setInitialData(value);
-    }
-    setData(value);
-  }, [sensor, initialData]);
+  const handler = useCallback(
+    (newData) => {
+      const value = newData?.[sensor];
+      if (initialData === null && value !== null && value !== undefined) {
+        setInitialData(value);
+      }
+      setData(value);
+    },
+    [sensor, initialData],
+  );
   useChannel('data', handler);
 
   return { data, initialData };

@@ -1,9 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import {
-  Alert,
-  Button,
-  Card,
-} from 'react-bootstrap';
+import { Alert, Button, Card } from 'react-bootstrap';
 import ContentPage from 'components/ContentPage';
 import { usePowerModelState } from 'api/v2/powerModel';
 
@@ -31,21 +27,21 @@ export default function PowerModelView() {
       <Alert variant="warning">
         Make sure power model is not running before you start it!
       </Alert>
-      {!!successAlert && (
-        <Alert variant="success">
-          {successAlert}
-        </Alert>
-      )}
+      {!!successAlert && <Alert variant="success">{successAlert}</Alert>}
       <Card>
         <Card.Body className="text-center">
           <Card.Title>Start Power Model</Card.Title>
-          <Button variant="success" onClick={start} disabled={powerModelState}>Start</Button>
+          <Button variant="success" onClick={start} disabled={powerModelState}>
+            Start
+          </Button>
         </Card.Body>
       </Card>
       <Card>
         <Card.Body className="text-center">
           <Card.Title>Stop Power Model</Card.Title>
-          <Button variant="danger" onClick={stop}>Stop</Button>
+          <Button variant="danger" onClick={stop}>
+            Stop
+          </Button>
         </Card.Body>
       </Card>
     </ContentPage>

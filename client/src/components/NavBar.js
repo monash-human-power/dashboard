@@ -26,11 +26,7 @@ export default function NavBar() {
   ));
 
   const versionDropdown = bikeVersions.map(({ name, rootPath }) => (
-    <NavDropdown.Item
-      as={NavLink}
-      to={rootPath}
-      activeClassName=""
-    >
+    <NavDropdown.Item as={NavLink} to={rootPath} activeClassName="">
       {name}
     </NavDropdown.Item>
   ));
@@ -55,9 +51,7 @@ export default function NavBar() {
             {versionDropdown}
           </NavDropdown>
         </Nav>
-        <Nav className="ml-auto">
-          {linkItems}
-        </Nav>
+        <Nav className="ml-auto">{linkItems}</Nav>
       </Navbar.Collapse>
     </Navbar>
   );

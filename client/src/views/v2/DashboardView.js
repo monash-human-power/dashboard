@@ -1,10 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import {
-  Col,
-  Container,
-  FormCheck,
-  Row,
-} from 'react-bootstrap';
+import { Col, Container, FormCheck, Row } from 'react-bootstrap';
 import V2VelocityTimeChart from 'components/v2/charts/V2VelocityTimeChart';
 import V2PowerTimeChart from 'components/v2/charts/V2PowerTimeChart';
 import V2CadenceTimeChart from 'components/v2/charts/V2CadenceTimeChart';

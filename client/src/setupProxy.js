@@ -1,11 +1,11 @@
 const proxy = require('http-proxy-middleware');
 
-module.exports = function(app) {
+module.exports = function (app) {
   app.use(
     ['/files', '/server/status'],
     proxy({
       target: 'http://localhost:5000',
-    })
+    }),
   );
 
   app.use(
@@ -13,6 +13,6 @@ module.exports = function(app) {
     proxy({
       target: 'ws://localhost:5000',
       ws: true,
-    })
+    }),
   );
 };

@@ -22,9 +22,7 @@ export default function SensorStatusView() {
 
   return (
     <ContentPage title="Sensor Status">
-      <ListGroup>
-        {sensorItems}
-      </ListGroup>
+      <ListGroup>{sensorItems}</ListGroup>
     </ContentPage>
   );
 }

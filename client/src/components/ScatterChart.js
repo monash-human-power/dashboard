@@ -107,12 +107,7 @@ export default function ScatterChart({
     ],
   };
 
-  return (
-    <Scatter
-      options={options}
-      data={formattedData}
-    />
-  );
+  return <Scatter options={options} data={formattedData} />;
 }
 
 ScatterChart.propTypes = {
@@ -125,10 +120,12 @@ ScatterChart.propTypes = {
     label: PropTypes.string.isRequired,
     unit: PropTypes.string.isRequired,
   }).isRequired,
-  data: PropTypes.arrayOf(PropTypes.shape({
-    x: PropTypes.number.isRequired,
-    y: PropTypes.number.isRequired,
-  })).isRequired,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      x: PropTypes.number.isRequired,
+      y: PropTypes.number.isRequired,
+    }),
+  ).isRequired,
   dataColour: PropTypes.string.isRequired,
   max: PropTypes.number.isRequired,
   maxColour: PropTypes.string.isRequired,
