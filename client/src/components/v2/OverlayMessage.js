@@ -13,12 +13,22 @@ export default function OverlayMessage() {
     message.current.value = '';
   }, []);
 
+  const handleMessageKeyPress = useCallback((event) => {
+    if (event.key === 'Enter') {
+      handleMessageSubmit();
+    }
+  });
+
   return (
     <Card>
       <Card.Body>
         <Card.Title>Overlay message</Card.Title>
         <InputGroup className="mt-3">
-          <FormControl ref={message} placeholder="Message for rider" />
+          <FormControl
+            ref={message}
+            placeholder="Message for rider"
+            onKeyPress={handleMessageKeyPress}
+          />
           <InputGroup.Append>
             <Button variant="outline-secondary" onClick={handleMessageSubmit}>
               Send
