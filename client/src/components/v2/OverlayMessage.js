@@ -4,9 +4,11 @@ import { useMessageState } from 'api/v2/camera';
 
 /**
  * Text field for sending messages to the rider via the active overlay.
+ *
+ * @returns {React.Component} Component
  */
 export default function OverlayMessage() {
-  const [state, setMessage, sendMessage] = useMessageState();
+  const { state, setMessage, sendMessage } = useMessageState();
 
   const handleMessageChange = useCallback((event) => {
     setMessage(event.target.value);

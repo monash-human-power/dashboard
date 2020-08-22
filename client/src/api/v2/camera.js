@@ -52,13 +52,33 @@ export function useOverlays(device) {
 }
 
 /**
- * TODO: docs
+ * @typedef {object} CameraMessageState
+ * @property {string} message The message currently entered by the user.
+ * @property {boolean} received Specifies whether a sent message has been
+ *                              acknowledged by the server in the last 5
+ *                              seconds.
+ * @property {boolean} sending Specifies whether we are waiting for an
+ *                             acknowledgement for the most recent message.
+ */
+
+/**
+ * @typedef {object} CameraMessageHook
+ * @property {CameraMessageState} state Current state of the messages.
+ * @property {function(string)} setMessage Set the message.
+ * @property {function(void)} sendMessage Send the message to the rider.
+ */
+
+/**
+ * Handle storing, sending and receiving acknowledgement of messages to the
+ * camera overlay.
+ *
+ * @returns {CameraMessageHook} Hook
  */
 export function useMessageState() {
   const [state, setState] = useState({
+    message: '',
     received: false,
     sending: false,
-    message: '',
   });
   let receivedTimeout;
 
@@ -74,8 +94,8 @@ export function useMessageState() {
     receivedTimeout = setTimeout(() => {
       setState({
         ...state,
-        received: false,
         message: '',
+        received: false,
       });
     }, 5000);
   }, []);
@@ -99,7 +119,7 @@ export function useMessageState() {
     });
   });
 
-  return [state, setMessage, sendMessage];
+  return { state, setMessage, sendMessage };
 }
 
 /**
