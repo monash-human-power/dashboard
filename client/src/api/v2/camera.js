@@ -52,38 +52,35 @@ export function useOverlays(device) {
 }
 
 /**
- * Send Message
- * @param {string} message The message to be sent.
- */
-export function sendMessage(message) {
-  emit('send-message', message);
-}
-
-/**
  * TODO: docs
  */
 export function useMessageState() {
   const [state, setState] = useState({
     received: false,
+    sending: false,
     message: '',
   });
   let receivedTimeout;
 
-  const update = useCallback(() => {
+  const receivedCallback = useCallback(() => {
     clearTimeout(receivedTimeout);
     setState({
       ...state,
       received: true,
+      sending: false,
     });
+
+    // Remove the "received" status after 5 seconds
     receivedTimeout = setTimeout(() => {
       setState({
+        ...state,
         received: false,
         message: '',
       });
     }, 5000);
   }, []);
 
-  useChannel('send-message-received', update);
+  useChannel('send-message-received', receivedCallback);
 
   const setMessage = useCallback((message) => {
     setState({
@@ -92,7 +89,17 @@ export function useMessageState() {
     });
   });
 
-  return [state, setMessage];
+  const sendMessage = useCallback(() => {
+    if (!state.message) return;
+
+    emit('send-message', state.message);
+    setState({
+      ...state,
+      sending: true,
+    });
+  });
+
+  return [state, setMessage, sendMessage];
 }
 
 /**
