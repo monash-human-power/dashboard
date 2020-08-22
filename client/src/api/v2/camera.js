@@ -62,21 +62,37 @@ export function sendMessage(message) {
 /**
  * TODO: docs
  */
-export function useMessageReceived() {
-  const [received, setReceived] = useState(false);
+export function useMessageState() {
+  const [state, setState] = useState({
+    received: false,
+    message: '',
+  });
   let receivedTimeout;
 
   const update = useCallback(() => {
     clearTimeout(receivedTimeout);
-    setReceived(true);
+    setState({
+      ...state,
+      received: true,
+    });
     receivedTimeout = setTimeout(() => {
-      setReceived(false);
+      setState({
+        received: false,
+        message: '',
+      });
     }, 5000);
   }, []);
 
   useChannel('send-message-received', update);
 
-  return received;
+  const setMessage = useCallback((message) => {
+    setState({
+      ...state,
+      message,
+    });
+  });
+
+  return [state, setMessage];
 }
 
 /**

@@ -1,25 +1,20 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback } from 'react';
 import { Button, Card, FormControl, InputGroup } from 'react-bootstrap';
-import { sendMessage, useMessageReceived } from 'api/v2/camera';
+import { sendMessage, useMessageState } from 'api/v2/camera';
 
 /**
  * Text field for sending messages to the rider via the active overlay.
  */
 export default function OverlayMessage() {
-  const [messageState] = useState({
-    message: useRef(null),
-  });
-  const messageReceived = useMessageReceived();
+  const [state, setMessage] = useMessageState();
 
   const handleMessageSubmit = useCallback(() => {
-    sendMessage(messageState.message.current.value);
-    messageState.message.current.value = '';
-  }, []);
+    sendMessage(state.message);
+    setMessage('');
+  });
 
-  const handleMessageKeyPress = useCallback((event) => {
-    if (event.key === 'Enter') {
-      handleMessageSubmit();
-    }
+  const handleMessageChange = useCallback((event) => {
+    setMessage(event.target.value);
   });
 
   return (
@@ -28,9 +23,11 @@ export default function OverlayMessage() {
         <Card.Title>Overlay message</Card.Title>
         <InputGroup className="mt-3">
           <FormControl
-            ref={messageState.message}
+            onChange={handleMessageChange}
+            onKeyPress={(event) => {
+              if (event.key === 'Enter') handleMessageSubmit();
+            }}
             placeholder="Message for rider"
-            onKeyPress={handleMessageKeyPress}
           />
           <InputGroup.Append>
             <Button variant="outline-secondary" onClick={handleMessageSubmit}>
@@ -38,7 +35,7 @@ export default function OverlayMessage() {
             </Button>
           </InputGroup.Append>
         </InputGroup>
-        {messageReceived ? 'Message sent!' : ''}
+        {state.received ? 'Message sent!' : ''}
       </Card.Body>
     </Card>
   );
