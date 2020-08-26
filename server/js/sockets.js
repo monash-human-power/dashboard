@@ -176,7 +176,6 @@ sockets.init = function socketInit(server) {
         }
       } else if (topic.match(/^\/v3\/status/)) {
         // topicString: ["", "v3", "status", "<component>", "<subcomponent>", "<device>"]
-        console.log(`mqtt ${topic}: ${payloadString}`);
         const component = topicString[3];
         const subComponent = topicString[4];
         const device = topicString[5];
@@ -262,12 +261,6 @@ sockets.init = function socketInit(server) {
           socket.emit(
             `status-${component}-${subComponent}`,
             global.statusPayloads[component][subComponent],
-          );
-
-          console.log(
-            `emit: status-${component}-${subComponent}: ${JSON.stringify(
-              global.statusPayloads[component][subComponent],
-            )}`,
           );
         });
       });

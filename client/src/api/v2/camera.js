@@ -128,7 +128,6 @@ function parseRecordingPayloadData(data) {
  * @param {string} subComponent The sub component to init for (e.g. recording, video feed)
  */
 function initStatus(subComponent) {
-  console.log(`emit status-camera-${subComponent}`)
   emit(`status-camera-${subComponent}`);
 }
 
@@ -149,13 +148,10 @@ export function useCameraRecordingStatus(device) {
   const update = useCallback((newPayload) => {
     // Update last payload
     setLastPayload(newPayload);
-    console.log(`receive ${`status-camera-recording`}: ${JSON.stringify(newPayload)}`)
   }, []);
 
   useChannel(`status-camera-recording`, update);
 
-
-  console.log(`parsed: ${JSON.stringify(lastPayload)}`);
   return parseRecordingPayloadData(lastPayload && lastPayload[device]);
 }
 
@@ -191,7 +187,6 @@ export function useVideoFeedStatus() {
 
   const handler = useCallback((newPayload) => {
     setPayloads(newPayload);
-    console.log(`receive ${`status-camera-video-feed`}: ${JSON.stringify(newPayload)}`)
   }, []);
 
   useChannel(`status-camera-video-feed`, handler);
