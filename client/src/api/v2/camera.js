@@ -123,10 +123,13 @@ function parseRecordingPayloadData(data) {
 }
 
 /**
- * Initiate receiving camera recording statuses
+ * Initiate receiving status payloads
+ *
+ * @param {string} subComponent The sub component to init for (e.g. recording, video feed)
  */
-function initCameraStatus() {
-  emit('send-camera-recording-payloads');
+function initStatus(subComponent) {
+  console.log(`emit status-camera-${subComponent}`)
+  emit(`status-camera-${subComponent}`);
 }
 
 /**
@@ -138,7 +141,7 @@ function initCameraStatus() {
 export function useCameraRecordingStatus(device) {
   // Only run init once per render
   useEffect(() => {
-    initCameraStatus();
+    initStatus("recording");
   }, []);
 
   const [lastPayload, setLastPayload] = useState(null);
@@ -146,11 +149,14 @@ export function useCameraRecordingStatus(device) {
   const update = useCallback((newPayload) => {
     // Update last payload
     setLastPayload(newPayload);
+    console.log(`receive ${`status-camera-recording`}: ${JSON.stringify(newPayload)}`)
   }, []);
 
-  useChannel(`camera-recording-status-${device}`, update);
+  useChannel(`status-camera-recording`, update);
 
-  return parseRecordingPayloadData(lastPayload);
+
+  console.log(`parsed: ${JSON.stringify(lastPayload)}`);
+  return parseRecordingPayloadData(lastPayload && lastPayload[device]);
 }
 
 /**
@@ -166,13 +172,6 @@ export function getPrettyDeviceName(device) {
 }
 
 /**
- * Initiate receiving camera video feed statuses
- */
-function initVideoFeedStatus() {
-  emit('send-video-feed-payloads');
-}
-
-/**
  * @typedef {object} VideoFeedStatus
  * @property {boolean}  online Whether video feed is on/off
  */
@@ -185,16 +184,17 @@ function initVideoFeedStatus() {
 export function useVideoFeedStatus() {
   // Only run init once per render
   useEffect(() => {
-    initVideoFeedStatus();
+    initStatus('video-feed');
   }, []);
 
-  const [payloads, setPayloads] = useState({}); // Payloads is Object.<string, string payload>
+  const [payload, setPayloads] = useState({}); // Payloads is Object.<string, string payload>
 
-  const handler = useCallback((newPayloads) => {
-    setPayloads(newPayloads);
+  const handler = useCallback((newPayload) => {
+    setPayloads(newPayload);
+    console.log(`receive ${`status-camera-video-feed`}: ${JSON.stringify(newPayload)}`)
   }, []);
 
-  useChannel(`camera-video-feed-status`, handler);
+  useChannel(`status-camera-video-feed`, handler);
 
-  return payloads;
+  return payload;
 }
