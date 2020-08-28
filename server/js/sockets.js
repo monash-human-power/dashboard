@@ -12,8 +12,18 @@ let PUBLISH_ONLINE = false;
 let PUBLIC_MQTT_CLIENT;
 
 // global vars
-global.lastRecordingPayloads = {};
-global.lastVideoFeedPayloads = {};
+global.statusPayloads = {
+  camera: {
+    'video-feed': {
+      primary: {},
+      secondary: {},
+    },
+    recording: {
+      primary: {},
+      secondary: {},
+    },
+  },
+};
 
 function connectToPublicMQTTBroker(clientID = '') {
   const publicMqttOptions = {
@@ -115,8 +125,7 @@ sockets.init = function socketInit(server) {
         Subscribe with the other topics and add a new message handler
         for the topics
     */
-    mqttClient.subscribe('/v3/camera/recording/status/+');
-    mqttClient.subscribe('/v3/camera/video-feed/status/+');
+    mqttClient.subscribe('/v3/status/#');
 
     mqttClient.on('message', function mqttMessage(topic, payload) {
       const payloadString = payload.toString();
@@ -165,29 +174,21 @@ sockets.init = function socketInit(server) {
             console.error(`Unhandled topic - ${topic}`);
             break;
         }
-      } else if (
-        topicString.slice(0, -1).join('/') === '/v3/camera/recording/status'
-      ) {
-        const deviceName = topicString[topicString.length - 1];
-
+      } else if (topic.match(/^\/v3\/status/)) {
+        // topicString: ["", "v3", "status", "<component>", "<subcomponent>", "<device>"]
+        const component = topicString[3];
+        const subComponent = topicString[4];
+        const device = topicString[5];
         // Store last received payload for device globally
-        global.lastRecordingPayloads[deviceName] = JSON.parse(payloadString);
+        global.statusPayloads[component][subComponent][device] = JSON.parse(
+          payloadString,
+        );
 
         // Send mqtt payload on corresponding channel
         socket.emit(
-          `camera-recording-status-${deviceName}`,
-          global.lastRecordingPayloads[deviceName],
+          `status-${component}-${subComponent}`,
+          global.statusPayloads[component][subComponent],
         );
-      } else if (
-        topicString.slice(0, -1).join('/') === '/v3/camera/video-feed/status'
-      ) {
-        // Store last received payload for device globally
-        global.lastVideoFeedPayloads[
-          topicString[topicString.length - 1]
-        ] = JSON.parse(payloadString);
-
-        // Send mqtt payload on corresponding channel
-        socket.emit(`camera-video-feed-status`, global.lastVideoFeedPayloads);
       } else {
         console.error(`Unhandled topic - ${topic}`);
       }
@@ -252,18 +253,17 @@ sockets.init = function socketInit(server) {
       socket.emit('server-settings', { publishOnline: PUBLISH_ONLINE });
     });
 
-    socket.on('send-camera-recording-payloads', () => {
-      // Send mqtt payload on corresponding channel for each device
-      Object.keys(global.lastRecordingPayloads).forEach((device) => {
-        socket.emit(
-          `camera-recording-status-${device}`,
-          global.lastRecordingPayloads[device],
-        );
+    // Create a socket channel for each sub component (e.g. recording, video feed)
+    Object.keys(global.statusPayloads).forEach((component) => {
+      Object.keys(global.statusPayloads[component]).forEach((subComponent) => {
+        socket.on(`status-${component}-${subComponent}`, () => {
+          // Send mqtt payload on corresponding channel
+          socket.emit(
+            `status-${component}-${subComponent}`,
+            global.statusPayloads[component][subComponent],
+          );
+        });
       });
-    });
-
-    socket.on('send-video-feed-payloads', () => {
-      socket.emit(`camera-video-feed-status`, global.lastVideoFeedPayloads);
     });
 
     socket.on('start-camera-recording', () => {
