@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { Button, Card, FormControl, InputGroup } from 'react-bootstrap';
-import { useMessageState } from 'api/v2/camera';
+import { useMessageState, sendMessage } from 'api/v2/camera';
 
 /**
  * Text field for sending messages to the rider via the active overlay.
@@ -13,8 +13,12 @@ export default function OverlayMessage() {
     received,
     sending,
     setMessage,
-    sendMessage,
+    setSending,
   } = useMessageState();
+
+  const handleSendMessage = useCallback(() => {
+    if (sendMessage(message)) setSending(true);
+  }, [message, setSending]);
 
   const handleMessageChange = useCallback(
     (event) => {
@@ -25,9 +29,9 @@ export default function OverlayMessage() {
 
   const handleKeyPressed = useCallback(
     (event) => {
-      if (event.key === 'Enter') sendMessage();
+      if (event.key === 'Enter') handleSendMessage();
     },
-    [sendMessage],
+    [handleSendMessage],
   );
 
   return (
@@ -42,7 +46,7 @@ export default function OverlayMessage() {
             value={message}
           />
           <InputGroup.Append>
-            <Button variant="outline-secondary" onClick={sendMessage}>
+            <Button variant="outline-secondary" onClick={handleSendMessage}>
               Send
             </Button>
           </InputGroup.Append>
