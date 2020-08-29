@@ -47,7 +47,8 @@ export default function OverlayMessage() {
             </Button>
           </InputGroup.Append>
         </InputGroup>
-        {sending ? 'Sending...' : ' '} {received ? 'Message sent!' : ''}
+        <span>{sending ? 'Sending...' : ''}</span>
+        <span>{received ? 'Message sent!' : ''}</span>
       </Card.Body>
     </Card>
   );
