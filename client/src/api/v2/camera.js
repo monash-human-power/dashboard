@@ -75,54 +75,33 @@ export function useOverlays(device) {
  * @returns {CameraMessageHook} Hook
  */
 export function useMessageState() {
-  const [state, setState] = useState({
-    message: '',
-    received: false,
-    sending: false,
-  });
+  const [message, setMessage] = useState('');
+  const [received, setReceived] = useState(false);
+  const [sending, setSending] = useState(false);
   let receivedTimeout;
 
   const receivedCallback = useCallback(() => {
     clearTimeout(receivedTimeout);
-    setState({
-      ...state,
-      message: '',
-      received: true,
-      sending: false,
-    });
+    setMessage('');
+    setReceived(true);
+    setSending(false);
 
     // Remove the "received" status after 5 seconds
     receivedTimeout = setTimeout(() => {
-      setState({
-        ...state,
-        received: false,
-      });
+      setReceived(false);
     }, 5000);
   }, []);
 
   useChannel('send-message-received', receivedCallback);
 
-  const setMessage = useCallback(
-    (message) => {
-      setState({
-        ...state,
-        message,
-      });
-    },
-    [state, setState],
-  );
-
   const sendMessage = useCallback(() => {
-    if (!state.message) return;
+    if (!message) return;
 
-    emit('send-message', state.message);
-    setState({
-      ...state,
-      sending: true,
-    });
-  }, [state, setState]);
+    emit('send-message', message);
+    setSending(true);
+  }, [message, setSending]);
 
-  return { state, setMessage, sendMessage };
+  return { message, received, sending, setMessage, sendMessage };
 }
 
 /**

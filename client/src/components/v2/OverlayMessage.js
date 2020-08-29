@@ -8,7 +8,13 @@ import { useMessageState } from 'api/v2/camera';
  * @returns {React.Component} Component
  */
 export default function OverlayMessage() {
-  const { state, setMessage, sendMessage } = useMessageState();
+  const {
+    message,
+    received,
+    sending,
+    setMessage,
+    sendMessage,
+  } = useMessageState();
 
   const handleMessageChange = useCallback(
     (event) => {
@@ -33,7 +39,7 @@ export default function OverlayMessage() {
             onChange={handleMessageChange}
             onKeyPress={handleKeyPressed}
             placeholder="Message for rider"
-            value={state.message}
+            value={message}
           />
           <InputGroup.Append>
             <Button variant="outline-secondary" onClick={sendMessage}>
@@ -41,8 +47,7 @@ export default function OverlayMessage() {
             </Button>
           </InputGroup.Append>
         </InputGroup>
-        {state.sending ? 'Sending...' : ' '}{' '}
-        {state.received ? 'Message sent!' : ''}
+        {sending ? 'Sending...' : ' '} {received ? 'Message sent!' : ''}
       </Card.Body>
     </Card>
   );
