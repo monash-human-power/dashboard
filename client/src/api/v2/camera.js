@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import formatBytes from 'utils/formatBytes';
 import { camelCaseToStartCase, capitalise } from 'utils/string';
 import { useChannel, emit } from './socket';
@@ -78,16 +78,16 @@ export function useMessageState() {
   const [message, setMessage] = useState('');
   const [received, setReceived] = useState(false);
   const [sending, setSending] = useState(false);
-  let receivedTimeout;
+  const receivedTimeout = useRef(null);
 
   const receivedCallback = useCallback(() => {
-    clearTimeout(receivedTimeout);
+    clearTimeout(receivedTimeout.current);
     setMessage('');
     setReceived(true);
     setSending(false);
 
     // Remove the "received" status after 5 seconds
-    receivedTimeout = setTimeout(() => {
+    receivedTimeout.current = setTimeout(() => {
       setReceived(false);
     }, 5000);
   }, []);
