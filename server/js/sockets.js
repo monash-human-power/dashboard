@@ -22,6 +22,8 @@ global.statusPayloads = {
       primary: {},
       secondary: {},
     },
+    primary: {},
+    secondary: {},
   },
 };
 
@@ -180,9 +182,14 @@ sockets.init = function socketInit(server) {
         const subComponent = topicString[4];
         const device = topicString[5];
         // Store last received payload for device globally
-        global.statusPayloads[component][subComponent][device] = JSON.parse(
-          payloadString,
-        );
+        if (device)
+          global.statusPayloads[component][subComponent][device] = JSON.parse(
+            payloadString,
+          );
+        else
+          global.statusPayloads[component][subComponent] = JSON.parse(
+            payloadString,
+          );
 
         // Send mqtt payload on corresponding channel
         socket.emit(
