@@ -1,6 +1,3 @@
-import { useCallback, useEffect, useState } from 'react';
-import { getPrettyDeviceName } from '../camera';
-import { emit, useChannel } from '../socket';
 import { useData } from './data';
 
 /**
@@ -52,28 +49,4 @@ export function useStatus() {
     potentiometer: !!data.pot,
     thermometer: !!data.thermoC,
   });
-}
-
-/**
- * Returns the last received connection status of the camera client to the mqtt broker
- *
- * @param {string} device Device
- * @returns {SensorStatus} Sensor status
- */
-export function useCameraStatus(device) {
-  // Only run init once per render
-  useEffect(() => {
-    emit(`status-camera-${device}`);
-  }, [device]);
-
-  const [state, setState] = useState(false);
-
-  const handler = useCallback((newPayload) => {
-    console.log(newPayload.connected);
-    setState(newPayload.connected);
-  }, []);
-
-  useChannel(`status-camera-${device}`, handler);
-
-  return { label: `${getPrettyDeviceName(device)} Camera`, name: `${device}`, state };
 }

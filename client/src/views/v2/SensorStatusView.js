@@ -1,4 +1,4 @@
-import { useCameraStatus, useStatus } from 'api/v2/sensors';
+import { useStatus } from 'api/v2/sensors';
 import ContentPage from 'components/ContentPage';
 import WidgetListGroupItem from 'components/WidgetListGroupItem';
 import React from 'react';
@@ -11,9 +11,6 @@ import { Badge, ListGroup } from 'react-bootstrap';
  */
 export default function SensorStatusView() {
   const sensorStatus = useStatus();
-
-  sensorStatus.push(useCameraStatus("primary"));
-  sensorStatus.push(useCameraStatus("secondary"));
 
   const sensorItems = sensorStatus.map(({ label, name, state }) => (
     <WidgetListGroupItem title={label} key={name}>

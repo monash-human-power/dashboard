@@ -43,7 +43,7 @@ export default function CameraRecording({ devices }) {
                   {status[device]?.online ? 'ON' : 'OFF'}
                 </Badge>
                 <span className={styles.deviceName}>
-                  {`${getPrettyDeviceName(device)} Camera`}
+                  {`${getPrettyDeviceName(device)} Feed`}
                 </span>
               </Card.Subtitle>
               <CameraRecordingStatus device={device} />
