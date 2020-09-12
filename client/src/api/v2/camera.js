@@ -193,3 +193,30 @@ export function useVideoFeedStatus() {
 
   return payload;
 }
+
+/**
+ * @typedef {object} CameraStatus
+ * @property {boolean}  online Whether camera is connected / not connected
+ */
+/**
+ * Returns the last received connection status of the camera client to the mqtt broker
+ *
+ * @param {string} device Device
+ * @returns {CameraStatus} Camera status
+ */
+export function useCameraStatus(device) {
+  // Only run init once per render
+  useEffect(() => {
+    emit(`status-camera-${device}`);
+  }, [device]);
+
+  const [state, setState] = useState(false);
+
+  const handler = useCallback((newPayload) => {
+    setState(newPayload.connected);
+  }, []);
+
+  useChannel(`status-camera-${device}`, handler);
+
+  return state;
+}
