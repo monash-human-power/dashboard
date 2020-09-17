@@ -1,8 +1,8 @@
-import React from 'react';
-import { Badge, ListGroup } from 'react-bootstrap';
+import { useStatus } from 'api/v2/sensors';
 import ContentPage from 'components/ContentPage';
 import WidgetListGroupItem from 'components/WidgetListGroupItem';
-import { useStatus } from 'api/v2/sensors';
+import React from 'react';
+import { Badge, ListGroup } from 'react-bootstrap';
 
 /**
  * Sensor Status page component

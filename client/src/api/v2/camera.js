@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import formatBytes from 'utils/formatBytes';
 import { camelCaseToStartCase, capitalise } from 'utils/string';
-import { useChannel, emit } from './socket';
+import { emit, useChannel } from './socket';
 
 /**
  * @typedef {object} OverlaysHook
@@ -134,16 +134,15 @@ export function stopRecording() {
  */
 
 /**
- * Parse the payload into an object and format the values
+ * Parse the recording payload into an object and format the values
  *
  * Payload structure is defined in the 'V3 MQTT Topics' page on Notion.
  * Topic is /v3/camera/recording/status/<primary/>secondary>.
  *
- * @param {string} payload Payload
+ * @param {string} data Payload in JSON form
  * @returns {CameraRecordingStatusPayload} Formatted payload without status
  */
-function parsePayload(payload) {
-  const data = JSON.parse(payload);
+function parseRecordingPayloadData(data) {
   if (!data) return null;
 
   const formattedData = {};
@@ -183,10 +182,12 @@ function parsePayload(payload) {
 }
 
 /**
- * Initiate receiving camera recording statuses
+ * Initiate receiving status payloads
+ *
+ * @param {string} subComponent The sub component to init for (e.g. recording, video feed)
  */
-function initCameraStatus() {
-  emit('send-last-received-camera-recording-payloads');
+function initStatus(subComponent) {
+  emit(`status-camera-${subComponent}`);
 }
 
 /**
@@ -196,21 +197,21 @@ function initCameraStatus() {
  * @returns {CameraRecordingStatusPayload} Payload
  */
 export function useCameraRecordingStatus(device) {
-  // only run init once per render
+  // Only run init once per render
   useEffect(() => {
-    initCameraStatus();
+    initStatus('recording');
   }, []);
 
   const [lastPayload, setLastPayload] = useState(null);
 
   const update = useCallback((newPayload) => {
-    // update last payload
+    // Update last payload
     setLastPayload(newPayload);
   }, []);
 
-  useChannel(`camera-recording-status-${device}`, update);
+  useChannel(`status-camera-recording`, update);
 
-  return parsePayload(lastPayload);
+  return parseRecordingPayloadData(lastPayload && lastPayload[device]);
 }
 
 /**
@@ -223,4 +224,58 @@ export function useCameraRecordingStatus(device) {
  */
 export function getPrettyDeviceName(device) {
   return device === 'primary' ? 'Primary' : 'Secondary';
+}
+
+/**
+ * @typedef {object} VideoFeedStatus
+ * @property {boolean}  online Whether video feed is on/off
+ */
+
+/**
+ * Returns the last received status of the video feeds from `/v3/camera/video-feed/status/<primary/secondary>`
+ *
+ * @returns {object.<string, VideoFeedStatus>} A VideoFeedStatus for each device
+ */
+export function useVideoFeedStatus() {
+  // Only run init once per render
+  useEffect(() => {
+    initStatus('video-feed');
+  }, []);
+
+  const [payload, setPayloads] = useState({}); // Payloads is Object.<string, string payload>
+
+  const handler = useCallback((newPayload) => {
+    setPayloads(newPayload);
+  }, []);
+
+  useChannel(`status-camera-video-feed`, handler);
+
+  return payload;
+}
+
+/**
+ * @typedef {object} CameraStatus
+ * @property {boolean}  online Whether camera is connected / not connected
+ */
+/**
+ * Returns the last received connection status of the camera client to the mqtt broker
+ *
+ * @param {string} device Device
+ * @returns {CameraStatus} Camera status
+ */
+export function useCameraStatus(device) {
+  // Only run init once per render
+  useEffect(() => {
+    emit(`status-camera-${device}`);
+  }, [device]);
+
+  const [state, setState] = useState(false);
+
+  const handler = useCallback((newPayload) => {
+    setState(newPayload.connected);
+  }, []);
+
+  useChannel(`status-camera-${device}`, handler);
+
+  return state;
 }
