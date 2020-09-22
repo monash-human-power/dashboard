@@ -126,9 +126,22 @@ function parseRecordingPayloadData(data) {
  * Initiate receiving status payloads
  *
  * @param {string} subComponent The sub component to init for (e.g. recording, video feed)
+ * @param {string} device Device (primary or secondary)
  */
-function initStatus(subComponent) {
-  emit(`status-camera-${subComponent}`);
+function initStatus(subComponent, device) {
+  emit(`get-status-payload`, ["camera", subComponent].concat(device ? [device] : []));
+}
+
+/**
+ * Makes the device name pretty.
+ *
+ * Hardcoded for efficiency. If you don't like it, complain to Angus Trau :).
+ *
+ * @param {'primary' | 'secondary'} device Device
+ * @returns {string} Prettied device name
+ */
+export function getPrettyDeviceName(device) {
+  return device === 'primary' ? 'Primary' : 'Secondary';
 }
 
 /**
@@ -147,24 +160,12 @@ export function useCameraRecordingStatus(device) {
 
   const update = useCallback((newPayload) => {
     // Update last payload
-    setLastPayload(newPayload);
+    setLastPayload(newPayload ?? null);
   }, []);
 
   useChannel(`status-camera-recording`, update);
 
   return parseRecordingPayloadData(lastPayload && lastPayload[device]);
-}
-
-/**
- * Makes the device name pretty.
- *
- * Hardcoded for efficiency. If you don't like it, complain to Angus Trau :).
- *
- * @param {'primary' | 'secondary'} device Device
- * @returns {string} Prettied device name
- */
-export function getPrettyDeviceName(device) {
-  return device === 'primary' ? 'Primary' : 'Secondary';
 }
 
 /**
@@ -186,7 +187,7 @@ export function useVideoFeedStatus() {
   const [payload, setPayloads] = useState({}); // Payloads is Object.<string, string payload>
 
   const handler = useCallback((newPayload) => {
-    setPayloads(newPayload);
+    setPayloads(newPayload ?? {});
   }, []);
 
   useChannel(`status-camera-video-feed`, handler);
@@ -213,7 +214,7 @@ export function useCameraStatus(device) {
   const [state, setState] = useState(false);
 
   const handler = useCallback((newPayload) => {
-    setState(newPayload.connected);
+    setState(newPayload?.connected ?? false);
   }, []);
 
   useChannel(`status-camera-${device}`, handler);
