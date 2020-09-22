@@ -174,7 +174,7 @@ sockets.init = function socketInit(server) {
         const props = topicString.slice(2);
 
         // Add to global
-        Object.assign(retained.status, propsToObj(props, value));
+        Object.assign(retained, propsToObj(props, value));
 
         // Emit subcomponent
         const component = topicString[3];
@@ -183,13 +183,26 @@ sockets.init = function socketInit(server) {
           `status-${component}-${subcomponent}`,
           retained.status?.[component]?.[subcomponent],
         );
+        console.log(
+          `received emit status-${component}-${subcomponent}: ${JSON.stringify(
+            retained.status?.[component]?.[subcomponent],
+          )}\n`,
+        );
       } else {
         console.error(`Unhandled topic - ${topic}`);
       }
     });
 
     socket.on('get-status-payload', (path) => {
-      socket.emit(getPropWithPath(retained.status, path));
+      console.log(
+        `status-${path.join('-')}: ${JSON.stringify(
+          getPropWithPath(retained.status, path),
+        )}\n`,
+      );
+      socket.emit(
+        `status-${path.join('-')}`,
+        getPropWithPath(retained.status, path),
+      );
     });
 
     // TODO: Fix up below socket.io handlers
