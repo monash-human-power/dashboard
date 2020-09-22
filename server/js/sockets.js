@@ -6,7 +6,7 @@ require('dotenv').config();
 const sockets = {};
 const mqtt = require('mqtt');
 const os = require('os');
-const { propsToObj, getPropWithPath } = require('./util');
+const { getPropWithPath, setPropWithPath } = require('./util');
 
 // Public MQTT broker
 let PUBLISH_ONLINE = false;
@@ -174,7 +174,11 @@ sockets.init = function socketInit(server) {
         const props = topicString.slice(2);
 
         // Add to global
-        Object.assign(retained, propsToObj(props, value));
+        retained[props[0]] = setPropWithPath(
+          retained[props[0]],
+          props.slice(1),
+          value,
+        );
 
         // Emit subcomponent
         const component = topicString[3];
@@ -194,6 +198,8 @@ sockets.init = function socketInit(server) {
     });
 
     socket.on('get-status-payload', (path) => {
+      console.log(retained.status);
+      console.log(path);
       console.log(
         `status-${path.join('-')}: ${JSON.stringify(
           getPropWithPath(retained.status, path),
