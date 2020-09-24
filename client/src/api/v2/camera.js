@@ -117,10 +117,12 @@ function parseRecordingPayloadData(data) {
  * Initiate receiving status payloads
  *
  * @param {string} subComponent The sub component to init for (e.g. recording, video feed)
- * @param {string} device Device (primary or secondary)
+ * @param {string?} device Device (primary or secondary)
  */
 function initStatus(subComponent, device) {
-  emit(`get-status-payload`, ["camera", subComponent].concat(device ? [device] : []));
+  const deviceAsArr = device ? [device] : [];  // only add device path if specified
+  const path = ["camera", subComponent].concat(deviceAsArr);
+  emit(`get-status-payload`, path);
 }
 
 /**
