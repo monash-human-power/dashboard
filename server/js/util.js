@@ -31,6 +31,13 @@ module.exports = (function util() {
     return getPropWithPath(nextObj, path.slice(1));
   };
 
+  /**
+   * Set a (nested) property of an object using a path of properties
+   *
+   * @param {object} obj Object
+   * @param {string[]} path Path of properties
+   * @param {any} value Value at the end of path
+   */
   const setPropWithPath = (obj, path, value) => {
     if (typeof obj !== 'object') return null;
     if (path.length === 0) return value;
@@ -38,40 +45,6 @@ module.exports = (function util() {
     const nextObj = hasProp(obj)(prop) ? obj[prop] : {};
     return { ...obj, [prop]: setPropWithPath(nextObj, path.slice(1), value) };
   };
-
-  // /**
-  //  * Shallow copy an object but without a property
-  //  *
-  //  * @param {object} obj Object
-  //  * @param {string} prop Property of object (key)
-  //  * @returns {object} Object
-  //  */
-  // const noProp = (obj, prop) =>
-  //   Object.keys(obj)
-  //     .filter((key) => key !== prop)
-  //     .reduce((acc, key) => ({ ...acc, [key]: obj[key] }), {});
-
-  // /**
-  //  * Deep merge two objects
-  //  *
-  //  * @param {object} target Target
-  //  * @param {object} source Source
-  //  * @returns {object} Merged object
-  //  */
-  // const deepMerge = (target, source) => {
-  //   const keys = Object.keys(source);
-  //   if (keys.length === 0) return target;
-  //   const key = keys[0];
-  //   const val = source[key];
-
-  //   if (val instanceof Object && Object.keys(target).includes(key))
-  //     // Need to merge object properties
-  //     return deepMerge({ ...target, [key]: deepMerge(target[key])(val) })(
-  //       noProp(source, key),
-  //     );
-
-  //   return deepMerge({ ...target, [key]: val })(noProp(source, key));
-  // };
 
   return {
     hasProp,

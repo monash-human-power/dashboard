@@ -169,29 +169,35 @@ sockets.init = function socketInit(server) {
             break;
         }
       } else if (topic.match(/^\/v3\/status/)) {
-        // topicString: ["", "v3", "status", "<component>", "<subcomponent>", ...properties]
-        const value = JSON.parse(payloadString);
-        const props = topicString.slice(2);
+        try {
+          // topicString: ["", "v3", "status", "<component>", "<subcomponent>", ...properties]
+          const value = JSON.parse(payloadString);
+          const props = topicString.slice(2);
 
-        // Add to global
-        retained[props[0]] = setPropWithPath(
-          retained[props[0]],
-          props.slice(1),
-          value,
-        );
+          // Add to global
+          retained[props[0]] = setPropWithPath(
+            retained[props[0]],
+            props.slice(1),
+            value,
+          );
 
-        // Emit subcomponent
-        const component = topicString[3];
-        const subcomponent = topicString[4];
-        socket.emit(
-          `status-${component}-${subcomponent}`,
-          retained.status?.[component]?.[subcomponent],
-        );
-        console.log(
-          `received emit status-${component}-${subcomponent}: ${JSON.stringify(
+          // Emit subcomponent
+          const component = topicString[3] ?? '';
+          const subcomponent = topicString[4] ?? '';
+          socket.emit(
+            `status-${component}-${subcomponent}`,
             retained.status?.[component]?.[subcomponent],
-          )}\n`,
-        );
+          );
+          console.log(
+            `received emit status-${component}-${subcomponent}: ${JSON.stringify(
+              retained.status?.[component]?.[subcomponent],
+            )}\n`,
+          );
+        } catch (e) {
+          console.error(
+            `Error in parsing received payload\n\ttopic: ${topic}\n\tpayload: ${payloadString}\n`,
+          );
+        }
       } else {
         console.error(`Unhandled topic - ${topic}`);
       }
