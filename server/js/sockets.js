@@ -172,12 +172,12 @@ sockets.init = function socketInit(server) {
         try {
           // topicString: ["", "v3", "status", "<component>", "<subcomponent>", ...properties]
           const value = JSON.parse(payloadString);
-          const props = topicString.slice(2);
+          const path = topicString.slice(2);
 
           // Add to global
-          retained[props[0]] = setPropWithPath(
-            retained[props[0]],
-            props.slice(1),
+          retained[path[0]] = setPropWithPath(
+            retained[path[0]],
+            path.slice(1),
             value,
           );
 
