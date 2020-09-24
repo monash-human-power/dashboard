@@ -211,10 +211,11 @@ sockets.init = function socketInit(server) {
           getPropWithPath(retained.status, path),
         )}\n`,
       );
-      socket.emit(
-        `status-${path.join('-')}`,
-        getPropWithPath(retained.status, path),
-      );
+      if (path instanceof Array && path.length > 0)
+        socket.emit(
+          `status-${path.join('-')}`,
+          getPropWithPath(retained.status, path),
+        );
     });
 
     // TODO: Fix up below socket.io handlers
