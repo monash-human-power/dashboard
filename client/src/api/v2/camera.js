@@ -141,7 +141,7 @@ export function getPrettyDeviceName(device) {
  * @typedef {object} StatusPayloadOptions
  *
  * @property {any?} initValue Initial value for the payload
- * @property {(setter: (p: any) => void, device: string?) => (payload: any?) => any?} payloadHandler Handler for updating payload
+ * @property {(setter: (p: any) => void, newPayload: any, device: string?) => any?} payloadHandler Handler for updating payload
  * @property {(payload: any?, device: string?) => any?} returnHandler Handler for return value
  */
 /**
@@ -153,7 +153,7 @@ export function getPrettyDeviceName(device) {
  */
 function createStatusPayloadHook(sub, {
   initValue = null,
-  payloadHandler = (s) => (p) => s(p ?? initValue),
+  payloadHandler = (s, p) => s(p ?? initValue),
   returnHandler = (p) => p
 }) {
   return function _hook(device) {
@@ -163,7 +163,10 @@ function createStatusPayloadHook(sub, {
     }, []);
 
     const [payload, setPayload] = useState(initValue);
-    useChannel(`status-camera-${sub}`, payloadHandler(setPayload, device));
+    useChannel(
+      `status-camera-${sub}`,
+      (newPayload) => payloadHandler(setPayload, newPayload, device)
+    );
 
     return returnHandler(payload, device);
   };
@@ -216,6 +219,6 @@ export const useVideoFeedStatus = createStatusPayloadHook(
 export const useCameraStatus = (device) => createStatusPayloadHook(
   device, {
     initValue: false,
-    payloadHandler: (setState) => (newPayload) => setState(newPayload?.connected ?? false)
+    payloadHandler: (setState, newPayload) => setState(newPayload?.connected ?? false)
   }
 )(device);
