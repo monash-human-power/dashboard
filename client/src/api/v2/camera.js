@@ -66,15 +66,6 @@ export function stopRecording() {
 }
 
 /**
- * @typedef {object} CameraRecordingStatusPayload
- * @property {string} status Status of recording
- * @property {?string} recordingMinutes Length of recording
- * @property {?string} recordingFile File name of recording
- * @property {?string} diskSpaceRemaining Remaining space on disk
- * @property {?string} error Error message from camera
- */
-
-/**
  * Parse the recording payload into an object and format the values
  *
  * Payload structure is defined in the 'V3 MQTT Topics' page on Notion.
@@ -126,33 +117,12 @@ function parseRecordingPayloadData(data) {
  * Initiate receiving status payloads
  *
  * @param {string} subComponent The sub component to init for (e.g. recording, video feed)
+ * @param {string?} device Device (primary or secondary)
  */
-function initStatus(subComponent) {
-  emit(`status-camera-${subComponent}`);
-}
-
-/**
- * Returns the last status payload published
- *
- * @param {string} device Device
- * @returns {CameraRecordingStatusPayload} Payload
- */
-export function useCameraRecordingStatus(device) {
-  // Only run init once per render
-  useEffect(() => {
-    initStatus("recording");
-  }, []);
-
-  const [lastPayload, setLastPayload] = useState(null);
-
-  const update = useCallback((newPayload) => {
-    // Update last payload
-    setLastPayload(newPayload);
-  }, []);
-
-  useChannel(`status-camera-recording`, update);
-
-  return parseRecordingPayloadData(lastPayload && lastPayload[device]);
+function initStatus(subComponent, device) {
+  const deviceAsArr = device ? [device] : [];  // only add device path if specified
+  const path = ["camera", subComponent].concat(deviceAsArr);
+  emit(`get-status-payload`, path);
 }
 
 /**
@@ -168,31 +138,73 @@ export function getPrettyDeviceName(device) {
 }
 
 /**
+ * @typedef {object} StatusPayloadOptions
+ *
+ * @property {any?} initValue Initial value for the payload
+ * @property {(setter: (p: any) => void, newPayload: any, device: string?) => any?} payloadHandler Handler for updating payload
+ * @property {(payload: any?, device: string?) => any?} returnHandler Handler for return value
+ */
+/**
+ * Create hooks for getting payloads
+ *
+ * @param {string} sub Subcomponent
+ * @param {StatusPayloadOptions} opts Options
+ * @returns {(device: string?) => any} Hook for getting a payload
+ */
+function createStatusPayloadHook(sub, {
+  initValue = null,
+  payloadHandler = (s, p) => s(p ?? initValue),
+  returnHandler = (p) => p
+}) {
+  return function _hook(device) {
+    // Only run init once per render
+    useEffect(() => {
+      initStatus(sub);
+    }, []);
+
+    const [payload, setPayload] = useState(initValue);
+    useChannel(
+      `status-camera-${sub}`,
+      (newPayload) => payloadHandler(setPayload, newPayload, device)
+    );
+
+    return returnHandler(payload, device);
+  };
+}
+
+/**
+ * @typedef {object} CameraRecordingStatusPayload
+ * @property {string} status Status of recording
+ * @property {?string} recordingMinutes Length of recording
+ * @property {?string} recordingFile File name of recording
+ * @property {?string} diskSpaceRemaining Remaining space on disk
+ * @property {?string} error Error message from camera
+ */
+
+/**
+ * Returns the last status payload published
+ *
+ * @param {string} device Device
+ * @returns {CameraRecordingStatusPayload} Payload
+ */
+export const useCameraRecordingStatus = createStatusPayloadHook(
+  'recording', {
+    returnHandler: (payload, device) => parseRecordingPayloadData(payload?.[device])
+  }
+);
+
+/**
  * @typedef {object} VideoFeedStatus
  * @property {boolean}  online Whether video feed is on/off
  */
-
 /**
  * Returns the last received status of the video feeds from `/v3/camera/video-feed/status/<primary/secondary>`
  *
  * @returns {object.<string, VideoFeedStatus>} A VideoFeedStatus for each device
  */
-export function useVideoFeedStatus() {
-  // Only run init once per render
-  useEffect(() => {
-    initStatus('video-feed');
-  }, []);
-
-  const [payload, setPayloads] = useState({}); // Payloads is Object.<string, string payload>
-
-  const handler = useCallback((newPayload) => {
-    setPayloads(newPayload);
-  }, []);
-
-  useChannel(`status-camera-video-feed`, handler);
-
-  return payload;
-}
+export const useVideoFeedStatus = createStatusPayloadHook(
+  'video-feed', { initValue: {} }
+);
 
 /**
  * @typedef {object} CameraStatus
@@ -204,19 +216,9 @@ export function useVideoFeedStatus() {
  * @param {string} device Device
  * @returns {CameraStatus} Camera status
  */
-export function useCameraStatus(device) {
-  // Only run init once per render
-  useEffect(() => {
-    emit(`status-camera-${device}`);
-  }, [device]);
-
-  const [state, setState] = useState(false);
-
-  const handler = useCallback((newPayload) => {
-    setState(newPayload.connected);
-  }, []);
-
-  useChannel(`status-camera-${device}`, handler);
-
-  return state;
-}
+export const useCameraStatus = (device) => createStatusPayloadHook(
+  device, {
+    initValue: false,
+    payloadHandler: (setState, newPayload) => setState(newPayload?.connected ?? false)
+  }
+)(device);

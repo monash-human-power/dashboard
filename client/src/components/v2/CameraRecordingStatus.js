@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import { useCameraRecordingStatus } from 'api/v2/camera';
+import PropTypes from 'prop-types';
+import React from 'react';
 import styles from './CameraRecordingStatus.module.css';
 
 const defaultStatus = 'Waiting for status...';
@@ -18,6 +18,8 @@ const defaultStatus = 'Waiting for status...';
  */
 export default function CameraRecordingStatus({ device }) {
   const payload = useCameraRecordingStatus(device);
+
+  console.log(`recording status: ${payload}`);
 
   return (
     <div>
