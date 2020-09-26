@@ -188,11 +188,6 @@ sockets.init = function socketInit(server) {
             `status-${component}-${subcomponent}`,
             retained.status?.[component]?.[subcomponent],
           );
-          console.log(
-            `received emit status-${component}-${subcomponent}: ${JSON.stringify(
-              retained.status?.[component]?.[subcomponent],
-            )}\n`,
-          );
         } catch (e) {
           console.error(
             `Error in parsing received payload\n\ttopic: ${topic}\n\tpayload: ${payloadString}\n`,
@@ -204,13 +199,6 @@ sockets.init = function socketInit(server) {
     });
 
     socket.on('get-status-payload', (path) => {
-      console.log(retained.status);
-      console.log(path);
-      console.log(
-        `status-${path.join('-')}: ${JSON.stringify(
-          getPropWithPath(retained.status, path),
-        )}\n`,
-      );
       if (path instanceof Array && path.length > 0)
         socket.emit(
           `status-${path.join('-')}`,
@@ -239,9 +227,6 @@ sockets.init = function socketInit(server) {
     });
 
     socket.on('create-power-plan', (inputPowerPlan) => {
-      console.log(
-        `Generated new power plan - ${inputPowerPlan.inputs.fileName}.json`,
-      );
       mqttClient.publish(
         'power_model/generate_power_plan',
         JSON.stringify(inputPowerPlan),

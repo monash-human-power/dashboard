@@ -19,8 +19,6 @@ const defaultStatus = 'Waiting for status...';
 export default function CameraRecordingStatus({ device }) {
   const payload = useCameraRecordingStatus(device);
 
-  console.log(`recording status: ${payload}`);
-
   return (
     <div>
       {payload ? (
