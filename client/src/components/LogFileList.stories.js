@@ -19,3 +19,8 @@ export const LogFiles = Template.bind({});
 LogFiles.args = {
   files: [mockLogFile(1), mockLogFile(2), mockLogFile(3)],
 };
+
+export const Empty = Template.bind({});
+Empty.args = {
+  files: [],
+};
