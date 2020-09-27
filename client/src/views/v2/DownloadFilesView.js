@@ -19,11 +19,6 @@ export default function DownloadFilesView() {
     setDeletingFile(null);
   }, []);
 
-  const handleDelete = useCallback((event, file) => {
-    event.preventDefault();
-    setDeletingFile(file);
-  }, []);
-
   const handleConfirmDelete = useCallback(() => {
     deleteFile(deletingFile);
     hideConfirmDelete();
@@ -42,7 +37,7 @@ export default function DownloadFilesView() {
         </Button>
       )}
 
-      <LogFileList fileNames={files} onDeleteFile={handleDelete} />
+      <LogFileList fileNames={files} onDeleteFile={setDeletingFile} />
 
       <DeleteModal
         show={deletingFile !== null}

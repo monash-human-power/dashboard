@@ -18,7 +18,4 @@ const mockLogFile = (num) => {
 export const LogFiles = Template.bind({});
 LogFiles.args = {
   files: [mockLogFile(1), mockLogFile(2), mockLogFile(3)],
-  onDeleteFile: (e, file) => {
-    e.preventDefault();
-  },
 };

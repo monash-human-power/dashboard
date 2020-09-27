@@ -3,6 +3,11 @@ import { Button } from 'react-bootstrap';
 import WidgetListGroupItem from 'components/WidgetListGroupItem';
 
 export default function LogFileList({ files, onDeleteFile }) {
+  const handleDelete = (event, file) => {
+    event.preventDefault();
+    onDeleteFile(file);
+  };
+
   const fileList = files.map((file) => (
     <WidgetListGroupItem
       key={file.url}
@@ -11,7 +16,7 @@ export default function LogFileList({ files, onDeleteFile }) {
       href={file.url}
       target="_blank"
     >
-      <Button variant="danger" size="sm" onClick={(e) => onDeleteFile(e, file)}>
+      <Button variant="danger" size="sm" onClick={handleDelete}>
         Delete
       </Button>
     </WidgetListGroupItem>
