@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from 'react';
-import { Button, ListGroup } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import ContentPage from 'components/ContentPage';
 import DeleteModal from 'components/DeleteModal';
-import WidgetListGroupItem from 'components/WidgetListGroupItem';
+import LogFileList from 'components/LogFileList';
 import { useFiles, useLatestFile } from 'api/v2/files';
 
 /**
@@ -29,20 +29,6 @@ export default function DownloadFilesView() {
     hideConfirmDelete();
   }, [deleteFile, deletingFile, hideConfirmDelete]);
 
-  const fileList = files.map((file) => (
-    <WidgetListGroupItem
-      key={file.url}
-      title={file.fileName}
-      action
-      href={file.url}
-      target="_blank"
-    >
-      <Button variant="danger" size="sm" onClick={(e) => handleDelete(e, file)}>
-        Delete
-      </Button>
-    </WidgetListGroupItem>
-  ));
-
   return (
     <ContentPage title="Files">
       {files.length > 0 && (
@@ -55,9 +41,8 @@ export default function DownloadFilesView() {
           Download latest
         </Button>
       )}
-      <ListGroup>{fileList}</ListGroup>
 
-      {files.length === 0 ? 'No log files found.' : null}
+      <LogFileList fileNames={files} onDeleteFile={handleDelete} />
 
       <DeleteModal
         show={deletingFile !== null}
