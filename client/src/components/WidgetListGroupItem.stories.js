@@ -25,8 +25,8 @@ ButtonWidget.args = {
   target: '_blank',
 };
 
-export const HoverAction = Template.bind({});
-HoverAction.args = {
+export const Link = Template.bind({});
+Link.args = {
   ...Simple.args,
   action: true,
   href: 'https://www.monashhumanpower.org',
