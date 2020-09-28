@@ -5,6 +5,9 @@ import WidgetListGroupItem from './WidgetListGroupItem';
 export default {
   title: 'WidgetListGroupItem',
   component: WidgetListGroupItem,
+  argTypes: {
+    onClick: { action: 'clicked' },
+  },
 };
 
 const Template = (args) => <WidgetListGroupItem {...args} />;

@@ -6,6 +6,9 @@ export default {
   title: 'LogFileList',
   component: LogFileList,
   decorators: [(story) => <ListGroup>{story()}</ListGroup>],
+  argTypes: {
+    onDeleteFile: { action: 'clicked' },
+  },
 };
 
 const Template = (args) => <LogFileList {...args} />;
