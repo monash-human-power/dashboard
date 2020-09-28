@@ -29,7 +29,7 @@ export default function LogFileList({ loading, files, onDeleteFile }) {
       href={file.url}
       target="_blank"
     >
-      <Button variant="danger" size="sm" onClick={handleDelete}>
+      <Button variant="danger" size="sm" onClick={(e) => handleDelete(e, file)}>
         Delete
       </Button>
     </WidgetListGroupItem>
