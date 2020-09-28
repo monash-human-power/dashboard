@@ -15,7 +15,7 @@ import LogFile from '../api/v2/files';
  * @param {LogFileListProps} Props props
  * @returns {React.Component<LogFileListProps>} Component
  */
-export default function LogFileList({ files, onDeleteFile }) {
+export default function LogFileList({ loading, files, onDeleteFile }) {
   const handleDelete = (event, file) => {
     event.preventDefault();
     onDeleteFile(file);
@@ -35,5 +35,11 @@ export default function LogFileList({ files, onDeleteFile }) {
     </WidgetListGroupItem>
   ));
 
+  if (loading) return 'Loading...';
+
   return fileList.length === 0 ? 'No log files found.' : fileList;
 }
+
+LogFileList.defaultProps = {
+  loading: false,
+};

@@ -43,12 +43,15 @@ export async function deleteFile(file) {
  */
 export function useFiles() {
   const [files, setFiles] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     /** Fetch file data */
     async function fetchData() {
       setFiles(await getFiles());
+      setLoading(false);
     }
+    setLoading(true);
     fetchData();
   }, []);
 
@@ -57,7 +60,7 @@ export function useFiles() {
     setFiles(await getFiles());
   }, []);
 
-  return { files, deleteFile: deleteFileHandler };
+  return { loading, files, deleteFile: deleteFileHandler };
 }
 
 /**

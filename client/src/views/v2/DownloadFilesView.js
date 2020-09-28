@@ -11,7 +11,7 @@ import { useFiles, useLatestFile } from 'api/v2/files';
  * @returns {React.Component} Component
  */
 export default function DownloadFilesView() {
-  const { files, deleteFile } = useFiles();
+  const { loading, files, deleteFile } = useFiles();
   const latestFileURL = useLatestFile();
   const [deletingFile, setDeletingFile] = useState(null);
 
@@ -37,7 +37,11 @@ export default function DownloadFilesView() {
         </Button>
       )}
 
-      <LogFileList fileNames={files} onDeleteFile={setDeletingFile} />
+      <LogFileList
+        loading={loading}
+        files={files}
+        onDeleteFile={setDeletingFile}
+      />
 
       <DeleteModal
         show={deletingFile !== null}

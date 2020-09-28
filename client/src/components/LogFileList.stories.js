@@ -24,3 +24,9 @@ export const Empty = Template.bind({});
 Empty.args = {
   files: [],
 };
+
+export const Loading = Template.bind({});
+Loading.args = {
+  ...Empty.args,
+  loading: true,
+};
