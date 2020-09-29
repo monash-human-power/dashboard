@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 
-interface LogFile {
+export interface LogFile {
   /** Log file name */
   fileName: string;
   /** URL to download file */
