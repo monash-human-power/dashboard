@@ -33,6 +33,8 @@ export async function deleteFile(file: LogFile) {
 
 /**
  * Use a list of log files
+ *
+ * @returns List of log files, and function to delete a log file
  */
 export function useFiles() {
   const [files, setFiles] = useState<LogFile[]>([]);
