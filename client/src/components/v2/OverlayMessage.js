@@ -16,19 +16,13 @@ export default function OverlayMessage() {
     sendMessage,
   } = useMessageState();
 
-  const handleMessageChange = useCallback(
-    (event) => {
-      setMessage(event.target.value);
-    },
-    [setMessage],
-  );
+  const handleMessageChange = (event) => {
+    setMessage(event.target.value);
+  };
 
-  const handleKeyPressed = useCallback(
-    (event) => {
-      if (event.key === 'Enter') sendMessage();
-    },
-    [sendMessage],
-  );
+  const handleKeyPressed = (event) => {
+    if (event.key === 'Enter') sendMessage();
+  };
 
   return (
     <Card>

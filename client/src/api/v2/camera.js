@@ -80,7 +80,7 @@ export function useMessageState() {
   const [sending, setSending] = useState(false);
   const receivedTimeout = useRef(null);
 
-  const receivedCallback = useCallback(() => {
+  const receivedCallback = () => {
     clearTimeout(receivedTimeout.current);
     setMessage('');
     setReceived(true);
@@ -90,7 +90,7 @@ export function useMessageState() {
     receivedTimeout.current = setTimeout(() => {
       setReceived(false);
     }, 5000);
-  }, []);
+  };
 
   useChannel('send-message-received', receivedCallback);
 
