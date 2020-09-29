@@ -52,18 +52,13 @@ export function useOverlays(device) {
 }
 
 /**
- * @typedef {object} CameraMessageState
+ * @typedef {object} CameraMessageHook
  * @property {string} message The message currently entered by the user.
  * @property {boolean} received Specifies whether a sent message has been
  *                              acknowledged by the server in the last 5
  *                              seconds.
  * @property {boolean} sending Specifies whether we are waiting for an
  *                             acknowledgement for the most recent message.
- */
-
-/**
- * @typedef {object} CameraMessageHook
- * @property {CameraMessageState} state Current state of the messages.
  * @property {function(string)} setMessage Set the message.
  * @property {function(void)} sendMessage Send the message to the rider.
  */
