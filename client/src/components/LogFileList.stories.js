@@ -30,6 +30,5 @@ Empty.args = {
 
 export const Loading = Template.bind({});
 Loading.args = {
-  ...Empty.args,
-  loading: true,
+  files: null,
 };
