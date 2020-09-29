@@ -94,20 +94,14 @@ export function useMessageState() {
 
   useChannel('send-message-received', receivedCallback);
 
-  return { message, received, sending, setMessage, setSending };
-}
+  const sendMessage = () => {
+    if (!message) return;
 
-/**
- * Sends a message to be shown on the camera overlay.
- *
- * @param {string} message The message to be sent
- * @returns {boolean} True only if a message has been sent.
- */
-export function sendMessage(message) {
-  if (!message) return false;
+    emit('send-message', message);
+    setSending(true);
+  };
 
-  emit('send-message', message);
-  return true;
+  return { message, received, sending, setMessage, sendMessage };
 }
 
 /**
