@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Button, Card, FormControl, InputGroup } from 'react-bootstrap';
 import { useMessageState } from 'api/v2/camera';
 
