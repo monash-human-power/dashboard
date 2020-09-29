@@ -8,13 +8,7 @@ import { useMessageState } from 'api/v2/camera';
  * @returns {React.Component} Component
  */
 export default function OverlayMessage() {
-  const {
-    message,
-    received,
-    sending,
-    setMessage,
-    sendMessage,
-  } = useMessageState();
+  const { message, setMessage, sendMessage } = useMessageState();
 
   const handleMessageChange = (event) => {
     setMessage(event.target.value);
@@ -41,8 +35,6 @@ export default function OverlayMessage() {
             </Button>
           </InputGroup.Append>
         </InputGroup>
-        <span>{sending ? 'Sending...' : ''}</span>
-        <span>{received ? 'Message sent!' : ''}</span>
       </Card.Body>
     </Card>
   );

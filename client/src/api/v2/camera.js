@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, useRef } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import formatBytes from 'utils/formatBytes';
 import { camelCaseToStartCase, capitalise } from 'utils/string';
 import { emit, useChannel } from './socket';
@@ -54,11 +54,6 @@ export function useOverlays(device) {
 /**
  * @typedef {object} CameraMessageHook
  * @property {string} message The message currently entered by the user.
- * @property {boolean} received Specifies whether a sent message has been
- *                              acknowledged by the server in the last 5
- *                              seconds.
- * @property {boolean} sending Specifies whether we are waiting for an
- *                             acknowledgement for the most recent message.
  * @property {function(string)} setMessage Set the message.
  * @property {function(void)} sendMessage Send the message to the rider.
  */
@@ -71,32 +66,15 @@ export function useOverlays(device) {
  */
 export function useMessageState() {
   const [message, setMessage] = useState('');
-  const [received, setReceived] = useState(false);
-  const [sending, setSending] = useState(false);
-  const receivedTimeout = useRef(null);
-
-  const receivedCallback = () => {
-    clearTimeout(receivedTimeout.current);
-    setMessage('');
-    setReceived(true);
-    setSending(false);
-
-    // Remove the "received" status after 5 seconds
-    receivedTimeout.current = setTimeout(() => {
-      setReceived(false);
-    }, 5000);
-  };
-
-  useChannel('send-message-received', receivedCallback);
 
   const sendMessage = () => {
     if (!message) return;
 
     emit('send-message', message);
-    setSending(true);
+    setMessage('');
   };
 
-  return { message, received, sending, setMessage, sendMessage };
+  return { message, setMessage, sendMessage };
 }
 
 /**

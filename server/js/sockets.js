@@ -229,7 +229,6 @@ sockets.init = function socketInit(server) {
     socket.on('send-message', (message) => {
       const payload = JSON.stringify({ message });
       mqttClient.publish('/v3/camera/message', payload);
-      socket.emit('send-message-received');
     });
 
     socket.on('create-power-plan', (inputPowerPlan) => {
