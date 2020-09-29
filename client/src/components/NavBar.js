@@ -1,17 +1,27 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
-import { useBikeVersion, bikeVersions } from 'router';
 import { ReactComponent as Logo } from 'assets/MHPLogo.svg';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { NavLink } from 'react-router-dom';
 import styles from './NavBar.module.css';
+
+/**
+ * @typedef {import('router').VersionInfo} VersionInfo
+ */
+
+/**
+ * @typedef {object} NavBarProps
+ * @property {VersionInfo} bikeVersion Version info for bike
+ * @property {VersionInfo[]} bikeVersions Version info for all bikes
+ */
 
 /**
  * Navigation bar component
  *
+ * @param {NavBarProps} props Props
  * @returns {React.Component} Component
  */
-export default function NavBar() {
-  const bikeVersion = useBikeVersion();
+export default function NavBar({ bikeVersion, bikeVersions }) {
   const bikeName = bikeVersion?.name;
   const linkItems = bikeVersion?.routes.map(({ name, path, exact }) => (
     <Nav.Link
@@ -56,3 +66,10 @@ export default function NavBar() {
     </Navbar>
   );
 }
+
+NavBar.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  bikeVersion: PropTypes.object.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  bikeVersions: PropTypes.object.isRequired
+};
