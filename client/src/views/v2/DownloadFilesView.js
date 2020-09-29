@@ -26,7 +26,7 @@ export default function DownloadFilesView() {
 
   return (
     <ContentPage title="Files">
-      {files !== null && files.length > 0 && (
+      {files?.length > 0 && (
         <Button
           href={latestFileURL}
           target="_blank"
