@@ -17,13 +17,14 @@ import LogFile from '../api/v2/files';
  */
 export default function LogFileList({ files, onDeleteFile }) {
   if (files === null) return 'Loading...';
+  if (files.length === 0) return 'No log files found.';
 
   const handleDelete = (event, file) => {
     event.preventDefault();
     onDeleteFile(file);
   };
 
-  const fileList = files.map((file) => (
+  return files.map((file) => (
     <WidgetListGroupItem
       key={file.url}
       title={file.fileName}
@@ -36,6 +37,4 @@ export default function LogFileList({ files, onDeleteFile }) {
       </Button>
     </WidgetListGroupItem>
   ));
-
-  return fileList.length === 0 ? 'No log files found.' : fileList;
 }
