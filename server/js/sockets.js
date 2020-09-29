@@ -6,25 +6,17 @@ require('dotenv').config();
 const sockets = {};
 const mqtt = require('mqtt');
 const os = require('os');
+const { getPropWithPath, setPropWithPath } = require('./util');
 
 // Public MQTT broker
 let PUBLISH_ONLINE = false;
 let PUBLIC_MQTT_CLIENT;
 
-// global vars
-global.statusPayloads = {
-  camera: {
-    'video-feed': {
-      primary: {},
-      secondary: {},
-    },
-    recording: {
-      primary: {},
-      secondary: {},
-    },
-    primary: {},
-    secondary: {},
-  },
+/**
+ * Structure can be found in the MQTT V3 Topics page on Notion
+ */
+const retained = {
+  status: {},
 };
 
 function connectToPublicMQTTBroker(clientID = '') {
@@ -177,28 +169,41 @@ sockets.init = function socketInit(server) {
             break;
         }
       } else if (topic.match(/^\/v3\/status/)) {
-        // topicString: ["", "v3", "status", "<component>", "<subcomponent>", "<device>"]
-        const component = topicString[3];
-        const subComponent = topicString[4];
-        const device = topicString[5];
-        // Store last received payload for device globally
-        if (device)
-          global.statusPayloads[component][subComponent][device] = JSON.parse(
-            payloadString,
-          );
-        else
-          global.statusPayloads[component][subComponent] = JSON.parse(
-            payloadString,
+        try {
+          // topicString: ["", "v3", "status", "<component>", "<subcomponent>", ...properties]
+          const value = JSON.parse(payloadString);
+          const path = topicString.slice(2);
+
+          // Add to global
+          retained[path[0]] = setPropWithPath(
+            retained[path[0]],
+            path.slice(1),
+            value,
           );
 
-        // Send mqtt payload on corresponding channel
-        socket.emit(
-          `status-${component}-${subComponent}`,
-          global.statusPayloads[component][subComponent],
-        );
+          // Emit subcomponent
+          const component = topicString[3] ?? '';
+          const subcomponent = topicString[4] ?? '';
+          socket.emit(
+            `status-${component}-${subcomponent}`,
+            retained.status?.[component]?.[subcomponent],
+          );
+        } catch (e) {
+          console.error(
+            `Error in parsing received payload\n\ttopic: ${topic}\n\tpayload: ${payloadString}\n`,
+          );
+        }
       } else {
         console.error(`Unhandled topic - ${topic}`);
       }
+    });
+
+    socket.on('get-status-payload', (path) => {
+      if (path instanceof Array && path.length > 0)
+        socket.emit(
+          `status-${path.join('-')}`,
+          getPropWithPath(retained.status, path),
+        );
     });
 
     // TODO: Fix up below socket.io handlers
@@ -228,9 +233,6 @@ sockets.init = function socketInit(server) {
     });
 
     socket.on('create-power-plan', (inputPowerPlan) => {
-      console.log(
-        `Generated new power plan - ${inputPowerPlan.inputs.fileName}.json`,
-      );
       mqttClient.publish(
         'power_model/generate_power_plan',
         JSON.stringify(inputPowerPlan),
@@ -264,19 +266,6 @@ sockets.init = function socketInit(server) {
 
     socket.on('get-server-settings', () => {
       socket.emit('server-settings', { publishOnline: PUBLISH_ONLINE });
-    });
-
-    // Create a socket channel for each sub component (e.g. recording, video feed)
-    Object.keys(global.statusPayloads).forEach((component) => {
-      Object.keys(global.statusPayloads[component]).forEach((subComponent) => {
-        socket.on(`status-${component}-${subComponent}`, () => {
-          // Send mqtt payload on corresponding channel
-          socket.emit(
-            `status-${component}-${subComponent}`,
-            global.statusPayloads[component][subComponent],
-          );
-        });
-      });
     });
 
     socket.on('start-camera-recording', () => {
