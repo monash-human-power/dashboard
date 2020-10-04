@@ -42,13 +42,14 @@ export async function deleteFile(file) {
  * @returns {FilesHook} Files hook
  */
 export function useFiles() {
-  const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState(null);
 
   useEffect(() => {
     /** Fetch file data */
     async function fetchData() {
       setFiles(await getFiles());
     }
+    setFiles(null);
     fetchData();
   }, []);
 
