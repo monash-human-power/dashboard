@@ -37,13 +37,14 @@ export async function deleteFile(file: LogFile) {
  * @returns List of log files, and function to delete a log file
  */
 export function useFiles() {
-  const [files, setFiles] = useState<LogFile[]>([]);
+  const [files, setFiles] = useState<LogFile[] | null>([]);
 
   useEffect(() => {
     /** Fetch file data */
     async function fetchData() {
       setFiles(await getFiles());
     }
+    setFiles(null);
     fetchData();
   }, []);
 
