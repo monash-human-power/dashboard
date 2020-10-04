@@ -18,7 +18,7 @@
     "react/jsx-filename-extension": [
       1,
       {
-        "extensions": [".js"]
+        "extensions": [".js", ".ts"]
       }
     ],
     "react/jsx-props-no-spreading": "off",
@@ -32,8 +32,26 @@
     "jsx-a11y/anchor-is-valid": "off",
     "import/no-unresolved": "off",
     "import/prefer-default-export": "off",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "mjs": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ],
     "semi": "error",
-    "jsdoc/require-returns-type": "error",
-    "jsdoc/require-param-type": "error"
+    "jsdoc/require-returns-type": "off",
+    "jsdoc/require-param-type": "off"
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
   }
 }
