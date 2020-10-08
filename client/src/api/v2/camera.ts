@@ -187,7 +187,7 @@ interface StatusPayloadOptions<T> {
     device: CameraDevice,
   ) => T | void;
   /** Handler for return value */
-  returnHandler?: (device: CameraDevice, payload?: T) => T | null | undefined;
+  returnHandler?: (payload?: T, device?: CameraDevice) => T | null | undefined;
 }
 
 /**
@@ -201,9 +201,9 @@ function createStatusPayloadHook<T>(
   sub: string,
   {
     initValue = undefined,
-    payloadHandler = (setter: (p?: T) => void, newPayload: T) =>
+    payloadHandler = (setter: (payload?: T) => void, newPayload: T) =>
       setter(newPayload ?? initValue),
-    returnHandler = (device: CameraDevice, payload?: T) => payload,
+    returnHandler = (payload?: T) => payload,
   }: StatusPayloadOptions<T>,
 ) {
   return function _hook(device: CameraDevice) {
@@ -217,7 +217,7 @@ function createStatusPayloadHook<T>(
       payloadHandler(setPayload, newPayload, device),
     );
 
-    return returnHandler(device, payload);
+    return returnHandler(payload, device);
   };
 }
 
@@ -228,11 +228,11 @@ function createStatusPayloadHook<T>(
  * @returns Formatted recording status
  */
 export const useCameraRecordingStatus = createStatusPayloadHook<
-  CameraRecordingStatusFormatted
->('recording', {
-  returnHandler: (device: CameraDevice, payload) =>
-    parseRecordingPayloadData(payload?.[device]),
-});
+         CameraRecordingStatusFormatted
+       >('recording', {
+         returnHandler: (payload, device) =>
+           parseRecordingPayloadData(payload?.[device as CameraDevice]),
+       });
 
 interface VideoFeedStatus {
   /** Whether video feed is on/off */
