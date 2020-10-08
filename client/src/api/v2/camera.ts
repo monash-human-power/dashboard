@@ -44,9 +44,12 @@ export function useOverlays(device: CameraDevice) {
 
   const setActiveOverlay = useCallback(
     (activeOverlay) => {
-      emit('set-overlays', {
-        [device]: activeOverlay,
-      });
+      emit(
+        'set-overlays',
+          JSON.stringify({
+            [device]: activeOverlay,
+          }),
+      );
     },
     [device],
   );
