@@ -6,7 +6,7 @@ import RadioSelector from 'components/RadioSelector';
 
 /**
  * @typedef {object} CameraSettingsProps
- * @property {'primary'|'secondary'} device Camera screen
+ * @property {CameraDevice} device Camera screen
  */
 
 /**

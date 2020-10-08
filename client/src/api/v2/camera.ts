@@ -3,20 +3,26 @@ import formatBytes from 'utils/formatBytes';
 import { camelCaseToStartCase, capitalise } from 'utils/string';
 import { emit, useChannel } from './socket';
 
-/**
- * @typedef {object} OverlaysHook
- * @property {?Array.<string>}  overlays          List of available overlays
- * @property {function(string)} setActiveOverlay  Set the active overlay
- */
+enum CameraDevice {
+  Primary = 'primary',
+  Secondary = 'secondary',
+}
+
+interface CameraOverlayStatus {
+  /** List of available overlays */
+  overlays: string[];
+  /** Name of currently active overlay */
+  active: string;
+}
 
 /**
  * Use a list of camera overlays
  *
- * @param {'primary'|'secondary'} device Camera screen
- * @returns {OverlaysHook} Hook
+ * @param device Camera screen
+ * @returns Status of overlays and function to set active overlay.
  */
-export function useOverlays(device) {
-  const [overlays, setOverlays] = useState(null);
+export function useOverlays(device: CameraDevice) {
+  const [overlays, setOverlays] = useState<CameraOverlayStatus | null>(null);
 
   const handleData = useCallback(
     (data) => {
@@ -38,12 +44,9 @@ export function useOverlays(device) {
 
   const setActiveOverlay = useCallback(
     (activeOverlay) => {
-      emit(
-        'set-overlays',
-        JSON.stringify({
-          [device]: activeOverlay,
-        }),
-      );
+      emit('set-overlays', {
+        [device]: activeOverlay,
+      });
     },
     [device],
   );
@@ -65,19 +68,55 @@ export function stopRecording() {
   emit('stop-camera-recording');
 }
 
+enum CameraRecordingStatus {
+  Off = 'off',
+  Recording = 'recording',
+  Error = 'error',
+}
+
+interface CameraRecordingStatusPayload {
+  /** Status of the camera's recording */
+  status: CameraRecordingStatus;
+  /** Current duration of recording in minutes, if recording */
+  recordingMinutes?: number;
+  /** Filename of recording, if recording */
+  recordingFile?: string;
+  /** Remaining disk space available for recording, in bytes */
+  diskSpaceRemaining: number;
+  /** Description of any error that has occurred */
+  error?: string;
+  /** Catch-all for any extra data */
+  [propName: string]: any;
+}
+
+interface CameraRecordingStatusFormatted {
+  /** Status of the camera's recording */
+  status?: string;
+  /** Current duration of recording in mm:ss, if recording */
+  recordingMinutes?: string;
+  /** Filename of recording, if recording */
+  recordingFile?: string;
+  /** Remaining disk space available for recording */
+  diskSpaceRemaining?: string;
+  /** Description of any error that has occurred */
+  error?: string;
+  /** Catch-all for any extra data */
+  [propName: string]: any;
+}
+
 /**
  * Parse the recording payload into an object and format the values
  *
  * Payload structure is defined in the 'V3 MQTT Topics' page on Notion.
  * Topic is /v3/camera/recording/status/<primary/>secondary>.
  *
- * @param {string} data Payload in JSON form
- * @returns {CameraRecordingStatusPayload} Formatted payload without status
+ * @param data Payload from MQTT message, parsed
+ * @returns Formatted payload
  */
-function parseRecordingPayloadData(data) {
+function parseRecordingPayloadData(data: CameraRecordingStatusPayload) {
   if (!data) return null;
 
-  const formattedData = {};
+  const formattedData: CameraRecordingStatusFormatted = {};
 
   Object.keys(data).forEach((field) => {
     let name = camelCaseToStartCase(field);
@@ -86,7 +125,7 @@ function parseRecordingPayloadData(data) {
     // format field value
     switch (field) {
       case 'status':
-        value = capitalise(data[field]);
+        value = capitalise(data.status);
         break;
 
       case 'diskSpaceRemaining':
@@ -95,8 +134,9 @@ function parseRecordingPayloadData(data) {
 
       case 'recordingMinutes':
         {
-          const mins = Math.floor(data.recordingMinutes);
-          const secs = Math.floor((data.recordingMinutes - mins) * 60);
+          const totalMinutes = data.recordingMinutes as number;
+          const mins = Math.floor(totalMinutes);
+          const secs = Math.floor((totalMinutes - mins) * 60);
           value = `${mins}m ${secs}s`;
           name = 'Recording Time';
         }
@@ -116,12 +156,12 @@ function parseRecordingPayloadData(data) {
 /**
  * Initiate receiving status payloads
  *
- * @param {string} subComponent The sub component to init for (e.g. recording, video feed)
- * @param {string?} device Device (primary or secondary)
+ * @param subComponent The sub component to init for (e.g. recording, video feed)
+ * @param device Device
  */
-function initStatus(subComponent, device) {
-  const deviceAsArr = device ? [device] : [];  // only add device path if specified
-  const path = ["camera", subComponent].concat(deviceAsArr);
+function initStatus(subComponent: string, device?: CameraDevice) {
+  const deviceAsArr = device ? [device] : []; // only add device path if specified
+  const path = ['camera', subComponent].concat(deviceAsArr);
   emit(`get-status-payload`, path);
 }
 
@@ -130,95 +170,99 @@ function initStatus(subComponent, device) {
  *
  * Hardcoded for efficiency. If you don't like it, complain to Angus Trau :).
  *
- * @param {'primary' | 'secondary'} device Device
- * @returns {string} Prettied device name
+ * @param device Device
+ * @returns  Prettied device name
  */
-export function getPrettyDeviceName(device) {
-  return device === 'primary' ? 'Primary' : 'Secondary';
+export function getPrettyDeviceName(device: CameraDevice) {
+  return device === CameraDevice.Primary ? 'Primary' : 'Secondary';
+}
+
+interface StatusPayloadOptions<T> {
+  /** Initial value for the payload */
+  initValue?: T;
+  /** Handler for updating payload */
+  payloadHandler?: (
+    setter: (p?: T) => void,
+    newPayload: T,
+    device: CameraDevice,
+  ) => T | void;
+  /** Handler for return value */
+  returnHandler?: (device: CameraDevice, payload?: T) => T | null | undefined;
 }
 
 /**
- * @typedef {object} StatusPayloadOptions
- *
- * @property {any?} initValue Initial value for the payload
- * @property {(setter: (p: any) => void, newPayload: any, device: string?) => any?} payloadHandler Handler for updating payload
- * @property {(payload: any?, device: string?) => any?} returnHandler Handler for return value
- */
-/**
  * Create hooks for getting payloads
  *
- * @param {string} sub Subcomponent
- * @param {StatusPayloadOptions} opts Options
- * @returns {(device: string?) => any} Hook for getting a payload
+ * @param sub Subcomponent
+ * @param opts Options
+ * @returns Hook for getting a payload
  */
-function createStatusPayloadHook(sub, {
-  initValue = null,
-  payloadHandler = (s, p) => s(p ?? initValue),
-  returnHandler = (p) => p
-}) {
-  return function _hook(device) {
+function createStatusPayloadHook<T>(
+  sub: string,
+  {
+    initValue = undefined,
+    payloadHandler = (setter: (p?: T) => void, newPayload: T) =>
+      setter(newPayload ?? initValue),
+    returnHandler = (device: CameraDevice, payload?: T) => payload,
+  }: StatusPayloadOptions<T>,
+) {
+  return function _hook(device: CameraDevice) {
     // Only run init once per render
     useEffect(() => {
-      initStatus(sub);
-    }, []);
+      initStatus(sub, device);
+    }, [device]);
 
     const [payload, setPayload] = useState(initValue);
-    useChannel(
-      `status-camera-${sub}`,
-      (newPayload) => payloadHandler(setPayload, newPayload, device)
+    useChannel(`status-camera-${sub}`, (newPayload: T) =>
+      payloadHandler(setPayload, newPayload, device),
     );
 
-    return returnHandler(payload, device);
+    return returnHandler(device, payload);
   };
 }
 
 /**
- * @typedef {object} CameraRecordingStatusPayload
- * @property {string} status Status of recording
- * @property {?string} recordingMinutes Length of recording
- * @property {?string} recordingFile File name of recording
- * @property {?string} diskSpaceRemaining Remaining space on disk
- * @property {?string} error Error message from camera
- */
-
-/**
  * Returns the last status payload published
  *
- * @param {string} device Device
- * @returns {CameraRecordingStatusPayload} Payload
+ * @param device Device
+ * @returns Formatted recording status
  */
-export const useCameraRecordingStatus = createStatusPayloadHook(
-  'recording', {
-    returnHandler: (payload, device) => parseRecordingPayloadData(payload?.[device])
-  }
-);
+export const useCameraRecordingStatus = createStatusPayloadHook<
+  CameraRecordingStatusFormatted
+>('recording', {
+  returnHandler: (device: CameraDevice, payload) =>
+    parseRecordingPayloadData(payload?.[device]),
+});
 
-/**
- * @typedef {object} VideoFeedStatus
- * @property {boolean}  online Whether video feed is on/off
- */
+interface VideoFeedStatus {
+  /** Whether video feed is on/off */
+  online: boolean;
+}
 /**
  * Returns the last received status of the video feeds from `/v3/camera/video-feed/status/<primary/secondary>`
  *
- * @returns {object.<string, VideoFeedStatus>} A VideoFeedStatus for each device
+ * @returns A VideoFeedStatus for each device
  */
-export const useVideoFeedStatus = createStatusPayloadHook(
-  'video-feed', { initValue: {} }
-);
+export const useVideoFeedStatus = createStatusPayloadHook<{
+  [CameraDevice.Primary]?: VideoFeedStatus;
+  [CameraDevice.Secondary]?: VideoFeedStatus;
+}>('video-feed', {
+  initValue: {},
+});
 
-/**
- * @typedef {object} CameraStatus
- * @property {boolean}  online Whether camera is connected / not connected
- */
+interface CameraStatus {
+  /** Whether camera is connected / not connected */
+  connected: boolean;
+}
 /**
  * Returns the last received connection status of the camera client to the mqtt broker
  *
- * @param {string} device Device
- * @returns {CameraStatus} Camera status
+ * @param device Device
+ * @returns Camera status
  */
-export const useCameraStatus = (device) => createStatusPayloadHook(
-  device, {
-    initValue: false,
-    payloadHandler: (setState, newPayload) => setState(newPayload?.connected ?? false)
-  }
-)(device);
+export const useCameraStatus = (device: CameraDevice) =>
+  createStatusPayloadHook<CameraStatus>(device, {
+    initValue: { connected: false },
+    payloadHandler: (setState, newPayload) =>
+      setState({ connected: newPayload?.connected ?? false }),
+  })(device);

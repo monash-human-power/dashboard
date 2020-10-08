@@ -12,7 +12,7 @@ import CameraRecordingStatus from './CameraRecordingStatus';
 
 /**
  * @typedef {object} CameraRecordingProps
- * @property {string[]} devices Device names
+ * @property {CameraDevice[]} devices Device names
  */
 
 /**
