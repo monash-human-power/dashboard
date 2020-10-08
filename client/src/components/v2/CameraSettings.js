@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Card } from 'react-bootstrap';
-import { useOverlays, getPrettyDeviceName } from 'api/v2/camera';
+import { useOverlays, getPrettyDeviceName, CameraDevice } from 'api/v2/camera';
 import RadioSelector from 'components/RadioSelector';
 
 /**

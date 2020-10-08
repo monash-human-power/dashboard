@@ -2,7 +2,8 @@ import {
   getPrettyDeviceName,
   startRecording,
   stopRecording,
-  useVideoFeedStatus
+  useVideoFeedStatus,
+  CameraDevice,
 } from 'api/v2/camera';
 import PropTypes from 'prop-types';
 import React from 'react';
