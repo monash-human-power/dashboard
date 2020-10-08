@@ -1,32 +1,29 @@
 import { useState, useCallback } from 'react';
 import { emit, useChannel } from './socket';
 
-/**
- * @typedef {object} PowerModelData
- * @property {number} rec_speed           Recommended Speed
- * @property {number} rec_power           Recommended Power
- * @property {number} zdist               Zone Distance Left
- * @property {number} distance_offset     Distance Offset
- * @property {number} distance_left       Total Distance Left
- * @property {number} predicted_max_speed Predicted Max Speed
- */
+export interface PowerModelData {
+  /** Recommended speed */
+  recSpeed?: number;
+  /** Recommended power */
+  recPower?: number;
+  /** Distance remaining in current power zone */
+  zoneDist?: number;
+  /** Distance offset */
+  distanceOffset?: number;
+  /** Total distance remaining */
+  distanceLeft?: number;
+  /** Predicted maximum speed */
+  predictedMaxSpeed?: number;
+}
 
 /**
  * Use current power model data
  *
- * @returns {?PowerModelData} Power model data
+ * @returns Power model data
  */
-export function usePowerModel() {
-  const [recSpData, setRecSpData] = useState({
-    rec_speed: null,
-    rec_power: null,
-    zdist: null,
-    distance_offset: null,
-    distance_left: null,
-  });
-  const [maxSpData, setMaxSpData] = useState({
-    predicted_max_speed: null,
-  });
+export function usePowerModel(): PowerModelData {
+  const [recSpData, setRecSpData] = useState({});
+  const [maxSpData, setMaxSpData] = useState({});
 
   const recSpHandler = useCallback((data) => {
     setRecSpData(data);
@@ -45,15 +42,9 @@ export function usePowerModel() {
 }
 
 /**
- * @typedef {object} PowerModelStateHook
- * @property {boolean}            running     Is the power model running
- * @property {function(boolean)}  setRunning  Set power model running state
- */
-
-/**
  * Use power model running state
  *
- * @returns {PowerModelStateHook} Hook
+ * @returns The power model running state and a function to set this value.
  */
 export function usePowerModelState() {
   const [running, setRunning] = useState(false);
@@ -63,7 +54,7 @@ export function usePowerModelState() {
   }, []);
   useChannel('power-model-running', handleData);
 
-  const setState = useCallback((state) => {
+  const setState = useCallback((state: boolean) => {
     if (state) {
       emit('start-power-model');
     } else {
@@ -72,7 +63,7 @@ export function usePowerModelState() {
     setRunning(state);
   }, []);
 
-  return [running, setState];
+  return [running, setState] as const;
 }
 
 /**
@@ -80,7 +71,7 @@ export function usePowerModelState() {
  *
  * @param {number} distance Current actual distance
  */
-export function setCalibration(distance) {
+export function setCalibration(distance: number) {
   emit('submit-calibration', distance);
 }
 

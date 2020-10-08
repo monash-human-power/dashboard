@@ -20,7 +20,9 @@ export function getSocket() {
  * @param channel Channel to transmit to
  * @param payload Payload to send
  */
-export function emit(channel: string, payload: object) {
+// TODO: We shouldn't be able to send just a number, we should enforce objects are sent.
+// Once V2 BOOST API is phased out, this should be possible.
+export function emit(channel: string, payload?: object | number) {
   getSocket().emit(channel, payload);
 }
 
