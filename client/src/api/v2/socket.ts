@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
-import io, { Socket } from 'socket.io-client';
+import io from 'socket.io-client';
 
-let socket;
+let socket: SocketIOClient.Socket;
 /**
  * Get socket.io connection
  *
- * @returns {Socket} Socket.io socket
+ * @returns Socket.io socket
  */
 export function getSocket() {
   if (!socket) {
@@ -17,20 +17,20 @@ export function getSocket() {
 /**
  * Transmit payload to channel
  *
- * @param {string} channel Channel to transmit to
- * @param {object} payload Payload to send
+ * @param channel Channel to transmit to
+ * @param payload Payload to send
  */
-export function emit(channel, payload) {
+export function emit(channel: string, payload: object) {
   getSocket().emit(channel, payload);
 }
 
 /**
  * Listen to channel
  *
- * @param {string}    channel   Channel to listen to
- * @param {Function}  callback  Callback on message
+ * @param channel   Channel to listen to
+ * @param callback  Callback on message
  */
-export function useChannel(channel, callback) {
+export function useChannel(channel: string, callback: Function) {
   useEffect(() => {
     const localSocket = getSocket();
     localSocket.on(channel, callback);
