@@ -1,7 +1,6 @@
+import WidgetListGroupItem from 'components/WidgetListGroupItem';
 import React from 'react';
 import { Button } from 'react-bootstrap';
-import WidgetListGroupItem from 'components/WidgetListGroupItem';
-import LogFile from '../api/v2/files';
 
 /**
  * @typedef {object} LogFileListProps
