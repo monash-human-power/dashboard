@@ -1,5 +1,6 @@
 import { storiesOf } from "@storybook/react";
 import React from 'react';
+import { BrowserRouter as Router } from "react-router-dom";
 import { bikeVersions, VersionInfo } from 'router';
 import { routes } from 'router/v2';
 import NavBar from './NavBar';
@@ -11,7 +12,7 @@ export default {
 };
 
 const template = (arg: VersionInfo) =>
-  () => <NavBar bikeVersion={arg} bikeVersions={bikeVersions} />;
+  () => <Router><NavBar bikeVersion={arg} bikeVersions={bikeVersions} /></Router>;
 
 storiesOf("NavBar", module)
   .add("V2", template({
