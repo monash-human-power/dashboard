@@ -1,4 +1,4 @@
-const { override, addWebpackExternals } = require('customize-cra');
+const { override, addWebpackExternals, useEslintRc } = require('customize-cra');
 
 module.exports = override(
   // Chart.js has a required dependency on moment.js. However this dependency is only required when
@@ -7,4 +7,7 @@ module.exports = override(
   addWebpackExternals({
     moment: 'moment',
   }),
+
+  // Use our own .eslint file rather than the config tha CRA uses
+  useEslintRc('.eslintrc'),
 );

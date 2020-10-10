@@ -1,20 +1,21 @@
 import { useState, useEffect, useCallback } from 'react';
 
-/**
- * @typedef {object} LogFile
- * @property {string} fileName  Log file name
- * @property {string} url       URL to download file
- */
+export interface LogFile {
+  /** Log file name */
+  fileName: string;
+  /** URL to download file */
+  url: string;
+}
 
 /**
  * Get list of log files
  *
- * @returns {Promise<LogFile[]>} List of log files
+ * @returns List of log files
  */
 export async function getFiles() {
   const response = await fetch('/files');
   const data = await response.json();
-  const files = data.files.map((fileName) => ({
+  const files: LogFile[] = data.files.map((fileName: string) => ({
     fileName,
     url: `/files/${fileName}`,
   }));
@@ -24,35 +25,30 @@ export async function getFiles() {
 /**
  * Delete a log file
  *
- * @param {LogFile} file Log file
+ * @param file Log file
  */
-export async function deleteFile(file) {
+export async function deleteFile(file: LogFile) {
   await fetch(file.url, { method: 'DELETE' });
 }
 
 /**
- * @typedef {object} FilesHook
- * @property {?Array.<LogFile>}   files       List of log files
- * @property {function(LogFile)}  deleteFile  Delete a log file
- */
-
-/**
  * Use a list of log files
  *
- * @returns {FilesHook} Files hook
+ * @returns List of log files, and function to delete a log file
  */
 export function useFiles() {
-  const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState<LogFile[] | null>([]);
 
   useEffect(() => {
     /** Fetch file data */
     async function fetchData() {
       setFiles(await getFiles());
     }
+    setFiles(null);
     fetchData();
   }, []);
 
-  const deleteFileHandler = useCallback(async (file) => {
+  const deleteFileHandler = useCallback(async (file: LogFile) => {
     await deleteFile(file);
     setFiles(await getFiles());
   }, []);
@@ -63,7 +59,7 @@ export function useFiles() {
 /**
  * Use the latest file URL
  *
- * @returns {string} Log file location
+ * @returns Log file location
  */
 export function useLatestFile() {
   return '/files/recent';

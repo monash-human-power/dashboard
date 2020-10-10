@@ -1,6 +1,9 @@
 /.vscode
 /server/data/*.csv
 
+# Ignore Storybook build output
+/client/storybook-static
+
 # Ignore built files from gulp
 /client/css/bootstrap.css
 /client/css/all.min.css
