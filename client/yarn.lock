@@ -2751,6 +2751,21 @@
   resolved "https://registry.yarnpkg.com/@types/braces/-/braces-3.0.0.tgz#7da1c0d44ff1c7eb660a36ec078ea61ba7eb42cb"
   integrity sha512-TbH79tcyi9FHwbyboOKeRachRq63mSuWYXOflsNO9ZyE5ClQ/JaozNKl+aWUq87qPNsXasXxi2AbgfwIJ+8GQw==
 
+"@types/chart.js@*":
+  version "2.9.25"
+  resolved "https://registry.yarnpkg.com/@types/chart.js/-/chart.js-2.9.25.tgz#a22d18f6f7cb5b4499f39de600c4c520f635a58f"
+  integrity sha512-SPgPISpaGM42WL9Dezms4+8fInHxAXDzTs8DwPxhGuJT+jETXlVITTbe8bvK1n+sMmyyelR9B4w0lwMkA24oJg==
+  dependencies:
+    moment "^2.10.2"
+
+"@types/chartjs-plugin-annotation@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@types/chartjs-plugin-annotation/-/chartjs-plugin-annotation-0.5.1.tgz#f560fc9e2dc15aa595b6b6043c7f7789dc890a90"
+  integrity sha512-ruMXTjRVQwwbOtuNfFBHbqbhj497+D/VRmMPZiHv/GCupGwUf2l1TL7S1BTRYlP1Hengx798UwaOpAO+3+Sczw==
+  dependencies:
+    "@types/chart.js" "*"
+    moment "^2.10.2"
+
 "@types/classnames@^2.2.10":
   version "2.2.10"
   resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.10.tgz#cc658ca319b6355399efc1f5b9e818f1a24bf999"
