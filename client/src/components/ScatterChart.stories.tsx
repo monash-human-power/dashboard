@@ -109,7 +109,7 @@ PowerDistance.args = {
 };
 
 export const PowerDistanceBlank = Templates.PowerDistance.bind({});
-PowerDistance.args = {
+PowerDistanceBlank.args = {
     data: [],
     max: 2200
 };
@@ -121,7 +121,7 @@ CadenceDistance.args = {
 };
 
 export const CadenceDistanceBlank = Templates.CadenceDistance.bind({});
-CadenceDistance.args = {
+CadenceDistanceBlank.args = {
     data: [],
     max: 550
 };
