@@ -88,23 +88,13 @@ interface CameraRecordingStatusPayload {
   diskSpaceRemaining: number;
   /** Description of any error that has occurred */
   error?: string;
-  /** Catch-all for any extra data */
-  [propName: string]: any;
 }
 
-interface CameraRecordingStatusFormatted {
-  /** Status of the camera's recording */
-  status?: string;
-  /** Current duration of recording in mm:ss, if recording */
-  recordingMinutes?: string;
-  /** Filename of recording, if recording */
-  recordingFile?: string;
-  /** Remaining disk space available for recording */
-  diskSpaceRemaining?: string;
-  /** Description of any error that has occurred */
-  error?: string;
-  /** Catch-all for any extra data */
-  [propName: string]: any;
+interface CameraRecordingStatusItem {
+  /** Display name of the status item e.g. "Disk Space Remaining" */
+  name: string;
+  /** Value of the status item e.g. "1.2 GiB" */
+  value: string;
 }
 
 /**
@@ -116,23 +106,25 @@ interface CameraRecordingStatusFormatted {
  * @param data Payload from MQTT message, parsed
  * @returns Formatted payload
  */
-function parseRecordingPayloadData(data: CameraRecordingStatusPayload) {
+export function parseRecordingPayloadData(data: CameraRecordingStatusPayload) {
   if (!data) return null;
 
-  const formattedData: CameraRecordingStatusFormatted = {};
+  const formattedData: CameraRecordingStatusItem[] = [];
 
   Object.keys(data).forEach((field) => {
-    let name = camelCaseToStartCase(field);
-    let value = '';
+    const item = {
+      name: camelCaseToStartCase(field),
+      value: '',
+    };
 
     // format field value
     switch (field) {
       case 'status':
-        value = capitalise(data.status);
+        item.value = capitalise(data.status);
         break;
 
       case 'diskSpaceRemaining':
-        value = formatBytes(data.diskSpaceRemaining);
+        item.value = formatBytes(data.diskSpaceRemaining);
         break;
 
       case 'recordingMinutes':
@@ -140,17 +132,25 @@ function parseRecordingPayloadData(data: CameraRecordingStatusPayload) {
           const totalMinutes = data.recordingMinutes as number;
           const mins = Math.floor(totalMinutes);
           const secs = Math.floor((totalMinutes - mins) * 60);
-          value = `${mins}m ${secs}s`;
-          name = 'Recording Time';
+          item.value = `${mins}m ${secs}s`;
+          item.name = 'Recording Time';
         }
         break;
 
+      case 'recordingFile':
+        item.value = data.recordingFile as string;
+        break;
+
+      case 'error':
+        item.value = data.error as string;
+        break;
+
       default:
-        value = data[field];
+        // Unexpected data
         break;
     }
 
-    formattedData[name] = value;
+    formattedData.push(item);
   });
 
   return formattedData;
@@ -230,12 +230,10 @@ function createStatusPayloadHook<T>(
  * @param device Device
  * @returns Formatted recording status
  */
-export const useCameraRecordingStatus = createStatusPayloadHook<
-         CameraRecordingStatusFormatted
-       >('recording', {
-         returnHandler: (payload, device) =>
-           parseRecordingPayloadData(payload?.[device as CameraDevice]),
-       });
+export const useCameraRecordingStatus = createStatusPayloadHook<{
+  [CameraDevice.Primary]?: CameraRecordingStatusPayload;
+  [CameraDevice.Secondary]?: CameraRecordingStatusPayload;
+}>('recording', {});
 
 interface VideoFeedStatus {
   /** Whether video feed is on/off */
