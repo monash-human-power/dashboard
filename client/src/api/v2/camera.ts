@@ -182,15 +182,15 @@ export function getPrettyDeviceName(device: CameraDevice) {
 
 interface StatusPayloadOptions<T> {
   /** Initial value for the payload */
-  initValue?: T;
+  initValue: T | null;
   /** Handler for updating payload */
   payloadHandler?: (
-    setter: (p?: T) => void,
-    newPayload: T,
+    setter: (p: T | null) => void,
+    newPayload: T | null,
     device: CameraDevice,
   ) => T | void;
   /** Handler for return value */
-  returnHandler?: (payload?: T, device?: CameraDevice) => T | null | undefined;
+  returnHandler?: (payload: T | null, device?: CameraDevice) => T | null;
 }
 
 /**
@@ -203,10 +203,12 @@ interface StatusPayloadOptions<T> {
 function createStatusPayloadHook<T>(
   sub: string,
   {
-    initValue = undefined,
-    payloadHandler = (setter: (payload?: T) => void, newPayload: T) =>
-      setter(newPayload ?? initValue),
-    returnHandler = (payload?: T) => payload,
+    initValue = null,
+    payloadHandler = (
+      setter: (payload: T | null) => void,
+      newPayload: T | null,
+    ) => setter(newPayload ?? initValue),
+    returnHandler = (payload: T | null) => payload,
   }: StatusPayloadOptions<T>,
 ) {
   return function _hook(device: CameraDevice) {
@@ -231,9 +233,11 @@ function createStatusPayloadHook<T>(
  * @returns Formatted recording status
  */
 export const useCameraRecordingStatus = createStatusPayloadHook<{
-  [CameraDevice.Primary]?: CameraRecordingStatusPayload;
-  [CameraDevice.Secondary]?: CameraRecordingStatusPayload;
-}>('recording', {});
+         [CameraDevice.Primary]?: CameraRecordingStatusPayload;
+         [CameraDevice.Secondary]?: CameraRecordingStatusPayload;
+       }>('recording', {
+         initValue: {},
+       });
 
 interface VideoFeedStatus {
   /** Whether video feed is on/off */
