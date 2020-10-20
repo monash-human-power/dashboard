@@ -17,7 +17,7 @@ interface SensorStates {
   accelerometer: boolean;
   gyroscope: boolean;
   potentiometer: boolean;
-  thermometer?: boolean;
+  thermometer: boolean;
 }
 
 /**
