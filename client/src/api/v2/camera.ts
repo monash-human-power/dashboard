@@ -3,6 +3,7 @@ import {
   Array,
   Literal,
   Number,
+  Partial,
   Record,
   Static,
   String,
@@ -220,17 +221,23 @@ function createStatusPayloadHook<T>(
   };
 }
 
+const CameraRecordingStatusPayloads = Partial({
+  primary: CameraRecordingStatusPayload,
+  secondary: CameraRecordingStatusPayload,
+});
+
 /**
  * Returns the last status payload published
  *
  * @param device Device
- * @returns Formatted recording status
+ * @returns Recording status
  */
-export const useCameraRecordingStatus = createStatusPayloadHook<{
-  ['primary']?: CameraRecordingStatusPayload;
-  ['secondary']?: CameraRecordingStatusPayload;
-}>('recording', {
-  initValue: {},
+export const useCameraRecordingStatus = createStatusPayloadHook<
+  Static<typeof CameraRecordingStatusPayloads>
+>('recording', {
+  initValue: null,
+  payloadHandler: (setter, newPayload) =>
+    setter(CameraRecordingStatusPayloads.check(newPayload)),
 });
 
 interface VideoFeedStatus {
