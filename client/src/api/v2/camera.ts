@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
   Array,
+  Boolean,
   Literal,
   Number,
   Partial,
@@ -240,26 +241,36 @@ export const useCameraRecordingStatus = createStatusPayloadHook<
     setter(CameraRecordingStatusPayloads.check(newPayload)),
 });
 
-interface VideoFeedStatus {
+const VideoFeedStatus = Record({
   /** Whether video feed is on/off */
-  online: boolean;
-}
+  online: Boolean,
+});
+type VideoFeedStatus = Static<typeof VideoFeedStatus>;
+
+const VideoFeedStatuses = Partial({
+  primary: VideoFeedStatus,
+  secondary: VideoFeedStatus,
+});
+
 /**
  * Returns the last received status of the video feeds from `/v3/camera/video-feed/status/<primary/secondary>`
  *
  * @returns A VideoFeedStatus for each device
  */
-export const useVideoFeedStatus = createStatusPayloadHook<{
-  ['primary']?: VideoFeedStatus;
-  ['secondary']?: VideoFeedStatus;
-}>('video-feed', {
+export const useVideoFeedStatus = createStatusPayloadHook<
+  Static<typeof VideoFeedStatuses>
+>('video-feed', {
   initValue: {},
+  payloadHandler: (setter, newPayload) => {
+    return setter(VideoFeedStatuses.check(newPayload ?? {}));
+  },
 });
 
 interface CameraStatus {
   /** Whether camera is connected / not connected */
   connected: boolean;
 }
+
 /**
  * Returns the last received connection status of the camera client to the mqtt broker
  *
