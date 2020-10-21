@@ -1,7 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Array, Literal, Record, Static, String, Union } from 'runtypes';
-import formatBytes from 'utils/formatBytes';
-import { camelCaseToStartCase, capitalise } from 'utils/string';
+import {
+  Array,
+  Literal,
+  Number,
+  Record,
+  Static,
+  String,
+  Union,
+} from 'runtypes';
+import { capitalise, formatBytes, formatMinutes } from 'utils/string';
 import { emit, useChannel } from './socket';
 
 const CameraDevice = Union(Literal('primary'), Literal('secondary'));
@@ -73,24 +80,31 @@ export function stopRecording() {
   emit('stop-camera-recording');
 }
 
-enum CameraRecordingStatus {
-  Off = 'off',
-  Recording = 'recording',
-  Error = 'error',
-}
-
-interface CameraRecordingStatusPayload {
-  /** Status of the camera's recording */
-  status: CameraRecordingStatus;
-  /** Current duration of recording in minutes, if recording */
-  recordingMinutes?: number;
-  /** Filename of recording, if recording */
-  recordingFile?: string;
+const CameraRecordingOffPayload = Record({
+  status: Literal('off'),
   /** Remaining disk space available for recording, in bytes */
-  diskSpaceRemaining: number;
-  /** Description of any error that has occurred */
-  error?: string;
-}
+  diskSpaceRemaining: Number,
+});
+const CameraRecordingOnPayload = Record({
+  status: Literal('recording'),
+  /** Current duration of recording in minutes */
+  recordingMinutes: Number,
+  /** Path to video file being recorded */
+  recordingFile: String,
+  diskSpaceRemaining: Number,
+});
+const CameraRecordingErrorPayload = Record({
+  status: Literal('error'),
+  diskSpaceRemaining: Number,
+  /** Description of error that has occurred */
+  error: String,
+});
+const CameraRecordingStatusPayload = Union(
+  CameraRecordingOffPayload,
+  CameraRecordingOnPayload,
+  CameraRecordingErrorPayload,
+);
+type CameraRecordingStatusPayload = Static<typeof CameraRecordingStatusPayload>;
 
 interface CameraRecordingStatusItem {
   /** Display name of the status item e.g. "Disk Space Remaining" */
@@ -105,57 +119,35 @@ interface CameraRecordingStatusItem {
  * Payload structure is defined in the 'V3 MQTT Topics' page on Notion.
  * Topic is /v3/camera/recording/status/<primary/>secondary>.
  *
- * @param data Payload from MQTT message, parsed
+ * @param payload Payload from MQTT message, parsed
  * @returns Formatted payload
  */
-export function parseRecordingPayloadData(data: CameraRecordingStatusPayload) {
-  if (!data) return null;
+export function formatRecordingPayload(payload: CameraRecordingStatusPayload) {
+  if (!payload) return null;
 
-  const formattedData: CameraRecordingStatusItem[] = [];
+  // Format data always present regardless of status
+  const commonData: CameraRecordingStatusItem[] = [
+    { name: 'Status', value: capitalise(payload.status) },
+    {
+      name: 'Disk space remaining',
+      value: formatBytes(payload.diskSpaceRemaining),
+    },
+  ];
 
-  Object.keys(data).forEach((field) => {
-    const item = {
-      name: camelCaseToStartCase(field),
-      value: '',
-    };
+  // Format data that is dependent on status
+  const formatter = CameraRecordingStatusPayload.match(
+    () => [],
+    (onPayload) => [
+      {
+        name: 'Recording duration',
+        value: formatMinutes(onPayload.recordingMinutes),
+      },
+      { name: 'Recording file', value: onPayload.recordingFile },
+    ],
+    (errorPayload) => [{ name: 'Error', value: errorPayload.error }],
+  );
 
-    // format field value
-    switch (field) {
-      case 'status':
-        item.value = capitalise(data.status);
-        break;
-
-      case 'diskSpaceRemaining':
-        item.value = formatBytes(data.diskSpaceRemaining);
-        break;
-
-      case 'recordingMinutes':
-        {
-          const totalMinutes = data.recordingMinutes as number;
-          const mins = Math.floor(totalMinutes);
-          const secs = Math.floor((totalMinutes - mins) * 60);
-          item.value = `${mins}m ${secs}s`;
-          item.name = 'Recording Time';
-        }
-        break;
-
-      case 'recordingFile':
-        item.value = data.recordingFile as string;
-        break;
-
-      case 'error':
-        item.value = data.error as string;
-        break;
-
-      default:
-        // Unexpected data
-        break;
-    }
-
-    formattedData.push(item);
-  });
-
-  return formattedData;
+  return [...commonData, ...formatter(payload)];
 }
 
 /**
@@ -235,11 +227,11 @@ function createStatusPayloadHook<T>(
  * @returns Formatted recording status
  */
 export const useCameraRecordingStatus = createStatusPayloadHook<{
-         ['primary']?: CameraRecordingStatusPayload;
-         ['secondary']?: CameraRecordingStatusPayload;
-       }>('recording', {
-         initValue: {},
-       });
+  ['primary']?: CameraRecordingStatusPayload;
+  ['secondary']?: CameraRecordingStatusPayload;
+}>('recording', {
+  initValue: {},
+});
 
 interface VideoFeedStatus {
   /** Whether video feed is on/off */
@@ -251,11 +243,11 @@ interface VideoFeedStatus {
  * @returns A VideoFeedStatus for each device
  */
 export const useVideoFeedStatus = createStatusPayloadHook<{
-         ['primary']?: VideoFeedStatus;
-         ['secondary']?: VideoFeedStatus;
-       }>('video-feed', {
-         initValue: {},
-       });
+  ['primary']?: VideoFeedStatus;
+  ['secondary']?: VideoFeedStatus;
+}>('video-feed', {
+  initValue: {},
+});
 
 interface CameraStatus {
   /** Whether camera is connected / not connected */

@@ -1,6 +1,6 @@
 import {
   useCameraRecordingStatus,
-  parseRecordingPayloadData,
+  formatRecordingPayload,
 } from 'api/v2/camera';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -21,7 +21,7 @@ const defaultStatus = 'Waiting for status...';
  */
 export default function CameraRecordingStatus({ device }) {
   const status = useCameraRecordingStatus(device)?.[device];
-  const statusFormatted = parseRecordingPayloadData(status);
+  const statusFormatted = formatRecordingPayload(status);
 
   return (
     <div>
