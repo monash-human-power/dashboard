@@ -55,9 +55,6 @@ export default function ScatterChart({
   max,
   maxColour,
 }: ScatterChartProps): JSX.Element {
-  console.log(title);
-  console.log(JSON.stringify(data));
-  console.log(JSON.stringify(max));
   const options: ChartOptions = {
     title: {
       display: true,
