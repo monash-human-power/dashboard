@@ -1,5 +1,6 @@
 import { BLUE, GREEN, GREY, PURPLE } from 'components/charts/colours';
 import React from 'react';
+import { createStory, StoryTemplate } from '../utils/stories';
 import ScatterChart, { AxisProps, DataProps } from './ScatterChart';
 
 export default {
@@ -23,9 +24,7 @@ interface DataArgs {
 const RAND_MULTIPLIER = 0x426687872;
 const RAND_DIGITS = 10;
 
-type Template = ((a: DataArgs) => JSX.Element) & { args: DataArgs };
-
-const createTemplate = (chartArgs: ChartProps): Template =>
+const createTemplate = (chartArgs: ChartProps): StoryTemplate<DataArgs> =>
     Object.assign(
         // Template function
         (a: DataArgs) => <ScatterChart {...{ ...chartArgs, ...a }} />,
@@ -97,38 +96,32 @@ const data = (low: number, high: number, step: number, max: number) =>
 
 /* ----------------------------------- Stories ----------------------------------- */
 
-export const VelocityDistance = Templates.VelocityDistance.bind({});
-VelocityDistance.args = {
+export const VelocityDistance = createStory<DataArgs>(Templates.VelocityDistance, {
     data: data(0, 50000, 1, 90),
     max: 110
-};
+});
 
-export const VelocityDistanceBlank = Templates.VelocityDistance.bind({});
-VelocityDistanceBlank.args = {
+export const VelocityDistanceBlank = createStory<DataArgs>(Templates.VelocityDistance, {
     data: [],
     max: 110
-};
+});
 
-export const PowerDistance = Templates.PowerDistance.bind({});
-PowerDistance.args = {
+export const PowerDistance = createStory<DataArgs>(Templates.PowerDistance, {
     data: data(0, 50000, 1, 2000),
     max: 2200
-};
+});
 
-export const PowerDistanceBlank = Templates.PowerDistance.bind({});
-PowerDistanceBlank.args = {
+export const PowerDistanceBlank = createStory<DataArgs>(Templates.PowerDistance, {
     data: [],
     max: 2200
-};
+});
 
-export const CadenceDistance = Templates.CadenceDistance.bind({});
-CadenceDistance.args = {
+export const CadenceDistance = createStory<DataArgs>(Templates.CadenceDistance, {
     data: data(0, 50000, 1, 500),
     max: 550
-};
+});
 
-export const CadenceDistanceBlank = Templates.CadenceDistance.bind({});
-CadenceDistanceBlank.args = {
+export const CadenceDistanceBlank = createStory<DataArgs>(Templates.CadenceDistance, {
     data: [],
     max: 550
-};
+});
