@@ -3,48 +3,42 @@ import AnnotationPlugin from 'chartjs-plugin-annotation';
 import React from 'react';
 import { Scatter } from 'react-chartjs-2';
 
-/**
- * @property {string} label Axis label
- * @property {string} unit  Axis unit of measurement
- */
 export interface AxisProps {
+  /** Axis label */
   label: string,
+  /** Axis unit of measurement */
   unit: string
 }
 
-/**
- * @property {number} x X-Axis value
- * @property {number} y Y-Axis value
- */
 export interface DataProps {
+  /** X-Axis value */
   x: number,
+  /** Y-Axis value */
   y: number
 }
 
-/**
- * @property {string}     title       Chart title
- * @property {AxisProps}  xAxis       X-Axis config
- * @property {AxisProps}  yAxis       Y-Axis config
- * @property {DataProps[]}   data        Data values
- * @property {string}     dataColour  Data background colour
- * @property {number}     max         Max line value
- * @property {string}     maxColour   Max line colour
- */
 export interface ScatterChartProps {
+  /** Chart title */
   title: string,
+  /** X-Axis config */
   xAxis: AxisProps,
+  /** Y-Axis config */
   yAxis: AxisProps,
+  /** Data values */
   data: DataProps[],
+  /** Data background colour */
   dataColour: string,
+  /** Max line value */
   max: number,
+  /** Max line colour */
   maxColour: string
 }
 
 /**
  * Scatter chart component
  *
- * @param {ScatterChartProps} props Props
- * @returns {React.Component<ScatterChartProps>} Component
+ * @param props Props
+ * @returns Component
  */
 export default function ScatterChart({
   title,
