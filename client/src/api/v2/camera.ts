@@ -125,7 +125,7 @@ interface CameraRecordingStatusItem {
  * @param payload Payload from MQTT message, parsed
  * @returns Formatted payload
  */
-export function formatRecordingPayload(payload: CameraRecordingStatusPayload) {
+export function formatRecordingPayload(payload?: CameraRecordingStatusPayload) {
   if (!payload) return null;
 
   // Format data always present regardless of status
