@@ -4,7 +4,7 @@ import ScatterChart, { AxisProps, DataProps } from './ScatterChart';
 
 export default {
     component: ScatterChart,
-    title: 'ScatterChart'
+    title: 'ScatterChart',
 };
 
 interface ChartProps {
@@ -19,6 +19,9 @@ interface DataArgs {
     data: DataProps[],
     max: number
 }
+
+const RAND_MULTIPLIER = 0x426687872;
+const RAND_DIGITS = 10;
 
 type Template = ((a: DataArgs) => JSX.Element) & { args: DataArgs };
 
@@ -63,8 +66,12 @@ const quad = (low: number, high: number, max: number) =>
     (x: number) => -((x - low) * (x - high)) * max / (1 / 4 * (low - high) * (low - high));
 
 // Add random noise to a value
-const perturb = (n: number) => Math.random() > 0.75
-    ? n : Math.abs(n * (Math.random() / 10 + 0.95) + (Math.random() - 0.5) * 14);
+const perturbFunc = (f: (n: number) => number) => (n: number) => f(n) > 0.75
+    ? n : Math.abs(n * (f(n) / 10 + 0.95) + (f(n) - 0.5) * 14);
+
+const perturb = perturbFunc(
+    (n) => (n * RAND_MULTIPLIER % (10 ** RAND_DIGITS + 1)) / 10 ** RAND_DIGITS
+);
 
 // Create the data for the chart using a function
 const createData = (
