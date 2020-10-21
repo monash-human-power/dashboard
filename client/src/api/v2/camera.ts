@@ -182,7 +182,7 @@ interface StatusPayloadOptions<T> {
   initValue: T | null;
   /** Handler for updating payload */
   payloadHandler?: (
-    setter: (p: T | null) => void,
+    setter: React.Dispatch<React.SetStateAction<T | null>>,
     newPayload: T | null,
     device: CameraDevice,
   ) => T | void;
@@ -204,7 +204,7 @@ function createStatusPayloadHook<T>(
   {
     initValue = null,
     payloadHandler = (
-      setter: (payload: T | null) => void,
+      setter: React.Dispatch<React.SetStateAction<T | null>>,
       newPayload: T | null,
     ) => setter(newPayload ?? initValue),
     returnHandler = (payload: T | null) => payload,
