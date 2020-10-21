@@ -1,19 +1,23 @@
 import { useCallback, useEffect, useState } from 'react';
+import { Array, Literal, Record, Static, String, Union } from 'runtypes';
 import formatBytes from 'utils/formatBytes';
 import { camelCaseToStartCase, capitalise } from 'utils/string';
 import { emit, useChannel } from './socket';
 
-enum CameraDevice {
-  Primary = 'primary',
-  Secondary = 'secondary',
-}
+const CameraDevice = Union(Literal('primary'), Literal('secondary'));
+type CameraDevice = Static<typeof CameraDevice>;
 
-interface CameraOverlayStatus {
+const CameraConfig = Record({
+  /** Device that the camera has been configured to be */
+  device: CameraDevice,
+  /** Bike that the camera is configured to be on */
+  bike: String,
   /** List of available overlays */
-  overlays: string[];
+  overlays: Array(String),
   /** Name of currently active overlay */
-  active: string;
-}
+  activeOverlay: String,
+});
+type CameraConfig = Static<typeof CameraConfig>;
 
 /**
  * Use a list of camera overlays
@@ -21,17 +25,15 @@ interface CameraOverlayStatus {
  * @param device Camera screen
  * @returns Status of overlays and function to set active overlay.
  */
-export function useOverlays(device: CameraDevice) {
-  const [overlays, setOverlays] = useState<CameraOverlayStatus | null>(null);
+export function useCameraConfig(device: CameraDevice) {
+  const [config, setConfig] = useState<CameraConfig | null>(null);
 
   const handleData = useCallback(
     (data) => {
-      const json = JSON.parse(data);
-      if (json.device === device) {
-        setOverlays({
-          active: json.activeOverlay,
-          overlays: json.overlays,
-        });
+      const newConfig = CameraConfig.check(JSON.parse(data));
+      // Received config is not necessarily for the requested device
+      if (newConfig.device === device) {
+        setConfig(newConfig);
       }
     },
     [device],
@@ -46,15 +48,15 @@ export function useOverlays(device: CameraDevice) {
     (activeOverlay) => {
       emit(
         'set-overlays',
-          JSON.stringify({
-            [device]: activeOverlay,
-          }),
+        JSON.stringify({
+          [device]: activeOverlay,
+        }),
       );
     },
     [device],
   );
 
-  return { overlays, setActiveOverlay };
+  return { config, setActiveOverlay };
 }
 
 /**
@@ -177,7 +179,7 @@ function initStatus(subComponent: string, device?: CameraDevice) {
  * @returns  Prettied device name
  */
 export function getPrettyDeviceName(device: CameraDevice) {
-  return device === CameraDevice.Primary ? 'Primary' : 'Secondary';
+  return device === 'primary' ? 'Primary' : 'Secondary';
 }
 
 interface StatusPayloadOptions<T> {
@@ -233,8 +235,8 @@ function createStatusPayloadHook<T>(
  * @returns Formatted recording status
  */
 export const useCameraRecordingStatus = createStatusPayloadHook<{
-         [CameraDevice.Primary]?: CameraRecordingStatusPayload;
-         [CameraDevice.Secondary]?: CameraRecordingStatusPayload;
+         ['primary']?: CameraRecordingStatusPayload;
+         ['secondary']?: CameraRecordingStatusPayload;
        }>('recording', {
          initValue: {},
        });
@@ -249,11 +251,11 @@ interface VideoFeedStatus {
  * @returns A VideoFeedStatus for each device
  */
 export const useVideoFeedStatus = createStatusPayloadHook<{
-  [CameraDevice.Primary]?: VideoFeedStatus;
-  [CameraDevice.Secondary]?: VideoFeedStatus;
-}>('video-feed', {
-  initValue: {},
-});
+         ['primary']?: VideoFeedStatus;
+         ['secondary']?: VideoFeedStatus;
+       }>('video-feed', {
+         initValue: {},
+       });
 
 interface CameraStatus {
   /** Whether camera is connected / not connected */
