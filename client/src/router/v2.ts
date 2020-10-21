@@ -9,7 +9,7 @@ import SensorStatusView from 'views/v2/SensorStatusView';
 import { RouteInfo } from './route';
 
 /**
- * component type is force casted to React.Component.
+ * Component type is force casted to React.Component.
  *
  * V2 views will have to be converted to ts otherwise.
  */

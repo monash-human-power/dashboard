@@ -10,15 +10,17 @@ import styles from './NavBar.module.css';
  * @property {VersionInfo[]} bikeVersions Version info for all bikes
  */
 export interface NavBarProps {
+  /** Version info for bike */
   bikeVersion: VersionInfo | null,
+  /** Version info for all bikes */
   bikeVersions: VersionInfo[]
 }
 
 /**
  * Navigation bar component
  *
- * @param {NavBarProps} props Props
- * @returns {JSX.Element} Component
+ * @param props Props
+ * @returns Component
  */
 export default function NavBar({ bikeVersion, bikeVersions }: NavBarProps): JSX.Element {
   const bikeName = bikeVersion?.name;
