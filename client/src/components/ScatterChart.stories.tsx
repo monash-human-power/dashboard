@@ -38,21 +38,21 @@ const createTemplate = (chartArgs: ChartProps): Template =>
 const Templates = {
     VelocityDistance: createTemplate({
         title: "Velocity-Distance",
-        xAxis: { label: 'Distance', unit: 'km' },
+        xAxis: { label: 'Distance', unit: 'm' },
         yAxis: { label: 'Velocity', unit: 'km/hr' },
         dataColour: PURPLE,
         maxColour: GREY
     }),
     PowerDistance: createTemplate({
         title: "Power-Time",
-        xAxis: { label: 'Distance', unit: 'km' },
+        xAxis: { label: 'Distance', unit: 'm' },
         yAxis: { label: 'Power', unit: 'W' },
         dataColour: BLUE,
         maxColour: GREY
     }),
     CadenceDistance: createTemplate({
         title: "Cadence-Distance",
-        xAxis: { label: 'Distance', unit: 'km' },
+        xAxis: { label: 'Distance', unit: 'm' },
         yAxis: { label: 'Cadence', unit: 'RPM' },
         dataColour: GREEN,
         maxColour: GREY
@@ -99,7 +99,7 @@ const data = (low: number, high: number, step: number, max: number) =>
 
 export const VelocityDistance = Templates.VelocityDistance.bind({});
 VelocityDistance.args = {
-    data: data(0, 50, 1, 90),
+    data: data(0, 50000, 1, 90),
     max: 110
 };
 
@@ -111,7 +111,7 @@ VelocityDistanceBlank.args = {
 
 export const PowerDistance = Templates.PowerDistance.bind({});
 PowerDistance.args = {
-    data: data(0, 50, 1, 2000),
+    data: data(0, 50000, 1, 2000),
     max: 2200
 };
 
@@ -123,7 +123,7 @@ PowerDistanceBlank.args = {
 
 export const CadenceDistance = Templates.CadenceDistance.bind({});
 CadenceDistance.args = {
-    data: data(0, 50, 1, 500),
+    data: data(0, 50000, 1, 500),
     max: 550
 };
 
