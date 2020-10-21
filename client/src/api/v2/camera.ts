@@ -3,15 +3,17 @@ import {
   Array,
   Boolean,
   Literal,
+  Null,
   Number,
   Partial,
   Record,
+  Runtype,
   Static,
   String,
   Union,
 } from 'runtypes';
 import { capitalise, formatBytes, formatMinutes } from 'utils/string';
-import { emit, useChannel } from './socket';
+import { emit, useChannelShaped } from './socket';
 
 const CameraDevice = Union(Literal('primary'), Literal('secondary'));
 type CameraDevice = Static<typeof CameraDevice>;
@@ -38,8 +40,7 @@ export function useCameraConfig(device: CameraDevice) {
   const [config, setConfig] = useState<CameraConfig | null>(null);
 
   const handleData = useCallback(
-    (data) => {
-      const newConfig = CameraConfig.check(JSON.parse(data));
+    (newConfig: CameraConfig) => {
       // Received config is not necessarily for the requested device
       if (newConfig.device === device) {
         setConfig(newConfig);
@@ -47,7 +48,7 @@ export function useCameraConfig(device: CameraDevice) {
     },
     [device],
   );
-  useChannel('push-overlays', handleData);
+  useChannelShaped('push-overlays', CameraConfig, handleData);
 
   useEffect(() => {
     emit('get-overlays');
@@ -193,11 +194,13 @@ interface StatusPayloadOptions<T> {
  * Create hooks for getting payloads
  *
  * @param sub Subcomponent
+ * @param shape Shape of received payloads
  * @param opts Options
  * @returns Hook for getting a payload
  */
 function createStatusPayloadHook<T>(
   sub: string,
+  shape: Runtype<T>,
   {
     initValue = null,
     payloadHandler = (
@@ -214,7 +217,7 @@ function createStatusPayloadHook<T>(
     }, [device]);
 
     const [payload, setPayload] = useState(initValue);
-    useChannel(`status-camera-${sub}`, (newPayload: T) =>
+    useChannelShaped(`status-camera-${sub}`, shape, (newPayload: T) =>
       payloadHandler(setPayload, newPayload, device),
     );
 
@@ -233,13 +236,13 @@ const CameraRecordingStatusPayloads = Partial({
  * @param device Device
  * @returns Recording status
  */
-export const useCameraRecordingStatus = createStatusPayloadHook<
-  Static<typeof CameraRecordingStatusPayloads>
->('recording', {
-  initValue: null,
-  payloadHandler: (setter, newPayload) =>
-    setter(CameraRecordingStatusPayloads.check(newPayload)),
-});
+export const useCameraRecordingStatus = createStatusPayloadHook(
+  'recording',
+  CameraRecordingStatusPayloads,
+  {
+    initValue: null,
+  },
+);
 
 const VideoFeedStatus = Record({
   /** Whether video feed is on/off */
@@ -250,26 +253,23 @@ type VideoFeedStatus = Static<typeof VideoFeedStatus>;
 const VideoFeedStatuses = Partial({
   primary: VideoFeedStatus,
   secondary: VideoFeedStatus,
-});
+}).Or(Null);
 
 /**
  * Returns the last received status of the video feeds from `/v3/camera/video-feed/status/<primary/secondary>`
  *
  * @returns A VideoFeedStatus for each device
  */
-export const useVideoFeedStatus = createStatusPayloadHook<
-  Static<typeof VideoFeedStatuses>
->('video-feed', {
-  initValue: {},
-  payloadHandler: (setter, newPayload) => {
-    return setter(VideoFeedStatuses.check(newPayload ?? {}));
-  },
-});
+export const useVideoFeedStatus = createStatusPayloadHook(
+  'video-feed',
+  VideoFeedStatuses,
+  { initValue: {} },
+);
 
-interface CameraStatus {
+const CameraStatus = Record({
   /** Whether camera is connected / not connected */
-  connected: boolean;
-}
+  connected: Boolean,
+});
 
 /**
  * Returns the last received connection status of the camera client to the mqtt broker
@@ -278,8 +278,6 @@ interface CameraStatus {
  * @returns Camera status
  */
 export const useCameraStatus = (device: CameraDevice) =>
-  createStatusPayloadHook<CameraStatus>(device, {
+  createStatusPayloadHook(device, CameraStatus, {
     initValue: { connected: false },
-    payloadHandler: (setState, newPayload) =>
-      setState({ connected: newPayload?.connected ?? false }),
   })(device);

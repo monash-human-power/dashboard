@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { Runtype, Static } from 'runtypes';
 import io from 'socket.io-client';
 
 let socket: SocketIOClient.Socket;
@@ -39,4 +40,24 @@ export function useChannel(channel: string, callback: Function) {
       localSocket.off(channel, callback);
     };
   }, [channel, callback]);
+}
+
+/**
+ * Listen to channel with shape of response enforced
+ *
+ * @param channel   Channel to listen to
+ * @param shape     Shape of response payload
+ * @param callback  Callback on message
+ */
+export function useChannelShaped<T>(
+  channel: string,
+  shape: Runtype<T>,
+  callback: (payload: Static<typeof shape>) => void,
+) {
+  const parsedCallback = (payload: string | object) => {
+    console.log(`channel: ${channel}, payload: ${payload}`);
+    const json = typeof payload === 'string' ? JSON.parse(payload) : payload;
+    callback(shape.check(json));
+  };
+  useChannel(channel, parsedCallback);
 }
