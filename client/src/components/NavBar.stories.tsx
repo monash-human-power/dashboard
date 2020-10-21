@@ -21,7 +21,7 @@ storiesOf("NavBar", module)
     routes,
   }))
   .add("V3", template({
-    name: 'Version 3 (V3)',
+    name: 'Version 3 (Priscilla)',
     rootPath: '/v3',
     routes: [],
   }));
