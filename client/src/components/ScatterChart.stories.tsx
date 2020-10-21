@@ -90,14 +90,25 @@ const createData = (
         }]);
 };
 
-// Helper function to reduce repetition in parameters
-const data = (low: number, high: number, step: number, max: number) =>
-    createData(quad(low, high, max), low, high, step);
+/**
+ * Helper function to reduce repetition in parameters.
+ * Make sure the number of datapoints generated is not too big.
+ *
+ * @param low Lowest x value
+ * @param high Highest x value
+ * @param step Step in x value
+ * @param max Highest y value
+ * @returns Data points
+ */
+const data = (low: number, high: number, step: number, max: number) => {
+    if (high / step > 10000) console.log("Generating too many data points, may cause errors.");
+    return createData(quad(low, high, max), low, high, step);
+};
 
 /* ----------------------------------- Stories ----------------------------------- */
 
 export const VelocityDistance = createStory<DataArgs>(Templates.VelocityDistance, {
-    data: data(0, 50000, 1, 90),
+    data: data(0, 50000, 1000, 90),
     max: 110
 });
 
@@ -107,7 +118,7 @@ export const VelocityDistanceBlank = createStory<DataArgs>(Templates.VelocityDis
 });
 
 export const PowerDistance = createStory<DataArgs>(Templates.PowerDistance, {
-    data: data(0, 50000, 1, 2000),
+    data: data(0, 50000, 1000, 2000),
     max: 2200
 });
 
@@ -117,7 +128,7 @@ export const PowerDistanceBlank = createStory<DataArgs>(Templates.PowerDistance,
 });
 
 export const CadenceDistance = createStory<DataArgs>(Templates.CadenceDistance, {
-    data: data(0, 50000, 1, 500),
+    data: data(0, 50000, 1000, 500),
     max: 550
 });
 
