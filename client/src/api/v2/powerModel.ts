@@ -1,44 +1,48 @@
 import { useState, useCallback } from 'react';
-import { emit, useChannel } from './socket';
+import { Number, Record, Static } from 'runtypes';
+import { emit, useChannel, useChannelShaped } from './socket';
 
-export interface PowerModelData {
+const RecommendedData = Record({
   /** Recommended speed */
-  recSpeed?: number;
+  rec_speed: Number,
   /** Recommended power */
-  recPower?: number;
+  rec_power: Number,
   /** Distance remaining in current power zone */
-  zoneDist?: number;
+  zdist: Number,
   /** Distance offset */
-  distanceOffset?: number;
+  distance_offset: Number,
   /** Total distance remaining */
-  distanceLeft?: number;
+  distance_left: Number,
+});
+type RecommendedData = Static<typeof RecommendedData>;
+
+const EstimatedData = Record ({
   /** Predicted maximum speed */
-  predictedMaxSpeed?: number;
-}
+  predicted_max_speed: Number,
+});
+type EstimatedData = Static<typeof EstimatedData>;
+
 
 /**
  * Use current power model data
  *
  * @returns Power model data
  */
-export function usePowerModel(): PowerModelData {
-  const [recSpData, setRecSpData] = useState({});
-  const [maxSpData, setMaxSpData] = useState({});
+export function usePowerModel() {
+  const [recData, setRecData] = useState<RecommendedData | null>(null);
+  const [estData, setEstData] = useState<EstimatedData | null>(null);
 
-  const recSpHandler = useCallback((data) => {
-    setRecSpData(data);
+  const recHandler = useCallback((data: RecommendedData) => {
+    setRecData(data);
   }, []);
-  useChannel('power-model-recommended-SP', recSpHandler);
+  useChannelShaped('power-model-recommended-SP', RecommendedData, recHandler);
 
-  const maxSpHandler = useCallback((data) => {
-    setMaxSpData(data);
+  const maxHandler = useCallback((data: EstimatedData) => {
+    setEstData(data);
   }, []);
-  useChannel('power-model-max-speed', maxSpHandler);
+  useChannelShaped('power-model-max-speed', EstimatedData, maxHandler);
 
-  return {
-    ...recSpData,
-    ...maxSpData,
-  };
+  return { recData, maxData: estData };
 }
 
 /**
