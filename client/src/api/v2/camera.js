@@ -52,29 +52,14 @@ export function useOverlays(device) {
 }
 
 /**
- * @typedef {object} CameraMessageHook
- * @property {string} message The message currently entered by the user.
- * @property {function(string)} setMessage Set the message.
- * @property {function(void)} sendMessage Send the message to the rider.
- */
-
-/**
- * Handle storing, sending and receiving acknowledgement of messages to the
- * camera overlay.
+ * Sends a message to the rider's camera overlay.
  *
- * @returns {CameraMessageHook} Hook
+ * @param {string} message Message to send to rider
  */
-export function useMessageState() {
-  const [message, setMessage] = useState('');
+export function sendMessage(message) {
+  if (!message) return;
 
-  const sendMessage = () => {
-    if (!message) return;
-
-    emit('send-message', message);
-    setMessage('');
-  };
-
-  return { message, setMessage, sendMessage };
+  emit('send-message', message);
 }
 
 /**
