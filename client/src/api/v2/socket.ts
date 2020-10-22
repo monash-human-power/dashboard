@@ -55,7 +55,6 @@ export function useChannelShaped<T>(
   callback: (payload: Static<typeof shape>) => void,
 ) {
   const parsedCallback = (payload: string | object) => {
-    console.log(`channel: ${channel}, payload: ${payload}`);
     const json = typeof payload === 'string' ? JSON.parse(payload) : payload;
     callback(shape.check(json));
   };
