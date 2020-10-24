@@ -52,6 +52,17 @@ export function useOverlays(device) {
 }
 
 /**
+ * Sends a message to the rider's camera overlay.
+ *
+ * @param {string} message Message to send to rider
+ */
+export function sendMessage(message) {
+  if (!message) return;
+
+  emit('send-message', message);
+}
+
+/**
  * Send a message to server to start recording video
  */
 export function startRecording() {
@@ -120,8 +131,8 @@ function parseRecordingPayloadData(data) {
  * @param {string?} device Device (primary or secondary)
  */
 function initStatus(subComponent, device) {
-  const deviceAsArr = device ? [device] : [];  // only add device path if specified
-  const path = ["camera", subComponent].concat(deviceAsArr);
+  const deviceAsArr = device ? [device] : []; // only add device path if specified
+  const path = ['camera', subComponent].concat(deviceAsArr);
   emit(`get-status-payload`, path);
 }
 
@@ -151,11 +162,14 @@ export function getPrettyDeviceName(device) {
  * @param {StatusPayloadOptions} opts Options
  * @returns {(device: string?) => any} Hook for getting a payload
  */
-function createStatusPayloadHook(sub, {
-  initValue = null,
-  payloadHandler = (s, p) => s(p ?? initValue),
-  returnHandler = (p) => p
-}) {
+function createStatusPayloadHook(
+  sub,
+  {
+    initValue = null,
+    payloadHandler = (s, p) => s(p ?? initValue),
+    returnHandler = (p) => p,
+  },
+) {
   return function _hook(device) {
     // Only run init once per render
     useEffect(() => {
@@ -163,9 +177,8 @@ function createStatusPayloadHook(sub, {
     }, []);
 
     const [payload, setPayload] = useState(initValue);
-    useChannel(
-      `status-camera-${sub}`,
-      (newPayload) => payloadHandler(setPayload, newPayload, device)
+    useChannel(`status-camera-${sub}`, (newPayload) =>
+      payloadHandler(setPayload, newPayload, device),
     );
 
     return returnHandler(payload, device);
@@ -187,11 +200,10 @@ function createStatusPayloadHook(sub, {
  * @param {string} device Device
  * @returns {CameraRecordingStatusPayload} Payload
  */
-export const useCameraRecordingStatus = createStatusPayloadHook(
-  'recording', {
-    returnHandler: (payload, device) => parseRecordingPayloadData(payload?.[device])
-  }
-);
+export const useCameraRecordingStatus = createStatusPayloadHook('recording', {
+  returnHandler: (payload, device) =>
+    parseRecordingPayloadData(payload?.[device]),
+});
 
 /**
  * @typedef {object} VideoFeedStatus
@@ -202,9 +214,9 @@ export const useCameraRecordingStatus = createStatusPayloadHook(
  *
  * @returns {object.<string, VideoFeedStatus>} A VideoFeedStatus for each device
  */
-export const useVideoFeedStatus = createStatusPayloadHook(
-  'video-feed', { initValue: {} }
-);
+export const useVideoFeedStatus = createStatusPayloadHook('video-feed', {
+  initValue: {},
+});
 
 /**
  * @typedef {object} CameraStatus
@@ -216,9 +228,9 @@ export const useVideoFeedStatus = createStatusPayloadHook(
  * @param {string} device Device
  * @returns {CameraStatus} Camera status
  */
-export const useCameraStatus = (device) => createStatusPayloadHook(
-  device, {
+export const useCameraStatus = (device) =>
+  createStatusPayloadHook(device, {
     initValue: false,
-    payloadHandler: (setState, newPayload) => setState(newPayload?.connected ?? false)
-  }
-)(device);
+    payloadHandler: (setState, newPayload) =>
+      setState(newPayload?.connected ?? false),
+  })(device);
