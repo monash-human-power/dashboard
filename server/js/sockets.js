@@ -226,6 +226,11 @@ sockets.init = function socketInit(server) {
       );
     });
 
+    socket.on('send-message', (message) => {
+      const payload = JSON.stringify({ message });
+      mqttClient.publish('/v3/camera/message', payload);
+    });
+
     socket.on('create-power-plan', (inputPowerPlan) => {
       mqttClient.publish(
         'power_model/generate_power_plan',

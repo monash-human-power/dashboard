@@ -70,6 +70,17 @@ export function useCameraConfig(device: CameraDevice) {
 }
 
 /**
+ * Sends a message to the rider's camera overlay.
+ *
+ * @param message Message to send to rider
+ */
+export function sendMessage(message: string) {
+  if (!message) return;
+
+  emit('send-message', message);
+}
+
+/**
  * Send a message to server to start recording video
  */
 export function startRecording() {
