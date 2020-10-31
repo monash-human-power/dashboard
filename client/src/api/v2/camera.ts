@@ -161,7 +161,7 @@ export function formatRecordingPayload(payload?: CameraRecordingStatusPayload) {
     (errorPayload) => [{ name: 'Error', value: errorPayload.error }],
   );
 
-  return [...commonData, ...formatter(payload)];
+  return commonData.concat(formatter(payload));
 }
 
 /**
