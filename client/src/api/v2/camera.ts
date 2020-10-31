@@ -171,8 +171,8 @@ export function formatRecordingPayload(payload?: CameraRecordingStatusPayload) {
  * @param device Device
  */
 function initStatus(subComponent: string, device?: CameraDevice) {
-  const deviceAsArr = device ? [device] : []; // only add device path if specified
-  const path = ['camera', subComponent].concat(deviceAsArr);
+  const path = ['camera', subComponent];
+  if (device) path.push(device);
   emit(`get-status-payload`, path);
 }
 
