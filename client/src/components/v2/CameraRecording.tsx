@@ -13,11 +13,11 @@ interface VideoFeedStatus {
   online: boolean
 }
 
-export interface CameraRecordingProps extends CameraRecordingStatusProps {
-  /** Status for each device */
-  status: {
-    [device: string]: VideoFeedStatus
-  }
+export type CameraRecordingPropT = VideoFeedStatus & CameraRecordingStatusProps;
+
+export interface CameraRecordingProps {
+  /* Information for each device */
+  [device: string]: CameraRecordingPropT
 }
 
 /**
@@ -30,16 +30,16 @@ export interface CameraRecordingProps extends CameraRecordingStatusProps {
  * @param props Props
  * @returns Component
  */
-export default function CameraRecording({ status, statusFormatted }: CameraRecordingProps) {
+export default function CameraRecording(props: CameraRecordingProps) {
   // Check if at least one camera's video feed is online
-  const canRecord = Object.keys(status).find((device) => status[device]?.online);
+  const canRecord = Object.keys(props).find((device) => props[device]?.online);
 
   return (
     <Card>
       <Card.Body>
         <Card.Title>Recording Controls</Card.Title>
         <Row className={styles.row}>
-          {Object.entries(status).map(([device, online]) => (
+          {Object.entries(props).map(([device, { online }]) => (
             <Col className={styles.col} key={device} sm={6}>
               <Card.Subtitle>
                 <Badge pill variant={online ? 'success' : 'danger'}>
@@ -49,7 +49,7 @@ export default function CameraRecording({ status, statusFormatted }: CameraRecor
                   {`${getPrettyDeviceName(device as "primary" | "secondary")} Feed`}
                 </span>
               </Card.Subtitle>
-              <CameraRecordingStatus statusFormatted={statusFormatted} />
+              <CameraRecordingStatus statusFormatted={props[device]?.statusFormatted} />
             </Col>
           ))}
         </Row>
