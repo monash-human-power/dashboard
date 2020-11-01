@@ -1,5 +1,3 @@
-import { useCameraRecordingStatus } from 'api/v2/camera';
-import PropTypes from 'prop-types';
 import React from 'react';
 import styles from './CameraRecordingStatus.module.css';
 
@@ -16,16 +14,14 @@ const defaultStatus = 'Waiting for status...';
  * @param {CameraRecordingStatusProps} props Props
  * @returns {React.Component<CameraRecordingStatusProps>} Component
  */
-export default function CameraRecordingStatus({ device }) {
-  const payload = useCameraRecordingStatus(device);
-
+export default function CameraRecordingStatus({ statusFormatted }) {
   return (
     <div>
-      {payload ? (
-        Object.keys(payload).map((field) => (
-          <div className={styles.statusRow} key={field}>
-            <span>{`${field}:`}</span>
-            <span className={styles.push}>{payload[field]}</span>
+      {statusFormatted ? (
+        statusFormatted.map((field) => (
+          <div className={styles.statusRow} key={field.name}>
+            <span>{`${field.name}:`}</span>
+            <span className={styles.push}>{field.value}</span>
           </div>
         ))
       ) : (
@@ -34,7 +30,3 @@ export default function CameraRecordingStatus({ device }) {
     </div>
   );
 }
-
-CameraRecordingStatus.propTypes = {
-  device: PropTypes.string.isRequired,
-};
