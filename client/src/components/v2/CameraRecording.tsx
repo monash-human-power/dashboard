@@ -1,19 +1,24 @@
 import {
   getPrettyDeviceName,
   startRecording,
-  stopRecording,
-  useVideoFeedStatus
+  stopRecording
 } from 'api/v2/camera';
-import PropTypes from 'prop-types';
 import React from 'react';
 import { Badge, Button, Card, Col, Row } from 'react-bootstrap';
 import styles from './CameraRecording.module.css';
-import CameraRecordingStatus from './CameraRecordingStatus';
+import CameraRecordingStatus, { CameraRecordingStatusProps } from './CameraRecordingStatus';
 
-/**
- * @typedef {object} CameraRecordingProps
- * @property {string[]} devices Device names
- */
+// ! Remove this before merging and instead import from camera
+interface VideoFeedStatus {
+  online: boolean
+}
+
+export interface CameraRecordingProps extends CameraRecordingStatusProps {
+  /** Status for each device */
+  status: {
+    [device: string]: VideoFeedStatus
+  }
+}
 
 /**
  * Camera recording buttons for starting and stopping video recording.
@@ -22,12 +27,10 @@ import CameraRecordingStatus from './CameraRecordingStatus';
  *
  * This is a feature intended for V3 but is currently in V2 for testing.
  *
- * @param {CameraRecordingProps} props Props
- * @returns {React.Component<CameraRecordingProps>} Component
+ * @param props Props
+ * @returns Component
  */
-export default function CameraRecording({ devices }) {
-  const status = useVideoFeedStatus();
-
+export default function CameraRecording({ status, statusFormatted }: CameraRecordingProps) {
   // Check if at least one camera's video feed is online
   const canRecord = Object.keys(status).find((device) => status[device]?.online);
 
@@ -36,17 +39,17 @@ export default function CameraRecording({ devices }) {
       <Card.Body>
         <Card.Title>Recording Controls</Card.Title>
         <Row className={styles.row}>
-          {devices.map((device) => (
+          {Object.entries(status).map(([device, online]) => (
             <Col className={styles.col} key={device} sm={6}>
               <Card.Subtitle>
-                <Badge pill variant={status[device]?.online ? 'success' : 'danger'}>
-                  {status[device]?.online ? 'ON' : 'OFF'}
+                <Badge pill variant={online ? 'success' : 'danger'}>
+                  {online ? 'ON' : 'OFF'}
                 </Badge>
                 <span className={styles.deviceName}>
-                  {`${getPrettyDeviceName(device)} Feed`}
+                  {`${getPrettyDeviceName(device as "primary" | "secondary")} Feed`}
                 </span>
               </Card.Subtitle>
-              <CameraRecordingStatus device={device} />
+              <CameraRecordingStatus statusFormatted={statusFormatted} />
             </Col>
           ))}
         </Row>
@@ -72,7 +75,3 @@ export default function CameraRecording({ devices }) {
     </Card>
   );
 }
-
-CameraRecording.propTypes = {
-  devices: PropTypes.arrayOf(String).isRequired,
-};

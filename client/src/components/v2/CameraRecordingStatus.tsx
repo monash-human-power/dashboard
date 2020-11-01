@@ -3,18 +3,26 @@ import styles from './CameraRecordingStatus.module.css';
 
 const defaultStatus = 'Waiting for status...';
 
-/**
- * @typedef {object} CameraRecordingStatusProps
- * @property {'primary'|'secondary'} device Camera screen
- */
+// ! Remove this after merge and import from camera
+interface CameraRecordingStatusItem {
+  /** Display name of the status item e.g. "Disk Space Remaining" */
+  name: string;
+  /** Value of the status item e.g. "1.2 GiB" */
+  value: string;
+}
+
+export interface CameraRecordingStatusProps {
+  /** Status payload formatted to be human readable */
+  statusFormatted: CameraRecordingStatusItem[] | null
+}
 
 /**
  *  Status of a camera
  *
- * @param {CameraRecordingStatusProps} props Props
- * @returns {React.Component<CameraRecordingStatusProps>} Component
+ * @param props Props
+ * @returns Component
  */
-export default function CameraRecordingStatus({ statusFormatted }) {
+export default function CameraRecordingStatus({ statusFormatted }: CameraRecordingStatusProps) {
   return (
     <div>
       {statusFormatted ? (
