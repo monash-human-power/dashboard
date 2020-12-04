@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import PropTypes from 'prop-types';
-import { Card } from 'react-bootstrap';
-import { useOverlays, getPrettyDeviceName } from 'api/v2/camera';
+import { getPrettyDeviceName, useOverlays } from 'api/v2/camera';
 import RadioSelector from 'components/RadioSelector';
+import PropTypes from 'prop-types';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Card } from 'react-bootstrap';
 
 /**
  * @typedef {object} CameraSettingsProps
@@ -15,7 +15,7 @@ import RadioSelector from 'components/RadioSelector';
  * @param {CameraSettingsProps} props Props
  * @returns {React.Component<CameraSettingsProps>} Component
  */
-export default function CameraSettings({ device }) {
+export default function OverlaySelection({ device }) {
   const { overlays: controls, setActiveOverlay } = useOverlays(device);
   const [selectedOverlay, setSelectedOverlay] = useState(null);
   const name = getPrettyDeviceName(device);
@@ -58,6 +58,6 @@ export default function CameraSettings({ device }) {
   );
 }
 
-CameraSettings.propTypes = {
+OverlaySelection.propTypes = {
   device: PropTypes.string.isRequired,
 };
