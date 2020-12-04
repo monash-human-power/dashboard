@@ -1,20 +1,21 @@
-import React, { useCallback } from 'react';
+/* eslint-disable jsdoc/no-undefined-types */
 import PropTypes from 'prop-types';
-import { useUID } from 'react-uid';
+import React, { useCallback } from 'react';
 import FormCheck from 'react-bootstrap/FormCheck';
+import { useUID } from 'react-uid';
 
 /**
  * @typedef {object} RadioSelectorProps
  * @property {string[]}         options   List of possible options
- * @property {string}           value     Selected option
- * @property {function(string)} onChange  On selected changed callback
+ * @property {string | null}           value     Selected option
+ * @property {React.Dispatch<SetStateAction<null>>} onChange  On selected changed callback
  */
 
 /**
  * Radio selector group component
  *
  * @param {RadioSelectorProps} props Props
- * @returns {React.Component<RadioSelectorProps>} Component
+ * @returns {JSX.Element} Component
  */
 export default function RadioSelector({ options, value, onChange }) {
   const uid = useUID();
@@ -41,10 +42,6 @@ export default function RadioSelector({ options, value, onChange }) {
 
 RadioSelector.propTypes = {
   options: PropTypes.arrayOf(PropTypes.string).isRequired,
-  value: PropTypes.string,
+  value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-};
-
-RadioSelector.defaultProps = {
-  value: null,
 };

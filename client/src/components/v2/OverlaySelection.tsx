@@ -1,22 +1,26 @@
-import { getPrettyDeviceName, useOverlays } from 'api/v2/camera';
+import { getPrettyDeviceName, OverlaysHook } from 'api/v2/camera';
 import RadioSelector from 'components/RadioSelector';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Card } from 'react-bootstrap';
 
-/**
- * @typedef {object} CameraSettingsProps
- * @property {'primary'|'secondary'} device Camera screen
- */
+export interface CameraSettingsProps {
+  /** Camera screen */
+  device: 'primary' | 'secondary'
+  /** Overlay hook */
+  overlays: OverlaysHook
+}
 
 /**
  * Camera settings for a display
  *
- * @param {CameraSettingsProps} props Props
- * @returns {React.Component<CameraSettingsProps>} Component
+ * @param props Props
+ * @returns Component
  */
-export default function OverlaySelection({ device }) {
-  const { overlays: controls, setActiveOverlay } = useOverlays(device);
+export default function OverlaySelection({
+  device,
+  overlays: { overlays: controls, setActiveOverlay }
+}: CameraSettingsProps) {
   const [selectedOverlay, setSelectedOverlay] = useState(null);
   const name = getPrettyDeviceName(device);
 
@@ -46,8 +50,8 @@ export default function OverlaySelection({ device }) {
             onChange={setSelectedOverlay}
           />
         ) : (
-          <Card.Subtitle>Waiting for response...</Card.Subtitle>
-        )}
+            <Card.Subtitle>Waiting for response...</Card.Subtitle>
+          )}
       </Card.Body>
       <Card.Footer>
         <Card.Link href="#" onClick={handleSave}>

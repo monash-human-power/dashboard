@@ -5,8 +5,8 @@ import { emit, useChannel } from './socket';
 
 /**
  * @typedef {object} OverlaysHook
- * @property {?Array.<string>}  overlays          List of available overlays
- * @property {function(string)} setActiveOverlay  Set the active overlay
+ * @property {?{active: any, overlays: any}}  overlays          List of available overlays
+ * @property {function(object | null)} setActiveOverlay  Set the active overlay
  */
 
 /**
