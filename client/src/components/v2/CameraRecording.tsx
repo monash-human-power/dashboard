@@ -13,7 +13,7 @@ interface VideoFeedStatus {
   online: boolean
 }
 
-export type CameraRecordingPropT = VideoFeedStatus & CameraRecordingStatusProps;
+export type CameraRecordingPropT = VideoFeedStatus & CameraRecordingStatusProps & {ip: string};
 
 export interface CameraRecordingProps {
   /* Information for each device */
@@ -40,15 +40,21 @@ export default function CameraRecording(props: CameraRecordingProps) {
         <Card.Title>Recording Controls</Card.Title>
         <Row className={styles.row}>
           {Object.entries(props).map(([device, { online }]) => (
+            /* Device recording controls UI */
             <Col className={styles.col} key={device} sm={6}>
-              <Card.Subtitle>
-                <Badge pill variant={online ? 'success' : 'danger'}>
-                  {online ? 'ON' : 'OFF'}
-                </Badge>
+              <Card.Subtitle className={styles.subtitle}>
+                {/* Name */}
                 <span className={styles.deviceName}>
-                  {`${getPrettyDeviceName(device as "primary" | "secondary")} Feed`}
+                  {`${getPrettyDeviceName(device as "primary" | "secondary")}`}
                 </span>
+                {/* Online status */}
+                <Badge className={styles.indicator} pill variant={online ? 'success' : 'danger'}>
+                  {online ? 'Online' : 'Offline'}
+                </Badge>
+                {/* IP */}
+                <div className={styles.push}>{props[device].ip}</div>
               </Card.Subtitle>
+              {/* Fields */}
               <CameraRecordingStatus statusFormatted={props[device]?.statusFormatted} />
             </Col>
           ))}

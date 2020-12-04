@@ -28,12 +28,12 @@ export default function CameraRecordingStatus({ statusFormatted }: CameraRecordi
       {statusFormatted ? (
         statusFormatted.map((field) => (
           <div className={styles.statusRow} key={field.name}>
-            <span>{`${field.name}:`}</span>
+            <span>{`${field.name}`}</span>
             <span className={styles.push}>{field.value}</span>
           </div>
         ))
       ) : (
-        <div className={styles.p}>{`Status: ${defaultStatus}`}</div>
+        <div className={styles.statusRow}>{`Status: ${defaultStatus}`}</div>
       )}
     </div>
   );

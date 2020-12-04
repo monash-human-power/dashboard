@@ -19,22 +19,26 @@ export const Empty = createStory(Template, {
 export const NoneOn = createStory(Template, {
     primary: {
         online: false,
-        statusFormatted: null
+        statusFormatted: null,
+        ip: '192.168.100.97'
     },
     secondary: {
         online: false,
-        statusFormatted: null
+        statusFormatted: null,
+        ip: '192.168.100.97'
     },
 });
 
 export const OneON = createStory(Template, {
     primary: {
         online: true,
-        statusFormatted: null
+        statusFormatted: null,
+        ip: '192.168.100.97'
     },
     secondary: {
         online: false,
-        statusFormatted: null
+        statusFormatted: null,
+        ip: '192.168.100.97'
     },
 });
 
@@ -50,11 +54,13 @@ export const RecordingOff = createStory(Template, {
                 name: "Disk space remaining",
                 value: "1.0 Gb"
             }
-        ]
+        ],
+        ip: '192.168.100.97'
     },
     secondary: {
         online: false,
-        statusFormatted: null
+        statusFormatted: null,
+        ip: '192.168.100.97'
     },
 });
 
@@ -78,10 +84,12 @@ export const RecordingOn = createStory(Template, {
                 name: "Disk space remaining",
                 value: "1.0 Gb"
             }
-        ]
+        ],
+        ip: '192.168.100.97'
     },
     secondary: {
         online: false,
-        statusFormatted: null
+        statusFormatted: null,
+        ip: '192.168.100.97'
     },
 });
