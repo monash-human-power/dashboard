@@ -2,9 +2,9 @@ import ContentPage from 'components/ContentPage';
 import CameraRecording from 'components/v2/CameraRecording';
 import CameraStatus from 'components/v2/CameraStatus';
 import OverlayMessage from 'components/v2/OverlayMessage';
-import OverlaySelection from 'components/v2/OverlaySelection';
 import React from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
+import OverlaySelectionContainer from '../../components/v2/OverlaySelectionContainer';
 
 /**
  * Camera Settings page component
@@ -12,6 +12,8 @@ import { Card, Col, Row } from 'react-bootstrap';
  * @returns {React.Component} Component
  */
 export default function CameraSettingsView() {
+  const devices = ['primary', 'secondary'];
+
   return (
     <ContentPage title="Camera Settings">
       <div className="mb-4">
@@ -32,17 +34,12 @@ export default function CameraSettingsView() {
         </Card>
       </div>
       <div className="mb-4">
-        <CameraRecording devices={['primary', 'secondary']} />
+        <CameraRecording devices={devices} />
       </div>
       <div className="mb-4">
         <OverlayMessage />
       </div>
-      <div className="mb-4">
-        <OverlaySelection device="primary" />
-      </div>
-      <div>
-        <OverlaySelection device="secondary" />
-      </div>
+      <OverlaySelectionContainer />
     </ContentPage>
   );
 }
