@@ -45,7 +45,8 @@
     ],
     "semi": "error",
     "jsdoc/require-returns-type": "off",
-    "jsdoc/require-param-type": "off"
+    "jsdoc/require-param-type": "off",
+    "jsdoc/no-undefined-types": "off"
   },
   "settings": {
     "import/resolver": {
