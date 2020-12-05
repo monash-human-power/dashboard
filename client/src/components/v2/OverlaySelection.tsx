@@ -4,11 +4,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Card } from 'react-bootstrap';
 import { Device } from '../../types/camera';
 
-export interface CameraSettingsProps {
+export interface OverlaySelectionProps extends OverlaysHook {
   /** Camera screen */
   device: Device
-  /** Overlay hook */
-  overlays: OverlaysHook
 }
 
 /**
@@ -19,8 +17,9 @@ export interface CameraSettingsProps {
  */
 export default function OverlaySelection({
   device,
-  overlays: { overlays: controls, setActiveOverlay }
-}: CameraSettingsProps) {
+  overlays: controls,
+  setActiveOverlay
+}: OverlaySelectionProps) {
   const [selectedOverlay, setSelectedOverlay] = useState(null);
   const name = getPrettyDeviceName(device);
 
