@@ -3,6 +3,8 @@
  */
 require('dotenv').config();
 
+const { DAS, BOOST, Camera } = require('./topics');
+
 const sockets = {};
 const mqtt = require('mqtt');
 const os = require('os');
@@ -92,13 +94,13 @@ sockets.init = function socketInit(server) {
   } else {
     mqttClient = mqtt.connect('mqtt://localhost:1883', mqttOptions);
   }
-  mqttClient.subscribe('start');
-  mqttClient.subscribe('stop');
-  mqttClient.subscribe('data');
-  mqttClient.subscribe('power_model/predicted_max_speed');
-  mqttClient.subscribe('power_model/recommended_SP');
+  mqttClient.subscribe(DAS.start);
+  mqttClient.subscribe(DAS.stop);
+  mqttClient.subscribe(DAS.data);
+  mqttClient.subscribe(BOOST.predicted_max_speed);
+  mqttClient.subscribe(BOOST.recommended_sp);
+  mqttClient.subscribe(Camera.push_overlays);
   mqttClient.subscribe('power_model/plan_generated');
-  mqttClient.subscribe('camera/push_overlays');
   // Camera recording status subscription occurs when mqttClient message handler is set
   // Camera video feed status subscription occurs when mqttClient message handler is set
   mqttClient.on('connect', mqttConnected);
@@ -126,30 +128,30 @@ sockets.init = function socketInit(server) {
       const topicString = topic.split('/');
       if (topicString.length === 1) {
         switch (topic) {
-          case 'start':
+          case DAS.start:
             socket.emit('start');
             break;
-          case 'stop':
+          case DAS.stop:
             socket.emit('stop');
             break;
-          case 'data':
+          case DAS.data:
             mqttDataTopicHandler(socket, payloadString);
             if (sendToPublicMQTTBroker()) {
-              PUBLIC_MQTT_CLIENT.publish('data', payloadString);
+              PUBLIC_MQTT_CLIENT.publish(DAS.data, payloadString);
             }
             break;
           default:
             console.error(`Unhandled topic - ${topic}`);
             break;
         }
-      } else if (topicString[0] === 'power_model') {
+      } else if (topicString[0] === 'boost') {
         socket.emit('power-model-running');
         const message = mqttDataConverter(payloadString);
         switch (topicString[1]) {
           case 'predicted_max_speed':
             socket.emit('power-model-max-speed', message);
             break;
-          case 'recommended_SP':
+          case 'recommended_sp':
             socket.emit('power-model-recommended-SP', message);
             break;
           case 'plan_generated':
@@ -208,27 +210,24 @@ sockets.init = function socketInit(server) {
 
     // TODO: Fix up below socket.io handlers
     socket.on('start-power-model', () => {
-      mqttClient.publish('power_model/start', 'true');
+      mqttClient.publish(BOOST.start, 'true');
     });
 
     socket.on('stop-power-model', () => {
-      mqttClient.publish('power_model/stop', 'true');
+      mqttClient.publish(BOOST.stop, 'true');
     });
 
     socket.on('reset-calibration', () => {
-      mqttClient.publish('power_model/calibrate/reset', 'true');
+      mqttClient.publish(BOOST.calibrate_reset, 'true');
     });
 
     socket.on('submit-calibration', (calibratedDistance) => {
-      mqttClient.publish(
-        'power_model/calibrate',
-        `calibrate=${calibratedDistance}`,
-      );
+      mqttClient.publish(BOOST.calibrate, `calibrate=${calibratedDistance}`);
     });
 
     socket.on('send-message', (message) => {
       const payload = JSON.stringify({ message });
-      mqttClient.publish('/v3/camera/message', payload);
+      mqttClient.publish(Camera.overlay_message, payload);
     });
 
     socket.on('create-power-plan', (inputPowerPlan) => {
@@ -239,11 +238,11 @@ sockets.init = function socketInit(server) {
     });
 
     socket.on('get-overlays', () => {
-      mqttClient.publish('camera/get_overlays', 'true');
+      mqttClient.publish(Camera.get_overlays, 'true');
     });
 
     socket.on('set-overlays', (selectedOverlays) => {
-      mqttClient.publish('camera/set_overlay', selectedOverlays);
+      mqttClient.publish(Camera.set_overlay, selectedOverlays);
     });
 
     socket.on('publish-data-on', () => {
@@ -268,11 +267,11 @@ sockets.init = function socketInit(server) {
     });
 
     socket.on('start-camera-recording', () => {
-      mqttClient.publish('/v3/camera/recording/start');
+      mqttClient.publish(Camera.recording_start);
     });
 
     socket.on('stop-camera-recording', () => {
-      mqttClient.publish('/v3/camera/recording/stop');
+      mqttClient.publish(Camera.recording_stop);
     });
   });
 };
