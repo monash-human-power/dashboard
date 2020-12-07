@@ -121,7 +121,7 @@ sockets.init = function socketInit(server) {
         Subscribe with the other topics and add a new message handler
         for the topics
     */
-    mqttClient.subscribe('/v3/status/#');
+    mqttClient.subscribe('status/#');
 
     mqttClient.on('message', function mqttMessage(topic, payload) {
       const payloadString = payload.toString();
@@ -170,11 +170,11 @@ sockets.init = function socketInit(server) {
             console.error(`Unhandled topic - ${topic}`);
             break;
         }
-      } else if (topic.match(/^\/v3\/status/)) {
+      } else if (topic.match(/^status/)) {
         try {
-          // topicString: ["", "v3", "status", "<component>", "<subcomponent>", ...properties]
+          // topicString: ["", "status", "<component>", "<subcomponent>", ...properties]
           const value = JSON.parse(payloadString);
-          const path = topicString.slice(2);
+          const path = topicString;
 
           // Add to global
           retained[path[0]] = setPropWithPath(
@@ -184,8 +184,8 @@ sockets.init = function socketInit(server) {
           );
 
           // Emit subcomponent
-          const component = topicString[3] ?? '';
-          const subcomponent = topicString[4] ?? '';
+          const component = topicString[1] ?? '';
+          const subcomponent = topicString[2] ?? '';
           socket.emit(
             `status-${component}-${subcomponent}`,
             retained.status?.[component]?.[subcomponent],

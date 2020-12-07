@@ -210,11 +210,11 @@ export const useCameraRecordingStatus = createStatusPayloadHook('recording', {
  * @property {boolean}  online Whether video feed is on/off
  */
 /**
- * Returns the last received status of the video feeds from `/v3/camera/video-feed/status/<primary/secondary>`
+ * Returns the last received status of the video feeds from `/v3/camera/video_feed/status/<primary/secondary>`
  *
  * @returns {object.<string, VideoFeedStatus>} A VideoFeedStatus for each device
  */
-export const useVideoFeedStatus = createStatusPayloadHook('video-feed', {
+export const useVideoFeedStatus = createStatusPayloadHook('video_feed', {
   initValue: {},
 });
 
