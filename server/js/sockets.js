@@ -58,7 +58,7 @@ function mqttError(error) {
   console.error(`MQTT Error: ${error}`);
 }
 
-function mqttDataConverter(payload) {
+function queryStringToJson(payload) {
   const message = {};
   const dataArray = payload.split('&');
   for (let index = 0; index < dataArray.length; index += 1) {
@@ -76,7 +76,7 @@ function mqttDataConverter(payload) {
 }
 
 function mqttDataTopicHandler(socket, payload) {
-  const message = mqttDataConverter(payload);
+  const message = queryStringToJson(payload);
   socket.emit('data', message);
 }
 
@@ -125,54 +125,11 @@ sockets.init = function socketInit(server) {
 
     mqttClient.on('message', function mqttMessage(topic, payload) {
       const payloadString = payload.toString();
-      const topicString = topic.split('/');
-      if (topicString.length === 1) {
-        switch (topic) {
-          case DAS.start:
-            socket.emit('start');
-            break;
-          case DAS.stop:
-            socket.emit('stop');
-            break;
-          case DAS.data:
-            mqttDataTopicHandler(socket, payloadString);
-            if (sendToPublicMQTTBroker()) {
-              PUBLIC_MQTT_CLIENT.publish(DAS.data, payloadString);
-            }
-            break;
-          default:
-            console.error(`Unhandled topic - ${topic}`);
-            break;
-        }
-      } else if (topicString[0] === 'boost') {
-        socket.emit('power-model-running');
-        const message = mqttDataConverter(payloadString);
-        switch (topicString[1]) {
-          case 'predicted_max_speed':
-            socket.emit('power-model-max-speed', message);
-            break;
-          case 'recommended_sp':
-            socket.emit('power-model-recommended-SP', message);
-            break;
-          case 'plan_generated':
-            socket.emit('power-plan-generated');
-            break;
-          default:
-            console.error(`Unhandled topic - ${topic}`);
-            break;
-        }
-      } else if (topicString[0] === 'camera') {
-        switch (topicString[1]) {
-          case 'push_overlays':
-            socket.emit('push-overlays', payloadString);
-            break;
-          default:
-            console.error(`Unhandled topic - ${topic}`);
-            break;
-        }
-      } else if (topic.match(/^status/)) {
+
+      if (topic.startsWith('status')) {
         try {
-          // topicString: ["", "status", "<component>", "<subcomponent>", ...properties]
+          const topicString = topic.split('/');
+          // topicString: ["status", "<component>", "<subcomponent>", ...properties]
           const value = JSON.parse(payloadString);
           const path = topicString;
 
@@ -196,7 +153,47 @@ sockets.init = function socketInit(server) {
           );
         }
       } else {
-        console.error(`Unhandled topic - ${topic}`);
+        switch (topic) {
+          case DAS.start:
+            socket.emit('start');
+            break;
+          case DAS.stop:
+            socket.emit('stop');
+            break;
+          case DAS.data:
+            mqttDataTopicHandler(socket, payloadString);
+            if (sendToPublicMQTTBroker()) {
+              PUBLIC_MQTT_CLIENT.publish(DAS.data, payloadString);
+            }
+            break;
+
+          case BOOST.predicted_max_speed:
+            socket.emit('power-model-running');
+            socket.emit(
+              'power-model-max-speed',
+              queryStringToJson(payloadString),
+            );
+            break;
+          case BOOST.recommended_sp:
+            socket.emit('power-model-running');
+            socket.emit(
+              'power-model-recommended-SP',
+              queryStringToJson(payloadString),
+            );
+            break;
+          case 'power_model/plan_generated':
+            socket.emit('power-model-running');
+            socket.emit('power-plan-generated');
+            break;
+
+          case Camera.push_overlays:
+            socket.emit('push-overlays', payloadString);
+            break;
+
+          default:
+            console.error(`Unhandled topic - ${topic}`);
+            break;
+        }
       }
     });
 
