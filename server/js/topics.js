@@ -46,26 +46,22 @@ class Camera {
 }
 
 class WirelessModule {
-  static base = '/v3/wireless_module/';
+  static base = '/v3/wireless_module';
 
-  static battery(module_id = '+') {
-    return `${WirelessModule.base}${module_id}/battery`;
+  static id(module_id = '+') {
+    const module_base = `${WirelessModule.base}/${module_id}`;
+    return {
+      base: module_base,
+      battery: `${module_base}/battery`,
+      data: `${module_base}/data`,
+      start: `${module_base}/start`,
+      stop: `${module_base}/stop`,
+      module: `${module_base}/module`,
+    };
   }
 
-  static data(module_id = '+') {
-    return `${WirelessModule.base}${module_id}/data`;
-  }
-
-  static start(module_id = '+') {
-    return `${WirelessModule.base}${module_id}/start`;
-  }
-
-  static stop(module_id = '+') {
-    return `${WirelessModule.base}${module_id}/stop`;
-  }
-
-  static module(module_id = '+') {
-    return `${WirelessModule.base}${module_id}/#`;
+  static all() {
+    return WirelessModule.id('+');
   }
 }
 
