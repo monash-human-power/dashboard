@@ -1,12 +1,11 @@
-import { getPrettyDeviceName, useCameraStatus } from 'api/v2/camera';
-import PropTypes from 'prop-types';
 import React from 'react';
-import { Badge } from 'react-bootstrap';
-import { Device } from '../../types/camera';
+import { Badge, Card, Col, Row } from 'react-bootstrap';
 
 export interface CameraStatusProps {
-    /** Device name */
-    device: Device
+    /** Status of primary device */
+    primaryStatus: boolean
+    /** Status of secondary device */
+    secondaryStatus: boolean
 }
 
 /**
@@ -19,21 +18,30 @@ export interface CameraStatusProps {
  * @param props Props
  * @returns Component
  */
-export default function CameraStatus({ device }: CameraStatusProps) {
-    const status = useCameraStatus(device);
-
+export default function CameraStatus({ primaryStatus, secondaryStatus }: CameraStatusProps) {
     return (
-        <>
-            <Badge pill variant={status ? 'success' : 'danger'}>
-                {status ? 'Connected' : 'Disconnected'}
-            </Badge><br/>
-            <span>
-                {`${getPrettyDeviceName(device)} Camera`}
-            </span>
-        </>
+        <Card>
+            <Card.Body>
+                <Card.Title>Camera Status</Card.Title>
+                <Card.Subtitle>
+                    <Row>
+                        <Col>
+                            <Badge pill variant={primaryStatus ? 'success' : 'danger'}>
+                                {primaryStatus ? 'Connected' : 'Disconnected'}
+                            </Badge>
+                            <br />
+                            <span>Primary Camera</span>
+                        </Col>
+                        <Col>
+                            <Badge pill variant={secondaryStatus ? 'success' : 'danger'}>
+                                {secondaryStatus ? 'Connected' : 'Disconnected'}
+                            </Badge>
+                            <br />
+                            <span>Secondary Camera</span>
+                        </Col>
+                    </Row>
+                </Card.Subtitle>
+            </Card.Body>
+        </Card>
     );
 }
-
-CameraStatus.propTypes = {
-    device: PropTypes.string.isRequired,
-};
