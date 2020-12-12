@@ -1,14 +1,11 @@
 import { getPrettyDeviceName, OverlaysHook } from 'api/v2/camera';
 import RadioSelector from 'components/RadioSelector';
-import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Card } from 'react-bootstrap';
 
 export interface OverlaySelectionProps extends OverlaysHook {
   /** Camera screen */
   device: 'primary' | 'secondary'
-  /** Overlay hook */
-  overlays: OverlaysHook
 }
 
 /**
@@ -21,7 +18,7 @@ export default function OverlaySelection({
   device,
   overlays: controls,
   setActiveOverlay
-}: OverlaySelectionProps) {
+}: OverlaySelectionProps): JSX.Element {
   const [selectedOverlay, setSelectedOverlay] = useState(null);
   const name = getPrettyDeviceName(device);
 
@@ -62,7 +59,3 @@ export default function OverlaySelection({
     </Card>
   );
 }
-
-OverlaySelection.propTypes = {
-  device: PropTypes.string.isRequired,
-};
