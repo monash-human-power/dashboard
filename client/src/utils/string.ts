@@ -4,7 +4,7 @@
  * @param string String to capitalise
  * @returns Capitalised string
  */
-export function capitalise(string: string) {
+export function capitalise(string: string): string {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
@@ -14,7 +14,7 @@ export function capitalise(string: string) {
  * @param string String to convert
  * @returns Start case string
  */
-export function camelCaseToStartCase(string: string) {
+export function camelCaseToStartCase(string: string): string {
   const split = string.replace(/([A-Z])/g, ' $1');
   return capitalise(split);
 }
@@ -28,7 +28,7 @@ export function camelCaseToStartCase(string: string) {
  * @param digits -- Number of decimal places to round to
  * @returns Bytes represented in a format with units
  */
-export function formatBytes(bytes: number, digits: number = 2) {
+export function formatBytes(bytes: number, digits: number = 2): string {
   if (bytes === 0) return '0 Bytes';
   const units = [
     'Bytes',
@@ -48,11 +48,11 @@ export function formatBytes(bytes: number, digits: number = 2) {
 
 /**
  * Converts a number of minutes to the format mm:ss.
- * 
+ *
  * @param totalMinutes Number of minuets to format
  * @returns The formatted duration.
  */
-export function formatMinutes(totalMinutes: number) {
+export function formatMinutes(totalMinutes: number): string {
   const mins = Math.floor(totalMinutes);
   const secs = Math.floor((totalMinutes - mins) * 60);
   return `${mins}m ${secs}s`;
