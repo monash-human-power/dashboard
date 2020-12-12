@@ -26,7 +26,6 @@ export default function LogFileList({ files, onDeleteFile }) {
 
   return files.map((file) => (
     <WidgetListGroupItem
-      key={file.url}
       title={file.fileName}
       action
       href={file.url}
