@@ -3,13 +3,13 @@ import { Button } from 'react-bootstrap';
 import WidgetListGroupItem, {
   WidgetListGroupItemProps,
 } from './WidgetListGroupItem';
-import { storiesOf } from '@storybook/react';
 
 export default {
   title: 'WidgetListGroupItem',
   component: WidgetListGroupItem,
   argTypes: {
     onClick: { action: 'clicked' },
+    title: { control: 'string' },
   },
 };
 
@@ -19,11 +19,17 @@ const template = (args: WidgetListGroupItemProps) => () => (
 
 const baseProps = { title: 'List group item', active: false };
 
-storiesOf('WidgetListGroupItem', module)
-  .add('Simple', template({ ...baseProps }))
-  .add('Active', template({ ...baseProps, active: true }))
-  .add(
-    'ButtonWidget',
-    template({ ...baseProps, children: <Button size="sm">Button</Button> }),
-  )
-  .add('Link', template({ ...baseProps, action: true, href: 'javascript:;' }));
+export const Simple = template({ ...baseProps });
+
+export const Active = template({ ...baseProps, active: true });
+
+export const ButtonWidget = template({
+  ...baseProps,
+  children: <Button size="sm">Button</Button>,
+});
+
+export const Link = template({
+  ...baseProps,
+  action: true,
+  href: 'https://www.monashhumanpower.org',
+});
