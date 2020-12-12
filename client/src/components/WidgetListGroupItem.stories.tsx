@@ -9,7 +9,6 @@ export default {
   component: WidgetListGroupItem,
   argTypes: {
     onClick: { action: 'clicked' },
-    title: { control: 'string' },
   },
 };
 
