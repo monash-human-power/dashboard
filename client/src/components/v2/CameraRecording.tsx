@@ -1,8 +1,3 @@
-import {
-  getPrettyDeviceName,
-  startRecording,
-  stopRecording
-} from 'api/v2/camera';
 import React from 'react';
 import { Badge, Button, Card, Col, Row } from 'react-bootstrap';
 import styles from './CameraRecording.module.css';
@@ -13,11 +8,15 @@ interface VideoFeedStatus {
   online: boolean
 }
 
-export type CameraRecordingPropT = VideoFeedStatus & CameraRecordingStatusProps & {ip: string};
+export type CameraRecordingPropT = VideoFeedStatus & CameraRecordingStatusProps & { ip: string };
 
 export interface CameraRecordingProps {
-  /* Information for each device */
-  [device: string]: CameraRecordingPropT
+  /** Information for primary device */
+  primary: CameraRecordingPropT
+  /** Information for secondary device */
+  secondary: CameraRecordingPropT
+  startRecording: () => void
+  stopRecording: () => void
 }
 
 /**
@@ -30,34 +29,54 @@ export interface CameraRecordingProps {
  * @param props Props
  * @returns Component
  */
-export default function CameraRecording(props: CameraRecordingProps) {
+export default function CameraRecording({
+  primary,
+  secondary,
+  startRecording,
+  stopRecording
+}: CameraRecordingProps) {
   // Check if at least one camera's video feed is online
-  const canRecord = Object.keys(props).find((device) => props[device]?.online);
+  const canRecord = primary.online || secondary.online;
 
   return (
     <Card>
       <Card.Body>
         <Card.Title>Recording Controls</Card.Title>
         <Row className={styles.row}>
-          {Object.entries(props).map(([device, { online }]) => (
-            /* Device recording controls UI */
-            <Col className={styles.col} key={device} sm={6}>
-              <Card.Subtitle className={styles.subtitle}>
-                {/* Name */}
-                <span className={styles.deviceName}>
-                  {`${getPrettyDeviceName(device as "primary" | "secondary")}`}
+          {/* Device recording controls UI for primary device */}
+          <Col className={styles.col} key='primary' sm={6}>
+            <Card.Subtitle className={styles.subtitle}>
+              {/* Name */}
+              <span className={styles.deviceName}>
+                Primary
                 </span>
-                {/* Online status */}
-                <Badge className={styles.indicator} pill variant={online ? 'success' : 'danger'}>
-                  {online ? 'Online' : 'Offline'}
-                </Badge>
-                {/* IP */}
-                <div className={styles.push}>{props[device].ip}</div>
-              </Card.Subtitle>
-              {/* Fields */}
-              <CameraRecordingStatus statusFormatted={props[device]?.statusFormatted} />
-            </Col>
-          ))}
+              {/* Online status */}
+              <Badge className={styles.indicator} pill variant={primary.online ? 'success' : 'danger'}>
+                {primary.online ? 'Online' : 'Offline'}
+              </Badge>
+              {/* IP */}
+              <div className={styles.push}>{primary.ip}</div>
+            </Card.Subtitle>
+            {/* Fields */}
+            <CameraRecordingStatus statusFormatted={primary?.statusFormatted} />
+          </Col>
+          {/* Device recording controls UI for secondary device */}
+          <Col className={styles.col} key='secondary' sm={6}>
+            <Card.Subtitle className={styles.subtitle}>
+              {/* Name */}
+              <span className={styles.deviceName}>
+                Primary
+                </span>
+              {/* Online status */}
+              <Badge className={styles.indicator} pill variant={secondary.online ? 'success' : 'danger'}>
+                {secondary.online ? 'Online' : 'Offline'}
+              </Badge>
+              {/* IP */}
+              <div className={styles.push}>{secondary.ip}</div>
+            </Card.Subtitle>
+            {/* Fields */}
+            <CameraRecordingStatus statusFormatted={secondary?.statusFormatted} />
+          </Col>
         </Row>
       </Card.Body>
       <Card.Footer>
