@@ -34,7 +34,7 @@ export default function CameraRecording({
   secondary,
   startRecording,
   stopRecording
-}: CameraRecordingProps) {
+}: CameraRecordingProps): JSX.Element {
   // Check if at least one camera's video feed is online
   const canRecord = primary.online || secondary.online;
 

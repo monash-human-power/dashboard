@@ -22,7 +22,9 @@ export interface CameraRecordingStatusProps {
  * @param props Props
  * @returns Component
  */
-export default function CameraRecordingStatus({ statusFormatted }: CameraRecordingStatusProps) {
+export default function CameraRecordingStatus(
+  { statusFormatted }: CameraRecordingStatusProps
+): JSX.Element {
   return (
     <div>
       {statusFormatted ? (
@@ -33,8 +35,8 @@ export default function CameraRecordingStatus({ statusFormatted }: CameraRecordi
           </div>
         ))
       ) : (
-        <div className={styles.statusRow}>{`Status: ${defaultStatus}`}</div>
-      )}
+          <div className={styles.statusRow}>{`Status: ${defaultStatus}`}</div>
+        )}
     </div>
   );
 }
