@@ -16,6 +16,13 @@ export const Simple = Template.bind({});
 Simple.args = {
   key: 'unique_id',
   title: 'List group item',
+  active: false,
+};
+
+export const Active = Template.bind({});
+Active.args = {
+  ...Simple.args,
+  active: true,
 };
 
 export const ButtonWidget = Template.bind({});
