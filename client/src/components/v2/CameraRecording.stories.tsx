@@ -1,13 +1,19 @@
+import { action } from '@storybook/addon-actions';
 import React from 'react';
 import { addArgs, createStory } from '../../utils/stories';
-import CameraRecording, { CameraRecordingProps, CameraRecordingPropT } from './CameraRecording';
+import CameraRecording, { CameraRecordingPropT } from './CameraRecording';
 
 export default {
     component: CameraRecording,
     title: 'CameraRecording'
 };
 
-const Template = addArgs<CameraRecordingProps>((props) => <CameraRecording {...props} />);
+type DeviceInfo = {
+    primary: CameraRecordingPropT
+    secondary: CameraRecordingPropT
+}
+
+const Template = addArgs<DeviceInfo>((props) => <CameraRecording startRecording={action('Start Recording')} stopRecording={action('Stop Recording')} {...props} />);
 
 /* ----------------------------------- Stories ----------------------------------- */
 
