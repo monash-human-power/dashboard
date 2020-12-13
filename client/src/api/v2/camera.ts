@@ -188,7 +188,11 @@ export function getPrettyDeviceName(device: CameraDevice) {
   return device === 'primary' ? 'Primary' : 'Secondary';
 }
 
-interface StatusPayloadOptions<T> {
+/**
+ * `T` Type of the socket.io payload
+ * `U` Type to be returned by the handler
+ */
+interface StatusPayloadOptions<T, U> {
   /** Initial value for the payload */
   initValue: T | null;
   /** Handler for updating payload */
@@ -198,7 +202,7 @@ interface StatusPayloadOptions<T> {
     device: CameraDevice,
   ) => T | void;
   /** Handler for return value */
-  returnHandler?: (payload: T | null, device?: CameraDevice) => T | null;
+  returnHandler?: (payload: T | null, device?: CameraDevice) => U | null;
 }
 
 /**
@@ -219,7 +223,7 @@ function createStatusPayloadHook<T>(
       newPayload: T | null,
     ) => setter(newPayload ?? initValue),
     returnHandler = (payload: T | null) => payload,
-  }: StatusPayloadOptions<T>,
+  }: StatusPayloadOptions<T, T>,
 ) {
   return function _hook(device: CameraDevice) {
     // Only run init once per render
