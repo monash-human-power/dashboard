@@ -1,7 +1,7 @@
-// import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 import { Button } from 'react-bootstrap';
-// import FontAwesomeIcon from './FontAwesomeIcon';
+import FontAwesomeIcon from './FontAwesomeIcon';
 import WidgetListGroupItem from './WidgetListGroupItem';
 
 export interface BoostConfigListProps {
@@ -39,8 +39,7 @@ export default function BoostConfigList({
             size="sm"
             onClick={(e) => handleDelete(e, configName)}
           >
-            {/* <FontAwesomeIcon icon={faTrashAlt} /> */}
-            Delete
+            <FontAwesomeIcon icon={faTrashAlt} />
           </Button>
         </WidgetListGroupItem>
       ))}
