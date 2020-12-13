@@ -18,3 +18,9 @@ export const Simple = createStory(Template, {
   onSelectConfig: action('onSelectConfig'),
   onDeleteConfig: action('onDeleteConfig'),
 });
+
+export const Empty = createStory(Template, {
+  configNames: [],
+  onSelectConfig: action('onSelectConfig'),
+  onDeleteConfig: action('onDeleteConfig'),
+});

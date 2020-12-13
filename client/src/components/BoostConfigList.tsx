@@ -1,8 +1,9 @@
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faFile, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import FontAwesomeIcon from './FontAwesomeIcon';
 import WidgetListGroupItem from './WidgetListGroupItem';
+import styles from './BoostConfigList.module.css';
 
 export interface BoostConfigListProps {
   configNames: string[];
@@ -24,6 +25,16 @@ export default function BoostConfigList({
     event.stopPropagation();
     onDeleteConfig(configName);
   };
+  if (configNames.length === 0)
+    return (
+      <div className={styles.empty_dialogue}>
+        <div className={styles.file_icon}>
+          <FontAwesomeIcon icon={faFile} />
+        </div>
+        {'\n'}
+        No configs uploaded yet!
+      </div>
+    );
   return (
     <>
       {configNames.map((configName) => (
