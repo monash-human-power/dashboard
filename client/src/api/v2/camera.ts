@@ -213,7 +213,7 @@ interface StatusPayloadOptions<T, U> {
  * @param opts Options
  * @returns Hook for getting a payload
  */
-function createStatusPayloadHook<T>(
+function createStatusPayloadHook<T, U>(
   sub: string,
   shape: Runtype<T>,
   {
@@ -222,8 +222,8 @@ function createStatusPayloadHook<T>(
       setter: React.Dispatch<React.SetStateAction<T | null>>,
       newPayload: T | null,
     ) => setter(newPayload ?? initValue),
-    returnHandler = (payload: T | null) => payload,
-  }: StatusPayloadOptions<T, T>,
+    returnHandler = (payload: T | null) => payload as U | null,
+  }: StatusPayloadOptions<T, U>,
 ) {
   return function _hook(device: CameraDevice) {
     // Only run init once per render
