@@ -10,19 +10,20 @@ export default {
 
 const Template = addArgs<OverlaySelectionProps>((props) => <OverlaySelection {...props} />);
 
-const setActiveOverlay = action('set');
+const baseProps = {
+    device: 'primary' as 'primary', // For literal type, can use Device when that gets merged
+    setActiveOverlay: action('set')
+};
 
 /* ----------------------------------- Stories ----------------------------------- */
 
 export const Waiting = createStory(Template, {
-    device: 'primary',
-    setActiveOverlay,
+    ...baseProps,
     overlays: null
 });
 
 export const One = createStory(Template, {
-    device: 'primary',
-    setActiveOverlay,
+    ...baseProps,
     overlays: {
         active: 'overlay_1.py',
         overlays: ['overlay_1.py']
@@ -30,8 +31,7 @@ export const One = createStory(Template, {
 });
 
 export const Many = createStory(Template, {
-    device: 'primary',
-    setActiveOverlay,
+    ...baseProps,
     overlays: {
         active: 'overlay_1.py',
         overlays: ['overlay_1.py', 'overlay_2.py', 'overlay_3.py']
