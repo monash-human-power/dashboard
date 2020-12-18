@@ -41,6 +41,6 @@ export default function RadioSelector({ options, value, onChange }) {
 
 RadioSelector.propTypes = {
   options: PropTypes.arrayOf(PropTypes.string).isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
 };
