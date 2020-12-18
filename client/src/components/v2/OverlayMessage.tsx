@@ -25,7 +25,6 @@ export default function OverlayMessage() {
     [message, setMessage],
   );
 
-  // ! Remove any
   return (
     <Card>
       <Card.Body>
@@ -38,7 +37,7 @@ export default function OverlayMessage() {
             value={message}
           />
           <InputGroup.Append>
-            <Button variant="outline-secondary" onClick={sendMessage as any}>
+            <Button variant="outline-secondary" onClick={(_) => sendMessage(message)}>
               Send
             </Button>
           </InputGroup.Append>
