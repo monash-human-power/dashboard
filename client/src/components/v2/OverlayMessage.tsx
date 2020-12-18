@@ -1,11 +1,8 @@
-import { sendMessage } from 'api/v2/camera';
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { Button, Card, FormControl, InputGroup } from 'react-bootstrap';
 
 export interface OverlayMessageProps {
-  message: string,
-  handleMessageChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
-  handleKeyPressed: (event: React.KeyboardEvent<HTMLInputElement>) => void
+  sendMessage: (message: string) => void
 }
 
 /**
@@ -14,11 +11,24 @@ export interface OverlayMessageProps {
  * @param props Props
  * @returns Component
  */
-export default function OverlayMessage({
-  message,
-  handleMessageChange,
-  handleKeyPressed
-}: OverlayMessageProps) {
+export default function OverlayMessage({ sendMessage }: OverlayMessageProps) {
+  const [message, setMessage] = useState('');
+
+  const handleMessageChange = useCallback(
+    (event) => setMessage(event.target.value),
+    [setMessage],
+  );
+
+  const handleKeyPressed = useCallback(
+    (event) => {
+      if (event.key === 'Enter') {
+        sendMessage(message);
+        setMessage('');
+      }
+    },
+    [message, setMessage, sendMessage],
+  );
+
   return (
     <Card>
       <Card.Body>
