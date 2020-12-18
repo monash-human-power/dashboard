@@ -1,30 +1,24 @@
 import { sendMessage } from 'api/v2/camera';
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import { Button, Card, FormControl, InputGroup } from 'react-bootstrap';
+
+export interface OverlayMessageProps {
+  message: string,
+  handleMessageChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  handleKeyPressed: (event: React.KeyboardEvent<HTMLInputElement>) => void
+}
 
 /**
  * Text field for sending messages to the rider via the active overlay.
  *
+ * @param props Props
  * @returns Component
  */
-export default function OverlayMessage() {
-  const [message, setMessage] = useState('');
-
-  const handleMessageChange = useCallback(
-    (event) => setMessage(event.target.value),
-    [setMessage],
-  );
-
-  const handleKeyPressed = useCallback(
-    (event) => {
-      if (event.key === 'Enter') {
-        sendMessage(message);
-        setMessage('');
-      }
-    },
-    [message, setMessage],
-  );
-
+export default function OverlayMessage({
+  message,
+  handleMessageChange,
+  handleKeyPressed
+}: OverlayMessageProps) {
   return (
     <Card>
       <Card.Body>
