@@ -1,4 +1,3 @@
-/* eslint-disable jsdoc/no-undefined-types */
 import PropTypes from 'prop-types';
 import React, { useCallback } from 'react';
 import FormCheck from 'react-bootstrap/FormCheck';
