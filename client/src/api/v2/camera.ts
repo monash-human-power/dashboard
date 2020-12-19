@@ -271,12 +271,12 @@ const VideoFeedStatuses = Partial({
 }).Or(Null);
 
 /**
- * Returns the last received status of the video feeds from `/v3/camera/video-feed/status/<primary/secondary>`
+ * Returns the last received status of the video feeds from `/v3/camera/video_feed/status/<primary/secondary>`
  *
  * @returns A VideoFeedStatus for each device
  */
 export const useVideoFeedStatus = createStatusPayloadHook(
-  'video-feed',
+  'video_feed',
   VideoFeedStatuses,
   { initValue: {} },
 );
