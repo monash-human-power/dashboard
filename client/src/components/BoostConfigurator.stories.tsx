@@ -2,17 +2,15 @@ import React from 'react';
 import { action } from '@storybook/addon-actions';
 import { addArgs, createStory } from 'utils/stories';
 import { BoostConfig } from 'types/boost';
-import BoostConfigAccordion, {
-  BoostConfigAccordionProps,
-} from './BoostConfigAccordion';
+import BoostConfigurator, { BoostConfiguratorProps } from './BoostConfigurator';
 
 export default {
-  title: 'BoostConfigAccordion',
-  component: BoostConfigAccordion,
+  title: 'BoostConfigurator',
+  component: BoostConfigurator,
 };
 
-const Template = addArgs<BoostConfigAccordionProps>((props) => (
-  <BoostConfigAccordion {...props} />
+const Template = addArgs<BoostConfiguratorProps>((props) => (
+  <BoostConfigurator {...props} />
 ));
 
 const baseConfigs: BoostConfig[] = [

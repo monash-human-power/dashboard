@@ -4,17 +4,17 @@ import { BoostConfig, BoostConfigType } from 'types/boost';
 import { camelCaseToStartCase } from 'utils/string';
 import BoostConfigList from './BoostConfigList';
 
-export interface BoostConfigAccordionProps {
+export interface BoostConfiguratorProps {
   configs: BoostConfig[];
   onSelectConfig: (configType: BoostConfigType, name: string) => void;
   onDeleteConfig: (configType: BoostConfigType, name: string) => void;
 }
 
-export default function BoostConfigAccordion({
+export default function BoostConfigurator({
   configs,
   onSelectConfig,
   onDeleteConfig,
-}: BoostConfigAccordionProps) {
+}: BoostConfiguratorProps) {
   return (
     <Accordion>
       {configs.map((config, index) => (
