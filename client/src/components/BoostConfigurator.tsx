@@ -8,18 +8,24 @@ export interface BoostConfiguratorProps {
   configs: BoostConfig[];
   onSelectConfig: (configType: BoostConfigType, name: string) => void;
   onDeleteConfig: (configType: BoostConfigType, name: string) => void;
+  onUploadConfig: () => void;
 }
 
 export default function BoostConfigurator({
   configs,
   onSelectConfig,
   onDeleteConfig,
+  onUploadConfig,
 }: BoostConfiguratorProps) {
   return (
     <Card>
       <Card.Body>
         <Card.Title>Configuration</Card.Title>
-        <Button variant="outline-primary" className="mb-3" onClick={() => {}}>
+        <Button
+          variant="outline-primary"
+          className="mb-3"
+          onClick={onUploadConfig}
+        >
           Upload config
         </Button>
         <Accordion>

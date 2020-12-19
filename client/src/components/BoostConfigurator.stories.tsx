@@ -36,29 +36,29 @@ const baseConfigs: BoostConfig[] = [
   },
 ];
 
-const onSelectConfig = action('onSelectConfig');
-const onDeleteConfig = action('onDeleteConfig');
+const handlers = {
+  onSelectConfig: action('onSelectConfig'),
+  onDeleteConfig: action('onDeleteConfig'),
+  onUploadConfig: action('onUploadConfig'),
+};
 
 export const Simple = createStory(Template, {
+  ...handlers,
   configs: baseConfigs,
-  onSelectConfig,
-  onDeleteConfig,
 });
 
 export const NoSelection = createStory(Template, {
+  ...handlers,
   configs: baseConfigs.map((config) =>
     config.type === 'rider'
       ? { type: config.type, options: config.options }
       : config,
   ),
-  onSelectConfig,
-  onDeleteConfig,
 });
 
 export const NoOptions = createStory(Template, {
+  ...handlers,
   configs: baseConfigs.map((config) =>
     config.type === 'rider' ? { type: config.type, options: [] } : config,
   ),
-  onSelectConfig,
-  onDeleteConfig,
 });
