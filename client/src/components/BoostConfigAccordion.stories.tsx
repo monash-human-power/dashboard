@@ -1,4 +1,5 @@
 import React from 'react';
+import { action } from '@storybook/addon-actions';
 import { addArgs, createStory } from 'utils/stories';
 import BoostConfigAccordion, {
   BoostConfigAccordionProps,
@@ -13,9 +14,28 @@ const Template = addArgs<BoostConfigAccordionProps>((props) => (
   <BoostConfigAccordion {...props} />
 ));
 
+const onSelectConfig = action('onSelectConfig');
+const onDeleteConfig = action('onDeleteConfig');
+
 export const Simple = createStory(Template, {
-  powerPlanConfigs: ['my_plan_1.json', 'this_one_gets_you_to_144.json'],
-  riderConfigs: ['al.json', 'charles.json'],
-  bikeConfigs: ['blacksmith.json', 'wombat.json', 'precilla.json'],
-  trackConfigs: ['ford.json', 'holden.json', 'battle_mountain.json'],
+  configs: [
+    {
+      type: 'powerPlan',
+      options: ['my_plan_1.json', 'this_one_gets_you_to_144.json'],
+    },
+    {
+      type: 'rider',
+      options: ['al.json', 'charles.json'],
+    },
+    {
+      type: 'bike',
+      options: ['blacksmith.json', 'wombat.json', 'precilla.json'],
+    },
+    {
+      type: 'track',
+      options: ['ford.json', 'holden.json', 'battle_mountain.json'],
+    },
+  ],
+  onSelectConfig,
+  onDeleteConfig,
 });
