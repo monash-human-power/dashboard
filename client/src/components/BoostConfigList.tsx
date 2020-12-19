@@ -1,31 +1,30 @@
 import { faFile, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 import { Button } from 'react-bootstrap';
+import { BoostConfig } from 'types/boost';
 import FontAwesomeIcon from './FontAwesomeIcon';
 import WidgetListGroupItem from './WidgetListGroupItem';
 import styles from './BoostConfigList.module.css';
 
 export interface BoostConfigListProps {
-  configNames: string[];
-  activeConfig?: string;
+  config: BoostConfig;
   onSelectConfig: (configName: string) => void;
   onDeleteConfig: (configName: string) => void;
 }
 
 export default function BoostConfigList({
-  configNames,
-  activeConfig,
+  config,
   onSelectConfig,
   onDeleteConfig,
 }: BoostConfigListProps) {
   const handleSelect = (configName: string) => {
-    if (configName !== activeConfig) onSelectConfig(configName);
+    if (configName !== config.active) onSelectConfig(configName);
   };
   const handleDelete = (event: React.MouseEvent, configName: string) => {
     event.stopPropagation();
     onDeleteConfig(configName);
   };
-  if (configNames.length === 0)
+  if (config.options.length === 0)
     return (
       <div className={styles.empty_dialogue}>
         <div className={styles.file_icon}>
@@ -37,10 +36,10 @@ export default function BoostConfigList({
     );
   return (
     <>
-      {configNames.map((configName) => (
+      {config.options.map((configName) => (
         <WidgetListGroupItem
           title={configName}
-          active={configName === activeConfig}
+          active={configName === config.active}
           action
           onClick={() => handleSelect(configName)}
           as="a"

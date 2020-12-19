@@ -29,7 +29,7 @@ export default function BoostConfigAccordion({
           <Accordion.Collapse eventKey={String(index)}>
             <Card.Body>
               <BoostConfigList
-                configNames={config.options}
+                config={config}
                 onSelectConfig={(name) => onSelectConfig(config.type, name)}
                 onDeleteConfig={(name) => onDeleteConfig(config.type, name)}
               />
