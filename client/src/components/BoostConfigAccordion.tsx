@@ -25,6 +25,8 @@ export default function BoostConfigAccordion({
             eventKey={String(index)}
           >
             {camelCaseToStartCase(config.type)}
+            {': '}
+            <i>{config.active ? `"${config.active}"` : 'None'}</i>
           </Accordion.Toggle>
           <Accordion.Collapse eventKey={String(index)}>
             <Card.Body>

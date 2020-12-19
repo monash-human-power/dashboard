@@ -22,18 +22,22 @@ export const Simple = createStory(Template, {
     {
       type: 'powerPlan',
       options: ['my_plan_1.json', 'this_one_gets_you_to_144.json'],
+      active: 'my_plan_1.json',
     },
     {
       type: 'rider',
       options: ['al.json', 'charles.json'],
+      active: 'charles.json',
     },
     {
       type: 'bike',
       options: ['blacksmith.json', 'wombat.json', 'precilla.json'],
+      active: 'wombat.json',
     },
     {
       type: 'track',
       options: ['ford.json', 'holden.json', 'battle_mountain.json'],
+      active: 'ford.json',
     },
   ],
   onSelectConfig,
