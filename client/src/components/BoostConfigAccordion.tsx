@@ -1,14 +1,8 @@
 import React from 'react';
 import { Accordion, Card } from 'react-bootstrap';
+import { BoostConfig, BoostConfigType } from 'types/boost';
 import { camelCaseToStartCase } from 'utils/string';
 import BoostConfigList from './BoostConfigList';
-
-type BoostConfigType = 'powerPlan' | 'rider' | 'bike' | 'track';
-interface BoostConfig {
-  type: BoostConfigType;
-  options: string[];
-  active?: string;
-}
 
 export interface BoostConfigAccordionProps {
   configs: BoostConfig[];
