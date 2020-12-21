@@ -1,8 +1,8 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import NavBar from 'components/NavBar';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { routes } from 'router';
 import styles from './App.module.css';
+import NavBarContainer from './components/NavBarContainer';
 
 /**
  * Main App component
@@ -22,7 +22,7 @@ function App() {
   return (
     <Router>
       <div className={styles.app}>
-        <NavBar />
+        <NavBarContainer />
         <Switch>{routeItems}</Switch>
       </div>
     </Router>

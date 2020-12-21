@@ -1,6 +1,6 @@
-import { useState, useCallback } from 'react';
 import zipObject from 'lodash/zipObject';
-import { useTimeSeries, TimeSeriesPoint } from 'utils/timeSeries';
+import { useCallback, useState } from 'react';
+import { useTimeSeries } from 'utils/timeSeries';
 import { useChannel } from '../socket';
 
 /**
