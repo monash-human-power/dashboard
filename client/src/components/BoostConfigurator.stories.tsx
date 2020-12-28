@@ -49,16 +49,16 @@ export const Simple = createStory(Template, {
 
 export const NoSelection = createStory(Template, {
   ...handlers,
-  configs: baseConfigs.map((config) =>
-    config.type === 'rider'
-      ? { type: config.type, options: config.options }
-      : config,
+  configs: baseConfigs.map(({ type, options, active }) =>
+    // Omit `active` property for rider
+    type === 'rider' ? { type, options } : { type, options, active },
   ),
 });
 
 export const NoOptions = createStory(Template, {
   ...handlers,
-  configs: baseConfigs.map((config) =>
-    config.type === 'rider' ? { type: config.type, options: [] } : config,
+  configs: baseConfigs.map(({ type, options, active }) =>
+    // Omit all options for rider
+    type === 'rider' ? { type, options: [] } : { type, options, active },
   ),
 });
