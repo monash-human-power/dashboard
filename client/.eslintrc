@@ -18,7 +18,7 @@
     "react/jsx-filename-extension": [
       1,
       {
-        "extensions": [".js", ".ts"]
+        "extensions": [".js", ".ts", ".jsx", ".tsx"]
       }
     ],
     "react/jsx-props-no-spreading": "off",
@@ -44,8 +44,10 @@
       }
     ],
     "semi": "error",
+    "jsdoc/require-property-type": "off",
     "jsdoc/require-returns-type": "off",
-    "jsdoc/require-param-type": "off"
+    "jsdoc/require-param-type": "off",
+    "jsdoc/no-undefined-types": "off"
   },
   "settings": {
     "import/resolver": {

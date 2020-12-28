@@ -1,17 +1,28 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
-import { useBikeVersion, bikeVersions } from 'router';
 import { ReactComponent as Logo } from 'assets/MHPLogo.svg';
+import React from 'react';
+import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { NavLink } from 'react-router-dom';
+import { VersionInfo } from '../router';
 import styles from './NavBar.module.css';
+
+/**
+ * @property {VersionInfo} bikeVersion Version info for bike
+ * @property {VersionInfo[]} bikeVersions Version info for all bikes
+ */
+export interface NavBarProps {
+  /** Version info for bike */
+  bikeVersion: VersionInfo | null,
+  /** Version info for all bikes */
+  bikeVersions: VersionInfo[]
+}
 
 /**
  * Navigation bar component
  *
- * @returns {React.Component} Component
+ * @param props Props
+ * @returns Component
  */
-export default function NavBar() {
-  const bikeVersion = useBikeVersion();
+export default function NavBar({ bikeVersion, bikeVersions }: NavBarProps): JSX.Element {
   const bikeName = bikeVersion?.name;
   const linkItems = bikeVersion?.routes.map(({ name, path, exact }) => (
     <Nav.Link
