@@ -1,4 +1,4 @@
-import { getPrettyDeviceName, useCameraStatus, CameraDevice } from 'api/v2/camera';
+import { getPrettyDeviceName, useCameraStatus } from 'api/v2/camera';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Badge } from 'react-bootstrap';
