@@ -41,7 +41,7 @@ export default function OverlayMessage({ sendMessage }: OverlayMessageProps) {
             value={message}
           />
           <InputGroup.Append>
-            <Button variant="outline-secondary" onClick={sendMessage(message)}>
+            <Button variant="outline-secondary" onClick={() => sendMessage(message)}>
               Send
             </Button>
           </InputGroup.Append>
