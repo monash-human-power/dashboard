@@ -120,7 +120,7 @@ const CameraRecordingStatusPayload = Union(
 );
 type CameraRecordingStatusPayload = Static<typeof CameraRecordingStatusPayload>;
 
-interface CameraRecordingStatusItem {
+export interface CameraRecordingStatusItem {
   /** Display name of the status item e.g. "Disk Space Remaining" */
   name: string;
   /** Value of the status item e.g. "1.2 GiB" */
