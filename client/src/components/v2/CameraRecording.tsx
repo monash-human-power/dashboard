@@ -1,12 +1,8 @@
+import { VideoFeedStatus } from 'api/v2/camera';
 import React from 'react';
 import { Badge, Button, Card, Col, Row } from 'react-bootstrap';
 import styles from './CameraRecording.module.css';
 import CameraRecordingStatus, { CameraRecordingStatusProps } from './CameraRecordingStatus';
-
-// ! Remove this before merging and instead import from camera
-interface VideoFeedStatus {
-  online: boolean
-}
 
 export type CameraRecordingPropT = VideoFeedStatus & CameraRecordingStatusProps & { ip: string };
 

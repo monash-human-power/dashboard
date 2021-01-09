@@ -3,9 +3,9 @@ import {
   Array,
   Boolean,
   Literal,
-  Null,
+
   Number,
-  Partial,
+
   Record,
   Runtype,
   Static,
@@ -136,7 +136,7 @@ export interface CameraRecordingStatusItem {
  * @param payload Payload from MQTT message, parsed
  * @returns Formatted payload
  */
-export function formatRecordingPayload(payload?: CameraRecordingStatusPayload) {
+export function formatRecordingPayload(payload: CameraRecordingStatusPayload | null) {
   if (!payload) return null;
 
   // Format data always present regardless of status
@@ -202,7 +202,7 @@ interface StatusPayloadOptions<T, U> {
     device: CameraDevice,
   ) => T | void;
   /** Handler for return value */
-  returnHandler?: (payload: T | null, device?: CameraDevice) => U | null;
+  returnHandler: (payload: T | null, device?: CameraDevice) => U | null;
 }
 
 /**
@@ -222,7 +222,7 @@ function createStatusPayloadHook<T, U>(
       setter: React.Dispatch<React.SetStateAction<T | null>>,
       newPayload: T | null,
     ) => setter(newPayload ?? initValue),
-    returnHandler = (payload: T | null) => payload as U | null,
+    returnHandler,
   }: StatusPayloadOptions<T, U>,
 ) {
   return function _hook(device: CameraDevice) {
@@ -240,10 +240,10 @@ function createStatusPayloadHook<T, U>(
   };
 }
 
-const CameraRecordingStatusPayloads = Partial({
-  primary: CameraRecordingStatusPayload,
-  secondary: CameraRecordingStatusPayload,
-});
+// const CameraRecordingStatusPayloads = Partial({
+//   primary: CameraRecordingStatusPayload,
+//   secondary: CameraRecordingStatusPayload,
+// });
 
 /**
  * Returns the last status payload published
@@ -253,9 +253,10 @@ const CameraRecordingStatusPayloads = Partial({
  */
 export const useCameraRecordingStatus = createStatusPayloadHook(
   'recording',
-  CameraRecordingStatusPayloads,
+  CameraRecordingStatusPayload,
   {
     initValue: null,
+    returnHandler: (payload) => formatRecordingPayload(payload)
   },
 );
 
@@ -263,12 +264,15 @@ const VideoFeedStatus = Record({
   /** Whether video feed is on/off */
   online: Boolean,
 });
-type VideoFeedStatus = Static<typeof VideoFeedStatus>;
+export interface VideoFeedStatus {
+  /** Whether video feed is on/off */
+  online: boolean
+}
 
-const VideoFeedStatuses = Partial({
-  primary: VideoFeedStatus,
-  secondary: VideoFeedStatus,
-}).Or(Null);
+// const VideoFeedStatuses = Partial({
+//   primary: VideoFeedStatus,
+//   secondary: VideoFeedStatus,
+// }).Or(Null);
 
 /**
  * Returns the last received status of the video feeds from `/v3/camera/video_feed/status/<primary/secondary>`
@@ -277,8 +281,8 @@ const VideoFeedStatuses = Partial({
  */
 export const useVideoFeedStatus = createStatusPayloadHook(
   'video_feed',
-  VideoFeedStatuses,
-  { initValue: {} },
+  VideoFeedStatus,
+  { initValue: null, returnHandler: (payload) => payload },
 );
 
 const CameraStatus = Record({
@@ -295,4 +299,5 @@ const CameraStatus = Record({
 export const useCameraStatus = (device: CameraDevice) =>
   createStatusPayloadHook(device, CameraStatus, {
     initValue: { connected: false },
+    returnHandler: (payload) => payload,
   })(device);

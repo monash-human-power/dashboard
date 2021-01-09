@@ -1,5 +1,5 @@
+import { startRecording, stopRecording, useCameraRecordingStatus, useVideoFeedStatus } from 'api/v2/camera';
 import React from 'react';
-import { startRecording, stopRecording, useCameraRecordingStatus, useVideoFeedStatus } from '../../api/v2/camera';
 import CameraRecording from './CameraRecording';
 
 /**
@@ -12,12 +12,12 @@ export default function CameraRecordingContainer(): JSX.Element {
         startRecording,
         stopRecording,
         primary: {
-            ...useVideoFeedStatus('primary'),
+            online: useVideoFeedStatus('primary')?.online ?? false,
             ip: 'Error 501',
             statusFormatted: useCameraRecordingStatus('primary')
         },
         secondary: {
-            ...useVideoFeedStatus('secondary'),
+            online: useVideoFeedStatus('secondary')?.online ?? false,
             ip: 'Error 501',
             statusFormatted: useCameraRecordingStatus('secondary')
         }
