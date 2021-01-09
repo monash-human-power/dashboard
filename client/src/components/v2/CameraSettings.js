@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Card } from 'react-bootstrap';
-import { useOverlays, getPrettyDeviceName } from 'api/v2/camera';
+import { useCameraConfig, getPrettyDeviceName } from 'api/v2/camera';
 import RadioSelector from 'components/RadioSelector';
 
 /**
  * @typedef {object} CameraSettingsProps
- * @property {'primary'|'secondary'} device Camera screen
+ * @property {CameraDevice} device Camera screen
  */
 
 /**
@@ -16,14 +16,14 @@ import RadioSelector from 'components/RadioSelector';
  * @returns {React.Component<CameraSettingsProps>} Component
  */
 export default function CameraSettings({ device }) {
-  const { overlays: controls, setActiveOverlay } = useOverlays(device);
+  const { config, setActiveOverlay } = useCameraConfig(device);
   const [selectedOverlay, setSelectedOverlay] = useState(null);
   const name = getPrettyDeviceName(device);
 
   // On overlay data load, set selected to existing value
   useEffect(() => {
-    setSelectedOverlay(controls?.active);
-  }, [controls]);
+    setSelectedOverlay(config?.activeOverlay);
+  }, [config]);
 
   const handleSave = useCallback(
     (event) => {
@@ -39,9 +39,9 @@ export default function CameraSettings({ device }) {
     <Card>
       <Card.Body>
         <Card.Title>{`${name} display`}</Card.Title>
-        {controls ? (
+        {config ? (
           <RadioSelector
-            options={controls.overlays}
+            options={config.overlays}
             value={selectedOverlay}
             onChange={setSelectedOverlay}
           />

@@ -2,7 +2,7 @@ import {
   getPrettyDeviceName,
   startRecording,
   stopRecording,
-  useVideoFeedStatus
+  useVideoFeedStatus,
 } from 'api/v2/camera';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -12,7 +12,7 @@ import CameraRecordingStatus from './CameraRecordingStatus';
 
 /**
  * @typedef {object} CameraRecordingProps
- * @property {string[]} devices Device names
+ * @property {CameraDevice[]} devices Device names
  */
 
 /**
@@ -29,7 +29,9 @@ export default function CameraRecording({ devices }) {
   const status = useVideoFeedStatus();
 
   // Check if at least one camera's video feed is online
-  const canRecord = Object.keys(status).find((device) => status[device]?.online);
+  const canRecord = Object.keys(status).find(
+    (device) => status[device]?.online,
+  );
 
   return (
     <Card>
@@ -39,7 +41,10 @@ export default function CameraRecording({ devices }) {
           {devices.map((device) => (
             <Col className={styles.col} key={device} sm={6}>
               <Card.Subtitle>
-                <Badge pill variant={status[device]?.online ? 'success' : 'danger'}>
+                <Badge
+                  pill
+                  variant={status[device]?.online ? 'success' : 'danger'}
+                >
                   {status[device]?.online ? 'ON' : 'OFF'}
                 </Badge>
                 <span className={styles.deviceName}>

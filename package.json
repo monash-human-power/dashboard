@@ -5,6 +5,7 @@
   },
   "cacheDirectories": ["client/node_modules", "server/node_modules"],
   "engines": {
-    "yarn": "1.x"
+    "yarn": "1.x",
+    "node": "14.x"
   }
 }

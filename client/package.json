@@ -14,6 +14,7 @@
     "@types/react": "^16.9.49",
     "@types/react-dom": "^16.9.8",
     "@types/react-router-dom": "^5.1.6",
+    "@types/socket.io-client": "^1.4.34",
     "bootstrap": "^4.4.1",
     "chart.js": "^2.9.3",
     "chartjs-plugin-annotation": "^0.5.7",
@@ -38,6 +39,7 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.3",
     "react-uid": "^2.2.0",
+    "runtypes": "^5.0.1",
     "socket.io-client": "^2.3.0",
     "source-map-explorer": "^2.2.2",
     "typescript": "^4.0.3"
