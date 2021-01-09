@@ -10,7 +10,7 @@ import {
   Runtype,
   Static,
   String,
-  Union,
+  Union
 } from 'runtypes';
 import { capitalise, formatBytes, formatMinutes } from 'utils/string';
 import { emit, useChannelShaped } from './socket';
