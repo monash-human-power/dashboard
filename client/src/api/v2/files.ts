@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { Array, Record, String } from 'runtypes';
 
 export interface LogFile {
   /** Log file name */
@@ -7,6 +8,10 @@ export interface LogFile {
   url: string;
 }
 
+const LogFileListing = Record({
+  files: Array(String),
+});
+
 /**
  * Get list of log files
  *
@@ -14,8 +19,8 @@ export interface LogFile {
  */
 export async function getFiles() {
   const response = await fetch('/files');
-  const data = await response.json();
-  const files: LogFile[] = data.files.map((fileName: string) => ({
+  const data = LogFileListing.check(await response.json());
+  const files: LogFile[] = data.files.map((fileName) => ({
     fileName,
     url: `/files/${fileName}`,
   }));
