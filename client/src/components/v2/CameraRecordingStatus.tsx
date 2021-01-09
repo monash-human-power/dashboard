@@ -1,15 +1,8 @@
+import { CameraRecordingStatusItem } from 'api/v2/camera';
 import React from 'react';
 import styles from './CameraRecordingStatus.module.css';
 
 const defaultStatus = 'Waiting for status...';
-
-// ! Remove this after merge and import from camera
-interface CameraRecordingStatusItem {
-  /** Display name of the status item e.g. "Disk Space Remaining" */
-  name: string;
-  /** Value of the status item e.g. "1.2 GiB" */
-  value: string;
-}
 
 export interface CameraRecordingStatusProps {
   /** Status payload formatted to be human readable */
