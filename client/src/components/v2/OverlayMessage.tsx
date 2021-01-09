@@ -19,14 +19,17 @@ export default function OverlayMessage({ sendMessage }: OverlayMessageProps) {
     [setMessage],
   );
 
-  const handleKeyPressed = useCallback(
-    (event) => {
-      if (event.key === 'Enter') {
-        sendMessage(message);
-        setMessage('');
-      }
+  const handleMessage = useCallback(
+    () => {
+      sendMessage(message);
+      setMessage('');
     },
     [message, setMessage, sendMessage],
+  );
+
+  const handleKeyPressed = useCallback(
+    (event) => { if (event.key === 'Enter') handleMessage(); },
+    [handleMessage]
   );
 
   return (
@@ -41,7 +44,7 @@ export default function OverlayMessage({ sendMessage }: OverlayMessageProps) {
             value={message}
           />
           <InputGroup.Append>
-            <Button variant="outline-secondary" onClick={() => sendMessage(message)}>
+            <Button variant="outline-secondary" onClick={handleMessage}>
               Send
             </Button>
           </InputGroup.Append>
