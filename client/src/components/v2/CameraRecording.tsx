@@ -1,6 +1,7 @@
 import { VideoFeedStatus } from 'api/v2/camera';
 import React from 'react';
 import { Badge, Button, Card, Col, Row } from 'react-bootstrap';
+import { capitalise } from '../../utils/string';
 import styles from './CameraRecording.module.css';
 import CameraRecordingStatus, { CameraRecordingStatusProps } from './CameraRecordingStatus';
 
@@ -11,7 +12,9 @@ export interface CameraRecordingProps {
   primary: CameraRecordingPropT
   /** Information for secondary device */
   secondary: CameraRecordingPropT
+  /** Handler for starting recording */
   startRecording: () => void
+  /** Handler for stopping recording */
   stopRecording: () => void
 }
 
@@ -39,40 +42,33 @@ export default function CameraRecording({
       <Card.Body>
         <Card.Title>Recording Controls</Card.Title>
         <Row className={styles.row}>
-          {/* Device recording controls UI for primary device */}
-          <Col className={styles.col} key='primary' sm={6}>
-            <Card.Subtitle className={styles.subtitle}>
-              {/* Name */}
-              <span className={styles.deviceName}>
-                Primary
-                </span>
-              {/* Online status */}
-              <Badge className={styles.indicator} pill variant={primary.online ? 'success' : 'danger'}>
-                {primary.online ? 'Online' : 'Offline'}
-              </Badge>
-              {/* IP */}
-              <div className={styles.push}>{primary.ip}</div>
-            </Card.Subtitle>
-            {/* Fields */}
-            <CameraRecordingStatus statusFormatted={primary?.statusFormatted} />
-          </Col>
-          {/* Device recording controls UI for secondary device */}
-          <Col className={styles.col} key='secondary' sm={6}>
-            <Card.Subtitle className={styles.subtitle}>
-              {/* Name */}
-              <span className={styles.deviceName}>
-                Primary
-                </span>
-              {/* Online status */}
-              <Badge className={styles.indicator} pill variant={secondary.online ? 'success' : 'danger'}>
-                {secondary.online ? 'Online' : 'Offline'}
-              </Badge>
-              {/* IP */}
-              <div className={styles.push}>{secondary.ip}</div>
-            </Card.Subtitle>
-            {/* Fields */}
-            <CameraRecordingStatus statusFormatted={secondary?.statusFormatted} />
-          </Col>
+          {/* Device recording controls UI for device */}
+          {
+            [{
+              device: primary,
+              deviceName: 'primary'
+            }, {
+              device: secondary,
+              deviceName: 'secondary'
+            }].map(({ device, deviceName }) =>
+              <Col className={styles.col} key='device' sm={6}>
+                <Card.Subtitle className={styles.subtitle}>
+                  {/* Name */}
+                  <span className={styles.deviceName}>
+                    {capitalise(deviceName)}
+                  </span>
+                  {/* Online status */}
+                  <Badge className={styles.indicator} pill variant={device.online ? 'success' : 'danger'}>
+                    {device.online ? 'Online' : 'Offline'}
+                  </Badge>
+                  {/* IP */}
+                  <div className={styles.push}>{device.ip}</div>
+                </Card.Subtitle>
+                {/* Fields */}
+                <CameraRecordingStatus statusFormatted={device?.statusFormatted} />
+              </Col>
+            )
+          }
         </Row>
       </Card.Body>
       <Card.Footer>
