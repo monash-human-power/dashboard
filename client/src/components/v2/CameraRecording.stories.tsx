@@ -15,6 +15,12 @@ type DeviceInfo = {
 
 const Template = addArgs<DeviceInfo>((props) => <CameraRecording startRecording={action('Start Recording')} stopRecording={action('Stop Recording')} {...props} />);
 
+const baseDeviceProps = {
+    online: false,
+    statusFormatted: null,
+    ip: '192.168.100.97'
+};
+
 /* ----------------------------------- Stories ----------------------------------- */
 
 export const Empty = createStory(Template, {
@@ -23,33 +29,21 @@ export const Empty = createStory(Template, {
 });
 
 export const NoneOn = createStory(Template, {
-    primary: {
-        online: false,
-        statusFormatted: null,
-        ip: '192.168.100.97'
-    },
-    secondary: {
-        online: false,
-        statusFormatted: null,
-        ip: '192.168.100.97'
-    },
+    primary: baseDeviceProps,
+    secondary: baseDeviceProps,
 });
 
 export const OneON = createStory(Template, {
     primary: {
-        online: true,
-        statusFormatted: null,
-        ip: '192.168.100.97'
+        ...baseDeviceProps,
+        online: true
     },
-    secondary: {
-        online: false,
-        statusFormatted: null,
-        ip: '192.168.100.97'
-    },
+    secondary: baseDeviceProps,
 });
 
 export const RecordingOff = createStory(Template, {
     primary: {
+        ...baseDeviceProps,
         online: true,
         statusFormatted: [
             {
@@ -60,18 +54,14 @@ export const RecordingOff = createStory(Template, {
                 name: "Disk space remaining",
                 value: "1.0 Gb"
             }
-        ],
-        ip: '192.168.100.97'
+        ]
     },
-    secondary: {
-        online: false,
-        statusFormatted: null,
-        ip: '192.168.100.97'
-    },
+    secondary: baseDeviceProps,
 });
 
 export const RecordingOn = createStory(Template, {
     primary: {
+        ...baseDeviceProps,
         online: true,
         statusFormatted: [
             {
@@ -90,12 +80,7 @@ export const RecordingOn = createStory(Template, {
                 name: "Disk space remaining",
                 value: "1.0 Gb"
             }
-        ],
-        ip: '192.168.100.97'
+        ]
     },
-    secondary: {
-        online: false,
-        statusFormatted: null,
-        ip: '192.168.100.97'
-    },
+    secondary: baseDeviceProps,
 });
