@@ -51,7 +51,7 @@ export default function CameraRecording({
               device: secondary,
               deviceName: 'secondary'
             }].map(({ device, deviceName }) =>
-              <Col className={styles.col} key='device' sm={6}>
+              <Col className={styles.col} key={deviceName} sm={6}>
                 <Card.Subtitle className={styles.subtitle}>
                   {/* Name */}
                   <span className={styles.deviceName}>
