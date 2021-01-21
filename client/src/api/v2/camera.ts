@@ -3,9 +3,7 @@ import {
   Array,
   Boolean,
   Literal,
-
   Number,
-
   Record,
   Runtype,
   Static,
