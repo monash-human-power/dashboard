@@ -5,7 +5,7 @@ import { Badge } from 'react-bootstrap';
 
 /**
  * @typedef {object} CameraStatusProps
- * @property {string} devices Device names
+ * @property {CameraDevice} device Device name
  */
 
 /**
@@ -19,20 +19,19 @@ import { Badge } from 'react-bootstrap';
  * @returns {React.Component<CameraStatusProps>} Component
  */
 export default function CameraStatus({ device }) {
-    const status = useCameraStatus(device);
+  const status = useCameraStatus(device);
 
-    return (
-        <>
-            <Badge pill variant={status ? 'success' : 'danger'}>
-                {status ? 'Connected' : 'Disconnected'}
-            </Badge><br/>
-            <span>
-                {`${getPrettyDeviceName(device)} Camera`}
-            </span>
-        </>
-    );
+  return (
+    <>
+      <Badge pill variant={status.connected ? 'success' : 'danger'}>
+        {status.connected ? 'Connected' : 'Disconnected'}
+      </Badge>
+      <br />
+      <span>{`${getPrettyDeviceName(device)} Camera`}</span>
+    </>
+  );
 }
 
 CameraStatus.propTypes = {
-    device: PropTypes.string.isRequired,
+  device: PropTypes.string.isRequired,
 };

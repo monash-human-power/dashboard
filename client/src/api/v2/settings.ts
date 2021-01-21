@@ -1,18 +1,18 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useChannel, emit } from './socket';
 
-/**
- * @typedef {object} DASSettings
- * @property {boolean} publishOnline Whether to publish data to online broker
- */
+export interface DASSettings {
+  /** Whether to publish data to online broker */
+  publishOnline: boolean;
+}
 
 /**
  * Use DAS settings
  *
- * @returns {?DASSettings} DAS settings
+ * @returns DAS settings
  */
 export function useSettings() {
-  const [settings, setSettings] = useState(null);
+  const [settings, setSettings] = useState<DASSettings | null>(null);
 
   const handleData = useCallback((newSettings) => {
     setSettings(newSettings);
@@ -28,15 +28,9 @@ export function useSettings() {
 }
 
 /**
- * @typedef {object} PublishOnlineStateHook
- * @property {boolean}            publishOnline     Whether 'publish online' is enabled
- * @property {function(boolean)}  setPublishOnline  Set the 'publish online' setting
- */
-
-/**
  * Use "publish online" setting state
  *
- * @returns {PublishOnlineStateHook} Hook
+ * @returns Whether publishing online is enabled, and a setter for this value.
  */
 export function usePublishOnlineState() {
   const settings = useSettings();
@@ -48,7 +42,7 @@ export function usePublishOnlineState() {
     }
   }, [settings]);
 
-  const setPublishState = useCallback((state) => {
+  const setPublishState = useCallback((state: boolean) => {
     if (state) {
       emit('publish-data-on');
     } else {
