@@ -52,7 +52,7 @@ export const RecordingOff = createStory(Template, {
             },
             {
                 name: "Disk space remaining",
-                value: "1.0 Gb"
+                value: "1.0 GB"
             }
         ]
     },
@@ -78,7 +78,7 @@ export const RecordingOn = createStory(Template, {
             },
             {
                 name: "Disk space remaining",
-                value: "1.0 Gb"
+                value: "1.0 GB"
             }
         ]
     },
