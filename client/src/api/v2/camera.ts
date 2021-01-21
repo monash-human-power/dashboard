@@ -238,11 +238,6 @@ function createStatusPayloadHook<T, U>(
   };
 }
 
-// const CameraRecordingStatusPayloads = Partial({
-//   primary: CameraRecordingStatusPayload,
-//   secondary: CameraRecordingStatusPayload,
-// });
-
 /**
  * Returns the last status payload published
  *
@@ -266,11 +261,6 @@ export interface VideoFeedStatus {
   /** Whether video feed is on/off */
   online: boolean
 }
-
-// const VideoFeedStatuses = Partial({
-//   primary: VideoFeedStatus,
-//   secondary: VideoFeedStatus,
-// }).Or(Null);
 
 /**
  * Returns the last received status of the video feeds from `/v3/camera/video_feed/status/<primary/secondary>`
