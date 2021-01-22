@@ -16,7 +16,7 @@ import { capitalise, formatBytes, formatMinutes } from 'utils/string';
 import { emit, useChannelShaped } from './socket';
 
 const CameraDevice = Union(Literal('primary'), Literal('secondary'));
-type CameraDevice = Static<typeof CameraDevice>;
+export type CameraDevice = Static<typeof CameraDevice>;
 
 const CameraConfig = Record({
   /** Device that the camera has been configured to be */

@@ -1,14 +1,14 @@
-// import { useStatus } from 'api/v2/sensors';
 import ContentPage from 'components/ContentPage';
-// import WidgetListGroupItem from 'components/WidgetListGroupItem';
 import React from 'react';
 import { Row, Col, Badge, Card, Accordion, Button } from 'react-bootstrap';
+import CameraStatusPill from '../../components/v3/camera_system/CameraStatusPill/CameraStatusPill';
 
 /**
  * System Status page component
  *
  * @returns {React.Component} Component
  */
+
 export default function SensorStatusView() {
     return (
         <ContentPage title="System Status">
@@ -22,7 +22,7 @@ export default function SensorStatusView() {
                                 {/* Primary Camera Status */}
                                 <Col md xl="12" className="my-2">
                                     <span>
-                                        <b>Primary</b> <Badge pill variant="success">Online</Badge>
+                                        <b>Primary</b> <CameraStatusPill device="primary" />
                                     </span>
                                     {/* IP address */}
                                     <p style={{ fontSize: "0.75rem", color: "gray" }}>192.168.3.9</p>
@@ -52,7 +52,7 @@ export default function SensorStatusView() {
                                 {/* Secondary Camera Status */}
                                 <Col md xl="12" className="my-2">
                                     <span>
-                                        <b>Secondary</b> <Badge pill variant="success">Online</Badge>
+                                        <b>Secondary</b> <CameraStatusPill device="secondary" />
                                     </span>
                                     {/* IP address */}
                                     <p style={{ fontSize: "0.75rem", color: "gray" }}>192.168.3.9</p>
@@ -95,7 +95,28 @@ export default function SensorStatusView() {
                                     </span>
                                     {/* IP address */}
                                     <p style={{ fontSize: "0.75rem", color: "gray" }}>/v3/wireless_module/3/data</p>
-                                    <Accordion>
+
+                                    {/* Battery Voltage */}
+                                    <Row className="mx-2">
+                                        <Col xs="auto">
+                                            Battery Voltage
+                                        </Col>
+                                        <Col xs style={{ textAlign: "right" }}>
+                                            3.9V
+                                        </Col>
+                                    </Row>
+
+                                    {/* Video Feed Status */}
+                                    <Row className="mx-2">
+                                        <Col xs="auto">
+                                            Video Feed
+                                        </Col>
+                                        <Col xs style={{ textAlign: "right" }}>
+                                            OFF
+                                        </Col>
+                                    </Row>
+
+                                    <Accordion className="mt-2">
                                         <Card>
                                             <Accordion.Toggle as={Button} variant="outline-success" eventKey="0" onClick={() => console.log("yo")}>
                                                 Toggle Sensor Data
@@ -109,7 +130,7 @@ export default function SensorStatusView() {
                                                         </Col>
                                                         <Col xs style={{ textAlign: "right" }}>
                                                             3.9V
-                                        </Col>
+                                                    </Col>
                                                     </Row>
 
                                                     {/* Video Feed Status */}
