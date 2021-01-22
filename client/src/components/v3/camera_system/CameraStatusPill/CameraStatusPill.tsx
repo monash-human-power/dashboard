@@ -19,10 +19,7 @@ export interface CameraStatusProps {
 export default function CameraStatusPill({ device }: CameraStatusProps) {
     const status = useCameraStatus(device);
 
-    console.log("yoooooooo ->");
-    console.log(device);
-
-    // TODO: How come the status be null??
+    // TODO: How come the status can be null??
     if (status == null) {
         return (<Badge pill variant='danger'> ERROR </Badge>);
     }
