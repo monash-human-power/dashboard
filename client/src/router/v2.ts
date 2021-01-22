@@ -6,7 +6,6 @@ import PowerMapView from 'views/v2/PowerMapView';
 import PowerModelCalibrationView from 'views/v2/PowerModelCalibrationView';
 import PowerModelView from 'views/v2/PowerModelView';
 import SensorStatusView from 'views/v2/SensorStatusView';
-import SystemStatusView from 'views/v2/SystemStatusView';
 import { RouteInfo } from './route';
 
 /**
@@ -62,11 +61,5 @@ export const routes: RouteInfo[] = [
     path: '/v2/options',
     exact: true,
     component: OptionsView as unknown as React.Component,
-  },
-  {
-    name: 'System Status',
-    path: '/v2/system-status',
-    exact: true,
-    component: SystemStatusView as unknown as React.Component,
-  },
+  }
 ];
