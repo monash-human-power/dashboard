@@ -1,8 +1,8 @@
 import ContentPage from 'components/ContentPage';
 import React from 'react';
-import { Row, Col, Badge, Card, Accordion, Button } from 'react-bootstrap';
-import CameraStatusPill from '../../components/v3/camera_system/CameraStatusPill/CameraStatusPill';
-
+import { Row, Col, Card, Accordion, Button } from 'react-bootstrap';
+import CameraStatusPill from 'components/v3/camera_system/CameraStatusPill/CameraStatusPill';
+import WirelessModuleStatusPill from 'components/v3/wireless_modules/WirelessModuleStatusPill/WirelessModuleStatusPill';
 /**
  * System Status page component
  *
@@ -91,7 +91,7 @@ export default function SensorStatusView() {
                                 {/* Front WM Status */}
                                 <Col md xl="12" className="my-2">
                                     <span>
-                                        <b>Front WM</b> <Badge pill variant="success">Online</Badge>
+                                        <b>Front WM</b> <WirelessModuleStatusPill />
                                     </span>
                                     {/* IP address */}
                                     <p style={{ fontSize: "0.75rem", color: "gray" }}>/v3/wireless_module/3/data</p>
@@ -151,7 +151,7 @@ export default function SensorStatusView() {
                                 {/* Middle WM Status */}
                                 <Col md xl="12" className="my-2">
                                     <span>
-                                        <b>Front WM</b> <Badge pill variant="danger">Offline</Badge>
+                                        <b>Front WM</b> <WirelessModuleStatusPill />
                                     </span>
                                     {/* IP address */}
                                     <p style={{ fontSize: "0.75rem", color: "gray" }}>/v3/wireless_module/3/data</p>
@@ -160,7 +160,7 @@ export default function SensorStatusView() {
                                 {/* Back WM Status */}
                                 <Col md xl="12" className="my-2">
                                     <span>
-                                        <b>Front WM</b> <Badge pill variant="success">Online</Badge>
+                                        <b>Front WM</b> <WirelessModuleStatusPill />
                                     </span>
                                     {/* IP address */}
                                     <p style={{ fontSize: "0.75rem", color: "gray" }}>/v3/wireless_module/3/data</p>
