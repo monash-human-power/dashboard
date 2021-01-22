@@ -2,12 +2,10 @@
 import ContentPage from 'components/ContentPage';
 // import WidgetListGroupItem from 'components/WidgetListGroupItem';
 import React from 'react';
-import { Row, Col, Badge, Card, Button } from 'react-bootstrap';
-// import styles from '../../components/v2/CameraRecording.module.css';
-// TODO: IMPORT NICER
+import { Row, Col, Badge, Card, Accordion, Button } from 'react-bootstrap';
 
 /**
- * System page component
+ * System Status page component
  *
  * @returns {React.Component} Component
  */
@@ -16,21 +14,21 @@ export default function SensorStatusView() {
         <ContentPage title="System Status">
             <Row>
                 {/* Camera Status */}
-                <Col xl>
+                <Col xl className="mb-2">
                     <Card>
                         <Card.Body>
                             <Card.Title>Camera System</Card.Title>
                             <Row>
                                 {/* Primary Camera Status */}
-                                <Col md className="my-2">
+                                <Col md xl="12" className="my-2">
                                     <span>
                                         <b>Primary</b> <Badge pill variant="success">Online</Badge>
                                     </span>
                                     {/* IP address */}
-                                    <p style={{ fontSize: "0.8rem", color: "gray" }}>192.168.3.9</p>
+                                    <p style={{ fontSize: "0.75rem", color: "gray" }}>192.168.3.9</p>
 
                                     {/* Battery Voltage */}
-                                    <Row className="px-2">
+                                    <Row className="mx-2">
                                         <Col xs="auto">
                                             Battery Voltage
                                         </Col>
@@ -40,7 +38,7 @@ export default function SensorStatusView() {
                                     </Row>
 
                                     {/* Video Feed Status */}
-                                    <Row className="px-2">
+                                    <Row className="mx-2">
                                         <Col xs="auto">
                                             Video Feed
                                         </Col>
@@ -52,15 +50,15 @@ export default function SensorStatusView() {
                                 </Col>
 
                                 {/* Secondary Camera Status */}
-                                <Col md className="my-2">
+                                <Col md xl="12" className="my-2">
                                     <span>
                                         <b>Secondary</b> <Badge pill variant="success">Online</Badge>
                                     </span>
                                     {/* IP address */}
-                                    <p style={{ fontSize: "0.8rem", color: "gray" }}>192.168.3.9</p>
+                                    <p style={{ fontSize: "0.75rem", color: "gray" }}>192.168.3.9</p>
 
                                     {/* Battery Voltage */}
-                                    <Row className="px-2">
+                                    <Row className="mx-2">
                                         <Col xs="auto">
                                             Battery Voltage
                                         </Col>
@@ -70,7 +68,7 @@ export default function SensorStatusView() {
                                     </Row>
 
                                     {/* Video Feed Status */}
-                                    <Row className="px-2">
+                                    <Row className="mx-2">
                                         <Col xs="auto">
                                             Video Feed
                                         </Col>
@@ -85,37 +83,76 @@ export default function SensorStatusView() {
                 </Col>
 
                 {/* Wireless Module Status */}
-                <Col xl>
+                <Col xl className="mb-2">
                     <Card>
                         <Card.Body>
                             <Card.Title>Wireless Modules</Card.Title>
                             <Row>
-                                {/* Primary Camera Status */}
-                                <Col md>
+                                {/* Front WM Status */}
+                                <Col md xl="12" className="my-2">
                                     <span>
                                         <b>Front WM</b> <Badge pill variant="success">Online</Badge>
                                     </span>
                                     {/* IP address */}
-                                    <p style={{ fontSize: "0.8rem", color: "gray" }}>192.168.3.9</p>
-                                    <Button variant="primary">yoooo</Button>
+                                    <p style={{ fontSize: "0.75rem", color: "gray" }}>/v3/wireless_module/3/data</p>
+                                    <Accordion>
+                                        <Card>
+                                            <Accordion.Toggle as={Button} variant="outline-success" eventKey="0" onClick={() => console.log("yo")}>
+                                                Toggle Sensor Data
+                                            </Accordion.Toggle>
+                                            <Accordion.Collapse eventKey="0">
+                                                <Card.Body>
+                                                    {/* Battery Voltage */}
+                                                    <Row className="mx-2">
+                                                        <Col xs="auto">
+                                                            Battery Voltage
+                                                        </Col>
+                                                        <Col xs style={{ textAlign: "right" }}>
+                                                            3.9V
+                                        </Col>
+                                                    </Row>
+
+                                                    {/* Video Feed Status */}
+                                                    <Row className="mx-2">
+                                                        <Col xs="auto">
+                                                            Video Feed
+                                        </Col>
+                                                        <Col xs style={{ textAlign: "right" }}>
+                                                            OFF
+                                        </Col>
+                                                    </Row>
+                                                </Card.Body>
+                                            </Accordion.Collapse>
+                                        </Card>
+                                    </Accordion>
                                 </Col>
 
-                                {/* Secondary Camera Status */}
-                                <Col md>
+                                {/* Middle WM Status */}
+                                <Col md xl="12" className="my-2">
                                     <span>
-                                        Middle WM <Badge pill variant="success">Online</Badge>
+                                        <b>Front WM</b> <Badge pill variant="danger">Offline</Badge>
                                     </span>
-                                    <p>192.168.3.9</p>
-                                    <Button variant="primary">yoooo</Button>
+                                    {/* IP address */}
+                                    <p style={{ fontSize: "0.75rem", color: "gray" }}>/v3/wireless_module/3/data</p>
                                 </Col>
 
-                                {/* Secondary Camera Status */}
-                                <Col md>
+                                {/* Back WM Status */}
+                                <Col md xl="12" className="my-2">
                                     <span>
-                                        Back WM <Badge pill variant="success">Online</Badge>
+                                        <b>Front WM</b> <Badge pill variant="success">Online</Badge>
                                     </span>
-                                    <p>192.168.3.9</p>
-                                    <Button variant="primary">yoooo</Button>
+                                    {/* IP address */}
+                                    <p style={{ fontSize: "0.75rem", color: "gray" }}>/v3/wireless_module/3/data</p>
+                                    <Accordion>
+                                        <Card>
+                                            <Accordion.Toggle as={Button} variant="link" eventKey="2">
+                                                Toggle Sensor Data
+                                            </Accordion.Toggle>
+                                            <Accordion.Collapse eventKey="2">
+                                                <Card.Body>Hello! Im the body</Card.Body>
+                                            </Accordion.Collapse>
+                                        </Card>
+                                    </Accordion>
                                 </Col>
                             </Row>
 
