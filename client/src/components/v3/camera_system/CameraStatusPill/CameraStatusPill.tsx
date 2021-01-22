@@ -4,23 +4,20 @@ import React from 'react';
 import { Badge } from 'react-bootstrap';
 
 
-
 export interface CameraStatusProps {
     /** Specify the camera device */
     device: CameraDevice;
 }
 
+
 /**
  *  Camera status displayed in a bootstrap pill
- *
- * @param props Props
- * @returns Component
  */
 export default function CameraStatusPill({ device }: CameraStatusProps) {
     const status = useCameraStatus(device);
 
     // TODO: How come the status can be null??
-    if (status == null) {
+    if (status === null) {
         return (<Badge pill variant='danger'> ERROR </Badge>);
     }
 
