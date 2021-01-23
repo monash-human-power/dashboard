@@ -1,3 +1,4 @@
+import { emit, useChannelShaped } from 'api/v2/socket';
 import { useCallback, useEffect, useState } from 'react';
 import {
   Array,
@@ -10,10 +11,9 @@ import {
   Runtype,
   Static,
   String,
-  Union,
+  Union
 } from 'runtypes';
 import { capitalise, formatBytes, formatMinutes } from 'utils/string';
-import { emit, useChannelShaped } from './socket';
 
 const CameraDevice = Union(Literal('primary'), Literal('secondary'));
 type CameraDevice = Static<typeof CameraDevice>;
