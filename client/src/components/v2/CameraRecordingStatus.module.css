@@ -1,9 +1,11 @@
 .statusRow {
-  margin-bottom: 0.3em;
+  margin-left: 5px;
   display: flex;
+  font-weight: 500;
 }
 
 .push {
   margin-left: auto;
   text-align: right;
+  color: #A3A3A3
 }

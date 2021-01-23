@@ -3,6 +3,8 @@
  */
 require('dotenv').config();
 
+const { DAS, BOOST, Camera } = require('./topics');
+
 const sockets = {};
 const mqtt = require('mqtt');
 const os = require('os');
@@ -56,7 +58,7 @@ function mqttError(error) {
   console.error(`MQTT Error: ${error}`);
 }
 
-function mqttDataConverter(payload) {
+function queryStringToJson(payload) {
   const message = {};
   const dataArray = payload.split('&');
   for (let index = 0; index < dataArray.length; index += 1) {
@@ -74,7 +76,7 @@ function mqttDataConverter(payload) {
 }
 
 function mqttDataTopicHandler(socket, payload) {
-  const message = mqttDataConverter(payload);
+  const message = queryStringToJson(payload);
   socket.emit('data', message);
 }
 
@@ -92,13 +94,15 @@ sockets.init = function socketInit(server) {
   } else {
     mqttClient = mqtt.connect('mqtt://localhost:1883', mqttOptions);
   }
-  mqttClient.subscribe('start');
-  mqttClient.subscribe('stop');
-  mqttClient.subscribe('data');
-  mqttClient.subscribe('power_model/predicted_max_speed');
-  mqttClient.subscribe('power_model/recommended_SP');
+  mqttClient.subscribe(DAS.start);
+  mqttClient.subscribe(DAS.stop);
+  mqttClient.subscribe(DAS.data);
+  mqttClient.subscribe(BOOST.predicted_max_speed);
+  mqttClient.subscribe(BOOST.recommended_sp);
+  mqttClient.subscribe(Camera.push_overlays);
+  // TODO: This subscription should be removed when handling of BOOST.generate.complete
+  // is implemented.
   mqttClient.subscribe('power_model/plan_generated');
-  mqttClient.subscribe('camera/push_overlays');
   // Camera recording status subscription occurs when mqttClient message handler is set
   // Camera video feed status subscription occurs when mqttClient message handler is set
   mqttClient.on('connect', mqttConnected);
@@ -119,60 +123,17 @@ sockets.init = function socketInit(server) {
         Subscribe with the other topics and add a new message handler
         for the topics
     */
-    mqttClient.subscribe('/v3/status/#');
+    mqttClient.subscribe('status/#');
 
     mqttClient.on('message', function mqttMessage(topic, payload) {
       const payloadString = payload.toString();
-      const topicString = topic.split('/');
-      if (topicString.length === 1) {
-        switch (topic) {
-          case 'start':
-            socket.emit('start');
-            break;
-          case 'stop':
-            socket.emit('stop');
-            break;
-          case 'data':
-            mqttDataTopicHandler(socket, payloadString);
-            if (sendToPublicMQTTBroker()) {
-              PUBLIC_MQTT_CLIENT.publish('data', payloadString);
-            }
-            break;
-          default:
-            console.error(`Unhandled topic - ${topic}`);
-            break;
-        }
-      } else if (topicString[0] === 'power_model') {
-        socket.emit('power-model-running');
-        const message = mqttDataConverter(payloadString);
-        switch (topicString[1]) {
-          case 'predicted_max_speed':
-            socket.emit('power-model-max-speed', message);
-            break;
-          case 'recommended_SP':
-            socket.emit('power-model-recommended-SP', message);
-            break;
-          case 'plan_generated':
-            socket.emit('power-plan-generated');
-            break;
-          default:
-            console.error(`Unhandled topic - ${topic}`);
-            break;
-        }
-      } else if (topicString[0] === 'camera') {
-        switch (topicString[1]) {
-          case 'push_overlays':
-            socket.emit('push-overlays', payloadString);
-            break;
-          default:
-            console.error(`Unhandled topic - ${topic}`);
-            break;
-        }
-      } else if (topic.match(/^\/v3\/status/)) {
+
+      if (topic.startsWith('status')) {
         try {
-          // topicString: ["", "v3", "status", "<component>", "<subcomponent>", ...properties]
+          const topicString = topic.split('/');
+          // topicString: ["status", "<component>", "<subcomponent>", ...properties]
           const value = JSON.parse(payloadString);
-          const path = topicString.slice(2);
+          const path = topicString;
 
           // Add to global
           retained[path[0]] = setPropWithPath(
@@ -182,8 +143,8 @@ sockets.init = function socketInit(server) {
           );
 
           // Emit subcomponent
-          const component = topicString[3] ?? '';
-          const subcomponent = topicString[4] ?? '';
+          const component = topicString[1] ?? '';
+          const subcomponent = topicString[2] ?? '';
           socket.emit(
             `status-${component}-${subcomponent}`,
             retained.status?.[component]?.[subcomponent],
@@ -194,7 +155,49 @@ sockets.init = function socketInit(server) {
           );
         }
       } else {
-        console.error(`Unhandled topic - ${topic}`);
+        switch (topic) {
+          case DAS.start:
+            socket.emit('start');
+            break;
+          case DAS.stop:
+            socket.emit('stop');
+            break;
+          case DAS.data:
+            mqttDataTopicHandler(socket, payloadString);
+            if (sendToPublicMQTTBroker()) {
+              PUBLIC_MQTT_CLIENT.publish(DAS.data, payloadString);
+            }
+            break;
+
+          case BOOST.predicted_max_speed:
+            socket.emit('power-model-running');
+            socket.emit(
+              'power-model-max-speed',
+              queryStringToJson(payloadString),
+            );
+            break;
+          case BOOST.recommended_sp:
+            socket.emit('power-model-running');
+            socket.emit(
+              'power-model-recommended-SP',
+              queryStringToJson(payloadString),
+            );
+            break;
+          // TODO: Remove this when handling of
+          // BOOST.generate.complete is implemented.
+          case 'power_model/plan_generated':
+            socket.emit('power-model-running');
+            socket.emit('power-plan-generated');
+            break;
+
+          case Camera.push_overlays:
+            socket.emit('push-overlays', payloadString);
+            break;
+
+          default:
+            console.error(`Unhandled topic - ${topic}`);
+            break;
+        }
       }
     });
 
@@ -208,27 +211,24 @@ sockets.init = function socketInit(server) {
 
     // TODO: Fix up below socket.io handlers
     socket.on('start-power-model', () => {
-      mqttClient.publish('power_model/start', 'true');
+      mqttClient.publish(BOOST.start, 'true');
     });
 
     socket.on('stop-power-model', () => {
-      mqttClient.publish('power_model/stop', 'true');
+      mqttClient.publish(BOOST.stop, 'true');
     });
 
     socket.on('reset-calibration', () => {
-      mqttClient.publish('power_model/calibrate/reset', 'true');
+      mqttClient.publish(BOOST.calibrate_reset, 'true');
     });
 
     socket.on('submit-calibration', (calibratedDistance) => {
-      mqttClient.publish(
-        'power_model/calibrate',
-        `calibrate=${calibratedDistance}`,
-      );
+      mqttClient.publish(BOOST.calibrate, `calibrate=${calibratedDistance}`);
     });
 
     socket.on('send-message', (message) => {
       const payload = JSON.stringify({ message });
-      mqttClient.publish('/v3/camera/message', payload);
+      mqttClient.publish(Camera.overlay_message, payload);
     });
 
     socket.on('create-power-plan', (inputPowerPlan) => {
@@ -239,11 +239,11 @@ sockets.init = function socketInit(server) {
     });
 
     socket.on('get-overlays', () => {
-      mqttClient.publish('camera/get_overlays', 'true');
+      mqttClient.publish(Camera.get_overlays, 'true');
     });
 
     socket.on('set-overlays', (selectedOverlays) => {
-      mqttClient.publish('camera/set_overlay', selectedOverlays);
+      mqttClient.publish(Camera.set_overlay, selectedOverlays);
     });
 
     socket.on('publish-data-on', () => {
@@ -268,11 +268,11 @@ sockets.init = function socketInit(server) {
     });
 
     socket.on('start-camera-recording', () => {
-      mqttClient.publish('/v3/camera/recording/start');
+      mqttClient.publish(Camera.recording_start);
     });
 
     socket.on('stop-camera-recording', () => {
-      mqttClient.publish('/v3/camera/recording/stop');
+      mqttClient.publish(Camera.recording_stop);
     });
   });
 };
