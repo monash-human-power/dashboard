@@ -1,3 +1,4 @@
+const path = require('path');
 const { override, addWebpackExternals, useEslintRc } = require('customize-cra');
 
 module.exports = override(
@@ -9,5 +10,5 @@ module.exports = override(
   }),
 
   // Use our own .eslint file rather than the config tha CRA uses
-  useEslintRc('.eslintrc'),
+  useEslintRc(path.resolve(__dirname, '.eslintrc')),
 );
