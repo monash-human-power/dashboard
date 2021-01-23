@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from './Statistic.module.css';
 
 export interface StatisticProps {
     /** Value to be shown */
@@ -17,9 +18,9 @@ export interface StatisticProps {
 export default function Statistic({ value, unit, desc }: StatisticProps): JSX.Element {
     return (
         <div>
-            <span>{value ?? '-'}</span>
-            <span>{unit}</span><br />
-            <span>{desc}</span>
+            <span className={styles.value}>{value ?? '—'}</span>
+            <span className={styles.unit}>{unit}</span><br />
+            <span className={styles.desc}>{desc}</span>
         </div>
     );
 }
