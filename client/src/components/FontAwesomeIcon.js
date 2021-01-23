@@ -1,5 +1,5 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
 import styles from './FontAwesomeIcon.module.css';
 
 /**
@@ -20,7 +20,7 @@ import styles from './FontAwesomeIcon.module.css';
  * ```
  *
  * @param {FontAwesomeIconProps} props Props
- * @returns {React.Component<FontAwesomeIconProps>} Component
+ * @returns {JSX.Element} Component
  */
 export default function FontAwesomeIcon({ icon }) {
   /*
