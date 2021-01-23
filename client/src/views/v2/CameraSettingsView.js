@@ -1,5 +1,5 @@
 import ContentPage from 'components/ContentPage';
-import CameraRecording from 'components/v2/CameraRecording';
+import CameraRecordingContainer from 'components/v2/CameraRecordingContainer';
 import CameraSettings from 'components/v2/CameraSettings';
 import CameraStatus from 'components/v2/CameraStatus';
 import OverlayMessage from 'components/v2/OverlayMessage';
@@ -32,7 +32,7 @@ export default function CameraSettingsView() {
         </Card>
       </div>
       <div className="mb-4">
-        <CameraRecording devices={['primary', 'secondary']} />
+        <CameraRecordingContainer />
       </div>
       <div className="mb-4">
         <OverlayMessage />
