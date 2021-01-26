@@ -1,8 +1,8 @@
 import ContentPage from 'components/ContentPage';
 import CameraRecordingContainer from 'components/v2/CameraRecordingContainer';
-import CameraSettings from 'components/v2/CameraSettings';
 import CameraStatusContainer from 'components/v2/CameraStatusContainer';
 import OverlayMessageContainer from 'components/v2/OverlayMessageContainer';
+import OverlaySelectionContainer from 'components/v2/OverlaySelectionContainer';
 import React from 'react';
 
 /**
@@ -22,12 +22,7 @@ export default function CameraSettingsView() {
       <div className="mb-4">
         <OverlayMessageContainer />
       </div>
-      <div className="mb-4">
-        <CameraSettings device="primary" />
-      </div>
-      <div>
-        <CameraSettings device="secondary" />
-      </div>
+      <OverlaySelectionContainer />
     </ContentPage>
   );
 }
