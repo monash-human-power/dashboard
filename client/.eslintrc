@@ -1,59 +1,74 @@
 {
-  "plugins": ["jsdoc"],
-  "extends": [
-    "react-app",
-    "airbnb",
-    "plugin:jsdoc/recommended",
-    "prettier",
-    "prettier/react"
-  ],
-  "rules": {
-    "no-console": "off",
-    "dot-notation": [
-      2,
-      {
-        "allowPattern": "^[a-z]+(_[a-z]+)+$"
-      }
+    "plugins": [
+        "jsdoc"
     ],
-    "react/jsx-filename-extension": [
-      1,
-      {
-        "extensions": [".js", ".ts", ".jsx", ".tsx"]
-      }
+    "extends": [
+        "react-app",
+        "airbnb",
+        "plugin:jsdoc/recommended",
+        "prettier",
+        "prettier/react"
     ],
-    "react/jsx-props-no-spreading": "off",
-    "jsx-a11y/label-has-associated-control": [
-      2,
-      {
-        "controlComponents": ["Form.Control", "FormControl"],
-        "depth": 3
-      }
-    ],
-    "jsx-a11y/anchor-is-valid": "off",
-    "import/no-unresolved": "off",
-    "import/prefer-default-export": "off",
-    "import/extensions": [
-      "error",
-      "ignorePackages",
-      {
-        "js": "never",
-        "jsx": "never",
-        "mjs": "never",
-        "ts": "never",
-        "tsx": "never"
-      }
-    ],
-    "semi": "error",
-    "jsdoc/require-property-type": "off",
-    "jsdoc/require-returns-type": "off",
-    "jsdoc/require-param-type": "off",
-    "jsdoc/no-undefined-types": "off"
-  },
-  "settings": {
-    "import/resolver": {
-      "node": {
-        "extensions": [".js", ".jsx", ".ts", ".tsx"]
-      }
+    "rules": {
+        "no-console": "off",
+        "dot-notation": [
+            2,
+            {
+                "allowPattern": "^[a-z]+(_[a-z]+)+$"
+            }
+        ],
+        "react/jsx-filename-extension": [
+            1,
+            {
+                "extensions": [
+                    ".js",
+                    ".ts",
+                    ".jsx",
+                    ".tsx"
+                ]
+            }
+        ],
+        "react/jsx-props-no-spreading": "off",
+        "jsx-a11y/label-has-associated-control": [
+            2,
+            {
+                "controlComponents": [
+                    "Form.Control",
+                    "FormControl"
+                ],
+                "depth": 3
+            }
+        ],
+        "jsx-a11y/anchor-is-valid": "off",
+        "import/no-unresolved": "off",
+        "import/prefer-default-export": "off",
+        "import/extensions": [
+            "error",
+            "ignorePackages",
+            {
+                "js": "never",
+                "jsx": "never",
+                "mjs": "never",
+                "ts": "never",
+                "tsx": "never"
+            }
+        ],
+        "semi": "error",
+        "jsdoc/require-property-type": "off",
+        "jsdoc/require-returns-type": "off",
+        "jsdoc/require-param-type": "off",
+        "jsdoc/no-undefined-types": "off"
+    },
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "extensions": [
+                    ".js",
+                    ".jsx",
+                    ".ts",
+                    ".tsx"
+                ]
+            }
+        }
     }
-  }
 }

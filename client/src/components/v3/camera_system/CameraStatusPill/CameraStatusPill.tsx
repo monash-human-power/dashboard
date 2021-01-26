@@ -4,7 +4,7 @@ import React from 'react';
 import { Badge } from 'react-bootstrap';
 
 
-export interface CameraStatusProps {
+interface CameraStatusProps {
     /** Specify the camera device */
     device: CameraDevice;
 }

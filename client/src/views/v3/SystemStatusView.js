@@ -2,12 +2,48 @@ import ContentPage from 'components/ContentPage';
 import React from 'react';
 import { Row, Col, Card, Accordion, Button } from 'react-bootstrap';
 import CameraStatusPill from 'components/v3/camera_system/CameraStatusPill/CameraStatusPill';
-import WirelessModuleStatusPill from 'components/v3/wireless_modules/WirelessModuleStatusPill/WirelessModuleStatusPill';
+import WirelessModuleStatusPill from 'components/v3/wireless_modules/WirelessModuleStatusPill';
 /**
- * System Status page component
+ * V3 System Status page component
  *
  * @returns {React.Component} Component
  */
+
+
+
+const CameraStatusCol = () => {
+    return (
+        <Col md xl="12" className="my-2">
+            <span>
+                <b>Primary</b> <CameraStatusPill device="primary" />
+            </span>
+            {/* IP address */}
+            <p style={{ fontSize: "0.75rem", color: "gray" }}>192.168.3.9</p>
+
+            {/* Battery Voltage */}
+            <Row className="mx-2">
+                <Col xs="auto">
+                    Battery Voltage
+                </Col>
+                <Col xs style={{ textAlign: "right" }}>
+                    3.9V
+                </Col>
+            </Row>
+
+            {/* Video Feed Status */}
+            <Row className="mx-2">
+                <Col xs="auto">
+                    Video Feed
+                </Col>
+                <Col xs style={{ textAlign: "right" }}>
+                    OFF
+                </Col>
+            </Row>
+        </Col>
+    );
+};
+
+
 
 export default function SensorStatusView() {
     return (
@@ -20,34 +56,8 @@ export default function SensorStatusView() {
                             <Card.Title>Camera System</Card.Title>
                             <Row>
                                 {/* Primary Camera Status */}
-                                <Col md xl="12" className="my-2">
-                                    <span>
-                                        <b>Primary</b> <CameraStatusPill device="primary" />
-                                    </span>
-                                    {/* IP address */}
-                                    <p style={{ fontSize: "0.75rem", color: "gray" }}>192.168.3.9</p>
-
-                                    {/* Battery Voltage */}
-                                    <Row className="mx-2">
-                                        <Col xs="auto">
-                                            Battery Voltage
-                                        </Col>
-                                        <Col xs style={{ textAlign: "right" }}>
-                                            3.9V
-                                        </Col>
-                                    </Row>
-
-                                    {/* Video Feed Status */}
-                                    <Row className="mx-2">
-                                        <Col xs="auto">
-                                            Video Feed
-                                        </Col>
-                                        <Col xs style={{ textAlign: "right" }}>
-                                            OFF
-                                        </Col>
-                                    </Row>
-
-                                </Col>
+                                <CameraStatusCol />
+                                <CameraStatusCol />
 
                                 {/* Secondary Camera Status */}
                                 <Col md xl="12" className="my-2">
