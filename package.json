@@ -1,9 +1,13 @@
 {
+  "license": "MIT",
   "scripts": {
     "heroku-prebuild": "cd client && yarn install && CI=true yarn build && cd .. && cd server && yarn install",
     "start": "cd server && yarn start"
   },
-  "cacheDirectories": ["client/node_modules", "server/node_modules"],
+  "cacheDirectories": [
+    "client/node_modules",
+    "server/node_modules"
+  ],
   "engines": {
     "yarn": "1.x",
     "node": "14.x"
