@@ -1,4 +1,5 @@
 import React from 'react';
+import ContentPage from 'components/common/ContentPage';
 
 
 /**
@@ -8,9 +9,9 @@ import React from 'react';
  */
 export default function CameraSystemView() {
     return (
-        <div>
+        <ContentPage>
             <h1>Hi Im the Camera System View</h1>
-        </div>
+        </ContentPage>
     );
 };
 
