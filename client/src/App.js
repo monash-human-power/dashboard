@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { routes } from 'router';
+import NavBarContainer from 'components/common/navbar/NavBarContainer';
 import styles from './App.module.css';
-import NavBarContainer from './components/common/navbar/NavBarContainer';
 
 /**
  * Main App component
