@@ -1,12 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Container } from 'react-bootstrap';
 
-/**
- * @typedef {object} ContentPageProps
- * @property {string}           title     Page Title
- * @property {React.ReactNode}  children  Children
- */
+interface ContentPageProps {
+  /** Title of page */
+  title: string,
+  /** React children to be passed through */
+  children: React.ReactNode,
+}
 
 /**
  * Content Page container component
@@ -14,7 +14,7 @@ import { Container } from 'react-bootstrap';
  * @param {ContentPageProps} props Props
  * @returns {React.Component<ContentPageProps>} Component
  */
-export default function ContentPage({ title, children }) {
+export default function ContentPage({ title, children }: ContentPageProps): JSX.Element {
   return (
     <Container className="mb-4 mt-4">
       <h1 className="mb-4">{title}</h1>
@@ -22,11 +22,6 @@ export default function ContentPage({ title, children }) {
     </Container>
   );
 }
-
-ContentPage.propTypes = {
-  title: PropTypes.string,
-  children: PropTypes.node.isRequired,
-};
 
 ContentPage.defaultProps = {
   title: '',
