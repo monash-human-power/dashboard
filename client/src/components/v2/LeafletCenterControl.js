@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useLeaflet } from 'react-leaflet';
 import Control from 'react-leaflet-control';
 import { faLocationArrow } from '@fortawesome/free-solid-svg-icons';
-import FontAwesomeIcon from 'components/FontAwesomeIcon';
+import FontAwesomeIcon from 'components/v2/FontAwesomeIcon';
 
 /**
  * @typedef {object} LeafletCenterControlProps

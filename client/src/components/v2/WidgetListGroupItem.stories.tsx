@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
-import { addArgs, createStory } from '../utils/stories';
+import { addArgs, createStory } from '../../utils/stories';
 import WidgetListGroupItem, {
   WidgetListGroupItemProps,
 } from './WidgetListGroupItem';

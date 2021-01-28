@@ -1,6 +1,6 @@
 import React from 'react';
 import { action } from '@storybook/addon-actions';
-import { addArgs, createStory } from '../utils/stories';
+import { addArgs, createStory } from '../../utils/stories';
 import BoostConfigList, { BoostConfigListProps } from './BoostConfigList';
 
 export default {

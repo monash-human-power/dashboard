@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { routes } from 'router';
 import styles from './App.module.css';
-import NavBarContainer from './components/NavBarContainer';
+import NavBarContainer from './components/v2/NavBarContainer';
 
 /**
  * Main App component

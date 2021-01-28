@@ -3,7 +3,7 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import { BoostConfig } from 'types/boost';
 import styles from './BoostConfigList.module.css';
-import FontAwesomeIcon from './FontAwesomeIcon';
+import FontAwesomeIcon from 'components/v2/FontAwesomeIcon';
 import WidgetListGroupItem from './WidgetListGroupItem';
 
 export interface BoostConfigListProps {

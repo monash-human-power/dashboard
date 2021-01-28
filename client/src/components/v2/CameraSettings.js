@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Card } from 'react-bootstrap';
 import { useCameraConfig, getPrettyDeviceName } from 'api/v2/camera';
-import RadioSelector from 'components/RadioSelector';
+import RadioSelector from 'components/v2/RadioSelector';
 
 /**
  * @typedef {object} CameraSettingsProps
@@ -46,8 +46,8 @@ export default function CameraSettings({ device }) {
             onChange={setSelectedOverlay}
           />
         ) : (
-          <Card.Subtitle>Waiting for response...</Card.Subtitle>
-        )}
+            <Card.Subtitle>Waiting for response...</Card.Subtitle>
+          )}
       </Card.Body>
       <Card.Footer>
         <Card.Link href="#" onClick={handleSave}>

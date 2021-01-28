@@ -2,7 +2,7 @@ import { ReactComponent as Logo } from 'assets/MHPLogo.svg';
 import React from 'react';
 import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
-import { VersionInfo } from '../router';
+import { VersionInfo } from '../../router';
 import styles from './NavBar.module.css';
 
 /**

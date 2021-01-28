@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { Button, ButtonGroup, ListGroup } from 'react-bootstrap';
-import ContentPage from 'components/ContentPage';
-import WidgetListGroupItem from 'components/WidgetListGroupItem';
+import ContentPage from 'components/v2/ContentPage';
+import WidgetListGroupItem from 'components/v2/WidgetListGroupItem';
 import { usePublishOnlineState } from 'api/v2/settings';
 
 /**
