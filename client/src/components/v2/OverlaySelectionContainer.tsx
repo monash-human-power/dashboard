@@ -1,5 +1,5 @@
 import React from 'react';
-import { useOverlays } from '../../api/v2/camera';
+import { useCameraConfig } from '../../api/v2/camera';
 import OverlaySelection from './OverlaySelection';
 
 /**
@@ -11,10 +11,10 @@ export default function OverlaySelectionContainer() {
     return (
         <>
             <div className="mb-4">
-                <OverlaySelection device='primary' {...useOverlays('primary')} />
+                <OverlaySelection device='primary' {...useCameraConfig('primary')} />
             </div>
             <div className="mb-4">
-                <OverlaySelection device='secondary' {...useOverlays('secondary')} />
+                <OverlaySelection device='secondary' {...useCameraConfig('secondary')} />
             </div>
         </>
     );

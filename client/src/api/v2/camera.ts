@@ -28,6 +28,13 @@ const CameraConfig = Record({
 });
 type CameraConfig = Static<typeof CameraConfig>;
 
+export interface CameraConfigT {
+  /** Config defined by CameraConfig */
+  config: CameraConfig | null,
+  /** Set the active overlay */
+  setActiveOverlay: (activeOverlay: string) => void
+}
+
 /**
  * Use a list of camera overlays
  *
@@ -53,7 +60,7 @@ export function useCameraConfig(device: CameraDevice) {
   }, [device]);
 
   const setActiveOverlay = useCallback(
-    (activeOverlay) => {
+    (activeOverlay: string) => {
       emit(
         'set-overlays',
         JSON.stringify({
