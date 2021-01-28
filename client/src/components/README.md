@@ -2,14 +2,14 @@
 
 This folder stores the components used in V2 and V3 views.
 
-## [V2](./v2)
+## [V2 Components](./v2)
 
 This folder stores react components used ***ONLY* in V2 views**.
 
-## [V3](./v3)
+## [V3 Components](./v3)
 
 This folder stores react components used ***ONLY* in V3 views**.
 
-## [Common](./common)
+## [Common Components](./common)
 
 This folder stores react components that are ***SHARED* between V2 and V3**.
