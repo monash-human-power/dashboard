@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useSensorTimeSeries } from 'api/v2/sensors';
-import CadenceTimeChart from 'components/charts/CadenceTimeChart';
+import CadenceTimeChart from 'components/common/charts/CadenceTimeChart';
 
 /**
  * @typedef {object} V2CadenceTimeChartProps

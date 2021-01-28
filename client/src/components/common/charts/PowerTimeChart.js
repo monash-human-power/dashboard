@@ -1,43 +1,43 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ScatterChart from 'components/v2/ScatterChart';
-import { GREEN, GREY } from 'components/charts/colours';
+import { BLUE, GREY } from 'components/common/charts/colours';
 
 /**
  * @typedef {import('utils/timeSeries').TimeSeriesPoint} TimeSeriesPoint
  */
 
 /**
- * @typedef {object} CadenceTimeChartProps
+ * @typedef {object} PowerTimeChartProps
  * @property {TimeSeriesPoint[]} series Time series to render
  * @property {number} max The maximum value achieved
  */
 
 /**
- * Cadence-Time chart component
+ * Power-Time chart component
  *
- * @param {CadenceTimeChartProps} props Props
- * @returns {React.Component<CadenceTimeChartProps>} Component
+ * @param {PowerTimeChartProps} props Props
+ * @returns {React.Component<PowerTimeChartProps>} Component
  */
-export default function CadenceTimeChart({ series, max }) {
+export default function PowerTimeChart({ series, max }) {
   const data = series.map((point) => ({
     x: point.time / 1000,
     y: point.value,
   }));
   return (
     <ScatterChart
-      title="Cadence-Time"
+      title="Power-Time"
       xAxis={{ label: 'Time', unit: 's' }}
-      yAxis={{ label: 'Cadence', unit: 'RPM' }}
+      yAxis={{ label: 'Power', unit: 'W' }}
       data={data}
-      dataColour={GREEN}
+      dataColour={BLUE}
       max={max}
       maxColour={GREY}
     />
   );
 }
 
-CadenceTimeChart.propTypes = {
+PowerTimeChart.propTypes = {
   series: PropTypes.arrayOf(
     PropTypes.shape({
       time: PropTypes.number.isRequired,

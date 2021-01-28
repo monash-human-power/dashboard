@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useSensorData, useMultiSensorTimeSeries } from 'api/v2/sensors';
-import LocationTimeChart from 'components/charts/LocationTimeChart';
+import LocationTimeChart from 'components/common/charts/LocationTimeChart';
 
 /**
  * Checks if a given location is valid

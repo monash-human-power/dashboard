@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useSensorTimeSeries } from 'api/v2/sensors';
-import PowerTimeChart from 'components/charts/PowerTimeChart';
+import PowerTimeChart from 'components/common/charts/PowerTimeChart';
 
 /**
  * @typedef {object} V2PowerTimeChartProps

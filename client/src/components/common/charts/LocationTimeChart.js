@@ -10,7 +10,7 @@ import {
 } from 'react-leaflet';
 import LeafletCenterControl from 'components/v2/LeafletCenterControl';
 import 'leaflet/dist/leaflet.css';
-import styles from 'components/charts/LocationTimeChart.module.css';
+import styles from 'components/common/charts/LocationTimeChart.module.css';
 
 const MHP_WORKSHOP_LOCATION = [-37.908756, 145.13404];
 
