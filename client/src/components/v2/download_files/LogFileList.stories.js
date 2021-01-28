@@ -1,6 +1,6 @@
 import React from 'react';
 import { ListGroup } from 'react-bootstrap';
-import LogFileList from './LogFileList';
+import LogFileList from 'components/v2/download_files/LogFileList';
 
 export default {
   title: 'LogFileList',

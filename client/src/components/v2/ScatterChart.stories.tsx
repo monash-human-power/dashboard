@@ -1,7 +1,7 @@
 import { BLUE, GREEN, GREY, PURPLE } from 'components/charts/colours';
 import React from 'react';
-import { createStory, StoryTemplate } from '../../utils/stories';
-import ScatterChart, { AxisProps, DataProps } from './ScatterChart';
+import { createStory, StoryTemplate } from 'utils/stories';
+import ScatterChart, { AxisProps, DataProps } from 'components/v2/ScatterChart';
 
 export default {
     component: ScatterChart,

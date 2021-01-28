@@ -1,5 +1,5 @@
 import React from 'react';
-import DeleteModal from './DeleteModal';
+import DeleteModal from 'components/v2/download_files/DeleteModal';
 
 export default {
   title: 'DeleteModal',

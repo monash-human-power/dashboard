@@ -1,7 +1,7 @@
 import { action } from '@storybook/addon-actions';
 import React from 'react';
-import { addArgs, createStory } from '../../../utils/stories';
-import CameraRecording, { CameraRecordingPropT } from './CameraRecording';
+import { addArgs, createStory } from 'utils/stories';
+import CameraRecording, { CameraRecordingPropT } from 'components/v2/camera_settings/CameraRecording';
 
 export default {
     component: CameraRecording,

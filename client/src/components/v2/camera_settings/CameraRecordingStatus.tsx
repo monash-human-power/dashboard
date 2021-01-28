@@ -1,6 +1,6 @@
 import { CameraRecordingStatusItem } from 'api/v2/camera';
 import React from 'react';
-import styles from './CameraRecordingStatus.module.css';
+import styles from 'components/v2/camera_settings/CameraRecordingStatus.module.css';
 
 const defaultStatus = 'Waiting for status...';
 

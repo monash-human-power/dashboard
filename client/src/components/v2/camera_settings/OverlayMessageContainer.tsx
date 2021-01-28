@@ -1,6 +1,6 @@
 import { sendMessage } from 'api/v2/camera';
 import React from 'react';
-import OverlayMessage from './OverlayMessage';
+import OverlayMessage from 'components/v2/camera_settings/OverlayMessage';
 
 /**
  * Container for {@link OverlayMessage}

@@ -1,6 +1,6 @@
 import React from 'react';
-import { bikeVersions, useBikeVersion } from '../../../router';
-import NavBar from './NavBar';
+import { bikeVersions, useBikeVersion } from 'router';
+import NavBar from 'components/common/navbar/NavBar';
 
 /**
  * Container for NavBar

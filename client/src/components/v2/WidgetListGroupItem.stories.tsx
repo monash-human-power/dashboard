@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
-import { addArgs, createStory } from '../../utils/stories';
+import { addArgs, createStory } from 'utils/stories';
 import WidgetListGroupItem, {
   WidgetListGroupItemProps,
-} from './WidgetListGroupItem';
+} from 'components/v2/WidgetListGroupItem';
 
 export default {
   title: 'WidgetListGroupItem',

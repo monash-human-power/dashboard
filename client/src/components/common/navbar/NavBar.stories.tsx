@@ -3,7 +3,7 @@ import React from 'react';
 import { BrowserRouter as Router } from "react-router-dom";
 import { bikeVersions, VersionInfo } from 'router';
 import { routes } from 'router/v2';
-import NavBar from './NavBar';
+import NavBar from 'components/common/navbar/NavBar';
 
 
 export default {

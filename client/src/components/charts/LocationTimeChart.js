@@ -8,9 +8,9 @@ import {
   ScaleControl,
   TileLayer,
 } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
 import LeafletCenterControl from 'components/v2/LeafletCenterControl';
-import styles from './LocationTimeChart.module.css';
+import 'leaflet/dist/leaflet.css';
+import styles from 'components/charts/LocationTimeChart.module.css';
 
 const MHP_WORKSHOP_LOCATION = [-37.908756, 145.13404];
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { ListGroupItem, ListGroupItemProps } from 'react-bootstrap';
-import styles from './WidgetListGroupItem.module.css';
+import styles from 'components/v2/WidgetListGroupItem.module.css';
 
 export interface WidgetListGroupItemProps extends ListGroupItemProps {
   /** Item display text */
