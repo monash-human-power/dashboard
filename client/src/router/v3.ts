@@ -1,11 +1,8 @@
-import CameraSettingsView from 'views/v2/CameraSettingsView';
-import DashboardView from 'views/v2/DashboardView';
-import DownloadFilesView from 'views/v2/DownloadFilesView';
-import OptionsView from 'views/v2/OptionsView';
-import PowerMapView from 'views/v2/PowerMapView';
-import PowerModelCalibrationView from 'views/v2/PowerModelCalibrationView';
-import PowerModelView from 'views/v2/PowerModelView';
-import SensorStatusView from 'views/v2/SensorStatusView';
+import DashboardView from 'views/v3/DashboardView';
+import LogsView from 'views/v3/LogsView';
+import StatusView from 'views/v3/StatusView';
+import BoostView from 'views/v3/BoostView';
+import CameraSystemView from 'views/v3/CameraSystemView';
 import { RouteInfo } from './route';
 
 /**
@@ -14,50 +11,32 @@ import { RouteInfo } from './route';
 export const routes: RouteInfo[] = [
   {
     name: 'Dashboard',
-    path: '/v2/',
+    path: '/v3/',
     exact: true,
     component: DashboardView as unknown as React.Component,
   },
   {
-    name: 'Files',
-    path: '/v2/download-files',
+    name: 'Logs',
+    path: '/v3/logs',
     exact: true,
-    component: DownloadFilesView as unknown as React.Component,
+    component: LogsView as unknown as React.Component,
   },
   {
-    name: 'Sensors',
-    path: '/v2/status',
+    name: 'Status',
+    path: '/v3/status',
     exact: true,
-    component: SensorStatusView as unknown as React.Component,
+    component: StatusView as unknown as React.Component,
   },
   {
-    name: 'Power Model',
-    path: '/v2/power-model',
+    name: 'Boost',
+    path: '/v3/boost',
     exact: true,
-    component: PowerModelView as unknown as React.Component,
+    component: BoostView as unknown as React.Component,
   },
   {
-    name: 'Power Map',
-    path: '/v2/power-zone',
+    name: 'Camera System',
+    path: '/v3/camera-system',
     exact: true,
-    component: PowerMapView as unknown as React.Component,
-  },
-  {
-    name: 'Power Model Calibration',
-    path: '/v2/power-calibration',
-    exact: true,
-    component: PowerModelCalibrationView as unknown as React.Component,
-  },
-  {
-    name: 'Camera',
-    path: '/v2/camera',
-    exact: true,
-    component: CameraSettingsView as unknown as React.Component,
-  },
-  {
-    name: 'Options',
-    path: '/v2/options',
-    exact: true,
-    component: OptionsView as unknown as React.Component,
-  },
+    component: CameraSystemView as unknown as React.Component,
+  }
 ];
