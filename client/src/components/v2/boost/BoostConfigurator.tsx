@@ -11,6 +11,12 @@ export interface BoostConfiguratorProps {
   onUploadConfig: () => void;
 }
 
+/** 
+ * TODO: Add real docs for this component
+ *
+ * @param props Props
+ * @returns Component
+ */
 export default function BoostConfigurator({
   configs,
   onSelectConfig,
