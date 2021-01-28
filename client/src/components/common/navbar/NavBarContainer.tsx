@@ -1,5 +1,5 @@
 import React from 'react';
-import { bikeVersions, useBikeVersion } from '../../router';
+import { bikeVersions, useBikeVersion } from '../../../router';
 import NavBar from './NavBar';
 
 /**
