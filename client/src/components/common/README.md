@@ -16,7 +16,7 @@ All components that relate to a *specific view* should be stored in a subfolder.
 All components that are not bound to one view should be stored in the base of the folder.
 
 ```
-# A general V2 component should be stored in the base of this folder
+# A general component should be stored in the base of this folder
 ./BigButton.tsx
 ./BigButton.stories.tsx
 ./BigButton.module.css
