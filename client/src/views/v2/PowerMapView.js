@@ -10,8 +10,8 @@ import {
   Spinner,
 } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
-import ContentPage from 'components/v2/ContentPage';
-import LabelledControl from 'components/v2/LabelledControl';
+import ContentPage from 'components/common/ContentPage';
+import LabelledControl from 'components/v2/power_map/LabelledControl';
 import { getPresets, useGeneratePowerPlan } from 'api/v2/powerPlan';
 
 /**

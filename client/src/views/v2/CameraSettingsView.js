@@ -1,8 +1,8 @@
-import ContentPage from 'components/v2/ContentPage';
-import CameraRecordingContainer from 'components/v2/CameraRecordingContainer';
-import CameraSettings from 'components/v2/CameraSettings';
-import CameraStatus from 'components/v2/CameraStatus';
-import OverlayMessageContainer from 'components/v2/OverlayMessageContainer';
+import ContentPage from 'components/common/ContentPage';
+import CameraRecordingContainer from 'components/v2/camera_settings/CameraRecordingContainer';
+import CameraSettings from 'components/v2/camera_settings/CameraSettings';
+import CameraStatus from 'components/v2/camera_settings/CameraStatus';
+import OverlayMessageContainer from 'components/v2/camera_settings/OverlayMessageContainer';
 import React from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
 

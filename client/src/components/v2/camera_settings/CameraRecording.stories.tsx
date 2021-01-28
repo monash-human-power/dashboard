@@ -1,6 +1,6 @@
 import { action } from '@storybook/addon-actions';
 import React from 'react';
-import { addArgs, createStory } from '../../utils/stories';
+import { addArgs, createStory } from '../../../utils/stories';
 import CameraRecording, { CameraRecordingPropT } from './CameraRecording';
 
 export default {

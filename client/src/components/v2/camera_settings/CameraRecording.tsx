@@ -1,7 +1,7 @@
 import { VideoFeedStatus } from 'api/v2/camera';
 import React from 'react';
 import { Badge, Button, Card, Col, Row } from 'react-bootstrap';
-import { capitalise } from '../../utils/string';
+import { capitalise } from '../../../utils/string';
 import styles from './CameraRecording.module.css';
 import CameraRecordingStatus, { CameraRecordingStatusProps } from './CameraRecordingStatus';
 

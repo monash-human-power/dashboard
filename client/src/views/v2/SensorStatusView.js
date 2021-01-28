@@ -1,5 +1,5 @@
 import { useStatus } from 'api/v2/sensors';
-import ContentPage from 'components/v2/ContentPage';
+import ContentPage from 'components/common/ContentPage';
 import WidgetListGroupItem from 'components/v2/WidgetListGroupItem';
 import React from 'react';
 import { Badge, ListGroup } from 'react-bootstrap';
