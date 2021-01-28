@@ -40,3 +40,4 @@ export const routes: RouteInfo[] = [
     component: CameraSystemView as unknown as React.Component,
   }
 ];
+

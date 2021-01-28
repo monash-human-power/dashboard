@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 
 /**
@@ -7,9 +7,11 @@ import React from 'react';
  * @returns {React.Component} Component
  */
 export default function DashboardView() {
+    const [buttonInfo, setButtonInfo] = useState(0);
     return (
         <div>
-            <h1>Hi Im the dashboard</h1>
+            <h1>Hi Im the dashboard {buttonInfo} </h1>
+            <button type="button" onClick={() => setButtonInfo(buttonInfo + 1)}>press meee</button>
         </div>
     );
 };
