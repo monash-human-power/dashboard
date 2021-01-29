@@ -5,7 +5,7 @@ import OverlayMessage, { OverlayMessageProps } from 'components/v2/camera_settin
 
 export default {
     component: OverlayMessage,
-    title: 'OverlayMessage'
+    title: 'components/v2/camera_settings/OverlayMessage'
 };
 
 const Template = addArgs<OverlayMessageProps>((props) => <OverlayMessage {...props} />);

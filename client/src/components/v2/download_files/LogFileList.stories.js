@@ -3,7 +3,7 @@ import { ListGroup } from 'react-bootstrap';
 import LogFileList from 'components/v2/download_files/LogFileList';
 
 export default {
-  title: 'LogFileList',
+  title: 'components/v2/download_files/LogFileList',
   component: LogFileList,
   decorators: [(story) => <ListGroup>{story()}</ListGroup>],
   argTypes: {

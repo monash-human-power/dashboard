@@ -6,7 +6,7 @@ import OverlaySelection, { OverlaySelectionProps } from 'components/v2/camera_se
 
 export default {
     component: OverlaySelection,
-    title: 'OverlaySelection'
+    title: 'components/v2/camera_settings/OverlaySelection'
 };
 
 const Template = addArgs<OverlaySelectionProps>((props) => <OverlaySelection {...props} />);

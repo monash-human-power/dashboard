@@ -4,7 +4,7 @@ import { addArgs, createStory } from 'utils/stories';
 import BoostConfigList, { BoostConfigListProps } from 'components/v2/boost/BoostConfigList';
 
 export default {
-  title: 'BoostConfigList',
+  title: 'components/v2/boost/BoostConfigList',
   component: BoostConfigList,
 };
 

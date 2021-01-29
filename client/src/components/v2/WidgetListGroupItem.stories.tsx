@@ -6,7 +6,7 @@ import WidgetListGroupItem, {
 } from 'components/v2/WidgetListGroupItem';
 
 export default {
-  title: 'WidgetListGroupItem',
+  title: 'components/v2/WidgetListGroupItem',
   component: WidgetListGroupItem,
   argTypes: {
     onClick: { action: 'clicked' },
