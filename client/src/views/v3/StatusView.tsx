@@ -9,7 +9,7 @@ import React from 'react';
 export default function StatusView() {
     return (
         <div>
-            <h1>Hi Im the Status View</h1>
+            <h1>Hi I&apos;m the Status View</h1>
         </div>
     );
 };

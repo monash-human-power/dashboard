@@ -9,7 +9,7 @@ import React from 'react';
 export default function LogsView() {
     return (
         <div>
-            <h1>Hi Im the Logs View</h1>
+            <h1>Hi I&apos;m the Logs View</h1>
         </div>
     );
 };

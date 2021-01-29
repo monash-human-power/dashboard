@@ -9,7 +9,7 @@ import React from 'react';
 export default function CameraSystemView() {
     return (
         <div>
-            <h1>Hi Im the Camera System View</h1>
+            <h1>Hi I&apos;m the Camera System View</h1>
         </div>
     );
 };
