@@ -8,8 +8,8 @@ import CameraStatus from "./CameraStatus";
  * @returns Component
  */
 export default function CameraStatusContainer(): JSX.Element {
-    const primaryStatus = useCameraStatus('primary').online;
-    const secondaryStatus = useCameraStatus('secondary').online;
+    const primaryStatus = useCameraStatus('primary')?.connected ?? false;
+    const secondaryStatus = useCameraStatus('secondary')?.connected ?? false;
 
     return (<CameraStatus primaryStatus={primaryStatus} secondaryStatus={secondaryStatus} />);
 }
