@@ -1,8 +1,8 @@
 import ContentPage from 'components/common/ContentPage';
 import CameraRecordingContainer from 'components/v2/camera_settings/CameraRecordingContainer';
-import CameraStatusContainer from 'components/v2/CameraStatusContainer';
+import CameraStatusContainer from 'components/v2/camera_settings/CameraStatusContainer';
 import OverlayMessageContainer from 'components/v2/camera_settings/OverlayMessageContainer';
-import OverlaySelectionContainer from 'components/v2/OverlaySelectionContainer';
+import OverlaySelectionContainer from 'components/v2/camera_settings/OverlaySelectionContainer';
 import React from 'react';
 
 /**

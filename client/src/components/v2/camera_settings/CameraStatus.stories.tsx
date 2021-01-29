@@ -1,6 +1,6 @@
 import React from 'react';
-import { addArgs, createStory } from '../../utils/stories';
-import CameraStatus, { CameraStatusProps } from './CameraStatus';
+import { addArgs, createStory } from 'utils/stories';
+import CameraStatus, { CameraStatusProps } from 'components/v2/camera_settings/CameraStatus';
 
 export default {
     component: CameraStatus,
