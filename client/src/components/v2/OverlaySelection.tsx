@@ -1,28 +1,30 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import PropTypes from 'prop-types';
-import { Card } from 'react-bootstrap';
-import { useCameraConfig, getPrettyDeviceName } from 'api/v2/camera';
+import { CameraConfigT, getPrettyDeviceName } from 'api/v2/camera';
 import RadioSelector from 'components/v2/RadioSelector';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Card } from 'react-bootstrap';
 
-/**
- * @typedef {object} CameraSettingsProps
- * @property {CameraDevice} device Camera screen
- */
+export interface OverlaySelectionProps extends CameraConfigT {
+  /** Camera screen */
+  device: 'primary' | 'secondary'
+}
 
 /**
  * Camera settings for a display
  *
- * @param {CameraSettingsProps} props Props
- * @returns {React.Component<CameraSettingsProps>} Component
+ * @param props Props
+ * @returns Component
  */
-export default function CameraSettings({ device }) {
-  const { config, setActiveOverlay } = useCameraConfig(device);
-  const [selectedOverlay, setSelectedOverlay] = useState(null);
+export default function OverlaySelection({
+  device,
+  config,
+  setActiveOverlay
+}: OverlaySelectionProps): JSX.Element {
+  const [selectedOverlay, setSelectedOverlay] = useState<string | null>(null);
   const name = getPrettyDeviceName(device);
 
   // On overlay data load, set selected to existing value
   useEffect(() => {
-    setSelectedOverlay(config?.activeOverlay);
+    setSelectedOverlay(config?.activeOverlay ?? null);
   }, [config]);
 
   const handleSave = useCallback(
@@ -57,7 +59,3 @@ export default function CameraSettings({ device }) {
     </Card>
   );
 }
-
-CameraSettings.propTypes = {
-  device: PropTypes.string.isRequired,
-};

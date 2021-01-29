@@ -1,3 +1,4 @@
+import { emit, useChannelShaped } from 'api/v2/socket';
 import { useCallback, useEffect, useState } from 'react';
 import {
   Array,
@@ -11,7 +12,6 @@ import {
   Union
 } from 'runtypes';
 import { capitalise, formatBytes, formatMinutes } from 'utils/string';
-import { emit, useChannelShaped } from './socket';
 
 const CameraDevice = Union(Literal('primary'), Literal('secondary'));
 type CameraDevice = Static<typeof CameraDevice>;
@@ -27,6 +27,13 @@ const CameraConfig = Record({
   activeOverlay: String,
 });
 type CameraConfig = Static<typeof CameraConfig>;
+
+export interface CameraConfigT {
+  /** Config defined by CameraConfig */
+  config: CameraConfig | null,
+  /** Set the active overlay */
+  setActiveOverlay: (activeOverlay: string) => void
+}
 
 /**
  * Use a list of camera overlays
@@ -53,7 +60,7 @@ export function useCameraConfig(device: CameraDevice) {
   }, [device]);
 
   const setActiveOverlay = useCallback(
-    (activeOverlay) => {
+    (activeOverlay: string) => {
       emit(
         'set-overlays',
         JSON.stringify({

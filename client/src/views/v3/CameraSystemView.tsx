@@ -10,7 +10,7 @@ import ContentPage from 'components/common/ContentPage';
 export default function CameraSystemView() {
     return (
         <ContentPage>
-            <h1>Hi Im the Camera System View</h1>
+            <h1>Hi I&apos;m the Camera System View</h1>
         </ContentPage>
     );
 };

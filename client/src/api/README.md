@@ -12,4 +12,4 @@ This folder contains API functions that are ***ONLY* for the V3 bike**.
 
 ## [Common API](./common)
 
-This folder contains API functions that are ***SHARED* between V2 and V3 bikes**.
+This folder contains API functions that are for ***ALL* bikes**.

@@ -12,4 +12,4 @@ This folder contains react components used ***ONLY* in V3 views**.
 
 ## [Common Components](./common)
 
-This folder contains react components that are ***SHARED* between V2 and V3**.
+This folder contains react components that are for ***ALL* views**.

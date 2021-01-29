@@ -1,6 +1,6 @@
-# V2 Components
+# V3 Components
 
-This folder holds components that are needed only for V2 views.
+This folder holds components that are needed only for V3 views.
 
 ## Structure
 

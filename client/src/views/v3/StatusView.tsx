@@ -10,7 +10,7 @@ import ContentPage from 'components/common/ContentPage';
 export default function StatusView() {
     return (
         <ContentPage>
-            <h1>Hi Im the Status View</h1>
+            <h1>Hi I&apos;m the Status View</h1>
         </ContentPage>
     );
 };

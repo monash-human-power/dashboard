@@ -1,6 +1,6 @@
 # Common Components
 
-This folder contains react components that are **SHARED** between V2 and V3 views.
+This folder contains react components that are for **ALL** views.
 
 ## Structure
 
