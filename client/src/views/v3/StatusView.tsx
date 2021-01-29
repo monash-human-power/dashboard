@@ -1,68 +1,37 @@
 import React from 'react';
-import ContentPage from 'components/common/ContentPage';
 import { Row, Col, Card, Accordion, Button } from 'react-bootstrap';
+import ContentPage from 'components/common/ContentPage';
 import OnlineStatusPill from 'components/common/OnlineStatusPill';
+import CameraStatusCol from 'components/v3/status/CameraStatusCol';
+
+
+const PrimaryCamera = {
+    /** Specify whether the camera status is on, off or error */
+    cameraName: "Primary",
+    /** Specify whether the camera status is on, off or error */
+    isOnline: true,
+    /** Specify whether the camera status is on, off or error */
+    batteryVoltage: 3,
+    /** Specify whether the camera status is on, off or error */
+    ip: "192.168.123.2",
+    /** Specify whether the camera status is on, off or error */
+    videoFeedStatus: "RECORDING",
+};
+
+const SecondaryCamera = {
+    /** Specify whether the camera status is on, off or error */
+    cameraName: "Secondary",
+    /** Specify whether the camera status is on, off or error */
+    isOnline: false,
+};
+
 
 /**
 //  * Status View component
 //  *
 //  * @returns {React.Component} Component
 //  */
-// export default function StatusView() {
-//     return (
-//         <ContentPage>
-//             <h1>Hi I&apos;m the Status View</h1>
-//         </ContentPage>
-//     );
-// };
-
-
-
-
-
-/**
- * V3 System Status page component
- *
- * @returns {React.Component} Component
- */
-
-
-
-const CameraStatusCol = () => {
-    return (
-        <Col md xl="12" className="my-2">
-            <span>
-                <b>Primary</b> <OnlineStatusPill isOnline />
-            </span>
-            {/* IP address */}
-            <p style={{ fontSize: "0.75rem", color: "gray" }}>192.168.3.9</p>
-
-            {/* Battery Voltage */}
-            <Row className="mx-2">
-                <Col xs="auto">
-                    Battery Voltage
-                </Col>
-                <Col xs style={{ textAlign: "right" }}>
-                    3.9V
-                </Col>
-            </Row>
-
-            {/* Video Feed Status */}
-            <Row className="mx-2">
-                <Col xs="auto">
-                    Video Feed
-                </Col>
-                <Col xs style={{ textAlign: "right" }}>
-                    OFF
-                </Col>
-            </Row>
-        </Col>
-    );
-};
-
-
-
-export default function SensorStatusView() {
+export default function StatusView() {
     return (
         <ContentPage title="System Status">
             <Row>
@@ -73,37 +42,10 @@ export default function SensorStatusView() {
                             <Card.Title>Camera System</Card.Title>
                             <Row>
                                 {/* Primary Camera Status */}
-                                <CameraStatusCol />
-                                <CameraStatusCol />
+                                <CameraStatusCol {...PrimaryCamera} />
 
                                 {/* Secondary Camera Status */}
-                                <Col md xl="12" className="my-2">
-                                    <span>
-                                        <b>Secondary</b> <OnlineStatusPill isOnline />
-                                    </span>
-                                    {/* IP address */}
-                                    <p style={{ fontSize: "0.75rem", color: "gray" }}>192.168.3.9</p>
-
-                                    {/* Battery Voltage */}
-                                    <Row className="mx-2">
-                                        <Col xs="auto">
-                                            Battery Voltage
-                                        </Col>
-                                        <Col xs style={{ textAlign: "right" }}>
-                                            3.9V
-                                        </Col>
-                                    </Row>
-
-                                    {/* Video Feed Status */}
-                                    <Row className="mx-2">
-                                        <Col xs="auto">
-                                            Video Feed
-                                        </Col>
-                                        <Col xs style={{ textAlign: "right" }}>
-                                            OFF
-                                        </Col>
-                                    </Row>
-                                </Col>
+                                <CameraStatusCol {...SecondaryCamera} />
                             </Row>
                         </Card.Body>
                     </Card>
@@ -127,47 +69,47 @@ export default function SensorStatusView() {
                                     <Row className="mx-2">
                                         <Col xs="auto">
                                             Battery Voltage
-                                        </Col>
+                                    </Col>
                                         <Col xs style={{ textAlign: "right" }}>
                                             3.9V
-                                        </Col>
+                                    </Col>
                                     </Row>
 
                                     {/* Video Feed Status */}
                                     <Row className="mx-2">
                                         <Col xs="auto">
                                             Video Feed
-                                        </Col>
+                                    </Col>
                                         <Col xs style={{ textAlign: "right" }}>
                                             OFF
-                                        </Col>
+                                    </Col>
                                     </Row>
 
                                     <Accordion className="mt-2">
                                         <Card>
                                             <Accordion.Toggle as={Button} variant="outline-success" eventKey="0" onClick={() => console.log("yo")}>
                                                 Toggle Sensor Data
-                                            </Accordion.Toggle>
+                                        </Accordion.Toggle>
                                             <Accordion.Collapse eventKey="0">
                                                 <Card.Body>
                                                     {/* Battery Voltage */}
                                                     <Row className="mx-2">
                                                         <Col xs="auto">
                                                             Battery Voltage
-                                                        </Col>
+                                                    </Col>
                                                         <Col xs style={{ textAlign: "right" }}>
                                                             3.9V
-                                                    </Col>
+                                                </Col>
                                                     </Row>
 
                                                     {/* Video Feed Status */}
                                                     <Row className="mx-2">
                                                         <Col xs="auto">
                                                             Video Feed
-                                        </Col>
+                                    </Col>
                                                         <Col xs style={{ textAlign: "right" }}>
                                                             OFF
-                                        </Col>
+                                    </Col>
                                                     </Row>
                                                 </Card.Body>
                                             </Accordion.Collapse>
@@ -195,7 +137,7 @@ export default function SensorStatusView() {
                                         <Card>
                                             <Accordion.Toggle as={Button} variant="link" eventKey="2">
                                                 Toggle Sensor Data
-                                            </Accordion.Toggle>
+                                        </Accordion.Toggle>
                                             <Accordion.Collapse eventKey="2">
                                                 <Card.Body>Hello! Im the body</Card.Body>
                                             </Accordion.Collapse>
@@ -214,3 +156,7 @@ export default function SensorStatusView() {
         </ContentPage >
     );
 }
+
+
+
+

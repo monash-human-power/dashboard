@@ -1,15 +1,15 @@
 import React from 'react';
 import { Badge } from 'react-bootstrap';
 
+export type isOnlineT = boolean | null
 
 /**
  * @property {boolean | null} isOnline Whether the status is on, off or error
  */
 export interface OnlineStatusPillProps {
     /** Specify whether the status is on, off or error */
-    isOnline: boolean | null;
+    isOnline: isOnlineT;
 }
-
 
 /**
  * Bootstrap pill used to describe connectivity status for a component
@@ -17,16 +17,10 @@ export interface OnlineStatusPillProps {
  * @returns Component
  */
 export default function OnlineStatusPill({ isOnline }: OnlineStatusPillProps) {
-
-    // This is to deal with the situation when the sensors are of type null
-    if (isOnline === null) {
-        return (<Badge pill variant='danger'> ERROR </Badge>);
+    switch (isOnline) {
+        case true: return (<Badge pill variant='success'> Online </Badge>);
+        case false: return (<Badge pill variant='secondary'> Offline </Badge>);
+        case null: return (<Badge pill variant='danger'> ERROR </Badge>);
+        default: return (<Badge pill variant='danger'> ERROR </Badge>);
     }
-
-    // If not null return connection status
-    return (
-        <Badge pill variant={isOnline ? 'success' : 'secondary'}>
-            {isOnline ? 'Online' : 'Offline'}
-        </Badge>
-    );
 }
