@@ -5,7 +5,7 @@ import CameraRecording, { CameraRecordingPropT } from 'components/v2/camera_sett
 
 export default {
     component: CameraRecording,
-    title: 'CameraRecording'
+    title: 'components/v2/camera_settings/CameraRecording'
 };
 
 type DeviceInfo = {

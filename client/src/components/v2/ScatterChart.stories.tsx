@@ -5,7 +5,7 @@ import ScatterChart, { AxisProps, DataProps } from 'components/v2/ScatterChart';
 
 export default {
     component: ScatterChart,
-    title: 'ScatterChart',
+    title: 'components/v2/ScatterChart',
 };
 
 interface ChartProps {

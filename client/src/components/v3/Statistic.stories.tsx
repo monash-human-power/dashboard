@@ -3,7 +3,7 @@ import { addArgs, createStory } from 'utils/stories';
 import Statistic, { StatisticProps } from 'components/v3/Statistic';
 
 export default {
-    title: 'Statistic',
+    title: 'components/v3/Statistic',
     component: Statistic,
 };
 
