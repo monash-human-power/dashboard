@@ -8,7 +8,7 @@ import { RouteInfo } from 'router/route';
 /**
  * V3 views
  */
-export const routes: RouteInfo[] = [
+const routes: RouteInfo[] = [
   {
     name: 'Dashboard',
     path: '/v3/',
@@ -41,3 +41,4 @@ export const routes: RouteInfo[] = [
   }
 ];
 
+export default routes;

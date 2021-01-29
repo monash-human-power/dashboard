@@ -13,7 +13,7 @@ import { RouteInfo } from 'router/route';
  *
  * V2 views will have to be converted to ts otherwise.
  */
-export const routes: RouteInfo[] = [
+const routes: RouteInfo[] = [
   {
     name: 'Dashboard',
     path: '/v2/',
@@ -63,3 +63,5 @@ export const routes: RouteInfo[] = [
     component: OptionsView as unknown as React.Component,
   },
 ];
+
+export default routes;

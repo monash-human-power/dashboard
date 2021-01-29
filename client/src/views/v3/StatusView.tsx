@@ -1,7 +1,7 @@
 import React from 'react';
 import ContentPage from 'components/common/ContentPage';
 import { Row, Col, Card, Accordion, Button } from 'react-bootstrap';
-import StatusPill from 'components/common/StatusPill';
+import OnlineStatusPill from 'components/common/OnlineStatusPill';
 
 /**
 //  * Status View component
@@ -32,7 +32,7 @@ const CameraStatusCol = () => {
     return (
         <Col md xl="12" className="my-2">
             <span>
-                <b>Primary</b> <StatusPill isConnected />
+                <b>Primary</b> <OnlineStatusPill isOnline />
             </span>
             {/* IP address */}
             <p style={{ fontSize: "0.75rem", color: "gray" }}>192.168.3.9</p>
@@ -79,7 +79,7 @@ export default function SensorStatusView() {
                                 {/* Secondary Camera Status */}
                                 <Col md xl="12" className="my-2">
                                     <span>
-                                        <b>Secondary</b> <StatusPill isConnected />
+                                        <b>Secondary</b> <OnlineStatusPill isOnline />
                                     </span>
                                     {/* IP address */}
                                     <p style={{ fontSize: "0.75rem", color: "gray" }}>192.168.3.9</p>
@@ -118,7 +118,7 @@ export default function SensorStatusView() {
                                 {/* Front WM Status */}
                                 <Col md xl="12" className="my-2">
                                     <span>
-                                        <b>Front WM</b> <StatusPill isConnected />
+                                        <b>Front WM</b> <OnlineStatusPill isOnline />
                                     </span>
                                     {/* IP address */}
                                     <p style={{ fontSize: "0.75rem", color: "gray" }}>/v3/wireless_module/3/data</p>
@@ -178,7 +178,7 @@ export default function SensorStatusView() {
                                 {/* Middle WM Status */}
                                 <Col md xl="12" className="my-2">
                                     <span>
-                                        <b>Front WM</b> <StatusPill isConnected />
+                                        <b>Front WM</b> <OnlineStatusPill isOnline />
                                     </span>
                                     {/* IP address */}
                                     <p style={{ fontSize: "0.75rem", color: "gray" }}>/v3/wireless_module/3/data</p>
@@ -187,7 +187,7 @@ export default function SensorStatusView() {
                                 {/* Back WM Status */}
                                 <Col md xl="12" className="my-2">
                                     <span>
-                                        <b>Front WM</b> <StatusPill isConnected />
+                                        <b>Front WM</b> <OnlineStatusPill isOnline />
                                     </span>
                                     {/* IP address */}
                                     <p style={{ fontSize: "0.75rem", color: "gray" }}>/v3/wireless_module/3/data</p>

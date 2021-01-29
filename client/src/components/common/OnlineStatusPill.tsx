@@ -3,11 +3,11 @@ import { Badge } from 'react-bootstrap';
 
 
 /**
- * @property {boolean | null} isConnected Whether the status is on, off or error
+ * @property {boolean | null} isOnline Whether the status is on, off or error
  */
-export interface PillProps {
+export interface OnlineStatusPillProps {
     /** Specify whether the status is on, off or error */
-    isConnected: boolean | null;
+    isOnline: boolean | null;
 }
 
 
@@ -16,17 +16,17 @@ export interface PillProps {
  * @param props Props
  * @returns Component
  */
-export default function CameraStatusPill({ isConnected }: PillProps) {
+export default function OnlineStatusPill({ isOnline }: OnlineStatusPillProps) {
 
     // This is to deal with the situation when the sensors are of type null
-    if (isConnected === null) {
+    if (isOnline === null) {
         return (<Badge pill variant='danger'> ERROR </Badge>);
     }
 
     // If not null return connection status
     return (
-        <Badge pill variant={isConnected ? 'success' : 'secondary'}>
-            {isConnected ? 'Online' : 'Offline'}
+        <Badge pill variant={isOnline ? 'success' : 'secondary'}>
+            {isOnline ? 'Online' : 'Offline'}
         </Badge>
     );
 }
