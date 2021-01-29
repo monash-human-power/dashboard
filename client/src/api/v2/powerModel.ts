@@ -1,6 +1,6 @@
+import { emit, useChannel, useChannelShaped } from 'api/v2/socket';
 import { useCallback, useState } from 'react';
 import { Number, Record, Static } from 'runtypes';
-import { emit, useChannel, useChannelShaped } from './socket';
 
 const RecommendedData = Record({
   /** Recommended speed */
