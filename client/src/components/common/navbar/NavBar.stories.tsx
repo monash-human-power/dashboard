@@ -8,7 +8,7 @@ import NavBar from 'components/common/navbar/NavBar';
 
 export default {
   component: NavBar,
-  title: 'NavBar'
+  title: 'Common/Helper/NavBar'
 };
 
 const template = (arg: VersionInfo) =>
