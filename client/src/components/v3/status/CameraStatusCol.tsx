@@ -3,17 +3,12 @@ import { Row, Col } from 'react-bootstrap';
 import OnlineStatusPill, { isOnlineT } from 'components/common/OnlineStatusPill';
 
 export interface CameraStatusProps {
-    /** Specify whether the camera status is on, off or error */
     cameraName: string,
-    /** Specify whether the camera status is on, off or error */
     isOnline: isOnlineT,
-    /** Specify whether the camera status is on, off or error */
     batteryVoltage?: number,
-    /** Specify whether the camera status is on, off or error */
     ip?: string,
-    /** Specify whether the camera status is on, off or error */
     videoFeedStatus?: string,
-}
+};
 
 
 export default function CameraStatusCol({
@@ -22,7 +17,6 @@ export default function CameraStatusCol({
     ip,
     videoFeedStatus,
     cameraName }: CameraStatusProps) {
-
     return (
         <Col md xl="12" className="my-2">
             <span>

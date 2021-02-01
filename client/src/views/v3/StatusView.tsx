@@ -1,30 +1,46 @@
 import React from 'react';
-import { Row, Col, Card, Accordion, Button } from 'react-bootstrap';
+import { Row, Col, Card } from 'react-bootstrap';
 import ContentPage from 'components/common/ContentPage';
-import OnlineStatusPill from 'components/common/OnlineStatusPill';
 import CameraStatusCol from 'components/v3/status/CameraStatusCol';
+import WirelessModuleStatusCol from 'components/v3/status/WirelessModuleStatusCol';
 
 
 const PrimaryCamera = {
-    /** Specify whether the camera status is on, off or error */
     cameraName: "Primary",
-    /** Specify whether the camera status is on, off or error */
     isOnline: true,
-    /** Specify whether the camera status is on, off or error */
     batteryVoltage: 3,
-    /** Specify whether the camera status is on, off or error */
     ip: "192.168.123.2",
-    /** Specify whether the camera status is on, off or error */
     videoFeedStatus: "RECORDING",
 };
 
 const SecondaryCamera = {
-    /** Specify whether the camera status is on, off or error */
     cameraName: "Secondary",
-    /** Specify whether the camera status is on, off or error */
     isOnline: false,
 };
 
+const FrontWM = {
+    moduleName: "Front WM",
+    isOnline: true,
+    batteryVoltage: 3.1,
+    mqttAddress: "/v3/wireless_module/1/data",
+    videoFeedStatus: "string",
+};
+
+const MiddleWM = {
+    moduleName: "Front WM",
+    isOnline: false,
+    batteryVoltage: 3.1,
+    mqttAddress: "/v3/wireless_module/1/data",
+    videoFeedStatus: "string",
+};
+
+const BackWM = {
+    moduleName: "Front WM",
+    isOnline: null,
+    batteryVoltage: 3.1,
+    mqttAddress: "/v3/wireless_module/1/data",
+    videoFeedStatus: "string",
+};
 
 /**
 //  * Status View component
@@ -58,96 +74,15 @@ export default function StatusView() {
                             <Card.Title>Wireless Modules</Card.Title>
                             <Row>
                                 {/* Front WM Status */}
-                                <Col md xl="12" className="my-2">
-                                    <span>
-                                        <b>Front WM</b> <OnlineStatusPill isOnline />
-                                    </span>
-                                    {/* IP address */}
-                                    <p style={{ fontSize: "0.75rem", color: "gray" }}>/v3/wireless_module/3/data</p>
-
-                                    {/* Battery Voltage */}
-                                    <Row className="mx-2">
-                                        <Col xs="auto">
-                                            Battery Voltage
-                                    </Col>
-                                        <Col xs style={{ textAlign: "right" }}>
-                                            3.9V
-                                    </Col>
-                                    </Row>
-
-                                    {/* Video Feed Status */}
-                                    <Row className="mx-2">
-                                        <Col xs="auto">
-                                            Video Feed
-                                    </Col>
-                                        <Col xs style={{ textAlign: "right" }}>
-                                            OFF
-                                    </Col>
-                                    </Row>
-
-                                    <Accordion className="mt-2">
-                                        <Card>
-                                            <Accordion.Toggle as={Button} variant="outline-success" eventKey="0" onClick={() => console.log("yo")}>
-                                                Toggle Sensor Data
-                                        </Accordion.Toggle>
-                                            <Accordion.Collapse eventKey="0">
-                                                <Card.Body>
-                                                    {/* Battery Voltage */}
-                                                    <Row className="mx-2">
-                                                        <Col xs="auto">
-                                                            Battery Voltage
-                                                    </Col>
-                                                        <Col xs style={{ textAlign: "right" }}>
-                                                            3.9V
-                                                </Col>
-                                                    </Row>
-
-                                                    {/* Video Feed Status */}
-                                                    <Row className="mx-2">
-                                                        <Col xs="auto">
-                                                            Video Feed
-                                    </Col>
-                                                        <Col xs style={{ textAlign: "right" }}>
-                                                            OFF
-                                    </Col>
-                                                    </Row>
-                                                </Card.Body>
-                                            </Accordion.Collapse>
-                                        </Card>
-                                    </Accordion>
-                                </Col>
+                                <WirelessModuleStatusCol {...FrontWM} />
 
                                 {/* Middle WM Status */}
-                                <Col md xl="12" className="my-2">
-                                    <span>
-                                        <b>Front WM</b> <OnlineStatusPill isOnline />
-                                    </span>
-                                    {/* IP address */}
-                                    <p style={{ fontSize: "0.75rem", color: "gray" }}>/v3/wireless_module/3/data</p>
-                                </Col>
+                                <WirelessModuleStatusCol {...MiddleWM} />
 
                                 {/* Back WM Status */}
-                                <Col md xl="12" className="my-2">
-                                    <span>
-                                        <b>Front WM</b> <OnlineStatusPill isOnline />
-                                    </span>
-                                    {/* IP address */}
-                                    <p style={{ fontSize: "0.75rem", color: "gray" }}>/v3/wireless_module/3/data</p>
-                                    <Accordion>
-                                        <Card>
-                                            <Accordion.Toggle as={Button} variant="link" eventKey="2">
-                                                Toggle Sensor Data
-                                        </Accordion.Toggle>
-                                            <Accordion.Collapse eventKey="2">
-                                                <Card.Body>Hello! Im the body</Card.Body>
-                                            </Accordion.Collapse>
-                                        </Card>
-                                    </Accordion>
-                                </Col>
+                                <WirelessModuleStatusCol {...BackWM} />
                             </Row>
-
                         </Card.Body>
-
                     </Card>
                 </Col>
 
