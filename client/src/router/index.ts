@@ -2,6 +2,8 @@ import { useRouteMatch } from 'react-router-dom';
 import HomeView from 'views/HomeView';
 import { RouteInfo } from './route';
 import { routes as V2Routes } from './v2';
+import { routes as V3Routes } from './v3';
+
 
 export interface VersionInfo {
   /** Bike version friendly name */
@@ -21,7 +23,7 @@ export const bikeVersions: VersionInfo[] = [
   {
     name: 'Version 3 (V3)',
     rootPath: '/v3',
-    routes: [],
+    routes: V3Routes,
   },
 ];
 
