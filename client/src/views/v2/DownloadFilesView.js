@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap';
 import ContentPage from 'components/common/ContentPage';
 import DeleteModal from 'components/common/download_files/DeleteModal';
 import LogFileList from 'components/common/download_files/LogFileList';
-import { useFiles, useLatestFile } from 'api/v2/files';
+import { useFiles, useLatestFile } from 'api/common/files';
 
 /**
  * Download Files page component

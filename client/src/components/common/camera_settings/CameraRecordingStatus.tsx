@@ -1,4 +1,4 @@
-import { CameraRecordingStatusItem } from 'api/v2/camera';
+import { CameraRecordingStatusItem } from 'api/common/camera';
 import React from 'react';
 import styles from 'components/common/camera_settings/CameraRecordingStatus.module.css';
 

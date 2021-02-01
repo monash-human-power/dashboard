@@ -1,4 +1,4 @@
-import { VideoFeedStatus } from 'api/v2/camera';
+import { VideoFeedStatus } from 'api/common/camera';
 import React from 'react';
 import { Badge, Button, Card, Col, Row } from 'react-bootstrap';
 import { capitalise } from 'utils/string';

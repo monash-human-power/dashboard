@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCameraStatus } from "api/v2/camera";
+import { useCameraStatus } from "api/common/camera";
 import CameraStatus from "components/common/camera_settings/CameraStatus";
 
 /**

@@ -1,4 +1,4 @@
-import { startRecording, stopRecording, useCameraRecordingStatus, useVideoFeedStatus } from 'api/v2/camera';
+import { startRecording, stopRecording, useCameraRecordingStatus, useVideoFeedStatus } from 'api/common/camera';
 import React from 'react';
 import CameraRecording from 'components/common/camera_settings/CameraRecording';
 
