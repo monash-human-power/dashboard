@@ -8,6 +8,12 @@ interface ContentPageProps {
   children: React.ReactNode,
 }
 
+/**
+ * Content Page container component
+ *
+ * @param props Props
+ * @returns Component
+ */
 export default function ContentPage({ title, children }: ContentPageProps): JSX.Element {
   return (
     <Container className="mb-4 mt-4">
