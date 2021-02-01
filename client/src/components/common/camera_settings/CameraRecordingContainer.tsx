@@ -1,6 +1,6 @@
 import { startRecording, stopRecording, useCameraRecordingStatus, useVideoFeedStatus } from 'api/v2/camera';
 import React from 'react';
-import CameraRecording from 'components/v2/camera_settings/CameraRecording';
+import CameraRecording from 'components/common/camera_settings/CameraRecording';
 
 /**
  * Container for {@link CameraRecording}.

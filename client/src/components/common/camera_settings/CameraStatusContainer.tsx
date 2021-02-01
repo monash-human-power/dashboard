@@ -1,6 +1,6 @@
 import React from 'react';
 import { useCameraStatus } from "api/v2/camera";
-import CameraStatus from "components/v2/camera_settings/CameraStatus";
+import CameraStatus from "components/common/camera_settings/CameraStatus";
 
 /**
  * Container for {@link CameraStatus}

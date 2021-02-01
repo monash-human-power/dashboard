@@ -1,9 +1,9 @@
 import React from 'react';
 import { ListGroup } from 'react-bootstrap';
-import LogFileList from 'components/v2/download_files/LogFileList';
+import LogFileList from 'components/common/download_files/LogFileList';
 
 export default {
-  title: 'components/v2/download_files/LogFileList',
+  title: 'components/common/download_files/LogFileList',
   component: LogFileList,
   decorators: [(story) => <ListGroup>{story()}</ListGroup>],
   argTypes: {

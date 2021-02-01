@@ -3,10 +3,10 @@ import { Button } from 'react-bootstrap';
 import { addArgs, createStory } from 'utils/stories';
 import WidgetListGroupItem, {
   WidgetListGroupItemProps,
-} from 'components/v2/WidgetListGroupItem';
+} from 'components/common/WidgetListGroupItem';
 
 export default {
-  title: 'components/v2/WidgetListGroupItem',
+  title: 'components/common/WidgetListGroupItem',
   component: WidgetListGroupItem,
   argTypes: {
     onClick: { action: 'clicked' },

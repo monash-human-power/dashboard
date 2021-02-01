@@ -1,4 +1,4 @@
-import WidgetListGroupItem from 'components/v2/WidgetListGroupItem';
+import WidgetListGroupItem from 'components/common/WidgetListGroupItem';
 import React from 'react';
 import { Button } from 'react-bootstrap';
 
