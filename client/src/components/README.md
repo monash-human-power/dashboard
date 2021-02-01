@@ -1,6 +1,6 @@
 # Component Library
 
-This folder contains the components used in V2 and V3 views.
+This folder contains the components used in all of the MHP bike views.
 
 ## [V2 Components](./v2)
 
