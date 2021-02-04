@@ -11,5 +11,20 @@
 }
 
 .deviceName {
-  margin-left: 4px;
+  font-size: large;
+}
+
+.push {
+  margin-left: auto;
+  text-align: right;
+  color: #A3A3A3
+}
+
+.indicator {
+  margin-left: 10px;
+}
+
+.subtitle {
+  display: flex;
+  margin-bottom: 3px;
 }

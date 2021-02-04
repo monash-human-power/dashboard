@@ -1,0 +1,19 @@
+.value {
+  font-size: 32px;
+  line-height: 21px;
+  color: #000000;
+}
+
+.unit {
+  font-size: 14px;
+  line-height: 21px;
+  color: #000000;
+  text-align: right;
+  margin-left: 4px;
+}
+
+.desc {
+  font-size: 14px;
+  line-height: 18px;
+  color: #000000;
+}
