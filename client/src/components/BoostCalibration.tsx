@@ -11,7 +11,7 @@ function BoostCalibrationInput({
     onCalibrationReset
 }: BoostCalibrationProps) {
 
-    const [calibrationValue, setCalibration] = useState('');
+    const [calibrationValue, setCalibration] = useState(0);
 
     const handleCalibrationChange = useCallback(
         (event) => {
@@ -31,10 +31,10 @@ function BoostCalibrationInput({
     // );
 
     return (
-    <InputGroup className="mb-3" >
+    <InputGroup className="mb-1" >
         <FormControl
             onChange={handleCalibrationChange}
-            placeholder="Calibrate distance"
+            placeholder="Calibrate distance..."
             value={calibrationValue}
         />
         <InputGroup.Append className="l5">
@@ -50,17 +50,22 @@ export default function BoostCalibration({
     onCalibrationSet,
     onCalibrationReset
 }: BoostCalibrationProps) {
+    // let distTravelled:number = 30;
+    const [distTravelled] = useState(30);
+
     return (
         <Card >
             <Card.Body>
                 <Card.Title>Calibration</Card.Title>
                 <Card.Text style={{ width: '35rem' }}>
-                    BOOST may use a distance different to the bike&apos s travelled distance for the purposes of generating power plan data.
+                    BOOST may use a distance different to the bike&apos;s travelled distance for the purposes of generating power plan data.
                 </Card.Text>
-                <b>Distance travelled </b>
-                <p/>
-                <b>Calibrated distance</b>
-                <p/>
+                <div className="pb-3">
+                    <b>Distance travelled (m) </b> <span className="float-right pr-4" > {distTravelled} </span>
+                </div>
+                <div className="pb-3">
+                  <b>Calibrated distance (m) </b> <span className="float-right pr-4"> 40 </span>
+                </div>
                 <BoostCalibrationInput onCalibrationReset={onCalibrationReset} onCalibrationSet={onCalibrationSet}/>
             </Card.Body>
         </Card>
