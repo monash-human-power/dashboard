@@ -1,58 +1,77 @@
 import React , {useCallback, useState} from 'react';
 import {Button, Card, InputGroup, FormControl} from 'react-bootstrap';
+import {setCalibration as sendCalibrationValue, resetCalibration} from '../api/v2/powerModel';
+import {useSensorData} from '../api/v2/sensors/data';
 
 export interface BoostCalibrationProps {
-    onCalibrationSet: () => void;
-    onCalibrationReset: () => void;
-  }
+    // getDistTravelled: () => number;
+}
 
-function BoostCalibrationInput({
-    onCalibrationSet,
-    onCalibrationReset
-}: BoostCalibrationProps) {
-
-    const [calibrationValue, setCalibration] = useState(0);
+/**
+ * Boost distance claibration input form
+ * 
+ * @returns {React.Component} Component
+ */
+function BoostCalibrationInput() {
+    const [calibrationValue, setCalib] = useState('');
 
     const handleCalibrationChange = useCallback(
         (event) => {
-        setCalibration(event.target.value);
+        setCalib(event.target.value);
         },
-        [setCalibration],
+        [setCalib],
     );
 
-    // const handleKeyPressed = useCallback(
-    //     (event) => {
-    //     if (event.key === 'Enter') {
-    //         sendMessage(message);
-    //         setMessage('');
-    //     }
-    //     },
-    //     [message, setMessage],
-    // );
+    const onSet = useCallback(
+        () => {
+          const calibValue: number = parseInt(calibrationValue, 10);
+          if (Number.isNaN(calibValue)) {
+            alert("Please enter an integer value only!");
+          }
+          else {
+            console.log(calibValue);
+            sendCalibrationValue(parseInt(calibrationValue, 10));
+          }
+          setCalib('');
+        },
+        [calibrationValue, setCalib],
+    );
+
+    const handleKeyPressed = useCallback(
+        (event) => { if (event.key === 'Enter') onSet(); },
+        [onSet]
+    );
 
     return (
     <InputGroup className="mb-1" >
         <FormControl
             onChange={handleCalibrationChange}
+            onKeyPress={handleKeyPressed}
             placeholder="Calibrate distance..."
             value={calibrationValue}
         />
         <InputGroup.Append className="l5">
-            <Button className="mr-2" variant="outline-secondary" onClick={onCalibrationSet}>Set</Button>
+            <Button className="mr-2" variant="outline-secondary" onClick={onSet}>Set</Button>
         </InputGroup.Append>
         
-        <Button variant="outline-danger" onClick={onCalibrationReset}>Reset</Button>
+        <Button variant="outline-danger" onClick={resetCalibration}>Reset</Button>
     </InputGroup>
     );
 }
 
-export default function BoostCalibration({
-    onCalibrationSet,
-    onCalibrationReset
-}: BoostCalibrationProps) {
-    // let distTravelled:number = 30;
+/**
+ * Boost calibration card, displays the calibrated distance and the 
+ * distance travelled by the bike
+ * 
+ * @returns {React.Component} Component
+ */
+export default function BoostCalibration() {
     const [distTravelled] = useState(30);
 
+    const GetDistTravelled = () => {
+        return useSensorData("reed_distance").data;
+    };
+    console.log(GetDistTravelled());
     return (
         <Card >
             <Card.Body>
@@ -66,7 +85,7 @@ export default function BoostCalibration({
                 <div className="pb-3">
                   <b>Calibrated distance (m) </b> <span className="float-right pr-4"> 40 </span>
                 </div>
-                <BoostCalibrationInput onCalibrationReset={onCalibrationReset} onCalibrationSet={onCalibrationSet}/>
+                <BoostCalibrationInput/>
             </Card.Body>
         </Card>
     );
