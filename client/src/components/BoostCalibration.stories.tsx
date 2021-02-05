@@ -1,5 +1,4 @@
 import React from 'react';
-import { action } from '@storybook/addon-actions';
 import { addArgs, createStory } from '../utils/stories';
 import BoostCalibration, { BoostCalibrationProps } from './BoostCalibration';
 
