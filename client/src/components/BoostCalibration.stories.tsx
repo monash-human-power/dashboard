@@ -11,13 +11,5 @@ export default {
   const Template = addArgs<BoostCalibrationProps>((props) => (
     <BoostCalibration {...props} />
   ));
-  
-  const onCalibrationSet = action('onSet');
-  const onCalibrationReset = action('onReset');
 
-  export const Simple = createStory(Template, {
-    onCalibrationSet,
-    onCalibrationReset,
-  });
-
-
+  export const Simple = createStory(Template, {});
