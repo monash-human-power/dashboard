@@ -1,7 +1,7 @@
 import zipObject from 'lodash/zipObject';
 import { useCallback, useState } from 'react';
 import { useTimeSeries } from 'utils/timeSeries';
-import { useChannel } from '../../common/socket';
+import { useChannel } from 'api/common/socket';
 
 /**
  * @typedef {object} MultiSensorTimeSeriesHook

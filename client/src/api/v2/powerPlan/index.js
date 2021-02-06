@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
-import { useChannel, emit } from '../../common/socket';
-import presets from './presets';
+import { useChannel, emit } from 'api/common/socket';
+import presets from 'api/common/presets';
 
 /**
  * @typedef {import('./presets').PowerPlanPreset} PowerPlanPreset

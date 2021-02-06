@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { useChannel } from '../../common/socket';
+import { useChannel } from 'api/common/socket';
 
 /* eslint-disable camelcase */
 export interface SensorData {

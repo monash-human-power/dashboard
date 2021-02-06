@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useChannel, emit } from '../common/socket';
+import { useChannel, emit } from 'api/common/socket';
 
 export interface DASSettings {
   /** Whether to publish data to online broker */
