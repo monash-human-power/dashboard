@@ -1,9 +1,9 @@
 import DashboardView from 'views/v3/DashboardView';
-import LogsView from 'views/v3/LogsView';
+import LogsView from 'views/common/LogsView';
 import StatusView from 'views/v3/StatusView';
-import BoostView from 'views/v3/BoostView';
+import BoostView from 'views/common/BoostView';
 import CameraSystemView from 'views/v3/CameraSystemView';
-import { RouteInfo } from './route';
+import { RouteInfo } from 'router/route';
 
 /**
  * V3 views

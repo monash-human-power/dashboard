@@ -1,4 +1,4 @@
-import CameraSettingsView from 'views/v2/CameraSettingsView';
+import CameraSettingsView from 'views/common/CameraSettingsView';
 import DashboardView from 'views/v2/DashboardView';
 import DownloadFilesView from 'views/v2/DownloadFilesView';
 import OptionsView from 'views/v2/OptionsView';
@@ -6,7 +6,7 @@ import PowerMapView from 'views/v2/PowerMapView';
 import PowerModelCalibrationView from 'views/v2/PowerModelCalibrationView';
 import PowerModelView from 'views/v2/PowerModelView';
 import SensorStatusView from 'views/v2/SensorStatusView';
-import { RouteInfo } from './route';
+import { RouteInfo } from 'router/route';
 
 /**
  * Component type is force casted to React.Component.

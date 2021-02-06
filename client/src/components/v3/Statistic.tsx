@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './Statistic.module.css';
+import styles from 'components/v3/Statistic.module.css';
 
 export interface StatisticProps {
     /** Value to be shown */

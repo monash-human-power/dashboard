@@ -1,10 +1,10 @@
 import React, { useState, useCallback } from 'react';
 import { Col, Container, FormCheck, Row } from 'react-bootstrap';
-import V2VelocityTimeChart from 'components/v2/charts/V2VelocityTimeChart';
-import V2PowerTimeChart from 'components/v2/charts/V2PowerTimeChart';
-import V2CadenceTimeChart from 'components/v2/charts/V2CadenceTimeChart';
-import LocationTimeChart from 'components/v2/charts/V2LocationTimeChart';
-import V2TextModeChart from 'components/v2/charts/V2TextModeChart';
+import V2VelocityTimeChart from 'components/v2/dashboard/V2VelocityTimeChart';
+import V2PowerTimeChart from 'components/v2/dashboard/V2PowerTimeChart';
+import V2CadenceTimeChart from 'components/v2/dashboard/V2CadenceTimeChart';
+import LocationTimeChart from 'components/v2/dashboard/V2LocationTimeChart';
+import V2TextModeChart from 'components/v2/dashboard/V2TextModeChart';
 import { useSensorData } from 'api/v2/sensors';
 
 /**
