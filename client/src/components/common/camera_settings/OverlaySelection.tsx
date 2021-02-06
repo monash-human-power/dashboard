@@ -1,4 +1,4 @@
-import { CameraConfigT, getPrettyDeviceName } from 'api/v2/camera';
+import { CameraConfigT, getPrettyDeviceName } from 'api/common/camera';
 import RadioSelector from 'components/v2/RadioSelector';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Card } from 'react-bootstrap';

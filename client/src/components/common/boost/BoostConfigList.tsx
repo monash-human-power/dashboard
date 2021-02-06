@@ -2,9 +2,9 @@ import { faFile, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import { BoostConfig } from 'types/boost';
-import FontAwesomeIcon from 'components/v2/FontAwesomeIcon';
-import WidgetListGroupItem from 'components/v2/WidgetListGroupItem';
-import styles from 'components/v2/boost/BoostConfigList.module.css';
+import FontAwesomeIcon from 'components/common/FontAwesomeIcon';
+import WidgetListGroupItem from 'components/common/WidgetListGroupItem';
+import styles from 'components/common/boost/BoostConfigList.module.css';
 
 export interface BoostConfigListProps {
   config: BoostConfig;

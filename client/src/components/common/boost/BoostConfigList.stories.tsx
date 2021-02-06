@@ -1,10 +1,10 @@
 import React from 'react';
 import { action } from '@storybook/addon-actions';
 import { addArgs, createStory } from 'utils/stories';
-import BoostConfigList, { BoostConfigListProps } from 'components/v2/boost/BoostConfigList';
+import BoostConfigList, { BoostConfigListProps } from 'components/common/boost/BoostConfigList';
 
 export default {
-  title: 'components/v2/boost/BoostConfigList',
+  title: 'components/common/boost/BoostConfigList',
   component: BoostConfigList,
 };
 

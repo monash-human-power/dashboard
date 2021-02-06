@@ -1,4 +1,4 @@
-import CameraSettingsView from 'views/v2/CameraSettingsView';
+import CameraSettingsView from 'views/common/CameraSettingsView';
 import DashboardView from 'views/v2/DashboardView';
 import DownloadFilesView from 'views/v2/DownloadFilesView';
 import OptionsView from 'views/v2/OptionsView';

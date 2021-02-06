@@ -1,8 +1,8 @@
 import React from 'react';
-import DeleteModal from 'components/v2/download_files/DeleteModal';
+import DeleteModal from 'components/common/download_files/DeleteModal';
 
 export default {
-  title: 'components/v2/download_files/DeleteModal',
+  title: 'components/common/download_files/DeleteModal',
   component: DeleteModal,
   argTypes: {
     onDeleteFile: { action: 'clicked' },

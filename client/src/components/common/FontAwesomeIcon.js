@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import styles from 'components/v2/FontAwesomeIcon.module.css';
+import styles from 'components/common/FontAwesomeIcon.module.css';
 
 /**
  * @typedef {import('@fortawesome/fontawesome-common-types').IconDefinition} IconDefinition

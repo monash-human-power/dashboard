@@ -1,4 +1,4 @@
-import { emit, useChannelShaped } from 'api/v2/socket';
+import { emit, useChannelShaped } from 'api/common/socket';
 import { useCallback, useEffect, useState } from 'react';
 import {
   Array,

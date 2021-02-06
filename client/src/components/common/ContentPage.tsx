@@ -11,8 +11,8 @@ interface ContentPageProps {
 /**
  * Content Page container component
  *
- * @param {ContentPageProps} props Props
- * @returns {React.Component<ContentPageProps>} Component
+ * @param props Props
+ * @returns Component
  */
 export default function ContentPage({ title, children }: ContentPageProps): JSX.Element {
   return (

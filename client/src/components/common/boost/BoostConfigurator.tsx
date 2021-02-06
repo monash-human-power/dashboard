@@ -2,7 +2,7 @@ import React from 'react';
 import { Accordion, Button, Card } from 'react-bootstrap';
 import { BoostConfig, BoostConfigType } from 'types/boost';
 import { camelCaseToStartCase } from 'utils/string';
-import BoostConfigList from 'components/v2/boost/BoostConfigList';
+import BoostConfigList from 'components/common/boost/BoostConfigList';
 
 export interface BoostConfiguratorProps {
   configs: BoostConfig[];

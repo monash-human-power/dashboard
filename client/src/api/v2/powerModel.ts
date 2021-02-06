@@ -1,4 +1,4 @@
-import { emit, useChannel, useChannelShaped } from 'api/v2/socket';
+import { emit, useChannel, useChannelShaped } from 'api/common/socket';
 import { useCallback, useState } from 'react';
 import { Number, Record, Static } from 'runtypes';
 
@@ -16,7 +16,7 @@ const RecommendedData = Record({
 });
 type RecommendedData = Static<typeof RecommendedData>;
 
-const EstimatedData = Record ({
+const EstimatedData = Record({
   /** Predicted maximum speed */
   predicted_max_speed: Number,
 });

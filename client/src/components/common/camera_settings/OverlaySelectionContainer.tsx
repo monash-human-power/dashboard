@@ -1,6 +1,6 @@
 import React from 'react';
-import { useCameraConfig } from 'api/v2/camera';
-import OverlaySelection from 'components/v2/camera_settings/OverlaySelection';
+import { useCameraConfig } from 'api/common/camera';
+import OverlaySelection from 'components/common/camera_settings/OverlaySelection';
 
 /**
  * Container for {@link OverlaySelection}
