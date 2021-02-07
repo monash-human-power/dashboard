@@ -76,7 +76,7 @@ export default function BoostCalibration() {
         <Card >
             <Card.Body>
                 <Card.Title>Calibration</Card.Title>
-                <Card.Text style={{ width: '35rem' }}>
+                <Card.Text>
                     BOOST may use a distance different to the bike&apos;s travelled distance for the purposes of generating power plan data.
                 </Card.Text>
                 <div className="pb-3">
