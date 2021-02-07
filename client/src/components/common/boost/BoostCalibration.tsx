@@ -1,11 +1,7 @@
 import React , {useCallback, useState} from 'react';
 import {Button, Card, InputGroup, FormControl} from 'react-bootstrap';
-import {setCalibration as sendCalibrationValue, resetCalibration} from '../api/v2/powerModel';
-import {useSensorData} from '../api/v2/sensors/data';
-
-export interface BoostCalibrationProps {
-    // getDistTravelled: () => number;
-}
+import {setCalibration as sendCalibrationValue, resetCalibration} from 'api/common/powerModel';
+import {useSensorData} from 'api/v2/sensors/data';
 
 /**
  * Boost distance claibration input form
