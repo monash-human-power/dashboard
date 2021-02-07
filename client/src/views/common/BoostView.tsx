@@ -1,6 +1,6 @@
 import React from 'react';
 import ContentPage from 'components/common/ContentPage';
-import BoostCalibration from '../../components/BoostCalibration';
+import BoostCalibration from 'components/common/boost/BoostCalibration';
 
 
 /**
