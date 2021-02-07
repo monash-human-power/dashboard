@@ -1,7 +1,7 @@
 import React , {useCallback, useState} from 'react';
 import {Button, Card, InputGroup, FormControl} from 'react-bootstrap';
 import {setCalibration as sendCalibrationValue, resetCalibration} from 'api/common/powerModel';
-import {useSensorData} from 'api/v2/sensors/data';
+// import {useSensorData} from 'api/v2/sensors/data';
 
 /**
  * Boost distance claibration input form
@@ -62,12 +62,10 @@ function BoostCalibrationInput() {
  * @returns {React.Component} Component
  */
 export default function BoostCalibration() {
-    const [distTravelled] = useState(30);
+    // const GetDistTravelled = () => {
+    //     return useSensorData("reed_distance").data;
+    // };
 
-    const GetDistTravelled = () => {
-        return useSensorData("reed_distance").data;
-    };
-    console.log(GetDistTravelled());
     return (
         <Card >
             <Card.Body>
@@ -76,7 +74,7 @@ export default function BoostCalibration() {
                     BOOST may use a distance different to the bike&apos;s travelled distance for the purposes of generating power plan data.
                 </Card.Text>
                 <div className="pb-3">
-                    <b>Distance travelled (m) </b> <span className="float-right pr-4" > {distTravelled} </span>
+                    <b>Distance travelled (m) </b> <span className="float-right pr-4" > 30 </span>
                 </div>
                 <div className="pb-3">
                   <b>Calibrated distance (m) </b> <span className="float-right pr-4"> 40 </span>
