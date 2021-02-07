@@ -1,8 +1,8 @@
 import { useRouteMatch } from 'react-router-dom';
 import HomeView from 'views/HomeView';
-import { RouteInfo } from './route';
-import { routes as V2Routes } from './v2';
-import { routes as V3Routes } from './v3';
+import { RouteInfo } from 'router/route';
+import { routes as V2Routes } from 'router/v2';
+import { routes as V3Routes } from 'router/v3';
 
 
 export interface VersionInfo {

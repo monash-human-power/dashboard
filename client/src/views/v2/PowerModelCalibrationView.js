@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { Alert, Button, Card, Form, InputGroup } from 'react-bootstrap';
-import ContentPage from 'components/ContentPage';
+import ContentPage from 'components/common/ContentPage';
 import { setCalibration, resetCalibration } from 'api/v2/powerModel';
 
 /**

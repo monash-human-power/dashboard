@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ContentPage from 'components/common/ContentPage';
 
 
 /**
@@ -9,10 +10,10 @@ import React, { useState } from 'react';
 export default function DashboardView() {
     const [buttonInfo, setButtonInfo] = useState(0);
     return (
-        <div>
+        <ContentPage>
             <h1>Hi I&apos;m the dashboard {buttonInfo} </h1>
             <button type="button" onClick={() => setButtonInfo(buttonInfo + 1)}>press meee</button>
-        </div>
+        </ContentPage>
     );
 };
 

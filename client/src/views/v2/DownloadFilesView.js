@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import { Button } from 'react-bootstrap';
-import ContentPage from 'components/ContentPage';
-import DeleteModal from 'components/DeleteModal';
-import LogFileList from 'components/LogFileList';
-import { useFiles, useLatestFile } from 'api/v2/files';
+import ContentPage from 'components/common/ContentPage';
+import DeleteModal from 'components/common/download_files/DeleteModal';
+import LogFileList from 'components/common/download_files/LogFileList';
+import { useFiles, useLatestFile } from 'api/common/files';
 
 /**
  * Download Files page component
