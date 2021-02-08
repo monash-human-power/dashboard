@@ -25,7 +25,6 @@ function BoostCalibrationInput() {
             alert("Please enter an integer value only!");
           }
           else {
-            console.log(calibValue);
             sendCalibrationValue(parseInt(calibrationValue, 10));
           }
           setCalib('');
@@ -45,6 +44,7 @@ function BoostCalibrationInput() {
             onKeyPress={handleKeyPressed}
             placeholder="Calibrate distance..."
             value={calibrationValue}
+            type="number"
         />
         <InputGroup.Append className="l5">
             <Button className="mr-2" variant="outline-secondary" onClick={onSet}>Set</Button>
