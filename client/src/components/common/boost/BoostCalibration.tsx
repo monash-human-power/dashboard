@@ -71,13 +71,13 @@ export default function BoostCalibration() {
             <Card.Body>
                 <Card.Title>Calibration</Card.Title>
                 <Card.Text>
-                    {"BOOST may use a distance different to the bike's travelled distance for the purposes of generating power plan data."}
+                    BOOST may use a distance different to the bike&apos;s travelled distance for the purposes of generating power plan data.
                 </Card.Text>
                 <div className="pb-3">
-                    <b>Distance travelled (m) </b> <span className="float-right pr-4" > 30 </span>
+                    <b>Distance travelled </b> <span className="float-right pr-4" > 30 m </span>
                 </div>
                 <div className="pb-3">
-                  <b>Calibrated distance (m) </b> <span className="float-right pr-4"> 40 </span>
+                  <b>Calibrated distance </b> <span className="float-right pr-4"> 40 m </span>
                 </div>
                 <BoostCalibrationInput/>
             </Card.Body>
