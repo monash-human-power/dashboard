@@ -10,10 +10,8 @@ import BoostCalibration from 'components/common/boost/BoostCalibration';
  */
 export default function BoostView() {
     return (
-        <ContentPage>
-            <div>
-                <BoostCalibration/>
-            </div>
+        <ContentPage title="Boost Configuration">
+            <BoostCalibration/>
         </ContentPage>
     );
 };
