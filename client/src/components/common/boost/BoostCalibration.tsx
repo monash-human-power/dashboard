@@ -4,11 +4,15 @@ import {setCalibration as sendCalibrationValue, resetCalibration} from 'api/comm
 // import {useSensorData} from 'api/v2/sensors/data';
 
 /**
- * Boost distance claibration input form
+ * Boost calibration card, displays the calibrated distance and the 
+ * distance travelled by the bike
  * 
  * @returns {React.Component} Component
  */
-function BoostCalibrationInput() {
+export default function BoostCalibration() {
+    // const GetDistTravelled = () => {
+    //     return useSensorData("reed_distance").data;
+    // };
     const [calibrationValue, setCalib] = useState('');
 
     const handleCalibrationChange = useCallback(
@@ -38,35 +42,6 @@ function BoostCalibrationInput() {
     );
 
     return (
-    <InputGroup className="mb-1" >
-        <FormControl
-            onChange={handleCalibrationChange}
-            onKeyPress={handleKeyPressed}
-            placeholder="Calibrate distance..."
-            value={calibrationValue}
-            type="number"
-        />
-        <InputGroup.Append className="l5">
-            <Button className="mr-2" variant="outline-secondary" onClick={onSet}>Set</Button>
-        </InputGroup.Append>
-        
-        <Button variant="outline-danger" onClick={resetCalibration}>Reset</Button>
-    </InputGroup>
-    );
-}
-
-/**
- * Boost calibration card, displays the calibrated distance and the 
- * distance travelled by the bike
- * 
- * @returns {React.Component} Component
- */
-export default function BoostCalibration() {
-    // const GetDistTravelled = () => {
-    //     return useSensorData("reed_distance").data;
-    // };
-
-    return (
         <Card >
             <Card.Body>
                 <Card.Title>Calibration</Card.Title>
@@ -79,7 +54,20 @@ export default function BoostCalibration() {
                 <div className="pb-3">
                   <b>Calibrated distance </b> <span className="float-right pr-4"> 40 m </span>
                 </div>
-                <BoostCalibrationInput/>
+                <InputGroup className="mb-1" >
+                    <FormControl
+                        onChange={handleCalibrationChange}
+                        onKeyPress={handleKeyPressed}
+                        placeholder="Calibrate distance..."
+                        value={calibrationValue}
+                        type="number"
+                    />
+                    <InputGroup.Append className="l5">
+                        <Button className="mr-2" variant="outline-secondary" onClick={onSet}>Set</Button>
+                    </InputGroup.Append>
+                    
+                    <Button variant="outline-danger" onClick={resetCalibration}>Reset</Button>
+                </InputGroup>
             </Card.Body>
         </Card>
     );
