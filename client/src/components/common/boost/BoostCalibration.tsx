@@ -1,6 +1,6 @@
 import React , {useCallback, useState} from 'react';
 import {Button, Card, InputGroup, FormControl} from 'react-bootstrap';
-import {setCalibration as sendCalibrationValue, resetCalibration} from 'api/common/powerModel';
+// import {setCalibration as sendCalibrationValue, resetCalibration} from 'api/common/powerModel';
 // import {useSensorData} from 'api/v2/sensors/data';
 
 /**
@@ -13,31 +13,40 @@ export default function BoostCalibration() {
     // const GetDistTravelled = () => {
     //     return useSensorData("reed_distance").data;
     // };
-    const [calibrationValue, setCalib] = useState('');
+    const [state, setState] = useState({calibrationValue: "", validated: true});
 
     const handleCalibrationChange = useCallback(
         (event) => {
-        setCalib(event.target.value);
+        const val = event.target.value;
+        setState(prevState => ({
+                ...prevState,
+                calibrationValue: val
+             }));
         },
-        [setCalib],
+        [setState],
     );
 
-    const onSet = useCallback(
-        () => {
-          const calibValue: number = parseInt(calibrationValue, 10);
-          if (Number.isNaN(calibValue)) {
-            alert("Please enter an integer value only!");
-          }
-          else {
-            sendCalibrationValue(parseInt(calibrationValue, 10));
-          }
-          setCalib('');
-        },
-        [calibrationValue, setCalib],
-    );
+    const onSet = useCallback((event: any) => {
+        const calibValue: number = parseInt(state.calibrationValue, 10);
+        if (Number.isNaN(calibValue)) {
+            event.preventdefault();
+            event.stopPropagation();
+        }
+        else {
+            console.log(calibValue);
+        }
+    
+        setState(prevState => ({
+            ...prevState,
+            validated: true
+        }));
+      },
+      [state, setState]);
 
     const handleKeyPressed = useCallback(
-        (event) => { if (event.key === 'Enter') onSet(); },
+        (event) => { 
+            if (event.key === 'Enter') onSet(event); 
+        },
         [onSet]
     );
 
@@ -59,14 +68,15 @@ export default function BoostCalibration() {
                         onChange={handleCalibrationChange}
                         onKeyPress={handleKeyPressed}
                         placeholder="Calibrate distance..."
-                        value={calibrationValue}
+                        value={state.calibrationValue}
                         type="number"
+                        required
                     />
                     <InputGroup.Append className="l5">
                         <Button className="mr-2" variant="outline-secondary" onClick={onSet}>Set</Button>
                     </InputGroup.Append>
                     
-                    <Button variant="outline-danger" onClick={resetCalibration}>Reset</Button>
+                    <Button variant="outline-danger" >Reset</Button>
                 </InputGroup>
             </Card.Body>
         </Card>
