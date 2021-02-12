@@ -1,5 +1,5 @@
-import React , {useCallback, useState} from 'react';
-import {Button, Card, InputGroup, FormControl} from 'react-bootstrap';
+import React , {useState, useCallback} from 'react';
+import {Button, Card, Form, Col} from 'react-bootstrap';
 // import {setCalibration as sendCalibrationValue, resetCalibration} from 'api/common/powerModel';
 // import {useSensorData} from 'api/v2/sensors/data';
 
@@ -10,45 +10,27 @@ import {Button, Card, InputGroup, FormControl} from 'react-bootstrap';
  * @returns {React.Component} Component
  */
 export default function BoostCalibration() {
-    // const GetDistTravelled = () => {
-    //     return useSensorData("reed_distance").data;
-    // };
-    const [state, setState] = useState({calibrationValue: "", validated: true});
+    const [state, setState] = useState({validated: false});
 
-    const handleCalibrationChange = useCallback(
-        (event) => {
-        const val = event.target.value;
-        setState(prevState => ({
-                ...prevState,
-                calibrationValue: val
-             }));
-        },
-        [setState],
-    );
+  const handleSubmit = (event: any) => {
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
 
-    const onSet = useCallback((event: any) => {
-        const calibValue: number = parseInt(state.calibrationValue, 10);
-        if (Number.isNaN(calibValue)) {
-            event.preventdefault();
-            event.stopPropagation();
-        }
-        else {
-            console.log(calibValue);
-        }
-    
-        setState(prevState => ({
-            ...prevState,
-            validated: true
-        }));
-      },
-      [state, setState]);
+    setState(prevState => ({
+      ...prevState,
+      validated: true})
+      );
+  };
 
     const handleKeyPressed = useCallback(
-        (event) => { 
-            if (event.key === 'Enter') onSet(event); 
-        },
-        [onSet]
-    );
+            (event) => { 
+                if (event.key === 'Enter') handleSubmit(event); 
+            },
+            [handleSubmit]
+        );
 
     return (
         <Card >
@@ -63,21 +45,20 @@ export default function BoostCalibration() {
                 <div className="pb-3">
                   <b>Calibrated distance </b> <span className="float-right pr-4"> 40 m </span>
                 </div>
-                <InputGroup className="mb-1" >
-                    <FormControl
-                        onChange={handleCalibrationChange}
-                        onKeyPress={handleKeyPressed}
-                        placeholder="Calibrate distance..."
-                        value={state.calibrationValue}
-                        type="number"
-                        required
-                    />
-                    <InputGroup.Append className="l5">
-                        <Button className="mr-2" variant="outline-secondary" onClick={onSet}>Set</Button>
-                    </InputGroup.Append>
-                    
-                    <Button variant="outline-danger" >Reset</Button>
-                </InputGroup>
+                <Form noValidate validated={state.validated} onSubmit={handleSubmit}>
+                    <Form.Row>
+                        <Form.Group as={Col} md="4" >
+                            <Form.Control type="number" placeholder="Calibrate distance..." onKeyPress={handleKeyPressed} required />
+                            <Form.Control.Feedback type="invalid">
+                            Please provide a valid calibration distance.
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group as={Col}>
+                        <Button  type="submit" >Set</Button>
+                        <Button variant="outline-danger" className="float-right pr-3" >Reset</Button>
+                        </Form.Group>
+                    </Form.Row>
+                </Form>
             </Card.Body>
         </Card>
     );
