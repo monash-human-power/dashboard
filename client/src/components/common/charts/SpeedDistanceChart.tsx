@@ -11,13 +11,13 @@ import { ChartProps } from 'types/chart';
  */
 export default function SpeedDistanceChart({ series, max }: ChartProps): JSX.Element {
   const data = series.map((point) => ({
-    x: point.time / 1000,
+    x: point.time,
     y: point.value,
   }));
   return (
     <ScatterChart
       title="Speed-Distance"
-      xAxis={{ label: 'Time', unit: 's' }}
+      xAxis={{ label: 'Distance', unit: 'm' }}
       yAxis={{ label: 'Speed', unit: 'km/h' }}
       data={data}
       dataColour={PURPLE}
