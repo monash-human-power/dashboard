@@ -1,7 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import ScatterChart from 'components/v2/ScatterChart';
 import { GREEN, GREY } from 'components/common/charts/colours';
+import ScatterChart from 'components/common/charts/ScatterChart';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 /**
  * @typedef {import('utils/timeSeries').TimeSeriesPoint} TimeSeriesPoint

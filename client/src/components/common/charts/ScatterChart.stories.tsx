@@ -1,11 +1,11 @@
 import { BLUE, GREEN, GREY, PURPLE } from 'components/common/charts/colours';
+import ScatterChart, { AxisProps, DataProps } from 'components/common/charts/ScatterChart';
 import React from 'react';
 import { createStory, StoryTemplate } from 'utils/stories';
-import ScatterChart, { AxisProps, DataProps } from 'components/v2/ScatterChart';
 
 export default {
     component: ScatterChart,
-    title: 'components/v2/ScatterChart',
+    title: 'components/common/charts/ScatterChart',
 };
 
 interface ChartProps {
