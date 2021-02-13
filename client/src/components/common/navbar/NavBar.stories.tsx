@@ -1,9 +1,9 @@
+import NavBar, { NavBarProps } from 'components/common/navbar/NavBar';
 import React from 'react';
-import { addArgs, createStory } from 'utils/stories';
 import { BrowserRouter as Router } from "react-router-dom";
 import { bikeVersions } from 'router';
 import { routes } from 'router/v2';
-import NavBar, { NavBarProps } from 'components/common/navbar/NavBar';
+import { addArgs, createStory } from 'utils/stories';
 
 
 export default {
@@ -15,7 +15,7 @@ const Template = addArgs<NavBarProps>(
   props => <Router><NavBar {...props} /></Router>
 );
 
-const baseProps = { bikeVersions: bikeVersions };
+const baseProps = { bikeVersions };
 
 export const V2 = createStory(Template, {
   ...baseProps,
