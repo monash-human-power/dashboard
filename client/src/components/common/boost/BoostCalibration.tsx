@@ -16,7 +16,7 @@ export interface BoostCalibrationProps {
 export default function BoostCalibration({
     onSet, onReset
 }: BoostCalibrationProps) {
-    const [state, setState] = useState({validated: false, calibrationValue: ""});
+    const [state, setState] = useState({validated: false, calibrationValue: 0});
 
     const handleCalibrationChange = useCallback(
         (event) => {
@@ -36,23 +36,23 @@ export default function BoostCalibration({
       event.stopPropagation();
     }
     else {
-        const value = parseInt(state.calibrationValue, 10);
+        const value = state.calibrationValue;
         onSet(value);
         console.log(value);
     }
     event.preventDefault();
-        setState(prevState => ({
-        ...prevState,
-        validated: true})
-        );
+    setState(prevState => ({
+    ...prevState,
+    validated: true})
+    );
   };
 
     const handleKeyPressed = useCallback(
-            (event) => { 
-                if (event.key === 'Enter') handleSubmit(event); 
-            },
-            [handleSubmit]
-        );
+        (event) => { 
+            if (event.key === 'Enter') handleSubmit(event); 
+        },
+        [handleSubmit]
+    );
 
     return (
         <Card >
@@ -74,7 +74,7 @@ export default function BoostCalibration({
                             type="number" 
                             placeholder="Calibrate distance..." 
                             onKeyPress={handleKeyPressed}
-                            onChange={handleCalibrationChange} 
+                            onChange={handleCalibrationChange}
                             required/>
                             <Form.Control.Feedback type="invalid">
                             Please provide a valid calibration distance.
