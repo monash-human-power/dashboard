@@ -28,10 +28,10 @@ export default function WirelessModuleStatusCol({
                 {/* MQTT address */}
                 <p style={{ fontSize: "0.75rem", color: "gray" }}>{mqttAddress}</p>
 
-                {/* Battery Voltage */}
                 <Table striped bordered hover>
                     <tbody>
 
+                        {/* Battery Voltage */}
                         <tr>
                             <td>Battery Voltage</td>
                             <td>{batteryVoltage}V</td>

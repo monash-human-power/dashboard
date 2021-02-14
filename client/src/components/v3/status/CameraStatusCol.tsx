@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col } from 'react-bootstrap';
+import { Col, Table } from 'react-bootstrap';
 import OnlineStatusPill, { isOnlineT } from 'components/common/OnlineStatusPill';
 
 export interface CameraStatusProps {
@@ -28,25 +28,24 @@ export default function CameraStatusCol({
                 {/* IP address */}
                 <p style={{ fontSize: "0.75rem", color: "gray" }}>{ip}</p>
 
-                {/* Battery Voltage */}
-                <Row className="mx-2">
-                    <Col xs="auto">
-                        Battery Voltage
-                    </Col>
-                    <Col xs style={{ textAlign: "right" }}>
-                        {batteryVoltage}V
-                    </Col>
-                </Row>
 
-                {/* Video Feed Status */}
-                <Row className="mx-2">
-                    <Col xs="auto">
-                        Video Feed
-                    </Col>
-                    <Col xs style={{ textAlign: "right" }}>
-                        {videoFeedStatus}
-                    </Col>
-                </Row>
+                <Table striped bordered hover>
+                    <tbody>
+
+                        {/* Battery Voltage */}
+                        <tr>
+                            <td>Battery Voltage</td>
+                            <td>{batteryVoltage}V</td>
+                        </tr>
+
+                        {/* Video Feed Status */}
+                        <tr>
+                            <td>Video Feed</td>
+                            <td>{videoFeedStatus}</td>
+                        </tr>
+
+                    </tbody>
+                </Table>
             </>}
         </Col>
     );
