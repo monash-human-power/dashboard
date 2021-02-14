@@ -4,7 +4,7 @@ import { addArgs, createStory } from 'utils/stories';
 import BoostCalibration, {BoostCalibrationProps} from 'components/common/boost/BoostCalibration';
 
 export default {
-    title: 'BoostCalibration',
+    title: 'components/common/boost/BoostCalibration',
     component: BoostCalibration,
   };
 
