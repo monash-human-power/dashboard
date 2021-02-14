@@ -7,9 +7,9 @@ import StatisticSpeed from '../../components/v3/StatisticSpeed';
 /**
  * Dashboard View component
  *
- * @returns {React.Component} Component
+ * @returns Component
  */
-export default function DashboardView() {
+export default function DashboardView(): JSX.Element {
     return (
         <ContentPage>
             <div>
