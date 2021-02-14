@@ -16,17 +16,14 @@ export interface BoostCalibrationProps {
 export default function BoostCalibration({
     onSet, onReset
 }: BoostCalibrationProps) {
-    const [state, setState] = useState({validated: false, calibrationValue: 0});
+    const [validated, setValidation] = useState(false);
+    const [calibValue, setCalibValue] = useState(0);
 
     const handleCalibrationChange = useCallback(
         (event) => {
-        const val = event.target.value;
-        setState(prevState => ({
-                ...prevState,
-                calibrationValue: val
-                }));
+        setCalibValue(event.target.value);
         },
-        [setState],
+        [setCalibValue],
     );
 
   const handleSubmit = useCallback(
@@ -37,17 +34,13 @@ export default function BoostCalibration({
         event.stopPropagation();
         }
         else {
-            const value = state.calibrationValue;
-            onSet(value);
-            console.log(value);
+            onSet(calibValue);
+            console.log(calibValue);
         }
         event.preventDefault();
-        setState(prevState => ({
-        ...prevState,
-        validated: true})
-        );
+        setValidation(true);
     },
-    [state, onSet, setState]);
+    [calibValue, onSet, setValidation]);
 
     const handleKeyPressed = useCallback(
         (event) => { 
@@ -69,7 +62,7 @@ export default function BoostCalibration({
                 <div className="pb-3">
                   <b>Calibrated distance </b> <span className="float-right pr-4"> 40 m </span>
                 </div>
-                <Form noValidate validated={state.validated} onSubmit={handleSubmit}>
+                <Form noValidate validated={validated} onSubmit={handleSubmit}>
                     <Form.Row>
                         <Form.Group as={Col} md="4" >
                             <Form.Control 
@@ -92,3 +85,82 @@ export default function BoostCalibration({
         </Card>
     );
 }
+
+// export default function BoostCalibration() {
+//     // const GetDistTravelled = () => {
+//     //     return useSensorData("reed_distance").data;
+//     // };
+//     const [state, setState] = useState({calibrationValue: "", validated: false});
+
+//     const handleCalibrationChange = useCallback(
+//         (event) => {
+//         const val = event.target.value;
+//         setState(prevState => ({
+//                 ...prevState,
+//                 calibrationValue: val
+//              }));
+//         },
+//         [setState],
+//     );
+
+//     const onSet = useCallback((event: any) => {
+//         const calibValue: number = parseInt(state.calibrationValue, 10);
+//         if (Number.isNaN(calibValue)) {
+//             event.preventdefault();
+//             event.stopPropagation();
+//         }
+//         else {
+//             console.log("All goods");
+//             console.log(calibValue);
+//         }
+    
+//         setState(prevState => ({
+//             ...prevState,
+//             validated: true
+//         }));
+//         console.log(state.calibrationValue);
+//       },
+//       [state, setState]);
+
+//     const handleKeyPressed = useCallback(
+//         (event) => { 
+//             if (event.key === 'Enter') onSet(event); 
+//         },
+//         [onSet]
+//     );
+
+//     return (
+//         <Card >
+//             <Card.Body>
+//                 <Card.Title>Calibration</Card.Title>
+//                 <Card.Text>
+//                     BOOST may use a distance different to the bike&apos;s travelled distance for the purposes of generating power plan data.
+//                 </Card.Text>
+//                 <div className="pb-3">
+//                     <b>Distance travelled </b> <span className="float-right pr-4" > 30 m </span>
+//                 </div>
+//                 <div className="pb-3">
+//                   <b>Calibrated distance </b> <span className="float-right pr-4"> 40 m </span>
+//                 </div>
+//                 <InputGroup className="mb-1" >
+//                     <FormControl
+//                         onChange={handleCalibrationChange}
+//                         onKeyPress={handleKeyPressed}
+//                         placeholder="Calibrate distance..."
+//                         value={state.calibrationValue}
+//                         type="number"
+//                         required
+//                     />
+//                     <Form.Control.Feedback type="invalid" className="mb-4">
+//                         Please provide a valid calibration distance.
+//                     </Form.Control.Feedback>
+//                     <InputGroup.Append className="l5">
+//                         <Button className="mr-2" variant="outline-secondary" onClick={onSet}>Set</Button>
+//                     </InputGroup.Append>
+                    
+//                     <Button variant="outline-danger" >Reset</Button>
+//                 </InputGroup>
+//             </Card.Body>
+//         </Card>
+//     );
+// }
