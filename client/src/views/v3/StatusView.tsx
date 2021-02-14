@@ -4,7 +4,7 @@ import ContentPage from 'components/common/ContentPage';
 import CameraStatusCol from 'components/v3/status/CameraStatusCol';
 import WirelessModuleStatusCol from 'components/v3/status/WirelessModuleStatusCol';
 
-
+// TODO: REMOVE HARD CODING OF PROPS DATA
 const PrimaryCamera = {
     cameraName: "Primary",
     isOnline: true,
@@ -23,34 +23,49 @@ const FrontWM = {
     isOnline: true,
     batteryVoltage: 3.1,
     mqttAddress: "/v3/wireless_module/1/data",
-    videoFeedStatus: "string",
+    sensorData: {
+        CO2: 123,
+        temperature: "21 Degrees",
+        humidity: "99%",
+        accelerometer: "120",
+        gyroscope: 360,
+    }
 };
 
 const MiddleWM = {
     moduleName: "Front WM",
     isOnline: false,
-    batteryVoltage: 3.1,
-    mqttAddress: "/v3/wireless_module/1/data",
-    videoFeedStatus: "string",
+    sensorData: {
+        CO2: null,
+        temperature: null,
+        humidity: null,
+        accelerometer: null,
+        gyroscope: null,
+    }
 };
 
 const BackWM = {
     moduleName: "Front WM",
     isOnline: null,
-    batteryVoltage: 3.1,
-    mqttAddress: "/v3/wireless_module/1/data",
-    videoFeedStatus: "string",
+    sensorData: {
+        CO2: null,
+        temperature: null,
+        humidity: null,
+        accelerometer: null,
+        gyroscope: null,
+    }
 };
 
 /**
-//  * Status View component
-//  *
-//  * @returns {React.Component} Component
-//  */
+ * Status View component
+ *
+ * @returns {React.Component} Component
+ */
 export default function StatusView() {
     return (
         <ContentPage title="System Status">
             <Row>
+
                 {/* Camera Status */}
                 <Col xl className="mb-2">
                     <Card>
@@ -87,7 +102,6 @@ export default function StatusView() {
                 </Col>
 
             </Row >
-
         </ContentPage >
     );
 }
