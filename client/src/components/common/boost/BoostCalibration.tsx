@@ -29,23 +29,25 @@ export default function BoostCalibration({
         [setState],
     );
 
-  const handleSubmit = (event: any) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    else {
-        const value = state.calibrationValue;
-        onSet(value);
-        console.log(value);
-    }
-    event.preventDefault();
-    setState(prevState => ({
-    ...prevState,
-    validated: true})
-    );
-  };
+  const handleSubmit = useCallback(
+      (event) => {
+        const form = event.currentTarget;
+        if (form.checkValidity() === false) {
+        event.preventDefault();
+        event.stopPropagation();
+        }
+        else {
+            const value = state.calibrationValue;
+            onSet(value);
+            console.log(value);
+        }
+        event.preventDefault();
+        setState(prevState => ({
+        ...prevState,
+        validated: true})
+        );
+    },
+    [state, onSet, setState]);
 
     const handleKeyPressed = useCallback(
         (event) => { 
