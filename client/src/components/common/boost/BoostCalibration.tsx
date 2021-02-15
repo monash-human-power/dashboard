@@ -1,4 +1,4 @@
-import React , {useState, useCallback, useEffect} from 'react';
+import React , {useState, useCallback} from 'react';
 import {Button, Card, Form, Col} from 'react-bootstrap';
 // import {useSensorData} from 'api/v2/sensors/data';
 
@@ -30,12 +30,10 @@ export default function BoostCalibration({
       (event) => {
         const form = event.currentTarget;
         if (form.checkValidity() === false) {
-        event.preventDefault();
         event.stopPropagation();
         }
         else {
             onSet(calibValue);
-            console.log(calibValue);
         }
         event.preventDefault();
         setValidation(true);
@@ -62,7 +60,12 @@ export default function BoostCalibration({
                 <div className="pb-3">
                   <b>Calibrated distance </b> <span className="float-right pr-4"> 40 m </span>
                 </div>
-                <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                <Form 
+                    noValidate 
+                    validated={validated} 
+                    onSubmit={handleSubmit} 
+                    onBlur={() => {setValidation(false);}}>
+
                     <Form.Row>
                         <Form.Group as={Col} md="4" >
                             <Form.Control 
@@ -70,7 +73,9 @@ export default function BoostCalibration({
                             placeholder="Calibrate distance..." 
                             onKeyPress={handleKeyPressed}
                             onChange={handleCalibrationChange}
+                            min = "0"
                             required/>
+
                             <Form.Control.Feedback type="invalid">
                             Please provide a valid calibration distance.
                             </Form.Control.Feedback>
