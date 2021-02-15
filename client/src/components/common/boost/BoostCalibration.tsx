@@ -18,7 +18,7 @@ export default function BoostCalibration({
     onSet, onReset, distTravelled
 }: BoostCalibrationProps) {
     // Controls the feedback form
-    const [validated, setValidation] = useState(false);
+    const [validated, setValidated] = useState(false);
     
     const [calibValue, setCalibValue] = useState(0);
     // Holds the difference between the current distance and the calibrated distance
@@ -42,9 +42,9 @@ export default function BoostCalibration({
             setCalibDiff(calibValue-distTravelled);
         }
         event.preventDefault();
-        setValidation(true);
+        setValidated(true);
     },
-    [calibValue, onSet, setValidation]);
+    [calibValue, onSet, setValidated]);
 
     const handleKeyPressed = useCallback(
         (event) => { 
@@ -70,7 +70,7 @@ export default function BoostCalibration({
                     noValidate 
                     validated={validated} 
                     onSubmit={handleSubmit} 
-                    onBlur={() => {setValidation(false);}}>
+                    onBlur={() => {setValidated(false);}}>
 
                     <Form.Row>
                         <Form.Group as={Col} md="4" >
