@@ -1,6 +1,5 @@
 import React , {useState, useCallback} from 'react';
 import {Button, Card, Form, Col} from 'react-bootstrap';
-// import {useSensorData} from 'api/v2/sensors/data';
 
 export interface BoostCalibrationProps {
     onSet: (calibValue: number) => void;
@@ -10,7 +9,8 @@ export interface BoostCalibrationProps {
 
 /**
  * Boost calibration card, displays the calibrated distance and the 
- * distance travelled by the bike
+ * distance travelled by the bike while also allowing user to set the 
+ * calibrated distance
  * 
  * @returns {React.Component} Component
  */
