@@ -5,6 +5,7 @@ import {Button, Card, Form, Col} from 'react-bootstrap';
 export interface BoostCalibrationProps {
     onSet: (calibValue: number) => void;
     onReset: () => void;
+    distTravelled: number;
   }
 
 /**
@@ -14,10 +15,11 @@ export interface BoostCalibrationProps {
  * @returns {React.Component} Component
  */
 export default function BoostCalibration({
-    onSet, onReset
+    onSet, onReset, distTravelled
 }: BoostCalibrationProps) {
     const [validated, setValidation] = useState(false);
     const [calibValue, setCalibValue] = useState(0);
+    const [calibDiff, setCalibDiff] = useState(0);
 
     const handleCalibrationChange = useCallback(
         (event) => {
@@ -34,6 +36,10 @@ export default function BoostCalibration({
         }
         else {
             onSet(calibValue);
+            setCalibDiff(calibValue-distTravelled);
+            console.log(calibValue);
+            console.log("Calibration diff: ");
+            console.log(calibDiff);
         }
         event.preventDefault();
         setValidation(true);
@@ -55,10 +61,10 @@ export default function BoostCalibration({
                     BOOST may use a distance different to the bike&apos;s travelled distance for the purposes of generating power plan data.
                 </Card.Text>
                 <div className="pb-3">
-                    <b>Distance travelled </b> <span className="float-right pr-4" > 30 m </span>
+                    <b>Distance travelled </b> <span className="float-right pr-4" > {distTravelled} m </span>
                 </div>
                 <div className="pb-3">
-                  <b>Calibrated distance </b> <span className="float-right pr-4"> 40 m </span>
+                  <b>Calibrated distance </b> <span className="float-right pr-4"> {distTravelled + calibDiff} m </span>
                 </div>
                 <Form 
                     noValidate 

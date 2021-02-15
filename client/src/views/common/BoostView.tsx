@@ -9,9 +9,10 @@ import {setCalibration, resetCalibration} from 'api/common/powerModel';
  * @returns {React.Component} Component
  */
 export default function BoostView() {
+    // TODO: remove the hardcoded value for `distTravelled` with actual value read from MQTT
     return (
         <ContentPage title="Boost Configuration">
-            <BoostCalibration onSet={setCalibration} onReset={resetCalibration}/>
+            <BoostCalibration onSet={setCalibration} onReset={resetCalibration} distTravelled={30}/>
         </ContentPage>
     );
 };
