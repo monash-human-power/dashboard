@@ -17,8 +17,11 @@ export interface BoostCalibrationProps {
 export default function BoostCalibration({
     onSet, onReset, distTravelled
 }: BoostCalibrationProps) {
+    // Controls the feedback form
     const [validated, setValidation] = useState(false);
+    
     const [calibValue, setCalibValue] = useState(0);
+    // Holds the difference between the current distance and the calibrated distance
     const [calibDiff, setCalibDiff] = useState(0);
 
     const handleCalibrationChange = useCallback(
@@ -37,9 +40,6 @@ export default function BoostCalibration({
         else {
             onSet(calibValue);
             setCalibDiff(calibValue-distTravelled);
-            console.log(calibValue);
-            console.log("Calibration diff: ");
-            console.log(calibDiff);
         }
         event.preventDefault();
         setValidation(true);
