@@ -5,6 +5,7 @@ export interface BoostCalibrationProps {
     onSet: (calibValue: number) => void;
     onReset: () => void;
     distTravelled: number;
+    calibratedDistance: number;
   }
 
 /**
@@ -15,14 +16,11 @@ export interface BoostCalibrationProps {
  * @returns {React.Component} Component
  */
 export default function BoostCalibration({
-    onSet, onReset, distTravelled
+    onSet, onReset, distTravelled, calibratedDistance
 }: BoostCalibrationProps) {
     // Controls the feedback form
     const [validated, setValidated] = useState(false);
-    
     const [calibValue, setCalibValue] = useState(0);
-    // Holds the difference between the current distance and the calibrated distance
-    const [calibDiff, setCalibDiff] = useState(0);
 
     const handleCalibrationChange = useCallback(
         (event) => {
@@ -39,7 +37,6 @@ export default function BoostCalibration({
         }
         else {
             onSet(calibValue);
-            setCalibDiff(calibValue-distTravelled);
         }
         event.preventDefault();
         setValidated(true);
@@ -64,7 +61,7 @@ export default function BoostCalibration({
                     <b>Distance travelled </b> <span className="float-right pr-4" > {distTravelled} m </span>
                 </div>
                 <div className="pb-3">
-                  <b>Calibrated distance </b> <span className="float-right pr-4"> {distTravelled + calibDiff} m </span>
+                <b>Calibrated distance </b> <span className="float-right pr-4"> {calibratedDistance} m </span>
                 </div>
                 <Form 
                     noValidate 

@@ -16,5 +16,6 @@ const onSet = action('onSetCalibration');
 const onReset= action('onResetCalibration');
 
 const distTravelled = 50;
+const calibratedDistance = 40;
 
-export const Simple = createStory(Template, {onSet, onReset, distTravelled});
+export const Simple = createStory(Template, {onSet, onReset, distTravelled, calibratedDistance});
