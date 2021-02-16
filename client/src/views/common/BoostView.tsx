@@ -12,7 +12,7 @@ export default function BoostView() {
     // TODO: remove the hardcoded value for `distTravelled` with actual value read from MQTT
     return (
         <ContentPage title="Boost Configuration">
-            <BoostCalibration onSet={setCalibration} onReset={resetCalibration} distTravelled={30}/>
+            <BoostCalibration onSet={setCalibration} onReset={resetCalibration} distTravelled={30} calibrationDiff={10}/>
         </ContentPage>
     );
 };
