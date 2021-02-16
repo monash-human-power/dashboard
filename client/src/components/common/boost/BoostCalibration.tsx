@@ -23,14 +23,14 @@ export default function BoostCalibration({
     const [calibValue, setCalibValue] = useState(0);
 
     const handleCalibrationChange = useCallback(
-        (event) => {
-        setCalibValue(event.target.value);
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+        setCalibValue(parseInt(event.target.value, 10));
         },
         [setCalibValue],
     );
 
   const handleSubmit = useCallback(
-      (event) => {
+      (event: React.FormEvent<HTMLInputElement>) => {
         const form = event.currentTarget;
         if (form.checkValidity() === false) {
         event.stopPropagation();
@@ -44,7 +44,7 @@ export default function BoostCalibration({
     [calibValue, onSet, setValidated]);
 
     const handleKeyPressed = useCallback(
-        (event) => { 
+        (event: React.KeyboardEvent<HTMLInputElement>) => { 
             if (event.key === 'Enter') handleSubmit(event); 
         },
         [handleSubmit]
