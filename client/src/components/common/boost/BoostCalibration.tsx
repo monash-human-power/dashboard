@@ -87,7 +87,6 @@ export default function BoostCalibration({
                 placeholder="Calibrate distance..."
                 onKeyPress={handleKeyPressed}
                 onChange={handleCalibrationChange}
-                min="0"
                 required
               />
 
