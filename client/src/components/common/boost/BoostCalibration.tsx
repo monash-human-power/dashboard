@@ -62,14 +62,13 @@ export default function BoostCalibration({
           distance for the purposes of generating power plan data.
         </Card.Text>
         <div className="pb-3">
-          <b>Distance travelled </b>{' '}
+          <b>Distance travelled </b>
           <span className="float-right pr-4"> {distTravelled} m </span>
         </div>
         <div className="pb-3">
-          <b>Calibrated distance </b>{' '}
+          <b>Calibrated distance </b>
           <span className="float-right pr-4">
-            {' '}
-            {distTravelled + calibrationDiff} m{' '}
+            {distTravelled + calibrationDiff} m
           </span>
         </div>
         <Form
