@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
 import { useData } from 'api/v2/sensors';
-import { usePowerModel } from 'api/v2/powerModel';
+import { usePowerModel } from 'api/common/powerModel';
 import styles from 'components/v2/dashboard/V2TextModeChart.module.css';
 
 /**

@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Alert, Button, Card } from 'react-bootstrap';
 import ContentPage from 'components/common/ContentPage';
-import { usePowerModelState } from 'api/v2/powerModel';
+import { usePowerModelState } from 'api/common/powerModel';
 
 /**
  * Power Model page component
