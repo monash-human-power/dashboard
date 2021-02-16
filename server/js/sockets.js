@@ -160,9 +160,11 @@ sockets.init = function socketInit(server) {
           const topicString = topic.split('/').slice(1); // Remove leading ""
           // topicString: ["v3", "wireless_module", <id>, <property>]
           const value = JSON.parse(payloadString);
+          const id = topicString[2];
+          const property = topicString[3];
 
           // Emit parsed payload as is
-          socket.emit(`module-${topicString[2]}-${topicString[3]}`, value);
+          socket.emit(`module-${id}-${property}`, value);
 
           // If needs to be retained, that can be implemented here
         } catch (e) {
