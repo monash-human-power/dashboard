@@ -1,8 +1,6 @@
-import { TimeSeriesPoint } from "utils/timeSeries";
-
 export interface ChartProps {
-    /** Time series to render */
-    series: TimeSeriesPoint[]
+    /** Data to render */
+    data: { x: number, y: number }[],
     /** The maximum value achieved */
     max: number
 }
