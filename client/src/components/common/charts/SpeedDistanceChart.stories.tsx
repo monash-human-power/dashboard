@@ -14,5 +14,5 @@ const Template = addArgs((props: ChartProps) => <SpeedDistanceChart {...props} /
 
 export const Blank = createStory(Template, {
     max: 100,
-    series: []
+    data: []
 });

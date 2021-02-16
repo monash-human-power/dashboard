@@ -9,11 +9,7 @@ import { ChartProps } from 'types/chart';
  * @param props Props
  * @returns Component
  */
-export default function SpeedDistanceChart({ series, max }: ChartProps): JSX.Element {
-  const data = series.map((point) => ({
-    x: point.time,
-    y: point.value,
-  }));
+export default function SpeedDistanceChart({ data, max }: ChartProps): JSX.Element {
   return (
     <ScatterChart
       title="Speed-Distance"
