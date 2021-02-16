@@ -3,7 +3,7 @@
  */
 require('dotenv').config();
 
-const { DAS, BOOST, Camera } = require('./topics');
+const { DAS, BOOST, Camera, WirelessModule } = require('./topics');
 
 const sockets = {};
 const mqtt = require('mqtt');
@@ -154,6 +154,22 @@ sockets.init = function socketInit(server) {
             `Error in parsing received payload\n\ttopic: ${topic}\n\tpayload: ${payloadString}\n`,
           );
         }
+      } else if (topic.startswith(WirelessModule.base)) {
+        // Emit on appropriate channel
+        try {
+          const topicString = topic.split('/').slice(1); // Remove leading ""
+          // topicString: ["v3", "wireless_module", <id>, <property>]
+          const value = JSON.parse(payloadString);
+
+          // Emit parsed payload as is
+          socket.emit(`module-${topicString[2]}-${topicString[3]}`, value);
+
+          // If needs to be retained, that can be implemented here
+        } catch (e) {
+          console.error(
+            `Error in parsing received payload\n\ttopic: ${topic}\n\tpayload: ${payloadString}\n`,
+          );
+        }
       } else {
         switch (topic) {
           case DAS.start:
@@ -162,6 +178,8 @@ sockets.init = function socketInit(server) {
           case DAS.stop:
             socket.emit('stop');
             break;
+
+          // V2 data channel
           case DAS.data:
             mqttDataTopicHandler(socket, payloadString);
             if (sendToPublicMQTTBroker()) {
