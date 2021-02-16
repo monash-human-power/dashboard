@@ -1,8 +1,7 @@
-import ContentPage from 'components/common/ContentPage';
+import StatisticSpeed from 'components/v3/StatisticSpeed';
 import React from 'react';
-import { Button } from 'react-bootstrap';
-import StatisticSpeed from '../../components/v3/StatisticSpeed';
-
+import { Badge } from 'react-bootstrap';
+import styles from './DashboardView.module.css';
 
 /**
  * Dashboard View component
@@ -11,20 +10,28 @@ import StatisticSpeed from '../../components/v3/StatisticSpeed';
  */
 export default function DashboardView(): JSX.Element {
     return (
-        <ContentPage>
-            <div>
-                <span>DAS recording</span>
-                <Button />
+        <div className={styles.contentContainer}>
+            <div className={styles.content} >
+                <div>
+                    <span>DAS recording</span>
+                    <Badge pill variant='danger'>
+                        501
+                    </Badge>
+                </div>
+                <div className={styles.statContainer}>
+                    <div className={styles.stat}><StatisticSpeed /></div>
+                    <div className={styles.stat}><StatisticSpeed /></div>
+                    <div className={styles.stat}><StatisticSpeed /></div>
+                    <div className={styles.stat}><StatisticSpeed /></div>
+                    <div className={styles.line} />
+                    <div className={styles.stat}><StatisticSpeed /></div>
+                    <div className={styles.stat}><StatisticSpeed /></div>
+                </div>
+                <div><div className={styles.graph}>Graph Here</div></div>
             </div>
-            <div>
-                <StatisticSpeed />
-                <StatisticSpeed />
-                <StatisticSpeed />
-                <StatisticSpeed />
-                <StatisticSpeed />
-                <StatisticSpeed />
+            <div className={styles.content}>
+                <div><div className={styles.bigGraph}>Big Graph Here</div></div>
             </div>
-            <div>Graph Here</div>
-        </ContentPage>
+        </div>
     );
 };
