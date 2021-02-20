@@ -97,6 +97,7 @@ sockets.init = function socketInit(server) {
   mqttClient.subscribe(DAS.start);
   mqttClient.subscribe(DAS.stop);
   mqttClient.subscribe(DAS.data);
+  mqttClient.subscribe(`${WirelessModule.base}/#`);
   mqttClient.subscribe(BOOST.predicted_max_speed);
   mqttClient.subscribe(BOOST.recommended_sp);
   mqttClient.subscribe(Camera.push_overlays);
@@ -154,7 +155,7 @@ sockets.init = function socketInit(server) {
             `Error in parsing received payload\n\ttopic: ${topic}\n\tpayload: ${payloadString}\n`,
           );
         }
-      } else if (topic.startswith(WirelessModule.base)) {
+      } else if (topic.startsWith(WirelessModule.base)) {
         // Emit on appropriate channel
         try {
           const topicString = topic.split('/').slice(1); // Remove leading ""
