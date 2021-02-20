@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import { Accordion, Button, Card } from 'react-bootstrap';
 import { BoostConfig, BoostConfigType } from 'types/boost';
 import { camelCaseToStartCase } from 'utils/string';
@@ -8,7 +8,7 @@ export interface BoostConfiguratorProps {
   configs: BoostConfig[];
   onSelectConfig: (configType: BoostConfigType, name: string) => void;
   onDeleteConfig: (configType: BoostConfigType, name: string) => void;
-  onUploadConfig: () => void;
+  onUploadConfig: (configType: BoostConfigType, configFiles: FileList) => void;
 }
 
 /** 
@@ -23,17 +23,36 @@ export default function BoostConfigurator({
   onDeleteConfig,
   onUploadConfig,
 }: BoostConfiguratorProps) {
+  const fileInput = useRef(null);
+  const [configType, setConfigType] = useState<BoostConfigType>('powerPlan');
+
+  const handleClick = (type: string) => {
+    if (fileInput.current != null) {
+      setConfigType("rider");
+      fileInput.current.click();
+    };
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files != null) {
+      onUploadConfig(configType, event.target.files);
+    }
+  };
+
   return (
     <Card>
       <Card.Body>
         <Card.Title>Configuration</Card.Title>
-        <Button
-          variant="outline-primary"
-          className="mb-3"
-          onClick={onUploadConfig}
-        >
-          Upload config
-        </Button>
+        <>
+          <input
+            ref={fileInput}
+            onChange={(e) => {handleFileUpload}}
+            type="file"
+            style={{ display: "none" }}
+            multiple={false}
+          />
+          <Button variant="outline-primary" className="mb-3" onClick={() => {handleClick("all")}}>Upload Config</Button>
+      </>
         <Accordion>
           {configs.map((config, index) => (
             <Card>
