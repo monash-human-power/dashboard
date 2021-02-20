@@ -2,11 +2,6 @@ import { useState } from "react";
 import { Array, Record, Static, String, Unknown } from "runtypes";
 import { useChannelShaped } from "./socket";
 
-export interface ModuleDataProps {
-    /** Module id */
-    id: number,
-}
-
 const ModuleDataT = Record({
     /** Sensor data */
     sensors: Array(Record({
@@ -27,7 +22,7 @@ export interface ModuleDataT extends _ModuleDataT {}
  * @param id ID of module
  * @returns Data
  */
-export function useModuleData({id}: ModuleDataProps): ModuleDataT {
+export function useModuleData(id: number): ModuleDataT {
     const [data, setData] = useState<ModuleDataT>({ sensors: [] });
 
     useChannelShaped(`module-${id}-data`, ModuleDataT, setData);
