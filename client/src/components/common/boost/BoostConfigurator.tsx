@@ -1,4 +1,6 @@
 import React, {useRef, useState} from 'react';
+// import { faFileUpload } from '@fortawesome/free-solid-svg-icons';
+// import FontAwesomeIcon from 'components/common/FontAwesomeIcon';
 import { Accordion, Button, Card } from 'react-bootstrap';
 import { BoostConfig, BoostConfigType } from 'types/boost';
 import { camelCaseToStartCase } from 'utils/string';
@@ -24,11 +26,11 @@ export default function BoostConfigurator({
   onUploadConfig,
 }: BoostConfiguratorProps) {
   const fileInput = useRef(null);
-  const [configType, setConfigType] = useState<BoostConfigType>('powerPlan');
+  const [configType, setConfigType] = useState<BoostConfigType>('all');
 
-  const handleClick = (type: string) => {
+  const handleClick = (type: BoostConfigType) => {
     if (fileInput.current != null) {
-      setConfigType("rider");
+      setConfigType(type);
       fileInput.current.click();
     };
   };
@@ -46,12 +48,14 @@ export default function BoostConfigurator({
         <>
           <input
             ref={fileInput}
-            onChange={(e) => {handleFileUpload}}
+            onChange={handleFileUpload}
             type="file"
             style={{ display: "none" }}
             multiple={false}
           />
-          <Button variant="outline-primary" className="mb-3" onClick={() => {handleClick("all")}}>Upload Config</Button>
+          <Button variant="outline-primary" className="mb-3" onClick={() => {handleClick('all');}}>
+            Upload All Configs
+          </Button>
       </>
         <Accordion>
           {configs.map((config, index) => (
