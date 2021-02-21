@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {createRef, useState} from 'react';
 import { faFileUpload } from '@fortawesome/free-solid-svg-icons';
 import FontAwesomeIcon from 'components/common/FontAwesomeIcon';
 import { Accordion, Button, Card } from 'react-bootstrap';
@@ -25,11 +25,12 @@ export default function BoostConfigurator({
   onDeleteConfig,
   onUploadConfig,
 }: BoostConfiguratorProps) {
-  const fileInput = useRef(null);
+  // const fileInput = useRef(null);
+  const fileInput = createRef<HTMLInputElement>();
   const [configType, setConfigType] = useState<BoostConfigType>('all');
 
   const handleClick = (type: BoostConfigType) => {
-    if (fileInput.current != null) {
+    if (fileInput.current) {
       setConfigType(type);
       fileInput.current.click();
     };
