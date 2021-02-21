@@ -1,6 +1,6 @@
 import React, {useRef, useState} from 'react';
-// import { faFileUpload } from '@fortawesome/free-solid-svg-icons';
-// import FontAwesomeIcon from 'components/common/FontAwesomeIcon';
+import { faFileUpload } from '@fortawesome/free-solid-svg-icons';
+import FontAwesomeIcon from 'components/common/FontAwesomeIcon';
 import { Accordion, Button, Card } from 'react-bootstrap';
 import { BoostConfig, BoostConfigType } from 'types/boost';
 import { camelCaseToStartCase } from 'utils/string';
@@ -68,6 +68,7 @@ export default function BoostConfigurator({
                 {camelCaseToStartCase(config.type)}
                 {': '}
                 <i>{config.active ? `"${config.active}"` : 'None'}</i>
+                <Button variant="outline-primary" className="float-right mb-1" onClick={(e) => {e.stopPropagation(); handleClick(config.type);}}><FontAwesomeIcon icon={faFileUpload} /></Button>
               </Accordion.Toggle>
               <Accordion.Collapse eventKey={String(index)}>
                 <Card.Body>
