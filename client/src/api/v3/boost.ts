@@ -17,6 +17,7 @@ export default function uploadConfig(configType: BoostConfigType, configFiles: F
         const payload = {
             "action": "upload",
             "configType": configType,
+            "configName": configFiles[0].name,
             "content": reader.result,
         };
         emit(topic, JSON.stringify(payload).replace(/\\n/g, ''));
