@@ -25,10 +25,11 @@ export default function BoostConfigurator({
   onDeleteConfig,
   onUploadConfig,
 }: BoostConfiguratorProps) {
-  // const fileInput = useRef(null);
   const fileInput = createRef<HTMLInputElement>();
   const [configType, setConfigType] = useState<BoostConfigType>('all');
 
+  // Function to click the hidden file input button (this is a work around to avoid the ugly
+  // UI of the default input file button)
   const handleClick = (type: BoostConfigType) => {
     if (fileInput.current) {
       setConfigType(type);
@@ -37,7 +38,8 @@ export default function BoostConfigurator({
   };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files != null) {
+    // This method gets called even if the user uploads a file and the second time they cancel to upload, hence the need to check that the files attribute is not an array of 0 length
+    if (event.target.files != null && event.target.files.length !== 0) {
       onUploadConfig(configType, event.target.files);
     }
   };
