@@ -1,4 +1,4 @@
-export type BoostConfigType = 'powerPlan' | 'rider' | 'bike' | 'track';
+export type BoostConfigType = 'powerPlan' | 'rider' | 'bike' | 'track' | 'all';
 
 export interface BoostConfig {
   /** The input of BOOST that this config is for */
