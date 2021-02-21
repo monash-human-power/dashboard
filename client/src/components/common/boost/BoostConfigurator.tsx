@@ -52,6 +52,7 @@ export default function BoostConfigurator({
             onChange={handleFileUpload}
             type="file"
             style={{ display: "none" }}
+            accept=".json"
             multiple={false}
           />
           <Button variant="outline-primary" className="mb-3" onClick={() => {handleClick('all');}}>
