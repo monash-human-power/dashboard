@@ -8,7 +8,7 @@ import { BoostConfigType } from 'types/boost';
  * @param configFiles list of files, only the first would be considered
  */
 export default function uploadConfig(configType: BoostConfigType, configFiles: FileList) {
-    const topic = 'boost/configs/action';
+    const topic = 'send-config';
     const reader = new FileReader();
     
     // Called when FileReader has completed reading a file
