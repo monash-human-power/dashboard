@@ -45,7 +45,7 @@ export default function BoostConfigurator({
   };
 
   return (
-    <Card>
+    <Card style={{ marginTop: '2.5rem' }}>
       <Card.Body>
         <Card.Title>Configuration</Card.Title>
         <>
