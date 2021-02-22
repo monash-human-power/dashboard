@@ -6,6 +6,7 @@ import {setCalibration, resetCalibration} from 'api/common/powerModel';
 import uploadConfig from 'api/v3/boost';
 import { BoostConfigType, BoostConfig } from 'types/boost';
 
+//TODO: Implement actual functions for `onSelectConfig`, `onDeleteConfig` and true values for `baseConfigs` (provided from boost)
 function onSelectConfig(configType: BoostConfigType, name: string) {
     console.log("onSelect clicked for:");
     console.log(configType);
@@ -18,6 +19,7 @@ function onDeleteConfig(configType: BoostConfigType, name: string) {
     console.log(name);
 }
 
+// Only test data
 const baseConfigs: BoostConfig[] = [
     {
       type: 'powerPlan',
@@ -51,6 +53,7 @@ export default function BoostView() {
     return (
         <ContentPage title="Boost Configuration">
             <BoostCalibration onSet={setCalibration} onReset={resetCalibration} distTravelled={30} calibrationDiff={10}/>
+            <p></p>
             <BoostConfigurator configs={baseConfigs} onSelectConfig={onSelectConfig} onDeleteConfig={onDeleteConfig} onUploadConfig={uploadConfig} />
         </ContentPage>
     );
