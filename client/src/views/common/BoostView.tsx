@@ -53,7 +53,6 @@ export default function BoostView() {
     return (
         <ContentPage title="Boost Configuration">
             <BoostCalibration onSet={setCalibration} onReset={resetCalibration} distTravelled={30} calibrationDiff={10}/>
-            <p></p>
             <BoostConfigurator configs={baseConfigs} onSelectConfig={onSelectConfig} onDeleteConfig={onDeleteConfig} onUploadConfig={uploadConfig} />
         </ContentPage>
     );
