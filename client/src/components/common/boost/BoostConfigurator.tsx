@@ -1,4 +1,4 @@
-import React, {createRef, useState} from 'react';
+import React, { createRef, useState } from 'react';
 import { faFileUpload } from '@fortawesome/free-solid-svg-icons';
 import FontAwesomeIcon from 'components/common/FontAwesomeIcon';
 import { Accordion, Button, Card } from 'react-bootstrap';
@@ -13,7 +13,7 @@ export interface BoostConfiguratorProps {
   onUploadConfig: (configType: BoostConfigType, configFiles: FileList) => void;
 }
 
-/** 
+/**
  * TODO: Add real docs for this component
  *
  * @param props Props
@@ -34,7 +34,7 @@ export default function BoostConfigurator({
     if (fileInput.current) {
       setConfigType(type);
       fileInput.current.click();
-    };
+    }
   };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,14 +53,20 @@ export default function BoostConfigurator({
             ref={fileInput}
             onChange={handleFileUpload}
             type="file"
-            style={{ display: "none" }}
+            style={{ display: 'none' }}
             accept=".json"
             multiple={false}
           />
-          <Button variant="outline-primary" className="mb-3" onClick={() => {handleClick('all');}}>
+          <Button
+            variant="outline-primary"
+            className="mb-3"
+            onClick={() => {
+              handleClick('all');
+            }}
+          >
             Upload All Configs
           </Button>
-      </>
+        </>
         <Accordion>
           {configs.map((config, index) => (
             <Card>
@@ -72,7 +78,16 @@ export default function BoostConfigurator({
                 {camelCaseToStartCase(config.type)}
                 {': '}
                 <i>{config.active ? `"${config.active}"` : 'None'}</i>
-                <Button variant="outline-primary" className="float-right mb-1" onClick={(e) => {e.stopPropagation(); handleClick(config.type);}}><FontAwesomeIcon icon={faFileUpload} /></Button>
+                <Button
+                  variant="outline-primary"
+                  className="float-right mb-1"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleClick(config.type);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faFileUpload} />
+                </Button>
               </Accordion.Toggle>
               <Accordion.Collapse eventKey={String(index)}>
                 <Card.Body>
