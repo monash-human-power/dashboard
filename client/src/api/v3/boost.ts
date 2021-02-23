@@ -2,7 +2,7 @@ import { emit } from 'api/common/socket';
 import { BoostConfigType } from 'types/boost';
 
 /**
- * Sends the content of the given configuration file on `boost/configs/action` over MQTT
+ * Send the content of the given configuration file on `boost/configs/action` over MQTT
  *
  * @param type the type of the configuration being sent
  * @param configFiles list of files, only the first would be considered
