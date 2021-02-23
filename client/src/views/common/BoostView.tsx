@@ -6,24 +6,30 @@ import { setCalibration, resetCalibration } from 'api/common/powerModel';
 import uploadConfig from 'api/v3/boost';
 import { BoostConfigType, BoostConfig } from 'types/boost';
 
-// TODO: Implement actual functions for `onSelectConfig`, `onDeleteConfig` and true values for `baseConfigs` (provided from boost)
+// TODO: Implement actual functions for `onSelectConfig`, `onDeleteConfig` and true values for `baseConfigs` (provided from `boost`)
 
 /**
- * Send the config selection to boost
+ * Send the config selection to `boost`
+ * 
  * @param configType the type of the config
  * @param name name of the config file
  */
 function onSelectConfig(configType: BoostConfigType, name: string) {
-  return;
+  console.log("Selected config:");
+  console.log(`type: ${configType}`);
+  console.log(`name: ${name}`);
 }
 
 /**
  * Inform boost of the deletion of the given config file
+ * 
  * @param configType the type of the config
  * @param name name of the config file
  */
 function onDeleteConfig(configType: BoostConfigType, name: string) {
-  return;
+  console.log("Deleted config:");
+  console.log(`type: ${configType}`);
+  console.log(`name: ${name}`);
 }
 
 // Only dummy data
