@@ -38,7 +38,8 @@ export default function BoostConfigurator({
   };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // This method gets called even if the user uploads a file and the second time they cancel to upload, hence the need to check that the files attribute is not an array of 0 length
+    // This method gets called even if the user uploads a file and the second time they cancel
+    // to upload, hence the need to check that the files attribute is not an array of 0 length
     if (event.target.files != null && event.target.files.length !== 0) {
       onUploadConfig(configType, event.target.files);
     }
