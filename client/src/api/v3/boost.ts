@@ -4,11 +4,11 @@ import { BoostConfigType } from 'types/boost';
 /**
  * Sends the content of the given configuration file on 'boost/configs/action' over MQTT
  *
- * @param configType the type of the configuration being sent
+ * @param type the type of the configuration being sent
  * @param configFiles list of files, only the first would be considered
  */
 export default function uploadConfig(
-  configType: BoostConfigType,
+  type: BoostConfigType,
   configFiles: FileList,
 ) {
   const topic = 'send-config';
@@ -19,7 +19,7 @@ export default function uploadConfig(
     console.log(reader.result);
     const payload = {
       action: 'upload',
-      configType: configType,
+      configType: type,
       configName: configFiles[0].name,
       content: reader.result,
     };
