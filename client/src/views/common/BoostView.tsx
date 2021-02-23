@@ -14,9 +14,7 @@ import { BoostConfigType, BoostConfig } from 'types/boost';
  * @param name name of the config file
  */
 function onSelectConfig(configType: BoostConfigType, name: string) {
-    console.log("onSelect clicked for:");
-    console.log(configType);
-    console.log(name);
+    return;
 } 
 
 /**
@@ -25,12 +23,10 @@ function onSelectConfig(configType: BoostConfigType, name: string) {
  * @param name name of the config file
  */
 function onDeleteConfig(configType: BoostConfigType, name: string) {
-    console.log("onDelete clicked for:");
-    console.log(configType);
-    console.log(name);
+    return;
 }
 
-// Only test data
+// Only dummy data
 const baseConfigs: BoostConfig[] = [
     {
       type: 'powerPlan',
