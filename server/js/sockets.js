@@ -97,7 +97,7 @@ sockets.init = function socketInit(server) {
   mqttClient.subscribe(DAS.start);
   mqttClient.subscribe(DAS.stop);
   mqttClient.subscribe(DAS.data);
-  mqttClient.subscribe(`${WirelessModule.base}/#`);
+  mqttClient.subscribe(WirelessModule.all().module);
   mqttClient.subscribe(BOOST.predicted_max_speed);
   mqttClient.subscribe(BOOST.recommended_sp);
   mqttClient.subscribe(Camera.push_overlays);
