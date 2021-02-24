@@ -117,6 +117,8 @@ sockets.init = function socketInit(server) {
   // eslint-disable-next-line global-require
   const io = require('socket.io').listen(server);
   io.on('connection', function ioConnection(socket) {
+    socket.setMaxListeners(20);
+
     /*
       Must subscribe to these when the mqtt message handler is set
       otherwise the retained payloads will not be handled.
