@@ -30,7 +30,7 @@ export default function BoostConfigurator({
 
   // Function to click the hidden file input button (this is a work around to avoid the ugly
   // UI of the default input file button)
-  const handleClick = (type: BoostConfigType) => {
+  const handleClickUpload = (type: BoostConfigType) => {
     if (fileInput.current) {
       setConfigType(type);
       fileInput.current.click();
@@ -62,7 +62,7 @@ export default function BoostConfigurator({
             variant="outline-primary"
             className="mb-3"
             onClick={() => {
-              handleClick('all');
+              handleClickUpload('all');
             }}
           >
             Upload All Configs
@@ -84,7 +84,7 @@ export default function BoostConfigurator({
                   className="float-right mb-1"
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleClick(config.type);
+                    handleClickUpload(config.type);
                   }}
                 >
                   <FontAwesomeIcon icon={faFileUpload} />
