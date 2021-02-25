@@ -61,9 +61,7 @@ export default function BoostConfigurator({
           <Button
             variant="outline-primary"
             className="mb-3"
-            onClick={() => {
-              handleClickUpload('all');
-            }}
+            onClick={() => handleClickUpload('all')}
           >
             Upload All Configs
           </Button>
