@@ -23,7 +23,7 @@ export default function uploadConfig(
       configName: configFile.name,
       content: reader.result,
     };
-    emit(topic, JSON.stringify(payload).replace(/\\n/g, ''));
+    emit(topic, JSON.stringify(payload));
   };
 
   reader.readAsText(configFile);
