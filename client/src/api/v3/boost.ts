@@ -11,7 +11,7 @@ export default function uploadConfig(
   type: BoostConfigType,
   configFile: File,
 ) {
-  const topic = 'send-uploaded-config';
+  const topic = 'send-config';
   const reader = new FileReader();
 
   // Called when FileReader has completed reading a file

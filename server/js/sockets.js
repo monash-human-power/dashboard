@@ -222,7 +222,7 @@ sockets.init = function socketInit(server) {
       mqttClient.publish(BOOST.calibrate_reset, 'true');
     });
 
-    socket.on('send-uploaded-config', (configContent) => {
+    socket.on('send-config', (configContent) => {
       mqttClient.publish('boost/configs/action', configContent);
     });
 
