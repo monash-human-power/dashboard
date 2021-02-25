@@ -20,7 +20,6 @@ export default function uploadConfig(
     const payload = {
       action: 'upload',
       configType: type,
-      configName: configFile.name,
       content: reader.result,
     };
     emit(topic, JSON.stringify(payload));
