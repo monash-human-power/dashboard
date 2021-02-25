@@ -48,7 +48,16 @@ export default function BoostConfigurator({
   return (
     <Card style={{ marginTop: '2.5rem' }}>
       <Card.Body>
-        <Card.Title>Configuration</Card.Title>
+        <Card.Title style={{ marginBottom: '1.5rem' }}>
+          Configuration
+        <Button
+            variant="outline-primary"
+            className="float-right"
+            onClick={() => handleClickUpload('all')}
+          >
+            Upload All Configs
+          </Button>
+        </Card.Title>
         <>
           <input
             ref={fileInput}
@@ -58,13 +67,6 @@ export default function BoostConfigurator({
             accept=".json"
             multiple={false}
           />
-          <Button
-            variant="outline-primary"
-            className="mb-3"
-            onClick={() => handleClickUpload('all')}
-          >
-            Upload All Configs
-          </Button>
         </>
         <Accordion>
           {configs.map((config, index) => (
@@ -80,6 +82,7 @@ export default function BoostConfigurator({
                 <Button
                   variant="outline-primary"
                   className="float-right mb-1"
+                  size="sm"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleClickUpload(config.type);
