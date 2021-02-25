@@ -10,7 +10,7 @@ export interface BoostConfiguratorProps {
   configs: BoostConfig[];
   onSelectConfig: (configType: BoostConfigType, name: string) => void;
   onDeleteConfig: (configType: BoostConfigType, name: string) => void;
-  onUploadConfig: (configType: BoostConfigType, configFiles: FileList) => void;
+  onUploadConfig: (configType: BoostConfigType, configFile: File) => void;
 }
 
 /**
@@ -41,7 +41,7 @@ export default function BoostConfigurator({
   // to upload, hence the need to check that the files attribute is not an array of 0 length
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files != null && event.target.files.length !== 0) {
-      onUploadConfig(configType, event.target.files);
+      onUploadConfig(configType, event.target.files[0]);
     }
   };
 
