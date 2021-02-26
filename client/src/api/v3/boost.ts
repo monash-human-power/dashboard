@@ -5,7 +5,7 @@ import { BoostConfigType } from 'types/boost';
  * Send the content of the given configuration file on `boost/configs/action` over MQTT
  *
  * @param type the type of the configuration being sent
- * @param configFile list of files, only the first would be considered
+ * @param configFile file containing the configuration content
  */
 export default function uploadConfig(
   type: BoostConfigType,
