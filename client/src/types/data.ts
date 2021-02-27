@@ -106,4 +106,7 @@ export type CadenceT = Static<typeof CadenceRT>
 export type HeartRateT = Static<typeof HeartRateRT>
 
 /** Union type of all sensor value types */
-export type SensorsT = TemperatureT | HumidityT | SteeringAngleT | CO2T | AccelerometerT | GyroscopeT | ReedVelocityT | ReedDistanceT | GPST | PowerT | CadenceT | HeartRateT;
+export type SensorsT = TemperatureT | HumidityT | SteeringAngleT
+    | CO2T | AccelerometerT | GyroscopeT
+    | ReedVelocityT | ReedDistanceT | GPST
+    | PowerT | CadenceT | HeartRateT;
