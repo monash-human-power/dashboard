@@ -1,4 +1,4 @@
-import { Number, Record, Static } from "runtypes";
+import { Number, Record, Static, String } from "runtypes";
 
 /* ------------------------------------ RunTypes ------------------------------------ */
 
@@ -44,8 +44,8 @@ export const ReedDistanceRT = Number;
 export const GPSRT = Record({
     /** Speed */
     speed: Number,
-    // /** Dilution of precision */
-    // pdop: Number,
+    /** Dilution of precision */
+    pdop: Number,
     /** Latitude */
     latitude: Number,
     /** Longitude */
@@ -54,8 +54,8 @@ export const GPSRT = Record({
     altitude: Number,
     /** Course */
     course: Number,
-    // /** Datetime */
-    // datetime: String
+    /** Datetime */
+    datetime: String
 });
 
 /** Value runtype of power sensor data */
