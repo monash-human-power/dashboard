@@ -222,6 +222,10 @@ sockets.init = function socketInit(server) {
       mqttClient.publish(BOOST.calibrate_reset, 'true');
     });
 
+    socket.on('send-config', (configContent) => {
+      mqttClient.publish('boost/configs/action', configContent);
+    });
+
     socket.on('submit-calibration', (calibratedDistance) => {
       mqttClient.publish(BOOST.calibrate, `calibrate=${calibratedDistance}`);
     });
