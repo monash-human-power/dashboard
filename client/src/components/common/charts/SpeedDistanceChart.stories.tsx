@@ -1,6 +1,6 @@
 import React from 'react';
+import { ChartProps } from 'types/chart';
 import { addArgs, createStory } from 'utils/stories';
-import { ChartProps } from '../../../types/chart';
 import SpeedDistanceChart from './SpeedDistanceChart';
 
 export default {
