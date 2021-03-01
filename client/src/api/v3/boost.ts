@@ -33,12 +33,29 @@ export default function uploadConfig(
   configFile: File,
 ) {
   const reader = new FileReader();
+  const possibleConfig = ['powerPlan', 'rider', 'track', 'bike'];
 
   // Called when FileReader has completed reading a file
   reader.onload = () => {
-    if (typeof reader.result === 'string' ) {
-    sendConfig('upload', type, reader.result);
+    if (type === 'all' && typeof reader.result === 'string') {
+      const allConfigs = JSON.parse(reader.result);
+
+      // For each config, send the config content over MQTT
+      Object.keys(allConfigs).forEach((key) => {
+        if (possibleConfig.includes(key)) {
+          sendConfig('upload', key as BoostConfigType, allConfigs[key]);
+          const i = possibleConfig.indexOf(key);
+          possibleConfig.splice(i,1);
+        }  
+      });
+      if (possibleConfig.length !== 0) {
+        // TODO: Remove alert
+        alert(`The config bundle uploaded does not contain the following configs: ${possibleConfig}`);
+      }
     }
+    else if (typeof reader.result === 'string') {
+      sendConfig('upload', type, reader.result);
+    };
   };
 
   reader.readAsText(configFile);
