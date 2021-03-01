@@ -23,10 +23,12 @@ function sendConfig(actionType: action, type: BoostConfigType, configContent: st
 }
 
 /**
- * Send the content of the given configuration file on `boost/configs/action` over MQTT
+* Read content from the given file and send it on `boost/configs/action` over MQTT. 
+ * If the content contains more than config (i.e. `type` is 'all'), the content is
+ * split into the different configurations.
  *
- * @param type the type of the configuration being sent
- * @param configFile file containing the configuration content
+ * @param type the type of the configuration
+ * @param configFile file containing content of the configuration
  */
 export default function uploadConfig(
   type: BoostConfigType,
