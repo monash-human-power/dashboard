@@ -1,38 +1,42 @@
-import React from 'react';
+import styles from 'components/common/charts/LocationTimeChart.module.css';
+import LeafletCenterControl from 'components/v2/LeafletCenterControl';
+import {
+  LatLngTuple
+} from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import PropTypes from 'prop-types';
+import React from 'react';
 import {
   AttributionControl,
   CircleMarker,
   Map,
   Polyline,
   ScaleControl,
-  TileLayer,
+  TileLayer
 } from 'react-leaflet';
-import LeafletCenterControl from 'components/v2/LeafletCenterControl';
-import 'leaflet/dist/leaflet.css';
-import styles from 'components/common/charts/LocationTimeChart.module.css';
 
 const MHP_WORKSHOP_LOCATION = [-37.908756, 145.13404];
 
-/**
- * @typedef {object} LocationTimeSeriesPoint
- * @property {number} lat   GPS latitude
- * @property {number} long  GPS longitude
- */
+export interface LocationTimeSeriesPoint {
+  /** GPS latitude */
+  lat: number
+  /** GPS longitude */
+  long: number
+}
 
-/**
- * @typedef {object} LocationTimeChartProps
- * @property {LocationTimeSeriesPoint[]} series GPS location time series
- */
+export interface LocationTimeChartProps {
+  /** GPS location time series */
+  series: LocationTimeSeriesPoint[]
+}
 
 /**
  * Location chart component
  *
- * @param {LocationTimeChartProps} props Props
- * @returns {React.Component} Component
+ * @param props Props
+ * @returns Component
  */
-export default function LocationTimeChart({ series }) {
-  const bikeHistory = series.map(({ lat, long }) => [lat, long]);
+export default function LocationTimeChart({ series }: LocationTimeChartProps): JSX.Element {
+  const bikeHistory = series.map(({ lat, long }) => [lat, long] as LatLngTuple);
 
   const initialLocation = bikeHistory[0];
   const currentLocation = bikeHistory[series.length - 1];
