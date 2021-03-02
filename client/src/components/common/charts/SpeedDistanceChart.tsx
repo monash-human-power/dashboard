@@ -4,7 +4,7 @@ import React from 'react';
 import { ChartProps } from 'types/chart';
 
 /**
- * Speed-Distance chart component
+ * Speed-Distance chart component. Does not maintain aspect ratio.
  *
  * @param props Props
  * @returns Component
@@ -19,6 +19,7 @@ export default function SpeedDistanceChart({ data, max }: ChartProps): JSX.Eleme
       dataColour={PURPLE}
       max={max}
       maxColour={GREY}
+      maintainAspectRatio={false}
     />
   );
 }

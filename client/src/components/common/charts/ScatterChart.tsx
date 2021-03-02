@@ -31,7 +31,9 @@ export interface ScatterChartProps {
   /** Max line value */
   max: number,
   /** Max line colour */
-  maxColour: string
+  maxColour: string,
+  /** Maintains aspect ratio. Turn off for manual resize */
+  maintainAspectRatio?: boolean
 }
 
 /**
@@ -48,6 +50,7 @@ export default function ScatterChart({
   dataColour,
   max,
   maxColour,
+  maintainAspectRatio = true
 }: ScatterChartProps): JSX.Element {
   const options: ChartOptions = {
     title: {
@@ -56,7 +59,7 @@ export default function ScatterChart({
       fontSize: 14,
     },
 
-    maintainAspectRatio: true,
+    maintainAspectRatio,
 
     legend: {
       display: false,
