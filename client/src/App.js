@@ -1,4 +1,5 @@
 import React from 'react';
+import { Toaster } from 'react-hot-toast';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { routes } from 'router';
 import NavBarContainer from 'components/common/navbar/NavBarContainer';
@@ -20,12 +21,18 @@ function App() {
   });
 
   return (
+    <>
+    <Toaster 
+      position="bottom-center"
+      reverseOrder={false}
+    />
     <Router>
       <div className={styles.app}>
         <NavBarContainer />
         <Switch>{routeItems}</Switch>
       </div>
     </Router>
+    </>
   );
 }
 

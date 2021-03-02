@@ -1,5 +1,6 @@
 import { emit } from 'api/common/socket';
 import { BoostConfigType } from 'types/boost';
+import toast from 'react-hot-toast';
 
 type action = 'upload' | 'delete';
 
@@ -57,6 +58,7 @@ export default function uploadConfig(
     }
     else if (typeof reader.result === 'string') {
       sendConfig('upload', type, reader.result);
+      toast.success(`Uploaded ${configFile.name}!`);
     };
   };
 
