@@ -1,0 +1,41 @@
+.statContainer {
+  display: flex;
+  margin-top: 25px;
+  margin-bottom: 30px;
+  margin-left: -8px;
+}
+
+.stat {
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.content {
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
+.contentContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.line {
+  height: 67px;
+  border: 1px solid #CCCCCC;
+}
+
+.graph {
+  height: 700px;
+  width: 650px;
+  border: 5px solid #000000;
+}
+
+.bigGraph {
+  height: 900px;
+  width: 700px;
+  border: 5px solid #000000;
+}
