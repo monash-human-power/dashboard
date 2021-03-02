@@ -1,7 +1,7 @@
 import React, { createRef, useState } from 'react';
 import { faFileUpload } from '@fortawesome/free-solid-svg-icons';
 import FontAwesomeIcon from 'components/common/FontAwesomeIcon';
-import { Accordion, Button, Card } from 'react-bootstrap';
+import { Accordion, Button, Card, Modal } from 'react-bootstrap';
 import { BoostConfig, BoostConfigType } from 'types/boost';
 import { camelCaseToStartCase } from 'utils/string';
 import BoostConfigList from 'components/common/boost/BoostConfigList';
@@ -10,7 +10,7 @@ export interface BoostConfiguratorProps {
   configs: BoostConfig[];
   onSelectConfig: (configType: BoostConfigType, name: string) => void;
   onDeleteConfig: (configType: BoostConfigType, name: string) => void;
-  onUploadConfig: (configType: BoostConfigType, configFile: File) => void;
+  onUploadConfig: (configType: BoostConfigType, configFile: File, displayErr: (message: string) => void) => void;
 }
 
 /**
@@ -28,6 +28,12 @@ export default function BoostConfigurator({
   const fileInput = createRef<HTMLInputElement>();
   const [configType, setConfigType] = useState<BoostConfigType>('all');
 
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const [showUploadError, setShowUplaodError] = useState(false);
+  const handleErrorClose = () => setShowUplaodError(false);
+
+
   // Function to click the hidden file input button (this is a work around to avoid the ugly
   // UI of the default input file button)
   const handleClickUpload = (type: BoostConfigType) => {
@@ -41,11 +47,27 @@ export default function BoostConfigurator({
   // to upload, hence the need to check that the files attribute is not an array of 0 length
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files != null && event.target.files.length !== 0) {
-      onUploadConfig(configType, event.target.files[0]);
+      const dispErr = (message: string) => {
+        setErrorMessage(message);
+        setShowUplaodError(true);
+      };
+      onUploadConfig(configType, event.target.files[0], dispErr);
     }
   };
 
   return (
+    <>
+    <Modal show={showUploadError} onHide={handleErrorClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Upload Error</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{errorMessage}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleErrorClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+    </Modal>
     <Card style={{ marginTop: '2.5rem' }}>
       <Card.Body>
         <Card.Title style={{ marginBottom: '1.5rem' }}>
@@ -105,5 +127,6 @@ export default function BoostConfigurator({
         </Accordion>
       </Card.Body>
     </Card>
+    </>
   );
 }

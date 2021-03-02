@@ -34,6 +34,7 @@ function sendConfig(actionType: action, type: BoostConfigType, configContent: st
 export default function uploadConfig(
   type: BoostConfigType,
   configFile: File,
+  displayErr: (message: string) => void
 ) {
   const reader = new FileReader();
   const possibleConfig = ['powerPlan', 'rider', 'track', 'bike'];
@@ -55,10 +56,11 @@ export default function uploadConfig(
       });
 
       if (possibleConfig.length === 4) {
-        toast.error('Not a config bundle');
+        displayErr(`${configFile.name} is not a bundle (i.e. it does not contain the 4 configs)`);
       }
       else if (possibleConfig.length !== 0) {
-        toast.error(`The bundle uploaded did not contain config/s for ${possibleConfig}`);
+        console.log('Detected that there were some missing configs');
+        displayErr(`The bundle ${configFile.name} did not contain the followinng config/s: ${possibleConfig} (The other configs were successfully uploaded)`);
       }
       else {
         toast.success(`Bundle ${configFile.name} uploaded`);
