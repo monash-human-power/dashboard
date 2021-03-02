@@ -47,6 +47,8 @@ export default function uploadConfig(
       Object.keys(allConfigs).forEach((key) => {
         if (possibleConfig.includes(key)) {
           sendConfig('upload', key as BoostConfigType, allConfigs[key]);
+
+          // Remove the uploaded config from the `possibleConfig` list
           const i = possibleConfig.indexOf(key);
           possibleConfig.splice(i,1);
         }  
@@ -56,7 +58,6 @@ export default function uploadConfig(
         toast.error('Not a config bundle');
       }
       else if (possibleConfig.length !== 0) {
-        // TODO: Remove alert
         toast.error(`The bundle uploaded did not contain config/s for ${possibleConfig}`);
       }
       else {
