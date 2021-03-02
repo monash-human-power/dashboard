@@ -16,8 +16,8 @@ export function V3SpeedDistanceChart() {
     const [data, setData] = useState<ChartPoint[]>([]);
 
     // Speed
-    const point = useSensorData(1, Sensor.ReedVelocity, ReedVelocityRT);
-    const distance = useSensorData(1, Sensor.ReedDistance, ReedDistanceRT);
+    const point = useSensorData(3, Sensor.ReedVelocity, ReedVelocityRT);
+    const distance = useSensorData(3, Sensor.ReedDistance, ReedDistanceRT);
 
     // Update data whenever the point is updated
     useEffect(() => {
@@ -25,7 +25,7 @@ export function V3SpeedDistanceChart() {
         if (
             point && distance  // Non null
             // New distance measurement
-            && distance !== data[data.length - 1].y
+            && distance !== data[data.length - 1]?.y
         ) setData([...data, { x: distance, y: point }]);
     }, [data, point, distance]);
 
