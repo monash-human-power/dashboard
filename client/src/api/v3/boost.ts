@@ -51,12 +51,20 @@ export default function uploadConfig(
           possibleConfig.splice(i,1);
         }  
       });
-      if (possibleConfig.length !== 0) {
+
+      if (possibleConfig.length === 4) {
+        toast.error('Not a config bundle');
+      }
+      else if (possibleConfig.length !== 0) {
         // TODO: Remove alert
-        alert(`The config bundle uploaded does not contain the following configs: ${possibleConfig}`);
+        toast.error(`The bundle uploaded did not contain config/s for ${possibleConfig}`);
+      }
+      else {
+        toast.success(`Bundle ${configFile.name} uploaded`);
       }
     }
     else if (typeof reader.result === 'string') {
+      // Single config uploaded
       sendConfig('upload', type, reader.result);
       toast.success(`Uploaded ${configFile.name}!`);
     };
