@@ -10,7 +10,7 @@ export interface BoostConfiguratorProps {
   configs: BoostConfig[];
   onSelectConfig: (configType: BoostConfigType, name: string) => void;
   onDeleteConfig: (configType: BoostConfigType, name: string) => void;
-  onUploadConfig: (configType: BoostConfigType, configFile: File, displayErr: (message: string) => void) => void;
+  onUploadConfig: (configType: BoostConfigType, configFile: File, displayErr: (message: string) => void, configExist: (type: BoostConfigType, name: string) => boolean) => void;
 }
 
 /**
@@ -43,6 +43,19 @@ export default function BoostConfigurator({
     }
   };
 
+  // Check if a config with the same given name exists
+  const configExist = (type: BoostConfigType, name: string) => {
+    let found = false;
+    console.log(name);
+    configs.forEach((config) => {
+      if (config.type === type && config.options.includes(`${name}.json`)) {
+        found = true;
+      };
+      console.log(config.options);
+    });
+    return found;
+  }; 
+
   // This method gets called even if the user uploads a file and the second time they cancel
   // to upload, hence the need to check that the files attribute is not an array of 0 length
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,7 +64,7 @@ export default function BoostConfigurator({
         setErrorMessage(message);
         setShowUplaodError(true);
       };
-      onUploadConfig(configType, event.target.files[0], dispErr);
+      onUploadConfig(configType, event.target.files[0], dispErr, configExist);
     }
   };
 
