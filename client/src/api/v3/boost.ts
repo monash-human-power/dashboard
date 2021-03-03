@@ -47,7 +47,7 @@ export default function uploadConfig(
     if (type === 'all' && typeof reader.result === 'string') {
       const allConfigs = JSON.parse(reader.result);
 
-      // Check that no config is repeated
+      // Check that no config is repeated and that all configs are present
       let repeatedConfigs = false;
       let errMessage = 'Rename the following repeated configs and re-upload: ';
       Object.keys(allConfigs).forEach((key) => {
@@ -62,31 +62,29 @@ export default function uploadConfig(
             }
             repeatedConfigs = true;
           }
+          // Remove the uploaded config from the `possibleConfig` list
+          const i = possibleConfig.indexOf(key);
+          possibleConfig.splice(i,1);
         };
       });
 
       if (repeatedConfigs) {
         displayErr(errMessage);
       }
+      else if (possibleConfig.length === 4) {
+        displayErr(`${configFile.name} is not a bundle (i.e. it does not contain the 4 configs)`);
+      }
+      else if (possibleConfig.length !== 0) {
+        displayErr(`The bundle ${configFile.name} did not contain the following config/s (please add them and re-upload): ${possibleConfig}`);
+      }
       else {
         // For each config, send the config content over MQTT
         Object.keys(allConfigs).forEach((key) => {
           if (possibleConfig.includes(key)) {
             sendConfig('upload', key as BoostConfigType, allConfigs[key]);
-            // Remove the uploaded config from the `possibleConfig` list
-            const i = possibleConfig.indexOf(key);
-            possibleConfig.splice(i,1);
           }
         });
-        if (possibleConfig.length === 4) {
-          displayErr(`${configFile.name} is not a bundle (i.e. it does not contain the 4 configs)`);
-        }
-        else if (possibleConfig.length !== 0) {
-          displayErr(`The bundle ${configFile.name} did not contain the followinng config/s: ${possibleConfig} (The other configs were successfully uploaded)`);
-        }
-        else {
           toast.success(`Uploaded configs in ${configFile.name}`);
-        }
       }
     }
     else if (typeof reader.result === 'string') {
