@@ -25,6 +25,7 @@ function App() {
     <Toaster 
       position="bottom-center"
       reverseOrder={false}
+      duration="10000"
     />
     <Router>
       <div className={styles.app}>
