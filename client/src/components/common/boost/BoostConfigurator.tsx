@@ -46,12 +46,10 @@ export default function BoostConfigurator({
   // Check if a config with the same given name exists
   const configExist = (type: BoostConfigType, name: string) => {
     let found = false;
-    console.log(name);
     configs.forEach((config) => {
       if (config.type === type && config.options.includes(`${name}.json`)) {
         found = true;
       };
-      console.log(config.options);
     });
     return found;
   }; 
