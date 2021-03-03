@@ -44,11 +44,13 @@ export default function uploadConfig(
 
   // Called when FileReader has completed reading a file
   reader.onload = () => {
-    if (type === 'all' && typeof reader.result === 'string') {
-      const allConfigs = JSON.parse(reader.result);
+    const fileContent = reader.result as string;
+    if (type === 'all') {
+      const allConfigs = JSON.parse(fileContent);
 
       // Check that no config is repeated and that all configs are present
       let repeatedConfigs = false;
+      let countConfigs = 0;
       let errMessage = 'Rename the following repeated configs and re-upload: ';
       Object.keys(allConfigs).forEach((key) => {
         if (possibleConfig.includes(key)) {
@@ -65,6 +67,8 @@ export default function uploadConfig(
           // Remove the uploaded config from the `possibleConfig` list
           const i = possibleConfig.indexOf(key);
           possibleConfig.splice(i,1);
+
+          countConfigs += 1;
         };
       });
 
@@ -77,24 +81,26 @@ export default function uploadConfig(
       else if (possibleConfig.length !== 0) {
         displayErr(`The bundle ${configFile.name} did not contain the following config/s (please add them and re-upload): ${possibleConfig}`);
       }
+      else if (countConfigs !== 4) {
+        // Exactly 4 oconfigs not provided
+        displayErr(`${configFile.name} contains too many or too few configs, please ensure there are 4 configs and re-upload`);
+      }
       else {
         // For each config, send the config content over MQTT
         Object.keys(allConfigs).forEach((key) => {
-          if (possibleConfig.includes(key)) {
-            sendConfig('upload', key as BoostConfigType, allConfigs[key]);
-          }
+          sendConfig('upload', key as BoostConfigType, allConfigs[key]);
         });
           toast.success(`Uploaded configs in ${configFile.name}`);
       }
     }
-    else if (typeof reader.result === 'string') {
+    else {
       // Single config uploaded
-      const config = JSON.parse(reader.result);
+      const config = JSON.parse(fileContent);
       if (configExist(type, config.name)) {
         displayErr(`${configFile.name} already exists for ${type}, please change the name and re-upload`);
       }
       else {
-        sendConfig('upload', type, reader.result);
+        sendConfig('upload', type, fileContent);
         toast.success(`Uploaded ${configFile.name}!`);
       }
     };
