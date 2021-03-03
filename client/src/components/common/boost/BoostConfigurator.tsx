@@ -74,7 +74,7 @@ export default function BoostConfigurator({
             <FontAwesomeIcon 
               icon={faExclamationTriangle} 
             />
-            <b className="mx-3">Upload Error</b>
+            <b className="mx-3">Upload Failed</b>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>{errorMessage}</Modal.Body>

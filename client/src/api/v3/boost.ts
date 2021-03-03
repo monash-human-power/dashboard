@@ -51,7 +51,7 @@ export default function uploadConfig(
       // Check that no config is repeated and that all configs are present
       let repeatedConfigs = false;
       let countConfigs = 0;
-      let errMessage = 'Rename the following repeated configs and re-upload: ';
+      let errMessage = `Please rename the following repeated configs inside ${configFile.name}: `;
       Object.keys(allConfigs).forEach((key) => {
         if (possibleConfig.includes(key)) {
           if (configExist(key as BoostConfigType, allConfigs[key].name)) {
@@ -79,11 +79,11 @@ export default function uploadConfig(
         displayErr(`${configFile.name} is not a bundle (i.e. it does not contain the 4 configs)`);
       }
       else if (possibleConfig.length !== 0) {
-        displayErr(`The bundle ${configFile.name} did not contain the following config/s (please add them and re-upload): ${possibleConfig}`);
+        displayErr(`The bundle ${configFile.name} did not contain the following config/s (please add them): ${possibleConfig}`);
       }
       else if (countConfigs !== 4) {
         // Exactly 4 oconfigs not provided
-        displayErr(`${configFile.name} contains too many or too few configs, please ensure there are 4 configs and re-upload`);
+        displayErr(`${configFile.name} contains too many or too few configs, please ensure there are exactly 4 configs`);
       }
       else {
         // For each config, send the config content over MQTT
@@ -97,7 +97,7 @@ export default function uploadConfig(
       // Single config uploaded
       const config = JSON.parse(fileContent);
       if (configExist(type, config.name)) {
-        displayErr(`${configFile.name} already exists for ${type}, please change the name and re-upload`);
+        displayErr(`${configFile.name} already exists for ${type}, please change the name`);
       }
       else {
         sendConfig('upload', type, fileContent);
