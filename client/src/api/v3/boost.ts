@@ -7,8 +7,8 @@ type payloadAction = 'upload' | 'delete';
 /**
  * Send configuration status over MQTT on topic 'boost/configs/action'
  * 
- * @param actionType actionType represents whether the config is being uploaded or deleted
- * @param type type the type of the configuration being sent
+ * @param actionType represents whether the config is being uploaded or deleted
+ * @param type the type of the configuration being sent
  * @param configContent configuration content
  */
 function sendConfig(actionType: payloadAction, type: BoostConfigType, configContent: string | null) {
@@ -25,13 +25,13 @@ function sendConfig(actionType: payloadAction, type: BoostConfigType, configCont
 
 /**
  * Read content from the given file and send it on `boost/configs/action` over MQTT. 
- * If the content contains more than config (i.e. `type` is 'all'), the content is
- * split into the different configurations.
+ * If the content contains more than one config (i.e. `type` is 'all'), the content is
+ * split into the different configurations before sending.
  *
  * @param type the type of the configuration
  * @param configFile file containing content of the configuration
  * @param displayErr function to display error if uploaded config is not correct
- * @param configExist function to check is a given config name is already used
+ * @param configExist function to check if a given config name has already been used
  */
 export default function uploadConfig(
   type: BoostConfigType,
