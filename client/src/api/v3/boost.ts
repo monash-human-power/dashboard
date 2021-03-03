@@ -2,7 +2,7 @@ import { emit } from 'api/common/socket';
 import { BoostConfigType } from 'types/boost';
 import toast from 'react-hot-toast';
 
-type action = 'upload' | 'delete';
+type payloadAction = 'upload' | 'delete';
 
 /**
  * Send configuration status over MQTT on topic 'boost/configs/action'
@@ -11,7 +11,7 @@ type action = 'upload' | 'delete';
  * @param type type the type of the configuration being sent
  * @param configContent configuration content
  */
-function sendConfig(actionType: action, type: BoostConfigType, configContent: string | null) {
+function sendConfig(actionType: payloadAction, type: BoostConfigType, configContent: string | null) {
   const topic = 'send-config';
   const payload = {
     action: actionType,
