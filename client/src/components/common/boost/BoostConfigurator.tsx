@@ -1,5 +1,5 @@
 import React, { createRef, useState } from 'react';
-import { faFileUpload } from '@fortawesome/free-solid-svg-icons';
+import { faFileUpload, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import FontAwesomeIcon from 'components/common/FontAwesomeIcon';
 import { Accordion, Button, Card, Modal } from 'react-bootstrap';
 import { BoostConfig, BoostConfigType } from 'types/boost';
@@ -70,7 +70,12 @@ export default function BoostConfigurator({
     <>
     <Modal show={showUploadError} onHide={handleErrorClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Upload Error</Modal.Title>
+          <Modal.Title>
+            <FontAwesomeIcon 
+              icon={faExclamationTriangle} 
+            />
+            <b className="mx-3">Upload Error</b>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>{errorMessage}</Modal.Body>
         <Modal.Footer>
