@@ -22,17 +22,13 @@ function App() {
 
   return (
     <>
-    <Toaster 
-      position="bottom-center"
-      reverseOrder={false}
-      duration="10000"
-    />
-    <Router>
-      <div className={styles.app}>
-        <NavBarContainer />
-        <Switch>{routeItems}</Switch>
-      </div>
-    </Router>
+      <Toaster position="bottom-center" reverseOrder={false} duration="10000" />
+      <Router>
+        <div className={styles.app}>
+          <NavBarContainer />
+          <Switch>{routeItems}</Switch>
+        </div>
+      </Router>
     </>
   );
 }

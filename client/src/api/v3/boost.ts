@@ -6,12 +6,16 @@ type payloadAction = 'upload' | 'delete';
 
 /**
  * Send configuration status over MQTT on topic 'boost/configs/action'
- * 
+ *
  * @param actionType represents whether the config is being uploaded or deleted
  * @param type the type of the configuration being sent
  * @param configContent configuration content
  */
-function sendConfig(actionType: payloadAction, type: BoostConfigType, configContent: string | null) {
+function sendConfig(
+  actionType: payloadAction,
+  type: BoostConfigType,
+  configContent: string | null,
+) {
   const topic = 'send-config';
   const payload = {
     action: actionType,
@@ -24,7 +28,7 @@ function sendConfig(actionType: payloadAction, type: BoostConfigType, configCont
 }
 
 /**
- * Read content from the given file and send it on `boost/configs/action` over MQTT. 
+ * Read content from the given file and send it on `boost/configs/action` over MQTT.
  * If the content contains more than one config (i.e. `type` is 'all'), the content is
  * split into the different configurations before sending.
  *
@@ -57,53 +61,58 @@ export default function uploadConfig(
           if (configExist(key as BoostConfigType, allConfigs[key].name)) {
             if (repeatedConfigs) {
               // Need to add a comma
-              errMessage = errMessage.concat(`, '${allConfigs[key].name}' in ${key} configuration`);
-            }
-            else {
-              errMessage = errMessage.concat(`'${allConfigs[key].name}' in ${key} configuration`);
+              errMessage = errMessage.concat(
+                `, '${allConfigs[key].name}' in ${key} configuration`,
+              );
+            } else {
+              errMessage = errMessage.concat(
+                `'${allConfigs[key].name}' in ${key} configuration`,
+              );
             }
             repeatedConfigs = true;
           }
           // Remove the uploaded config from the `possibleConfig` list
           const i = possibleConfig.indexOf(key);
-          possibleConfig.splice(i,1);
+          possibleConfig.splice(i, 1);
 
           countConfigs += 1;
-        };
+        }
       });
 
       if (repeatedConfigs) {
         displayErr(errMessage);
-      }
-      else if (possibleConfig.length === 4) {
-        displayErr(`${configFile.name} is not a bundle (i.e. it does not contain the 4 configs)`);
-      }
-      else if (possibleConfig.length !== 0) {
-        displayErr(`The bundle ${configFile.name} did not contain the following config/s (please add them): ${possibleConfig}`);
-      }
-      else if (countConfigs !== 4) {
+      } else if (possibleConfig.length === 4) {
+        displayErr(
+          `${configFile.name} is not a bundle (i.e. it does not contain the 4 configs)`,
+        );
+      } else if (possibleConfig.length !== 0) {
+        displayErr(
+          `The bundle ${configFile.name} did not contain the following config/s (please add them): ${possibleConfig}`,
+        );
+      } else if (countConfigs !== 4) {
         // Exactly 4 oconfigs not provided
-        displayErr(`${configFile.name} contains too many or too few configs, please ensure there are exactly 4 configs`);
-      }
-      else {
+        displayErr(
+          `${configFile.name} contains too many or too few configs, please ensure there are exactly 4 configs`,
+        );
+      } else {
         // For each config, send the config content over MQTT
         Object.keys(allConfigs).forEach((key) => {
           sendConfig('upload', key as BoostConfigType, allConfigs[key]);
         });
-          toast.success(`Uploaded configs in ${configFile.name}`);
+        toast.success(`Uploaded configs in ${configFile.name}`);
       }
-    }
-    else {
+    } else {
       // Single config uploaded
       const config = JSON.parse(fileContent);
       if (configExist(type, config.name)) {
-        displayErr(`${configFile.name} already exists for ${type}, please change the name`);
-      }
-      else {
+        displayErr(
+          `${configFile.name} already exists for ${type}, please change the name`,
+        );
+      } else {
         sendConfig('upload', type, fileContent);
         toast.success(`Uploaded ${configFile.name}!`);
       }
-    };
+    }
   };
 
   reader.readAsText(configFile);
