@@ -28,10 +28,10 @@ export default function BoostConfigurator({
   const fileInput = createRef<HTMLInputElement>();
   const [configType, setConfigType] = useState<BoostConfigType>('all');
 
-  const [displayMessage, setDisplayMessage] = useState({head: '', body: ''});
+  const [displayMessage, setDisplayMessage] = useState('');
 
-  const [showModal, setShowModal] = useState(false);
-  const handleErrorClose = () => setShowModal(false);
+  const [showUploadErr, setShowUploadErr] = useState(false);
+  const handleErrorClose = () => setShowUploadErr(false);
 
 
   // Function to click the hidden file input button (this is a work around to avoid the ugly
@@ -59,8 +59,8 @@ export default function BoostConfigurator({
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files != null && event.target.files.length !== 0) {
       const dispErr = (message: string) => {
-        setDisplayMessage({head: 'Upload Failed', body: message});
-        setShowModal(true);
+        setDisplayMessage(message);
+        setShowUploadErr(true);
       };
       onUploadConfig(configType, event.target.files[0], dispErr, configExist);
     }
@@ -68,24 +68,16 @@ export default function BoostConfigurator({
 
   return (
     <>
-<<<<<<< HEAD
-      <Modal show={showModal} onHide={handleErrorClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>
-            <FontAwesomeIcon icon={faExclamationTriangle} />
-            <b className="mx-3">{displayMessage.head}</b>
-=======
-    <Modal show={showUploadError} onHide={handleErrorClose}>
+    <Modal show={showUploadErr} onHide={handleErrorClose}>
         <Modal.Header closeButton>
           <Modal.Title>
             <FontAwesomeIcon 
               icon={faExclamationTriangle} 
             />
             <b className="mx-3">Upload Failed</b>
->>>>>>> parent of 16400a9... Apply prettier formatting
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>{displayMessage.body}</Modal.Body>
+        <Modal.Body>{displayMessage}</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleErrorClose}>
             Close
