@@ -36,10 +36,10 @@ export default function BoostConfigurator({
   const fileInput = createRef<HTMLInputElement>();
   const [configType, setConfigType] = useState<BoostConfigType>('all');
 
-  const [errorMessage, setErrorMessage] = useState('');
+  const [displayMessage, setDisplayMessage] = useState({head: '', body: ''});
 
-  const [showUploadError, setShowUplaodError] = useState(false);
-  const handleErrorClose = () => setShowUplaodError(false);
+  const [showModal, setShowModal] = useState(false);
+  const handleErrorClose = () => setShowModal(false);
 
   // Function to click the hidden file input button (this is a work around to avoid the ugly
   // UI of the default input file button)
@@ -66,8 +66,8 @@ export default function BoostConfigurator({
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files != null && event.target.files.length !== 0) {
       const dispErr = (message: string) => {
-        setErrorMessage(message);
-        setShowUplaodError(true);
+        setDisplayMessage({head: 'Upload Failed', body: message});
+        setShowModal(true);
       };
       onUploadConfig(configType, event.target.files[0], dispErr, configExist);
     }
@@ -75,14 +75,14 @@ export default function BoostConfigurator({
 
   return (
     <>
-      <Modal show={showUploadError} onHide={handleErrorClose}>
+      <Modal show={showModal} onHide={handleErrorClose}>
         <Modal.Header closeButton>
           <Modal.Title>
             <FontAwesomeIcon icon={faExclamationTriangle} />
-            <b className="mx-3">Upload Failed</b>
+            <b className="mx-3">{displayMessage.head}</b>
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>{errorMessage}</Modal.Body>
+        <Modal.Body>{displayMessage.body}</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleErrorClose}>
             Close
