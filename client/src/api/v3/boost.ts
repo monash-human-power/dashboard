@@ -52,18 +52,24 @@ export default function uploadConfig(
       let repeatedConfigs = false;
       let countConfigs = 0;
       let errMessage = `Please rename the following repeated configs inside ${configFile.name}: `;
-      Object.keys(allConfigs).forEach((key) => {
-        if (possibleConfig.includes(key)) {
-          if (configExist(key as BoostConfigType, allConfigs[key].name)) {
+
+      type configType = {name: string};
+      Object.entries(allConfigs).forEach((configEntry) => {
+        const config = configEntry[1] as configType;
+        const configType = configEntry[0];
+        if (possibleConfig.includes(configType)) {
+          if (configExist(configType as BoostConfigType, config.name)) {
             if (repeatedConfigs) {
+              console.log('Adding a comma');
               // Need to add a comma
               errMessage.concat(', ');
             }
-            errMessage = errMessage.concat(`'${allConfigs[key].name}' in ${key} configuration`);
+            errMessage = errMessage.concat(`'${config.name}' in ${configType} configuration`);
             repeatedConfigs = true;
+            console.log(errMessage);
           }
           // Remove the uploaded config from the `possibleConfig` list
-          const i = possibleConfig.indexOf(key);
+          const i = possibleConfig.indexOf(configType);
           possibleConfig.splice(i,1);
 
           countConfigs += 1;
