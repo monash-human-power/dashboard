@@ -80,7 +80,7 @@ export default function uploadConfig(
         displayErr(`The bundle ${configFile.name} did not contain the following config/s (please add them): ${possibleConfig}`);
       }
       else if (countConfigs !== 4) {
-        // Exactly 4 oconfigs not provided
+        // Exactly 4 configs not provided
         displayErr(`${configFile.name} contains too many or too few configs, please ensure there are exactly 4 configs`);
       }
       else {
