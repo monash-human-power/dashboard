@@ -28,6 +28,78 @@ function sendConfig(
 }
 
 /**
+ * Split the given configurations object into inidvidual configs and then send them over MQTT
+ * 
+ * @param configs 
+ * @param fileName name of the file that contained all the configs
+ * @param displayErr function to display error message 
+ * @param configExist function to check if a file of the same name exists
+ */
+function uploadMultipleConfigs(
+  configsContent: string,
+  fileName: string,
+  displayErr: (message: string) => void,
+  configExist: (type: BoostConfigType, name: string) => boolean,
+) {
+  // Check that no config is repeated and that all configs are present
+  let repeatedConfigs = false;
+  let countConfigs = 0;
+  let errMessage = `Please rename the following repeated configs inside ${fileName}: `;
+
+  const configs = JSON.parse(configsContent);
+
+  const possibleConfig = ['powerPlan', 'rider', 'track', 'bike'];
+
+  type configType = { name: string };
+  Object.entries(configs).forEach((configEntry) => {
+    const config = configEntry[1] as configType;
+    const configType = configEntry[0];
+    if (possibleConfig.includes(configType)) {
+      if (configExist(configType as BoostConfigType, config.name)) {
+        if (repeatedConfigs) {
+          console.log('Adding a comma');
+          // Need to add a comma
+          errMessage = errMessage.concat(', ');
+        }
+        errMessage = errMessage.concat(
+          `'${config.name}' in ${configType} configuration`,
+        );
+        repeatedConfigs = true;
+        console.log(errMessage);
+      }
+      // Remove the uploaded config from the `possibleConfig` list
+      const i = possibleConfig.indexOf(configType);
+      possibleConfig.splice(i, 1);
+
+      countConfigs += 1;
+    }
+  });
+
+  if (repeatedConfigs) {
+    displayErr(errMessage);
+  } else if (possibleConfig.length === 4) {
+    displayErr(
+      `${fileName} is not a bundle (i.e. it does not contain the 4 configs)`,
+    );
+  } else if (possibleConfig.length !== 0) {
+    displayErr(
+      `The bundle ${fileName} did not contain the following config/s (please add them): ${possibleConfig}`,
+    );
+  } else if (countConfigs !== 4) {
+    // Exactly 4 configs not provided
+    displayErr(
+      `${fileName} contains too many or too few configs, please ensure there are exactly 4 configs`,
+    );
+  } else {
+    // For each config, send the config content over MQTT
+    Object.keys(configs).forEach((key) => {
+      sendConfig('upload', key as BoostConfigType, configs[key]);
+    });
+    toast.success(`Uploaded configs in ${fileName}`);
+  }
+}
+
+/**
  * Read content from the given file and send it on `boost/configs/action` over MQTT.
  * If the content contains more than one config (i.e. `type` is 'all'), the content is
  * split into the different configurations before sending.
@@ -44,66 +116,12 @@ export default function uploadConfig(
   configExist: (type: BoostConfigType, name: string) => boolean,
 ) {
   const reader = new FileReader();
-  const possibleConfig = ['powerPlan', 'rider', 'track', 'bike'];
 
   // Called when FileReader has completed reading a file
   reader.onload = () => {
     const fileContent = reader.result as string;
     if (type === 'all') {
-      const allConfigs = JSON.parse(fileContent);
-
-      // Check that no config is repeated and that all configs are present
-      let repeatedConfigs = false;
-      let countConfigs = 0;
-      let errMessage = `Please rename the following repeated configs inside ${configFile.name}: `;
-
-      type configType = { name: string };
-      Object.entries(allConfigs).forEach((configEntry) => {
-        const config = configEntry[1] as configType;
-        const configType = configEntry[0];
-        if (possibleConfig.includes(configType)) {
-          if (configExist(configType as BoostConfigType, config.name)) {
-            if (repeatedConfigs) {
-              console.log('Adding a comma');
-              // Need to add a comma
-              errMessage = errMessage.concat(', ');
-            }
-            errMessage = errMessage.concat(
-              `'${config.name}' in ${configType} configuration`,
-            );
-            repeatedConfigs = true;
-            console.log(errMessage);
-          }
-          // Remove the uploaded config from the `possibleConfig` list
-          const i = possibleConfig.indexOf(configType);
-          possibleConfig.splice(i, 1);
-
-          countConfigs += 1;
-        }
-      });
-
-      if (repeatedConfigs) {
-        displayErr(errMessage);
-      } else if (possibleConfig.length === 4) {
-        displayErr(
-          `${configFile.name} is not a bundle (i.e. it does not contain the 4 configs)`,
-        );
-      } else if (possibleConfig.length !== 0) {
-        displayErr(
-          `The bundle ${configFile.name} did not contain the following config/s (please add them): ${possibleConfig}`,
-        );
-      } else if (countConfigs !== 4) {
-        // Exactly 4 configs not provided
-        displayErr(
-          `${configFile.name} contains too many or too few configs, please ensure there are exactly 4 configs`,
-        );
-      } else {
-        // For each config, send the config content over MQTT
-        Object.keys(allConfigs).forEach((key) => {
-          sendConfig('upload', key as BoostConfigType, allConfigs[key]);
-        });
-        toast.success(`Uploaded configs in ${configFile.name}`);
-      }
+      uploadMultipleConfigs(fileContent, configFile.name, displayErr, configExist);
     } else {
       // Single config uploaded
       const config = JSON.parse(fileContent);
