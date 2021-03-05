@@ -12,7 +12,7 @@ type payloadAction = 'upload' | 'delete';
  * @param configContent configuration content
  */
 function sendConfig(actionType: payloadAction, type: BoostConfigType, configContent: string | null) {
-  const topic = 'send-config';
+  const channel = 'send-config';
   const payload = {
     action: actionType,
     configType: type,
@@ -20,7 +20,7 @@ function sendConfig(actionType: payloadAction, type: BoostConfigType, configCont
   };
   // To check things work without needing the server started
   console.log(payload);
-  emit(topic, JSON.stringify(payload));
+  emit(channel, JSON.stringify(payload));
 }
 
 /**
