@@ -62,7 +62,7 @@ export default function uploadConfig(
             if (repeatedConfigs) {
               console.log('Adding a comma');
               // Need to add a comma
-              errMessage.concat(', ');
+              errMessage = errMessage.concat(', ');
             }
             errMessage = errMessage.concat(`'${config.name}' in ${configType} configuration`);
             repeatedConfigs = true;
