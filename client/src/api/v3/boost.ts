@@ -57,11 +57,9 @@ export default function uploadConfig(
           if (configExist(key as BoostConfigType, allConfigs[key].name)) {
             if (repeatedConfigs) {
               // Need to add a comma
-              errMessage = errMessage.concat(`, '${allConfigs[key].name}' in ${key} configuration`);
+              errMessage.concat(', ');
             }
-            else {
-              errMessage = errMessage.concat(`'${allConfigs[key].name}' in ${key} configuration`);
-            }
+            errMessage = errMessage.concat(`'${allConfigs[key].name}' in ${key} configuration`);
             repeatedConfigs = true;
           }
           // Remove the uploaded config from the `possibleConfig` list
