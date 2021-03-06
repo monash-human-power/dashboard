@@ -20,7 +20,9 @@ export default function StatisticRow(): JSX.Element {
     useEffect(() => {
         // Add new data point
         if (currSpeed) setMaxSpeed(Math.max(currSpeed, Math.abs(maxSpeed ?? 0)));
-    }, [currSpeed, maxSpeed]);
+        // Omit maxSpeed to avoid infinite render loop
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currSpeed]);
 
     // TODO: Trap locations
     // eslint-disable-next-line no-unused-vars
