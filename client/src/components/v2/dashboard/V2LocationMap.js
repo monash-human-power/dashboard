@@ -1,7 +1,7 @@
-import React from 'react';
+import { useMultiSensorTimeSeries, useSensorData } from 'api/v2/sensors';
+import LocationMap from 'components/common/charts/LocationMap';
 import PropTypes from 'prop-types';
-import { useSensorData, useMultiSensorTimeSeries } from 'api/v2/sensors';
-import LocationTimeChart from 'components/common/charts/LocationTimeChart';
+import React from 'react';
 
 /**
  * Checks if a given location is valid
@@ -24,17 +24,17 @@ function validateLocation(location) {
 }
 
 /**
- * @typedef {object} V2LocationTimeChartProps
+ * @typedef {object} V2LocationMapProps
  * @property {number} interval Time between updates in ms
  */
 
 /**
  * Location chart component
  *
- * @param {V2LocationTimeChartProps} props Props
+ * @param {V2LocationMapProps} props Props
  * @returns {React.Component} Component
  */
-export default function V2LocationTimeChart({ interval }) {
+export default function V2LocationMap({ interval }) {
   const { series: locationHistory } = useMultiSensorTimeSeries(
     ['gps_lat', 'gps_long'],
     interval,
@@ -63,9 +63,9 @@ export default function V2LocationTimeChart({ interval }) {
     bikeHistory.push(currentLocation);
   }
 
-  return <LocationTimeChart series={bikeHistory} />;
+  return <LocationMap series={bikeHistory} />;
 }
 
-V2LocationTimeChart.propTypes = {
+V2LocationMap.propTypes = {
   interval: PropTypes.number.isRequired,
 };

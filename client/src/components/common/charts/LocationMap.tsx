@@ -1,4 +1,4 @@
-import styles from 'components/common/charts/LocationTimeChart.module.css';
+import styles from 'components/common/charts/LocationMap.module.css';
 import LeafletCenterControl from 'components/v2/LeafletCenterControl';
 import {
   LatLngTuple
@@ -24,7 +24,7 @@ export interface LocationTimeSeriesPoint {
   long: number
 }
 
-export interface LocationTimeChartProps {
+export interface LocationMapProps {
   /** GPS location time series */
   series: LocationTimeSeriesPoint[]
 }
@@ -35,7 +35,7 @@ export interface LocationTimeChartProps {
  * @param props Props
  * @returns Component
  */
-export default function LocationTimeChart({ series }: LocationTimeChartProps): JSX.Element {
+export default function LocationMap({ series }: LocationMapProps): JSX.Element {
   const bikeHistory = series.map(({ lat, long }) => [lat, long] as LatLngTuple);
 
   const initialLocation = bikeHistory[0];
@@ -72,7 +72,7 @@ export default function LocationTimeChart({ series }: LocationTimeChartProps): J
   );
 }
 
-LocationTimeChart.propTypes = {
+LocationMap.propTypes = {
   series: PropTypes.arrayOf(
     PropTypes.shape({
       lat: PropTypes.number.isRequired,
