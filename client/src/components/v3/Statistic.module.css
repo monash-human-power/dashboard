@@ -9,13 +9,13 @@
 .value {
   font-size: 32px;
   line-height: 34px;
-  color: #000000;
+  color: black;
   text-align: right;
 }
 
 .unit {
   font-size: 14px;
-  color: #000000;
+  color: black;
   text-align: right;
   margin-left: 4px;
 }
@@ -23,5 +23,5 @@
 .desc {
   font-size: 14px;
   line-height: 18px;
-  color: #000000;
+  color: black;
 }

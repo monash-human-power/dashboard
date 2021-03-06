@@ -14,11 +14,11 @@
 .graph {
   height: 700px;
   width: 650px;
-  border: 5px solid #000000;
+  border: 5px solid black;
 }
 
 .bigGraph {
   height: 900px;
   width: 700px;
-  border: 5px solid #000000;
+  border: 5px solid black;
 }
