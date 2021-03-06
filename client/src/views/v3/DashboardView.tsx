@@ -1,7 +1,8 @@
+import V3LocationMap from 'components/v3/dashboard/V3LocationMap';
+import { V3SpeedDistanceChart } from 'components/v3/dashboard/V3SpeedDistanceChart';
 import StatisticSpeed from 'components/v3/StatisticSpeed';
 import React from 'react';
 import { Badge } from 'react-bootstrap';
-import { V3SpeedDistanceChart } from '../../components/v3/dashboard/V3SpeedDistanceChart';
 import styles from './DashboardView.module.css';
 
 /**
@@ -31,7 +32,7 @@ export default function DashboardView(): JSX.Element {
                 <div className={styles.graph}><V3SpeedDistanceChart /></div>
             </div>
             <div className={styles.content}>
-                <div><div className={styles.bigGraph}>Big Graph Here</div></div>
+                <div className={styles.bigGraph}><V3LocationMap /></div>
             </div>
         </div>
     );
