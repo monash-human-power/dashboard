@@ -1,6 +1,7 @@
 import { emit } from 'api/common/socket';
-import { BoostConfigType } from 'types/boost';
+import { BoostConfigType, configBundleT, configObjT } from 'types/boost';
 import toast from 'react-hot-toast';
+import { ValidationError } from 'runtypes';
 
 type payloadAction = 'upload' | 'delete';
 
@@ -30,7 +31,7 @@ function sendConfig(
 /**
  * Split the given configurations object into inidvidual configs and then send them over MQTT
  * 
- * @param configs 
+ * @param configsContent content of the config bundle file
  * @param fileName name of the file that contained all the configs
  * @param displayErr function to display error message 
  * @param configExist function to check if a file of the same name exists
@@ -41,23 +42,22 @@ function uploadMultipleConfigs(
   displayErr: (message: string) => void,
   configExist: (type: BoostConfigType, name: string) => boolean,
 ) {
+  // Check that the parsed object adhere to the form `configBundleT`
+  const configs = configBundleT.check(JSON.parse(configsContent));
+
   // Check that no config is repeated and that all configs are present
   let repeatedConfigs = false;
   let countConfigs = 0;
+  const possibleConfig = ['powerPlan', 'rider', 'track', 'bike'];
   let errMessage = `Please rename the following repeated configs inside ${fileName}: `;
 
-  const configs = JSON.parse(configsContent);
-
-  const possibleConfig = ['powerPlan', 'rider', 'track', 'bike'];
-
-  type configType = { name: string };
   Object.entries(configs).forEach((configEntry) => {
-    const config = configEntry[1] as configType;
-    const configType = configEntry[0];
+    const config = configObjT.check(configEntry[1]);
+    const configType = configEntry[0] as BoostConfigType;
+
     if (possibleConfig.includes(configType)) {
-      if (configExist(configType as BoostConfigType, config.name)) {
+      if (configExist(configType, config.name)) {
         if (repeatedConfigs) {
-          console.log('Adding a comma');
           // Need to add a comma
           errMessage = errMessage.concat(', ');
         }
@@ -65,7 +65,6 @@ function uploadMultipleConfigs(
           `'${config.name}' in ${configType} configuration`,
         );
         repeatedConfigs = true;
-        console.log(errMessage);
       }
       // Remove the uploaded config from the `possibleConfig` list
       const i = possibleConfig.indexOf(configType);
@@ -92,9 +91,13 @@ function uploadMultipleConfigs(
     );
   } else {
     // For each config, send the config content over MQTT
-    Object.keys(configs).forEach((key) => {
-      sendConfig('upload', key as BoostConfigType, configs[key]);
+    Object.entries(configs).forEach((configEntry) => {
+      const config = configObjT.check(configEntry[1]);
+      const configType = configEntry[0] as BoostConfigType;
+
+      sendConfig('upload', configType, JSON.stringify(config));
     });
+
     toast.success(`Uploaded configs in ${fileName}`);
   }
 }
@@ -122,16 +125,24 @@ export default function uploadConfig(
     const fileContent = reader.result as string;
     if (type === 'all') {
       uploadMultipleConfigs(fileContent, configFile.name, displayErr, configExist);
+      
     } else {
       // Single config uploaded
-      const config = JSON.parse(fileContent);
-      if (configExist(type, config.name)) {
-        displayErr(
-          `${configFile.name} already exists for ${type}, please change the name`,
-        );
-      } else {
-        sendConfig('upload', type, fileContent);
-        toast.success(`Uploaded ${configFile.name}!`);
+      try {
+        const config = configObjT.check(JSON.parse(fileContent));
+        if (configExist(type, config.name)) {
+          displayErr(
+            `${configFile.name} already exists for ${type}, please change the name`,
+          );
+        } else {
+          sendConfig('upload', type, fileContent);
+          toast.success(`Uploaded ${configFile.name}!`);
+        }
+      }
+      catch (error) {
+        if (error instanceof ValidationError) {
+          displayErr(`${configFile.name} is of incompatible for type ${type}`);
+        }
       }
     }
   };
