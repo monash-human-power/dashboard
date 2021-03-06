@@ -1,4 +1,3 @@
-import { V3SpeedDistanceChart } from 'components/v3/dashboard/V3SpeedDistanceChart';
 import StatisticRow from 'components/v3/StatisticRow';
 import React from 'react';
 import { Badge } from 'react-bootstrap';
@@ -20,7 +19,7 @@ export default function DashboardView(): JSX.Element {
                     </Badge>
                 </div>
                 <StatisticRow />
-                <div className={styles.graph}><V3SpeedDistanceChart /></div>
+                <div><div className={styles.graph}>Graph Here</div></div>
             </div>
             <div className={styles.content}>
                 <div><div className={styles.bigGraph}>Big Graph Here</div></div>
