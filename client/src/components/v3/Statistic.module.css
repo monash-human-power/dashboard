@@ -1,7 +1,15 @@
+.top {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
 .value {
   font-size: 32px;
   line-height: 21px;
   color: #000000;
+  text-align: right;
 }
 
 .unit {
