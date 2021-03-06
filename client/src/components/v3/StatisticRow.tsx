@@ -14,15 +14,15 @@ export default function StatisticRow(): JSX.Element {
     const [maxSpeed, setMaxSpeed] = useState<number | null>(null);
 
     // TODO: Multiple sensor data
-    const currSpeed = useSensorData(3, Sensor.ReedVelocity, ReedVelocityRT);
+    const currVel = useSensorData(3, Sensor.ReedVelocity, ReedVelocityRT);
 
     // Update max speed whenever the speed is updated
     useEffect(() => {
-        // Add new data point
-        if (currSpeed) setMaxSpeed(Math.max(currSpeed, Math.abs(maxSpeed ?? 0)));
+        // Update max speed as the greater of current velocity and previous max
+        if (currVel) setMaxSpeed(Math.max(Math.abs(currVel), maxSpeed ?? 0));
         // Omit maxSpeed to avoid infinite render loop
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currSpeed]);
+    }, [currVel]);
 
     // TODO: Trap locations
     // eslint-disable-next-line no-unused-vars
@@ -39,7 +39,7 @@ export default function StatisticRow(): JSX.Element {
     return (
         <div className={styles.statContainer}>
             <div className={styles.statSpeed}>
-                <Statistic value={currSpeed} unit="km/h" desc="Current speed" />
+                <Statistic value={currVel} unit="km/h" desc="Current speed" />
             </div>
             <div className={styles.statSpeed}>
                 <Statistic value={maxSpeed} unit="km/h" desc="Max. speed" />
