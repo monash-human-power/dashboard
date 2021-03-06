@@ -1,9 +1,30 @@
 import { emit } from 'api/common/socket';
 import { BoostConfigType, configBundleT, configObjT } from 'types/boost';
 import toast from 'react-hot-toast';
-import { ValidationError } from 'runtypes';
+import { Runtype } from 'runtypes';
 
 type payloadAction = 'upload' | 'delete';
+
+/**
+ * Check that the given string content is of the type given
+ * 
+ * @param content string containing the content to check
+ * @param typeRequired the type teh content is expected to be
+ * 
+ * @returns true if the content when parsed satisfies the given type else false
+ */
+function correctContentType(content: string, typeRequired: Runtype) {
+  try {
+    if (typeRequired.check(JSON.parse(content))) {
+      return true;
+    };
+  }
+  catch (error) {
+    return false;
+  }
+  return false;
+};
+
 
 /**
  * Send configuration status over MQTT on topic 'boost/configs/action'
@@ -123,29 +144,32 @@ export default function uploadConfig(
   // Called when FileReader has completed reading a file
   reader.onload = () => {
     const fileContent = reader.result as string;
-    if (type === 'all') {
-      uploadMultipleConfigs(fileContent, configFile.name, displayErr, configExist);
-      
-    } else {
-      // Single config uploaded
-      try {
-        const config = configObjT.check(JSON.parse(fileContent));
-        if (configExist(type, config.name)) {
-          displayErr(
-            `${configFile.name} already exists for ${type}, please change the name`,
-          );
-        } else {
-          sendConfig('upload', type, fileContent);
-          toast.success(`Uploaded ${configFile.name}!`);
-        }
-      }
-      catch (error) {
-        if (error instanceof ValidationError) {
-          displayErr(`${configFile.name} is of incompatible for type ${type}`);
-        }
-      }
-    }
-  };
 
-  reader.readAsText(configFile);
-}
+    if (type === 'all') {
+
+      if (correctContentType(fileContent, configBundleT)) {
+        uploadMultipleConfigs(fileContent, configFile.name, displayErr, configExist);
+      }
+      else {
+        displayErr(`${configFile.name} is not compatible for a config bundle`);
+      }
+      
+    } else if (correctContentType(fileContent, configObjT)) {
+      // Single config uploaded
+      const config = configObjT.check(JSON.parse(fileContent));
+      if (configExist(type, config.name)) {
+        displayErr(
+          `${configFile.name} already exists for ${type}, please change the name`,
+        );
+      } else {
+        sendConfig('upload', type, fileContent);
+        toast.success(`Uploaded ${configFile.name}!`);
+        }
+      }
+      else {
+        // Single config uploaded is not of the right type
+        displayErr(`${configFile.name} is not compatible for type ${type}`);
+      }
+    };
+    reader.readAsText(configFile);
+  };
