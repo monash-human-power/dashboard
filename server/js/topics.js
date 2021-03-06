@@ -56,7 +56,7 @@ class WirelessModule {
       data: `${module_base}/data`,
       start: `${module_base}/start`,
       stop: `${module_base}/stop`,
-      module: `${module_base}/module`,
+      module: `${module_base}/#`,
     };
   }
 
