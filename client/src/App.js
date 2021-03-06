@@ -12,7 +12,6 @@ import styles from './App.module.css';
 function App() {
   const routeItems = routes.map(({ path, exact, component }) => {
     const View = component;
-    console.log('hi');
     return (
       <Route exact={exact} path={path} key={path}>
         <div className={styles.view}>{View ? <View /> : null}</div>
