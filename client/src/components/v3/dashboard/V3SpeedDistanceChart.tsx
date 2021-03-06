@@ -27,7 +27,9 @@ export function V3SpeedDistanceChart() {
             // New distance measurement
             && distance !== data[data.length - 1]?.y
         ) setData([...data, { x: distance, y: point }]);
-    }, [data, point, distance]);
+        // Omit data in deps as otherwise there would be an infinite render loop
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [point, distance]);
 
     return (<SpeedDistanceChart
         // Maximum of data set
