@@ -36,20 +36,20 @@ export default function StatisticRow(): JSX.Element {
 
     return (
         <div className={styles.statContainer}>
-            <div className={styles.stat}>
+            <div className={styles.statSpeed}>
                 <Statistic value={currSpeed} unit="km/h" desc="Current speed" />
             </div>
-            <div className={styles.stat}>
+            <div className={styles.statSpeed}>
                 <Statistic value={maxSpeed} unit="km/h" desc="Max. speed" />
             </div>
-            <div className={styles.stat}>
+            <div className={styles.statSpeed}>
                 <Statistic
                     value={prevTrapSpeed}
                     unit="km/h"
                     desc="Prev. trap speed (archived"
                 />
             </div>
-            <div className={styles.stat}>
+            <div className={styles.statSpeed}>
                 <Statistic
                     value={nextTrapSpeed}
                     unit="km/h"
@@ -57,14 +57,14 @@ export default function StatisticRow(): JSX.Element {
                 />
             </div>
             <div className={styles.line} />
-            <div className={styles.stat}>
+            <div className={styles.statPower}>
                 <Statistic
                     value={power ? Math.round(power) : null}
                     unit="W"
                     desc="Power"
                 />
             </div>
-            <div className={styles.stat}>
+            <div className={styles.statHeartRate}>
                 <Statistic
                     value={heartRate ? Math.round(heartRate) : null}
                     unit="bpm"
