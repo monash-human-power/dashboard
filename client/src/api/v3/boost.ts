@@ -124,7 +124,7 @@ export default function uploadConfig(
     if (!isCorrectContentType(configContent, getConfigRunType(type))) {
       displayErr(`${configFile.name} is not of the correct type for ${type} config`);
     }
-    else if (type === 'all') {
+    else if (type === 'bundle') {
       uploadMultipleConfigs(configContent, configFile.name, displayErr, configExist);
     }
     else if (configExist(type, configContent.name)) {

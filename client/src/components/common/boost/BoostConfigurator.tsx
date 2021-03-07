@@ -34,7 +34,7 @@ export default function BoostConfigurator({
   onUploadConfig,
 }: BoostConfiguratorProps) {
   const fileInput = createRef<HTMLInputElement>();
-  const [configType, setConfigType] = useState<BoostConfigType>('all');
+  const [configType, setConfigType] = useState<BoostConfigType>('bundle');
 
   const [displayMessage, setDisplayMessage] = useState('');
 
@@ -96,7 +96,7 @@ export default function BoostConfigurator({
             <Button
               variant="outline-primary"
               className="float-right"
-              onClick={() => handleClickUpload('all')}
+              onClick={() => handleClickUpload('bundle')}
             >
               Upload All Configs
             </Button>

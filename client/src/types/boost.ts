@@ -1,6 +1,6 @@
 import { Number, String, Array, Record, Union, Runtype } from 'runtypes';
 
-export type BoostConfigType = 'powerPlan' | 'rider' | 'bike' | 'track' | 'all';
+export type BoostConfigType = 'powerPlan' | 'rider' | 'bike' | 'track' | 'bundle';
 
 export interface BoostConfig {
   /** The input of BOOST that this config is for */
@@ -89,7 +89,7 @@ const ConfigRunType: ConfigDictionary = {
   'bike': bikeT,
   'track': trackT,
   'powerPlan': powerPlanT,
-  'all': configBundle,
+  'bundle': configBundle,
 };
 
 export const getConfigRunType = (type: BoostConfigType) => {
