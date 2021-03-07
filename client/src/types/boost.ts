@@ -1,6 +1,11 @@
 import { Number, String, Array, Record, Union, Runtype } from 'runtypes';
 
-export type BoostConfigType = 'powerPlan' | 'rider' | 'bike' | 'track' | 'bundle';
+export type BoostConfigType =
+  | 'powerPlan'
+  | 'rider'
+  | 'bike'
+  | 'track'
+  | 'bundle';
 
 export interface BoostConfig {
   /** The input of BOOST that this config is for */
@@ -37,15 +42,18 @@ const bikeT = Record({
   backWheel: WheelT,
 });
 
-const zonesT = Record({power: Number, duration: Number});
-const parametersT = Record({lowerBound: Number, upperBound: Number, step: Number});
+const zonesT = Record({ power: Number, duration: Number });
+const parametersT = Record({
+  lowerBound: Number,
+  upperBound: Number,
+  step: Number,
+});
 const powerPlanT = Record({
   name: String,
   inrunPower: Number,
   zones: Array(zonesT),
   searchParams: parametersT,
 });
-
 
 const trackConstantT = Record({
   name: String,
@@ -83,13 +91,13 @@ export type configBundleT = typeof configBundle;
 
 export const configObjT = Union(riderT, bikeT, trackT, powerPlanT);
 
-type ConfigDictionary = {[K in BoostConfigType] : Runtype};
+type ConfigDictionary = { [K in BoostConfigType]: Runtype };
 const ConfigRunType: ConfigDictionary = {
-  'rider': riderT,
-  'bike': bikeT,
-  'track': trackT,
-  'powerPlan': powerPlanT,
-  'bundle': configBundle,
+  rider: riderT,
+  bike: bikeT,
+  track: trackT,
+  powerPlan: powerPlanT,
+  bundle: configBundle,
 };
 
 export const getConfigRunType = (type: BoostConfigType) => {
