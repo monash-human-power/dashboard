@@ -76,7 +76,6 @@ function uploadMultipleConfigs(
 
     if (configExist(configType, config.name)) {
       if (repeatedConfigs) {
-        // Need to add a comma
         errMessage = errMessage.concat(', ');
       }
       errMessage = errMessage.concat(
