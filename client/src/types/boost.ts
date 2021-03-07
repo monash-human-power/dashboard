@@ -1,4 +1,4 @@
-import { Number, String, Array, Record, Union } from 'runtypes';
+import { Number, String, Array, Record, Union, Runtype } from 'runtypes';
 
 export type BoostConfigType = 'powerPlan' | 'rider' | 'bike' | 'track' | 'all';
 
@@ -46,7 +46,7 @@ const powerPlanT = Record({
   searchParams: parametersT,
 });
 
-// const slopeT = Union(Record({type: String, contant: Number}), Record({type: String, file: String}));
+
 const trackConstantT = Record({
   name: String,
   length: Number,
@@ -59,7 +59,6 @@ const trackConstantT = Record({
     constant: Number,
   }),
 });
-
 const trackSlopedT = Record({
   name: String,
   length: Number,
@@ -69,15 +68,30 @@ const trackSlopedT = Record({
   airDensity: Number,
   slope: Record({
     type: String,
-    file: String,
+    filename: String,
   }),
 });
+const trackT = Union(trackConstantT, trackSlopedT);
 
-export const configBundleT = Record({
+const configBundle = Record({
   rider: riderT,
   bike: bikeT,
-  track: Union(trackConstantT, trackSlopedT),
+  track: trackT,
   powerPlan: powerPlanT,
 });
+export type configBundleT = typeof configBundle;
 
-export const configObjT = Union(riderT, bikeT, Union(trackConstantT, trackSlopedT), powerPlanT);
+export const configObjT = Union(riderT, bikeT, trackT, powerPlanT);
+
+type ConfigDictionary = {[K in BoostConfigType] : Runtype};
+const ConfigRunType: ConfigDictionary = {
+  'rider': riderT,
+  'bike': bikeT,
+  'track': trackT,
+  'powerPlan': powerPlanT,
+  'all': configBundle,
+};
+
+export const getConfigRunType = (type: BoostConfigType) => {
+  return ConfigRunType[type];
+};

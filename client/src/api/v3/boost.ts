@@ -1,5 +1,5 @@
 import { emit } from 'api/common/socket';
-import { BoostConfigType, configBundleT, configObjT } from 'types/boost';
+import { BoostConfigType, configBundleT, configObjT, getConfigRunType } from 'types/boost';
 import toast from 'react-hot-toast';
 import { Runtype } from 'runtypes';
 
@@ -13,9 +13,9 @@ type payloadAction = 'upload' | 'delete';
  * 
  * @returns true if the content when parsed satisfies the given type else false
  */
-function correctContentType(content: string, typeRequired: Runtype) {
+function isCorrectContentType(content: any, typeRequired: Runtype) {
   try {
-    if (typeRequired.check(JSON.parse(content))) {
+    if (typeRequired.check(content)) {
       return true;
     };
   }
@@ -52,69 +52,44 @@ function sendConfig(
 /**
  * Split the given configurations object into inidvidual configs and then send them over MQTT
  * 
- * @param configsContent content of the config bundle file
+ * @param configs dictionary containign the 4 config types (`powerPlan`, `rider`, `track` and `bike`)
  * @param fileName name of the file that contained all the configs
  * @param displayErr function to display error message 
  * @param configExist function to check if a file of the same name exists
  */
 function uploadMultipleConfigs(
-  configsContent: string,
+  configs: configBundleT,
   fileName: string,
   displayErr: (message: string) => void,
   configExist: (type: BoostConfigType, name: string) => boolean,
 ) {
-  // Check that the parsed object adhere to the form `configBundleT`
-  const configs = configBundleT.check(JSON.parse(configsContent));
-
-  // Check that no config is repeated and that all configs are present
+  // Check that no config is repeated 
   let repeatedConfigs = false;
-  let countConfigs = 0;
-  const possibleConfig = ['powerPlan', 'rider', 'track', 'bike'];
   let errMessage = `Please rename the following repeated configs inside ${fileName}: `;
 
   Object.entries(configs).forEach((configEntry) => {
-    const config = configObjT.check(configEntry[1]);
     const configType = configEntry[0] as BoostConfigType;
+    const config = configObjT.check(configEntry[1]);
 
-    if (possibleConfig.includes(configType)) {
-      if (configExist(configType, config.name)) {
-        if (repeatedConfigs) {
-          // Need to add a comma
-          errMessage = errMessage.concat(', ');
-        }
-        errMessage = errMessage.concat(
-          `'${config.name}' in ${configType} configuration`,
-        );
-        repeatedConfigs = true;
+    if (configExist(configType, config.name)) {
+      if (repeatedConfigs) {
+        // Need to add a comma
+        errMessage = errMessage.concat(', ');
       }
-      // Remove the uploaded config from the `possibleConfig` list
-      const i = possibleConfig.indexOf(configType);
-      possibleConfig.splice(i, 1);
-
-      countConfigs += 1;
+      errMessage = errMessage.concat(
+        `'${config.name}' in ${configType} configuration`,
+      );
+      repeatedConfigs = true;
     }
   });
 
   if (repeatedConfigs) {
     displayErr(errMessage);
-  } else if (possibleConfig.length === 4) {
-    displayErr(
-      `${fileName} is not a bundle (i.e. it does not contain the 4 configs)`,
-    );
-  } else if (possibleConfig.length !== 0) {
-    displayErr(
-      `The bundle ${fileName} did not contain the following config/s (please add them): ${possibleConfig}`,
-    );
-  } else if (countConfigs !== 4) {
-    // Exactly 4 configs not provided
-    displayErr(
-      `${fileName} contains too many or too few configs, please ensure there are exactly 4 configs`,
-    );
   } else {
     // For each config, send the config content over MQTT
     Object.entries(configs).forEach((configEntry) => {
-      const config = configObjT.check(configEntry[1]);
       const configType = configEntry[0] as BoostConfigType;
+      const config = configObjT.check(configEntry[1]);
 
       sendConfig('upload', configType, JSON.stringify(config));
     });
@@ -144,32 +119,25 @@ export default function uploadConfig(
   // Called when FileReader has completed reading a file
   reader.onload = () => {
     const fileContent = reader.result as string;
+    const configContent = JSON.parse(fileContent);
 
-    if (type === 'all') {
-
-      if (correctContentType(fileContent, configBundleT)) {
-        uploadMultipleConfigs(fileContent, configFile.name, displayErr, configExist);
-      }
-      else {
-        displayErr(`${configFile.name} is not compatible for a config bundle`);
-      }
-      
-    } else if (correctContentType(fileContent, configObjT)) {
-      // Single config uploaded
-      const config = configObjT.check(JSON.parse(fileContent));
-      if (configExist(type, config.name)) {
+    if (!isCorrectContentType(configContent, getConfigRunType(type))) {
+      displayErr(`${configFile.name} is not of the correct type for ${type} config`);
+    }
+    else if (type === 'all') {
+      uploadMultipleConfigs(configContent, configFile.name, displayErr, configExist);
+    }
+    else if (configExist(type, configContent.name)) {
         displayErr(
           `${configFile.name} already exists for ${type}, please change the name`,
         );
-      } else {
+      } 
+    else {
+        // Single config uploaded
         sendConfig('upload', type, fileContent);
         toast.success(`Uploaded ${configFile.name}!`);
         }
-      }
-      else {
-        // Single config uploaded is not of the right type
-        displayErr(`${configFile.name} is not compatible for type ${type}`);
-      }
     };
+
     reader.readAsText(configFile);
   };
