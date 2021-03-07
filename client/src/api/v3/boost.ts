@@ -11,12 +11,12 @@ import { Runtype } from 'runtypes';
 type payloadAction = 'upload' | 'delete';
 
 /**
- * Check that the given string content is of the type given
+ * Check that the given content is of the type given
  *
- * @param content string containing the content to check
- * @param typeRequired the type teh content is expected to be
+ * @param content the content to check for it's type
+ * @param typeRequired the type the content is expected to be
  *
- * @returns true if the content when parsed satisfies the given type else false
+ * @returns true if the content satisfies the given type else false
  */
 function isCorrectContentType(content: any, typeRequired: Runtype) {
   try {
