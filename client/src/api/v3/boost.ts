@@ -129,7 +129,7 @@ export default function uploadConfig(
     }
     else if (configExist(type, configContent.name)) {
         displayErr(
-          `${configFile.name} already exists for ${type}, please change the name`,
+          `${configFile.name} already exists for ${type}, please select it from the options provided`,
         );
       } 
     else {
