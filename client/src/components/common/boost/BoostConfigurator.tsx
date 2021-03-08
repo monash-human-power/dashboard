@@ -55,7 +55,7 @@ export default function BoostConfigurator({
     let found = false;
     configs.forEach((config) => {
       if (config.type === type) {
-        config.options.forEach( (configName) => {
+        config.options.forEach((configName) => {
           if (configName.displayName === name) {
             found = true;
           }
@@ -125,7 +125,9 @@ export default function BoostConfigurator({
                 >
                   {camelCaseToStartCase(config.type)}
                   {': '}
-                  <i>{config.active ? `"${config.active.displayName}"` : 'None'}</i>
+                  <i>
+                    {config.active ? `"${config.active.displayName}"` : 'None'}
+                  </i>
                   <Button
                     variant="outline-primary"
                     className="float-right mb-1"

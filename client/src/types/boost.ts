@@ -1,4 +1,12 @@
-import { Number, String, Array, Record, Union, Runtype, Static } from 'runtypes';
+import {
+  Number,
+  String,
+  Array,
+  Record,
+  Union,
+  Runtype,
+  Static,
+} from 'runtypes';
 
 export type BoostConfigType =
   | 'powerPlan'
@@ -8,9 +16,9 @@ export type BoostConfigType =
   | 'bundle';
 
 type configName = {
-  displayName: string,
-  fileName: string,
-}
+  displayName: string;
+  fileName: string;
+};
 
 export interface BoostConfig {
   /** The input of BOOST that this config is for */

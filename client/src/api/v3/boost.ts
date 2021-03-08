@@ -143,7 +143,7 @@ export default function uploadConfig(
       );
     } else {
       // Single config uploaded
-      sendConfig('upload', type, configFile.name , fileContent);
+      sendConfig('upload', type, configFile.name, fileContent);
       toast.success(`Uploaded ${configFile.name}!`);
     }
   };
