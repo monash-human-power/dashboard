@@ -1,4 +1,4 @@
-import { Number, String, Array, Record, Union, Runtype } from 'runtypes';
+import { Number, String, Array, Record, Union, Runtype, Static } from 'runtypes';
 
 export type BoostConfigType =
   | 'powerPlan'
@@ -87,7 +87,7 @@ const configBundle = Record({
   track: trackT,
   powerPlan: powerPlanT,
 });
-export type configBundleT = typeof configBundle;
+export type configBundleT = Static<typeof configBundle>;
 
 export const configObjT = Union(riderT, bikeT, trackT, powerPlanT);
 
