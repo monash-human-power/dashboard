@@ -3,7 +3,7 @@ import {
   BoostConfigType,
   configBundleT,
   configObjT,
-  ConfigRunType,
+  getConfigRunType,
 } from 'types/boost';
 import toast from 'react-hot-toast';
 import { Runtype } from 'runtypes';
@@ -123,7 +123,7 @@ export default function uploadConfig(
     const fileContent = reader.result as string;
     const configContent = JSON.parse(fileContent);
 
-    if (!isCorrectContentType(configContent, getConfigRunType(type))) {
+    if (!isCorrectContentType(configContent, getConfigRunType[type])) {
       displayErr(
         `${configFile.name} is not of the correct type for ${type} config`,
       );
