@@ -34,17 +34,20 @@ function isCorrectContentType(content: any, typeRequired: Runtype) {
  *
  * @param actionType represents whether the config is being uploaded or deleted
  * @param type the type of the configuration being sent
+ * @param name name of the config file
  * @param configContent configuration content
  */
 function sendConfig(
   actionType: payloadAction,
   type: BoostConfigType,
+  name: string,
   configContent: string | null,
 ) {
   const channel = 'send-config';
   const payload = {
     action: actionType,
     configType: type,
+    fileName: name,
     content: configContent,
   };
   // To check things work without needing the server started
@@ -93,7 +96,7 @@ function uploadMultipleConfigs(
       const configType = configEntry[0] as BoostConfigType;
       const config = configObjT.check(configEntry[1]);
 
-      sendConfig('upload', configType, JSON.stringify(config));
+      sendConfig('upload', configType, fileName, JSON.stringify(config));
     });
 
     toast.success(`Uploaded configs in ${fileName}`);
@@ -140,7 +143,7 @@ export default function uploadConfig(
       );
     } else {
       // Single config uploaded
-      sendConfig('upload', type, fileContent);
+      sendConfig('upload', type, configFile.name , fileContent);
       toast.success(`Uploaded ${configFile.name}!`);
     }
   };
