@@ -16,23 +16,23 @@ const Template = addArgs<BoostConfiguratorProps>((props) => (
 const baseConfigs: BoostConfig[] = [
   {
     type: 'powerPlan',
-    options: ['my_plan_1.json', 'this_one_gets_you_to_144.json'],
-    active: 'my_plan_1.json',
+    options: [{fileName: 'my_plan_1.json', displayName: 'my_plan_1'}, {fileName: 'this_one_gets_you_to_144.json', displayName: '144'}],
+    active: {fileName: 'my_plan_1.json', displayName: 'my_plan_1'},
   },
   {
     type: 'rider',
-    options: ['al.json', 'charles.json'],
-    active: 'charles.json',
+    options: [{fileName: 'al.json', displayName: 'AL'}, {fileName: 'charles.json', displayName: 'charles'}],
+    active: {fileName: 'charles.json', displayName: 'charles'},
   },
   {
     type: 'bike',
-    options: ['blacksmith.json', 'wombat.json', 'precilla.json'],
-    active: 'wombat.json',
+    options: [{fileName: 'blacksmith.json', displayName: 'Black Smith'}, {fileName: 'wombat.json', displayName: 'Wombat'}, {fileName: 'precilla.json', displayName: 'Precilla'}],
+    active: {fileName: 'wombat.json', displayName: 'Wombat'},
   },
   {
     type: 'track',
-    options: ['ford.json', 'holden.json', 'battle_mountain.json'],
-    active: 'ford.json',
+    options: [{fileName: 'ford.json', displayName: 'Ford'}, {fileName: 'holden.json', displayName: 'Holden'}, {fileName: 'battle_mountain.json', displayName: 'Battle Mountain'} ],
+    active: {fileName: 'ford.json', displayName: 'Ford'},
   },
 ];
 

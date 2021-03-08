@@ -23,8 +23,8 @@ export default function BoostConfigList({
   onSelectConfig,
   onDeleteConfig,
 }: BoostConfigListProps) {
-  const handleSelect = (configName: string) => {
-    if (configName !== config.active) onSelectConfig(configName);
+  const handleSelect = (configFileName: string) => {
+    if (configFileName !== config.active?.fileName) onSelectConfig(configFileName);
   };
   const handleDelete = (event: React.MouseEvent, configName: string) => {
     event.stopPropagation();
@@ -44,16 +44,16 @@ export default function BoostConfigList({
     <>
       {config.options.map((configName) => (
         <WidgetListGroupItem
-          title={configName}
+          title={configName.displayName}
           active={configName === config.active}
           action
-          onClick={() => handleSelect(configName)}
+          onClick={() => handleSelect(configName.fileName)}
           as="a"
         >
           <Button
             variant="danger"
             size="sm"
-            onClick={(e) => handleDelete(e, configName)}
+            onClick={(e) => handleDelete(e, configName.fileName)}
           >
             <FontAwesomeIcon icon={faTrashAlt} />
           </Button>

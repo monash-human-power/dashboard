@@ -18,8 +18,8 @@ const onDeleteConfig = action('onDeleteConfig');
 export const Simple = createStory(Template, {
   config: {
     type: 'powerPlan',
-    options: ['My first config', 'My second config'],
-    active: 'My first config',
+    options: [{displayName: 'My first config', fileName: 'my_first_config.json'}, {displayName: 'My second config', fileName: 'my_second_config.json'}],
+    active: {displayName: 'My first config', fileName: 'my_first_config.json'},
   },
   onSelectConfig,
   onDeleteConfig,
