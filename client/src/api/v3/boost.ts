@@ -3,7 +3,7 @@ import {
   BoostConfigType,
   configBundleT,
   configObjT,
-  getConfigRunType,
+  ConfigRunType,
 } from 'types/boost';
 import toast from 'react-hot-toast';
 import { Runtype } from 'runtypes';

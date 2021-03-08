@@ -92,14 +92,10 @@ export type configBundleT = Static<typeof configBundle>;
 export const configObjT = Union(riderT, bikeT, trackT, powerPlanT);
 
 type ConfigDictionary = { [K in BoostConfigType]: Runtype };
-const ConfigRunType: ConfigDictionary = {
+export const getConfigRunType: ConfigDictionary = {
   rider: riderT,
   bike: bikeT,
   track: trackT,
   powerPlan: powerPlanT,
   bundle: configBundle,
-};
-
-export const getConfigRunType = (type: BoostConfigType) => {
-  return ConfigRunType[type];
 };
