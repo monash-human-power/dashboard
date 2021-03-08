@@ -5,3 +5,10 @@
 .file_icon {
   transform: scale(1.5);
 }
+
+.file_name_display {
+  opacity: 0.6;
+  font-style: italic;
+  font-size: x-small;
+  text-align: center;
+}
