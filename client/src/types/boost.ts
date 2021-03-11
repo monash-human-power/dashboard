@@ -15,7 +15,7 @@ export type BoostConfigType =
   | 'track'
   | 'bundle';
 
-type configName = {
+type ConfigName = {
   displayName: string;
   fileName: string;
 };
@@ -24,17 +24,17 @@ export interface BoostConfig {
   /** The input of BOOST that this config is for */
   type: BoostConfigType;
   /** List of available BOOST configuration files */
-  options: configName[];
+  options: ConfigName[];
   /** Currently selected BOOST configuration */
-  active?: configName;
+  active?: ConfigName;
 }
 
-const riderT = Record({
+const RiderT = Record({
   name: String,
   mass: Number,
 });
 
-const cdaT = Record({
+const CdaT = Record({
   type: String,
   velocity: Array(Number),
   cda: Array(Number),
@@ -46,29 +46,29 @@ const WheelT = Record({
   momentOfInertia: Number,
   diameter: Number,
 });
-const bikeT = Record({
+const BikeT = Record({
   name: String,
   bikeMass: Number,
   dtLoss: Number,
-  cda: cdaT,
+  cda: CdaT,
   frontWheel: WheelT,
   backWheel: WheelT,
 });
 
-const zonesT = Record({ power: Number, duration: Number });
-const parametersT = Record({
+const ZonesT = Record({ power: Number, duration: Number });
+const ParametersT = Record({
   lowerBound: Number,
   upperBound: Number,
   step: Number,
 });
-const powerPlanT = Record({
+const PowerPlanT = Record({
   name: String,
   inrunPower: Number,
-  zones: Array(zonesT),
-  searchParams: parametersT,
+  zones: Array(ZonesT),
+  searchParams: ParametersT,
 });
 
-const trackConstantT = Record({
+const TrackConstantT = Record({
   name: String,
   length: Number,
   trapStart: Number,
@@ -80,7 +80,7 @@ const trackConstantT = Record({
     constant: Number,
   }),
 });
-const trackSlopedT = Record({
+const TrackSlopedT = Record({
   name: String,
   length: Number,
   trapStart: Number,
@@ -92,23 +92,23 @@ const trackSlopedT = Record({
     filename: String,
   }),
 });
-const trackT = Union(trackConstantT, trackSlopedT);
+const TrackT = Union(TrackConstantT, TrackSlopedT);
 
-const configBundle = Record({
-  rider: riderT,
-  bike: bikeT,
-  track: trackT,
-  powerPlan: powerPlanT,
+const ConfigBundle = Record({
+  rider: RiderT,
+  bike: BikeT,
+  track: TrackT,
+  powerPlan: PowerPlanT,
 });
-export type configBundleT = Static<typeof configBundle>;
+export type ConfigBundleT = Static<typeof ConfigBundle>;
 
-export const configObjT = Union(riderT, bikeT, trackT, powerPlanT);
+export const ConfigObjT = Union(RiderT, BikeT, TrackT, PowerPlanT);
 
 type ConfigDictionary = { [K in BoostConfigType]: Runtype };
 export const getConfigRunType: ConfigDictionary = {
-  rider: riderT,
-  bike: bikeT,
-  track: trackT,
-  powerPlan: powerPlanT,
-  bundle: configBundle,
+  rider: RiderT,
+  bike: BikeT,
+  track: TrackT,
+  powerPlan: PowerPlanT,
+  bundle: ConfigBundle,
 };

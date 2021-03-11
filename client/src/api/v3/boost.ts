@@ -1,8 +1,8 @@
 import { emit } from 'api/common/socket';
 import {
   BoostConfigType,
-  configBundleT,
-  configObjT,
+  ConfigBundleT,
+  ConfigObjT,
   getConfigRunType,
 } from 'types/boost';
 import toast from 'react-hot-toast';
@@ -64,7 +64,7 @@ function sendConfig(
  * @param configExist function to check if a file of the same name exists
  */
 function uploadMultipleConfigs(
-  configs: configBundleT,
+  configs: ConfigBundleT,
   fileName: string,
   displayErr: (message: string) => void,
   configExist: (type: BoostConfigType, name: string) => boolean,
@@ -75,7 +75,7 @@ function uploadMultipleConfigs(
 
   Object.entries(configs).forEach((configEntry) => {
     const configType = configEntry[0] as BoostConfigType;
-    const config = configObjT.check(configEntry[1]);
+    const config = ConfigObjT.check(configEntry[1]);
 
     if (configExist(configType, config.name)) {
       if (repeatedConfigs) {
@@ -94,7 +94,7 @@ function uploadMultipleConfigs(
     // For each config, send the config content over MQTT
     Object.entries(configs).forEach((configEntry) => {
       const configType = configEntry[0] as BoostConfigType;
-      const config = configObjT.check(configEntry[1]);
+      const config = ConfigObjT.check(configEntry[1]);
 
       sendConfig('upload', configType, fileName, JSON.stringify(config));
     });
