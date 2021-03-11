@@ -21,12 +21,12 @@ const baseConfigs: BoostConfig[] = [
   },
   {
     type: 'rider',
-    options: [{fileName: 'al.json', displayName: 'AL'}, {fileName: 'charles.json', displayName: 'charles'}],
+    options: [{fileName: 'al.json', displayName: 'Al'}, {fileName: 'charles.json', displayName: 'Charles'}],
     active: {fileName: 'charles.json', displayName: 'charles'},
   },
   {
     type: 'bike',
-    options: [{fileName: 'blacksmith.json', displayName: 'Black Smith'}, {fileName: 'wombat.json', displayName: 'Wombat'}, {fileName: 'precilla.json', displayName: 'Precilla'}],
+    options: [{fileName: 'blacksmith.json', displayName: 'Blacksmith'}, {fileName: 'wombat.json', displayName: 'Wombat'}, {fileName: 'precilla.json', displayName: 'Precilla'}],
     active: {fileName: 'wombat.json', displayName: 'Wombat'},
   },
   {
