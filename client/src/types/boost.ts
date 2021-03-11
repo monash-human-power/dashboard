@@ -8,27 +8,6 @@ import {
   Static,
 } from 'runtypes';
 
-export type BoostConfigType =
-  | 'powerPlan'
-  | 'rider'
-  | 'bike'
-  | 'track'
-  | 'bundle';
-
-type ConfigName = {
-  displayName: string;
-  fileName: string;
-};
-
-export interface BoostConfig {
-  /** The input of BOOST that this config is for */
-  type: BoostConfigType;
-  /** List of available BOOST configuration files */
-  options: ConfigName[];
-  /** Currently selected BOOST configuration */
-  active?: ConfigName;
-}
-
 const RiderT = Record({
   name: String,
   mass: Number,
@@ -103,6 +82,22 @@ const ConfigBundle = Record({
 export type ConfigBundleT = Static<typeof ConfigBundle>;
 
 export const ConfigObjT = Union(RiderT, BikeT, TrackT, PowerPlanT);
+
+export type BoostConfigType = keyof ConfigBundleT | "bundle";
+
+type ConfigName = {
+  displayName: string;
+  fileName: string;
+};
+
+export interface BoostConfig {
+  /** The input of BOOST that this config is for */
+  type: BoostConfigType;
+  /** List of available BOOST configuration files */
+  options: ConfigName[];
+  /** Currently selected BOOST configuration */
+  active?: ConfigName;
+}
 
 type ConfigDictionary = { [K in BoostConfigType]: Runtype };
 export const getConfigRunType: ConfigDictionary = {
