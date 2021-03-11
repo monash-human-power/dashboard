@@ -100,7 +100,7 @@ export interface BoostConfig {
 }
 
 type ConfigDictionary = { [K in BoostConfigType]: Runtype };
-export const getConfigRunType: ConfigDictionary = {
+export const boostConfigTypeToRuntype: ConfigDictionary = {
   rider: RiderT,
   bike: BikeT,
   track: TrackT,
