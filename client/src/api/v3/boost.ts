@@ -60,8 +60,6 @@ function sendConfig(
  *
  * @param configs dictionary containign the 4 config types (`powerPlan`, `rider`, `track` and `bike`)
  * @param fileName name of the file that contained all the configs
- * @param displayErr function to display error message
- * @param configExist function to check if a file of the same name exists
  */
 function uploadMultipleConfigs(
   configs: ConfigBundleT,
@@ -86,7 +84,6 @@ function uploadMultipleConfigs(
  * @param type the type of the configuration
  * @param configFile file containing content of the configuration
  * @param displayErr function to display error if uploaded config is not correct
- * @param fileExist function to check if a given config name has already been used
  */
 export default function uploadConfig(
   type: BoostConfigType,
