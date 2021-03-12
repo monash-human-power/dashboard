@@ -9,6 +9,7 @@
 .file_name_display {
   opacity: 0.6;
   font-style: italic;
+  margin-left: 0.5em;
   font-size: x-small;
   text-align: center;
 }
