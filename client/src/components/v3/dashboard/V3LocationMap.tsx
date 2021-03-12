@@ -5,6 +5,9 @@ import LocationMap, {
 import React, { useEffect, useState } from 'react';
 import { GPSRT } from 'types/data';
 
+export const V3MapKey = 'v3-dashboard-location-map-chart-data';
+export const V3MapZoomKey = 'v3-dashboard-location-map-zoom';
+
 /**
  * Checks if a given location is valid
  *
@@ -29,9 +32,16 @@ function isValidLocation(location: LocationTimeSeriesPoint): boolean {
  * @returns Component
  */
 export default function V3LocationMap(): JSX.Element {
-  const [locationHistory, setLocationHistory] = useState<
+  const storedData = sessionStorage.getItem(V3MapKey);
+
+  const [locationHistory, setStateLocationHistory] = useState<
     LocationTimeSeriesPoint[]
-  >([]);
+  >(storedData ? JSON.parse(storedData) : []);
+
+  const setLocationHistory = (data: LocationTimeSeriesPoint[]) => {
+    sessionStorage.setItem(V3MapKey, JSON.stringify(data));
+    setStateLocationHistory(data);
+  };
 
   // Extract location info from GPS
   const GPS = useSensorData(3, Sensor.GPS, GPSRT);

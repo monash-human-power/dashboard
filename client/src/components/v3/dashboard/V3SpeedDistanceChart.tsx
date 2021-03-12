@@ -4,14 +4,26 @@ import React, { useEffect, useState } from 'react';
 import { ChartPoint } from 'types/chart';
 import { ReedDistanceRT, ReedVelocityRT } from 'types/data';
 
+export const V3SDChartKey = 'v3-dashboard-speed-distance-chart-data';
+
 /**
  * Passes V3 data to the speed distance chart component
  *
  * @returns Component
  */
 export function V3SpeedDistanceChart() {
+  const storedData = sessionStorage.getItem(V3SDChartKey);
+
   // Used to store the data points
-  const [data, setData] = useState<ChartPoint[]>([]);
+  const [data, setStateData] = useState<ChartPoint[]>(
+    storedData ? JSON.parse(storedData) : [],
+  );
+
+  // Store data for session
+  const setData = (newData: ChartPoint[]) => {
+    sessionStorage.setItem(V3SDChartKey, JSON.stringify(newData));
+    setStateData(newData);
+  };
 
   // Speed
   const point = useSensorData(3, Sensor.ReedVelocity, ReedVelocityRT);
