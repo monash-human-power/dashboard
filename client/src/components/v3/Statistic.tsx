@@ -17,12 +17,12 @@ export interface StatisticProps {
  */
 export default function Statistic({ value, unit, desc }: StatisticProps): JSX.Element {
     return (
-        <div>
+        <>
             <div className={styles.top}>
                 <span className={styles.value}>{value ?? '—'}</span>
                 <span className={styles.unit}>{unit}</span>
             </div>
             <span className={styles.desc}>{desc}</span>
-        </div>
+        </>
     );
 }
