@@ -1,9 +1,9 @@
 import { VideoFeedStatus } from 'api/common/camera';
+import styles from 'components/common/camera_settings/CameraRecording.module.css';
+import CameraRecordingStatus, { CameraRecordingStatusProps } from 'components/common/camera_settings/CameraRecordingStatus';
 import React from 'react';
 import { Badge, Button, Card, Col, Row } from 'react-bootstrap';
 import { capitalise } from 'utils/string';
-import styles from 'components/common/camera_settings/CameraRecording.module.css';
-import CameraRecordingStatus, { CameraRecordingStatusProps } from 'components/common/camera_settings/CameraRecordingStatus';
 
 export type CameraRecordingPropT = VideoFeedStatus & CameraRecordingStatusProps & { ip: string };
 
