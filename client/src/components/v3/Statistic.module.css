@@ -4,6 +4,7 @@
   flex-wrap: wrap;
   justify-content: flex-end;
   align-items: flex-end;
+  margin-bottom: -5px;
 }
 
 .value {
