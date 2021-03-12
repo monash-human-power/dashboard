@@ -66,31 +66,7 @@ function sendConfig(
 function uploadMultipleConfigs(
   configs: ConfigBundleT,
   fileName: string,
-  displayErr: (message: string) => void,
-  configExist: (type: BoostConfigType, name: string) => boolean,
 ) {
-  // Check that no config is repeated
-  let repeatedConfigs = false;
-  let errMessage = `Please rename the following repeated configs inside ${fileName}: `;
-
-  Object.entries(configs).forEach((configEntry) => {
-    const configType = configEntry[0] as BoostConfigType;
-    const config = ConfigObjT.check(configEntry[1]);
-
-    if (configExist(configType, config.name)) {
-      if (repeatedConfigs) {
-        errMessage = errMessage.concat(', ');
-      }
-      errMessage = errMessage.concat(
-        `'${config.name}' in ${configType} configuration`,
-      );
-      repeatedConfigs = true;
-    }
-  });
-
-  if (repeatedConfigs) {
-    displayErr(errMessage);
-  } else {
     // For each config, send the config content over MQTT
     Object.entries(configs).forEach((configEntry) => {
       const configType = configEntry[0] as BoostConfigType;
@@ -100,7 +76,6 @@ function uploadMultipleConfigs(
     });
 
     toast.success(`Uploaded configs in ${fileName}`);
-  }
 }
 
 /**
@@ -111,13 +86,12 @@ function uploadMultipleConfigs(
  * @param type the type of the configuration
  * @param configFile file containing content of the configuration
  * @param displayErr function to display error if uploaded config is not correct
- * @param configExist function to check if a given config name has already been used
+ * @param fileExist function to check if a given config name has already been used
  */
 export default function uploadConfig(
   type: BoostConfigType,
   configFile: File,
   displayErr: (message: string) => void,
-  configExist: (type: BoostConfigType, name: string) => boolean,
 ) {
   const reader = new FileReader();
 
@@ -134,12 +108,6 @@ export default function uploadConfig(
       uploadMultipleConfigs(
         configContent,
         configFile.name,
-        displayErr,
-        configExist,
-      );
-    } else if (configExist(type, configContent.name)) {
-      displayErr(
-        `${configFile.name} already exists for ${type}, please select it from the options provided`,
       );
     } else {
       // Single config uploaded
