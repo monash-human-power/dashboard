@@ -301,11 +301,15 @@ sockets.init = function socketInit(server) {
     });
 
     socket.on('start-das-recording', () => {
-      mqttClient.publish(WirelessModule.all().start);
+      [1, 2, 3, 4].forEach((n) =>
+        mqttClient.publish(WirelessModule.id(n).start),
+      );
     });
 
     socket.on('stop-das-recording', () => {
-      mqttClient.publish(WirelessModule.all().stop);
+      [1, 2, 3, 4].forEach((n) =>
+        mqttClient.publish(WirelessModule.id(n).stop),
+      );
     });
   });
 };
