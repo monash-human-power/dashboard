@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import { Sensor, useSensorData } from 'api/common/data';
+import { useChannel } from 'api/common/socket';
 import SpeedDistanceChart from 'components/common/charts/SpeedDistanceChart';
 import { ChartPoint } from 'types/chart';
 import { ReedDistanceRT, ReedVelocityRT } from 'types/data';
@@ -20,6 +21,10 @@ export function V3SpeedDistanceChart() {
     storedData ? JSON.parse(storedData) : [],
   );
   const maxPoint = useRef(-1);
+
+  // Reset when start message received
+  const reset = () => setStateData([]);
+  useChannel('start', reset);
 
   // Store data for session
   const setData = (newData: ChartPoint[]) => {

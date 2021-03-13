@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Sensor, useSensorData } from 'api/common/data';
+import { useChannel } from 'api/common/socket';
 import LocationMap, {
   LocationTimeSeriesPoint,
 } from 'components/common/charts/LocationMap';
@@ -38,6 +39,10 @@ export default function V3LocationMap(): JSX.Element {
   const [locationHistory, setStateLocationHistory] = useState<
     LocationTimeSeriesPoint[]
   >(storedData ? JSON.parse(storedData) : []);
+
+  // Reset on start
+  const reset = () => setStateLocationHistory([]);
+  useChannel('start', reset);
 
   const setLocationHistory = (data: LocationTimeSeriesPoint[]) => {
     sessionStorage.setItem(V3MapKey, JSON.stringify(data));
