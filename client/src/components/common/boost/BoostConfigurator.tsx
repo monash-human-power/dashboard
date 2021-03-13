@@ -14,7 +14,7 @@ export interface BoostConfiguratorProps {
   onSelectConfig: (configType: ConfigT, name: string) => void;
   onDeleteConfig: (configType: ConfigT, name: string) => void;
   onUploadConfig: (
-    configType: FileConfigT | "bundle",
+    configType: FileConfigT | 'bundle',
     configFile: File,
     displayErr: (message: string) => void,
   ) => void;
@@ -53,14 +53,14 @@ export default function BoostConfigurator({
   const fileExist = (name: string) => {
     let found = false;
     configs.forEach((config) => {
-        config.options.forEach((configName) => {
-          if (configName.fileName === name) {
-            found = true;
-          }
-        });
+      config.options.forEach((configName) => {
+        if (configName.fileName === name) {
+          found = true;
+        }
       });
+    });
     return found;
-    };
+  };
 
   // This method gets called even if the user uploads a file and the second time they cancel
   // to upload, hence the need to check that the files attribute is not an array of 0 length
@@ -71,9 +71,10 @@ export default function BoostConfigurator({
         setShowUploadErr(true);
       };
       if (fileExist(event.target.files[0].name)) {
-        dispErr("A file of the same name already exists, please change the name and re-upload");
-      }
-      else {
+        dispErr(
+          'A file of the same name already exists, please change the name and re-upload',
+        );
+      } else {
         onUploadConfig(configType, event.target.files[0], dispErr);
       }
     }

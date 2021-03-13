@@ -83,7 +83,7 @@ export type ConfigBundleT = Static<typeof ConfigBundle>;
 
 export const ConfigObjT = Union(RiderT, BikeT, TrackT, PowerPlanT);
 
-export type FileConfigT = keyof ConfigBundleT | "bundle";
+export type FileConfigT = keyof ConfigBundleT | 'bundle';
 export type ConfigT = keyof ConfigBundleT;
 
 type ConfigName = {

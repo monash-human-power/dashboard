@@ -2,7 +2,9 @@ import React from 'react';
 import { action } from '@storybook/addon-actions';
 import { addArgs, createStory } from 'utils/stories';
 import { BoostConfig } from 'types/boost';
-import BoostConfigurator, { BoostConfiguratorProps } from 'components/common/boost/BoostConfigurator';
+import BoostConfigurator, {
+  BoostConfiguratorProps,
+} from 'components/common/boost/BoostConfigurator';
 
 export default {
   title: 'components/common/boost/BoostConfigurator',
@@ -16,23 +18,37 @@ const Template = addArgs<BoostConfiguratorProps>((props) => (
 const baseConfigs: BoostConfig[] = [
   {
     type: 'powerPlan',
-    options: [{fileName: 'my_plan_1.json', displayName: 'my_plan_1'}, {fileName: 'this_one_gets_you_to_144.json', displayName: '144'}],
-    active: {fileName: 'my_plan_1.json', displayName: 'my_plan_1'},
+    options: [
+      { fileName: 'my_plan_1.json', displayName: 'my_plan_1' },
+      { fileName: 'this_one_gets_you_to_144.json', displayName: '144' },
+    ],
+    active: { fileName: 'my_plan_1.json', displayName: 'my_plan_1' },
   },
   {
     type: 'rider',
-    options: [{fileName: 'al.json', displayName: 'Al'}, {fileName: 'charles.json', displayName: 'Charles'}],
-    active: {fileName: 'charles.json', displayName: 'charles'},
+    options: [
+      { fileName: 'al.json', displayName: 'Al' },
+      { fileName: 'charles.json', displayName: 'Charles' },
+    ],
+    active: { fileName: 'charles.json', displayName: 'charles' },
   },
   {
     type: 'bike',
-    options: [{fileName: 'blacksmith.json', displayName: 'Blacksmith'}, {fileName: 'wombat.json', displayName: 'Wombat'}, {fileName: 'precilla.json', displayName: 'Precilla'}],
-    active: {fileName: 'wombat.json', displayName: 'Wombat'},
+    options: [
+      { fileName: 'blacksmith.json', displayName: 'Blacksmith' },
+      { fileName: 'wombat.json', displayName: 'Wombat' },
+      { fileName: 'precilla.json', displayName: 'Precilla' },
+    ],
+    active: { fileName: 'wombat.json', displayName: 'Wombat' },
   },
   {
     type: 'track',
-    options: [{fileName: 'ford.json', displayName: 'Ford'}, {fileName: 'holden.json', displayName: 'Holden'}, {fileName: 'battle_mountain.json', displayName: 'Battle Mountain'} ],
-    active: {fileName: 'ford.json', displayName: 'Ford'},
+    options: [
+      { fileName: 'ford.json', displayName: 'Ford' },
+      { fileName: 'holden.json', displayName: 'Holden' },
+      { fileName: 'battle_mountain.json', displayName: 'Battle Mountain' },
+    ],
+    active: { fileName: 'ford.json', displayName: 'Ford' },
   },
 ];
 
