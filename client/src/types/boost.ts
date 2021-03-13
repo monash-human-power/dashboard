@@ -13,11 +13,16 @@ const RiderT = Record({
   mass: Number,
 });
 
-const CdaT = Record({
+const CdaFunctionalT = Record({
   type: String,
   velocity: Array(Number),
   cda: Array(Number),
 });
+const CdaConstantT = Record({
+  type: String,
+  constant: Number,
+});
+
 const WheelT = Record({
   rollResZeroSpeed: Number,
   rollResMoving: Number,
@@ -29,7 +34,7 @@ const BikeT = Record({
   name: String,
   bikeMass: Number,
   dtLoss: Number,
-  cda: CdaT,
+  cda: Union(CdaFunctionalT, CdaConstantT),
   frontWheel: WheelT,
   backWheel: WheelT,
 });
