@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { Sensor, useSensorData } from 'api/common/data';
 import SpeedDistanceChart from 'components/common/charts/SpeedDistanceChart';
@@ -19,6 +19,7 @@ export function V3SpeedDistanceChart() {
   const [data, setStateData] = useState<ChartPoint[]>(
     storedData ? JSON.parse(storedData) : [],
   );
+  const maxPoint = useRef(-1);
 
   // Store data for session
   const setData = (newData: ChartPoint[]) => {
@@ -38,8 +39,10 @@ export function V3SpeedDistanceChart() {
       distance && // Non null
       // New distance measurement
       distance !== data[data.length - 1]?.y
-    )
+    ) {
+      maxPoint.current = Math.max(maxPoint.current, point);
       setData([...data, { x: distance, y: point }]);
+    }
     // Omit data in deps as otherwise there would be an infinite render loop
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [point, distance]);
@@ -47,7 +50,7 @@ export function V3SpeedDistanceChart() {
   return (
     <SpeedDistanceChart
       // Maximum of data set
-      max={data.reduce((acc, { y }) => Math.max(acc, y), -1)}
+      max={maxPoint.current}
       data={data}
     />
   );
