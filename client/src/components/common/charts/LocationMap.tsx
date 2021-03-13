@@ -1,5 +1,4 @@
 import { LatLngTuple } from 'leaflet';
-import PropTypes from 'prop-types';
 import React from 'react';
 import {
   AttributionControl,
@@ -71,12 +70,3 @@ export default function LocationMap({ series }: LocationMapProps): JSX.Element {
     </Map>
   );
 }
-
-LocationMap.propTypes = {
-  series: PropTypes.arrayOf(
-    PropTypes.shape({
-      lat: PropTypes.number.isRequired,
-      long: PropTypes.number.isRequired,
-    }),
-  ).isRequired,
-};
