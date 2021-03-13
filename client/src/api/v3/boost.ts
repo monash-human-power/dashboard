@@ -56,25 +56,32 @@ function sendConfig(
   emit(channel, JSON.stringify(payload));
 }
 
+const configTypeToFileSuffix: { [K in ConfigT]: string } = {
+  rider: '_rider.json',
+  bike: '_bike.json',
+  track: '_track.json',
+  powerPlan: '_powerPlan.json',
+};
+
 /**
  * Split the given configurations object into inidvidual configs and then send them over MQTT
  *
  * @param configs dictionary containign the 4 config types (`powerPlan`, `rider`, `track` and `bike`)
  * @param fileName name of the file that contained all the configs
  */
-function uploadMultipleConfigs(
-  configs: ConfigBundleT,
-  fileName: string,
-) {
-    // For each config, send the config content over MQTT
-    Object.entries(configs).forEach((configEntry) => {
-      const configType = configEntry[0] as ConfigT;
-      const config = ConfigObjT.check(configEntry[1]);
+function uploadMultipleConfigs(configs: ConfigBundleT, fileName: string) {
+  // For each config, send the config content over MQTT
+  Object.entries(configs).forEach((configEntry) => {
+    const configType = configEntry[0] as ConfigT;
+    const config = ConfigObjT.check(configEntry[1]);
 
-      sendConfig('upload', configType, fileName, JSON.stringify(config));
-    });
+    // Since this config was uploaded as a bundle give it a different file name to differnetiate it's config type.
+    const file = fileName.replace('.json', configTypeToFileSuffix[configType]);
 
-    toast.success(`Uploaded configs in ${fileName}`);
+    sendConfig('upload', configType, file, JSON.stringify(config));
+  });
+
+  toast.success(`Uploaded configs in ${fileName}`);
 }
 
 /**
@@ -103,10 +110,7 @@ export default function uploadConfig(
         `${configFile.name} is not of the correct type for ${type} config`,
       );
     } else if (type === 'bundle') {
-      uploadMultipleConfigs(
-        configContent,
-        configFile.name,
-      );
+      uploadMultipleConfigs(configContent, configFile.name);
     } else {
       // Single config uploaded
       sendConfig('upload', type, configFile.name, fileContent);
