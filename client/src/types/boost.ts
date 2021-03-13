@@ -83,7 +83,8 @@ export type ConfigBundleT = Static<typeof ConfigBundle>;
 
 export const ConfigObjT = Union(RiderT, BikeT, TrackT, PowerPlanT);
 
-export type BoostConfigType = keyof ConfigBundleT | "bundle";
+export type FileConfigT = keyof ConfigBundleT | "bundle";
+export type ConfigT = keyof ConfigBundleT;
 
 type ConfigName = {
   displayName: string;
@@ -92,15 +93,15 @@ type ConfigName = {
 
 export interface BoostConfig {
   /** The input of BOOST that this config is for */
-  type: BoostConfigType;
+  type: ConfigT;
   /** List of available BOOST configuration files */
   options: ConfigName[];
   /** Currently selected BOOST configuration */
   active?: ConfigName;
 }
 
-type ConfigDictionary = { [K in BoostConfigType]: Runtype };
-export const boostConfigTypeToRuntype: ConfigDictionary = {
+type ConfigDictionary = { [K in FileConfigT]: Runtype };
+export const fileConfigTypeToRuntype: ConfigDictionary = {
   rider: RiderT,
   bike: BikeT,
   track: TrackT,

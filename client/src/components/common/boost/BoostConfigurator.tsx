@@ -5,16 +5,16 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import FontAwesomeIcon from 'components/common/FontAwesomeIcon';
 import { Accordion, Button, Card, Modal } from 'react-bootstrap';
-import { BoostConfig, BoostConfigType } from 'types/boost';
+import { BoostConfig, FileConfigT, ConfigT } from 'types/boost';
 import { camelCaseToStartCase } from 'utils/string';
 import BoostConfigList from 'components/common/boost/BoostConfigList';
 
 export interface BoostConfiguratorProps {
   configs: BoostConfig[];
-  onSelectConfig: (configType: BoostConfigType, name: string) => void;
-  onDeleteConfig: (configType: BoostConfigType, name: string) => void;
+  onSelectConfig: (configType: ConfigT, name: string) => void;
+  onDeleteConfig: (configType: ConfigT, name: string) => void;
   onUploadConfig: (
-    configType: BoostConfigType,
+    configType: FileConfigT | "bundle",
     configFile: File,
     displayErr: (message: string) => void,
   ) => void;
@@ -33,7 +33,7 @@ export default function BoostConfigurator({
   onUploadConfig,
 }: BoostConfiguratorProps) {
   const fileInput = createRef<HTMLInputElement>();
-  const [configType, setConfigType] = useState<BoostConfigType>('bundle');
+  const [configType, setConfigType] = useState<FileConfigT>('bundle');
 
   const [displayMessage, setDisplayMessage] = useState('');
 
@@ -42,7 +42,7 @@ export default function BoostConfigurator({
 
   // Function to click the hidden file input button (this is a work around to avoid the ugly
   // UI of the default input file button)
-  const handleClickUpload = (type: BoostConfigType) => {
+  const handleClickUpload = (type: FileConfigT) => {
     if (fileInput.current) {
       setConfigType(type);
       fileInput.current.click();

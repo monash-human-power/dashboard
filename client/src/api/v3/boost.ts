@@ -1,9 +1,10 @@
 import { emit } from 'api/common/socket';
 import {
-  BoostConfigType,
+  FileConfigT,
   ConfigBundleT,
   ConfigObjT,
-  boostConfigTypeToRuntype,
+  ConfigT,
+  fileConfigTypeToRuntype,
 } from 'types/boost';
 import toast from 'react-hot-toast';
 import { Runtype } from 'runtypes';
@@ -39,7 +40,7 @@ function isCorrectContentType(content: any, typeRequired: Runtype) {
  */
 function sendConfig(
   actionType: payloadAction,
-  type: BoostConfigType,
+  type: ConfigT,
   name: string,
   configContent: string | null,
 ) {
@@ -67,7 +68,7 @@ function uploadMultipleConfigs(
 ) {
     // For each config, send the config content over MQTT
     Object.entries(configs).forEach((configEntry) => {
-      const configType = configEntry[0] as BoostConfigType;
+      const configType = configEntry[0] as ConfigT;
       const config = ConfigObjT.check(configEntry[1]);
 
       sendConfig('upload', configType, fileName, JSON.stringify(config));
@@ -86,7 +87,7 @@ function uploadMultipleConfigs(
  * @param displayErr function to display error if uploaded config is not correct
  */
 export default function uploadConfig(
-  type: BoostConfigType,
+  type: FileConfigT,
   configFile: File,
   displayErr: (message: string) => void,
 ) {
@@ -97,7 +98,7 @@ export default function uploadConfig(
     const fileContent = reader.result as string;
     const configContent = JSON.parse(fileContent);
 
-    if (!isCorrectContentType(configContent, boostConfigTypeToRuntype[type])) {
+    if (!isCorrectContentType(configContent, fileConfigTypeToRuntype[type])) {
       displayErr(
         `${configFile.name} is not of the correct type for ${type} config`,
       );

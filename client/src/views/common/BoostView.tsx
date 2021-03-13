@@ -4,7 +4,7 @@ import BoostCalibration from 'components/common/boost/BoostCalibration';
 import BoostConfigurator from 'components/common/boost/BoostConfigurator';
 import { setCalibration, resetCalibration } from 'api/common/powerModel';
 import uploadConfig from 'api/v3/boost';
-import { BoostConfigType, BoostConfig } from 'types/boost';
+import { BoostConfig, ConfigT } from 'types/boost';
 
 // TODO: Implement actual functions for `onSelectConfig`, `onDeleteConfig` and true values for `baseConfigs` (provided from `boost`)
 
@@ -14,7 +14,7 @@ import { BoostConfigType, BoostConfig } from 'types/boost';
  * @param configType the type of the config
  * @param name name of the config file
  */
-function onSelectConfig(configType: BoostConfigType, name: string) {
+function onSelectConfig(configType: ConfigT, name: string) {
   console.log('Selected config:');
   console.log(`type: ${configType}`);
   console.log(`name: ${name}`);
@@ -26,7 +26,7 @@ function onSelectConfig(configType: BoostConfigType, name: string) {
  * @param configType the type of the config
  * @param name name of the config file
  */
-function onDeleteConfig(configType: BoostConfigType, name: string) {
+function onDeleteConfig(configType: ConfigT, name: string) {
   console.log('Deleted config:');
   console.log(`type: ${configType}`);
   console.log(`name: ${name}`);
