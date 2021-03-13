@@ -72,7 +72,6 @@ export default function BoostConfigList({
           <span>
             {configName.displayName}
             <span className={styles.file_name_display}>
-              {' '}
               ({getOriginalFileName(configName.fileName)})
             </span>
           </span>
