@@ -12,6 +12,13 @@ export interface BoostConfigListProps {
   onDeleteConfig: (configName: string) => void;
 }
 
+const fileNameSuffixes = [
+  '_rider.json',
+  '_bike.json',
+  '_track.json',
+  '_powerPlan.json',
+];
+
 /**
  * Selectors for BOOST config
  *
@@ -31,6 +38,17 @@ export default function BoostConfigList({
     event.stopPropagation();
     onDeleteConfig(configName);
   };
+
+  const getOriginalFileName = (fileName: string) => {
+    let originalFileName = fileName;
+    fileNameSuffixes.forEach((suffix: string) => {
+      if (fileName.includes(suffix)) {
+        originalFileName = fileName.replace(suffix, '.json');
+      }
+    });
+    return originalFileName;
+  };
+
   if (config.options.length === 0)
     return (
       <div className={styles.empty_dialogue}>
@@ -55,7 +73,7 @@ export default function BoostConfigList({
             {configName.displayName}
             <span className={styles.file_name_display}>
               {' '}
-              ({configName.fileName})
+              ({getOriginalFileName(configName.fileName)})
             </span>
           </span>
 

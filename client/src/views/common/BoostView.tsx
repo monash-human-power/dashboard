@@ -46,9 +46,9 @@ const baseConfigs: BoostConfig[] = [
     type: 'rider',
     options: [
       { fileName: 'al.json', displayName: 'AL' },
-      { fileName: 'charles.json', displayName: 'charles' },
+      { fileName: 'charles_rider.json', displayName: 'charles' },
     ],
-    active: { fileName: 'charles.json', displayName: 'charles' },
+    active: { fileName: 'charles_rider.json', displayName: 'charles' },
   },
   {
     type: 'bike',
@@ -63,7 +63,7 @@ const baseConfigs: BoostConfig[] = [
     type: 'track',
     options: [
       { fileName: 'ford.json', displayName: 'Ford' },
-      { fileName: 'holden.json', displayName: 'Holden' },
+      { fileName: 'holden_track.json', displayName: 'Holden' },
       { fileName: 'battle_mountain.json', displayName: 'Battle Mountain' },
     ],
     active: { fileName: 'ford.json', displayName: 'Ford' },
