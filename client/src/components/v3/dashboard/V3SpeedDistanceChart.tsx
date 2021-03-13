@@ -1,6 +1,7 @@
+import React, { useEffect, useState } from 'react';
+
 import { Sensor, useSensorData } from 'api/common/data';
 import SpeedDistanceChart from 'components/common/charts/SpeedDistanceChart';
-import React, { useEffect, useState } from 'react';
 import { ChartPoint } from 'types/chart';
 import { ReedDistanceRT, ReedVelocityRT } from 'types/data';
 

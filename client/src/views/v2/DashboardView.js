@@ -1,11 +1,12 @@
+import React, { useCallback, useState } from 'react';
+import { Col, Container, FormCheck, Row } from 'react-bootstrap';
+
 import { useSensorData } from 'api/v2/sensors';
 import V2CadenceTimeChart from 'components/v2/dashboard/V2CadenceTimeChart';
 import V2LocationMap from 'components/v2/dashboard/V2LocationMap';
 import V2PowerTimeChart from 'components/v2/dashboard/V2PowerTimeChart';
 import V2TextModeChart from 'components/v2/dashboard/V2TextModeChart';
 import V2VelocityTimeChart from 'components/v2/dashboard/V2VelocityTimeChart';
-import React, { useCallback, useState } from 'react';
-import { Col, Container, FormCheck, Row } from 'react-bootstrap';
 
 /**
  * Dashboard page component

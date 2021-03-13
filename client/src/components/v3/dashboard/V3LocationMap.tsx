@@ -1,8 +1,9 @@
+import React, { useEffect, useState } from 'react';
+
 import { Sensor, useSensorData } from 'api/common/data';
 import LocationMap, {
   LocationTimeSeriesPoint,
 } from 'components/common/charts/LocationMap';
-import React, { useEffect, useState } from 'react';
 import { GPSRT } from 'types/data';
 
 export const V3MapKey = 'v3-dashboard-location-map-chart-data';

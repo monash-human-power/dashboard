@@ -1,9 +1,10 @@
 import { faLocationArrow } from '@fortawesome/free-solid-svg-icons';
-import FontAwesomeIcon from 'components/common/FontAwesomeIcon';
 import PropTypes from 'prop-types';
 import React, { useCallback } from 'react';
 import { useLeaflet } from 'react-leaflet';
 import Control from 'react-leaflet-control';
+
+import FontAwesomeIcon from 'components/common/FontAwesomeIcon';
 
 /**
  * @typedef {object} LeafletCenterControlProps

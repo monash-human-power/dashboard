@@ -1,6 +1,7 @@
+import React from 'react';
+
 import { GREY, PURPLE } from 'components/common/charts/colours';
 import ScatterChart from 'components/common/charts/ScatterChart';
-import React from 'react';
 import { ChartProps } from 'types/chart';
 
 /**
@@ -9,7 +10,10 @@ import { ChartProps } from 'types/chart';
  * @param props Props
  * @returns Component
  */
-export default function SpeedDistanceChart({ data, max }: ChartProps): JSX.Element {
+export default function SpeedDistanceChart({
+  data,
+  max,
+}: ChartProps): JSX.Element {
   return (
     <ScatterChart
       title="Speed-Distance"

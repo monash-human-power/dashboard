@@ -5,35 +5,35 @@ import { Scatter } from 'react-chartjs-2';
 
 export interface AxisProps {
   /** Axis label */
-  label: string,
+  label: string;
   /** Axis unit of measurement */
-  unit: string
+  unit: string;
 }
 
 export interface DataProps {
   /** X-Axis value */
-  x: number,
+  x: number;
   /** Y-Axis value */
-  y: number
+  y: number;
 }
 
 export interface ScatterChartProps {
   /** Chart title */
-  title: string,
+  title: string;
   /** X-Axis config */
-  xAxis: AxisProps,
+  xAxis: AxisProps;
   /** Y-Axis config */
-  yAxis: AxisProps,
+  yAxis: AxisProps;
   /** Data values */
-  data: DataProps[],
+  data: DataProps[];
   /** Data background colour */
-  dataColour: string,
+  dataColour: string;
   /** Max line value */
-  max: number,
+  max: number;
   /** Max line colour */
-  maxColour: string,
+  maxColour: string;
   /** Maintains aspect ratio. Turn off for manual resize */
-  maintainAspectRatio?: boolean
+  maintainAspectRatio?: boolean;
 }
 
 /**
@@ -50,7 +50,7 @@ export default function ScatterChart({
   dataColour,
   max,
   maxColour,
-  maintainAspectRatio = true
+  maintainAspectRatio = true,
 }: ScatterChartProps): JSX.Element {
   const options: ChartOptions = {
     title: {

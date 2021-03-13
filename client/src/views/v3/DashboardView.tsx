@@ -1,7 +1,9 @@
-import V3LocationMap from 'components/v3/dashboard/V3LocationMap';
-import { V3SpeedDistanceChart } from 'components/v3/dashboard/V3SpeedDistanceChart';
 import React from 'react';
 import { Badge } from 'react-bootstrap';
+
+import V3LocationMap from 'components/v3/dashboard/V3LocationMap';
+import { V3SpeedDistanceChart } from 'components/v3/dashboard/V3SpeedDistanceChart';
+
 import styles from './DashboardView.module.css';
 
 /**

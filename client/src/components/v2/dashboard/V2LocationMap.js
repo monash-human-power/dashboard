@@ -1,7 +1,8 @@
-import { useMultiSensorTimeSeries, useSensorData } from 'api/v2/sensors';
-import LocationMap from 'components/common/charts/LocationMap';
 import PropTypes from 'prop-types';
 import React from 'react';
+
+import { useMultiSensorTimeSeries, useSensorData } from 'api/v2/sensors';
+import LocationMap from 'components/common/charts/LocationMap';
 
 /**
  * Checks if a given location is valid
