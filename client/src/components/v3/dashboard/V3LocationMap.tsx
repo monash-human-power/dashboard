@@ -19,8 +19,8 @@ export const V3MapZoomKey = 'v3-dashboard-location-map-zoom';
 function isValidLocation(location: LocationTimeSeriesPoint): boolean {
   return (
     Number.isFinite(location.lat) &&
-    location.lat >= -180 &&
-    location.lat <= 180 &&
+    location.lat >= -90 &&
+    location.lat <= 90 &&
     Number.isFinite(location.long) &&
     location.long >= -180 &&
     location.long <= 180
