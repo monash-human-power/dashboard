@@ -1,0 +1,29 @@
+.statContainer {
+  display: flex;
+  margin-top: 25px;
+  margin-bottom: 30px;
+  margin-left: -8px;
+}
+
+.statSpeed {
+  margin-left: 8px;
+  margin-right: 8px;
+  width: 115px;
+}
+
+.statPower {
+  margin-left: 8px;
+  margin-right: 8px;
+  width: 70px;
+}
+
+.statHeartRate {
+  margin-left: 15px;
+  margin-right: 8px;
+  width: 85px;
+}
+
+.line {
+  height: 67px;
+  border: 1px solid #CCCCCC;
+}

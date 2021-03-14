@@ -1,19 +1,24 @@
-import React, { useState } from 'react';
-import ContentPage from 'components/common/ContentPage';
-
+import DASRecording from 'components/v3/DASRecording';
+import StatisticRow from 'components/v3/StatisticRow';
+import React from 'react';
+import styles from './DashboardView.module.css';
 
 /**
  * Dashboard View component
  *
- * @returns {React.Component} Component
+ * @returns Component
  */
-export default function DashboardView() {
-    const [buttonInfo, setButtonInfo] = useState(0);
+export default function DashboardView(): JSX.Element {
     return (
-        <ContentPage>
-            <h1>Hi I&apos;m the dashboard {buttonInfo} </h1>
-            <button type="button" onClick={() => setButtonInfo(buttonInfo + 1)}>press meee</button>
-        </ContentPage>
+        <div className={styles.contentContainer}>
+            <div className={styles.content} >
+                <DASRecording />
+                <StatisticRow />
+                <div><div className={styles.graph}>Graph Here</div></div>
+            </div>
+            <div className={styles.content}>
+                <div><div className={styles.bigGraph}>Big Graph Here</div></div>
+            </div>
+        </div>
     );
 };
-

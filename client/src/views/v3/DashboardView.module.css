@@ -1,0 +1,24 @@
+.content {
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
+.contentContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.graph {
+  height: 700px;
+  width: 650px;
+  border: 5px solid black;
+}
+
+.bigGraph {
+  height: 900px;
+  width: 700px;
+  border: 5px solid black;
+}

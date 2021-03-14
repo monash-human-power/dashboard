@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Array, Null, Record, Runtype, Static, String, Union, Unknown } from "runtypes";
 import { SensorsT } from "types/data";
-import { useChannelShaped } from "./socket";
+import { emit, useChannelShaped } from "./socket";
 
 /** Enumerates the sensors available.
  *  Value should correspond to the sensor "type" attribute.
@@ -68,4 +68,18 @@ export function useSensorData<T extends SensorsT>(
         ?.value ?? null;  // Extract value, defaulting to null
 
     return Union(shape, Null).check(data);
+}
+
+/**
+ * Starts DAS log recording
+ */
+export function startLogging() {
+    emit('start-das-recording');
+}
+
+/**
+ * Stops DAS log recording
+ */
+export function stopLogging() {
+    emit('stop-das-recording');
 }
