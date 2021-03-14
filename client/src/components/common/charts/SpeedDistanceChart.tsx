@@ -16,7 +16,7 @@ export default function SpeedDistanceChart({
 }: ChartProps): JSX.Element {
   return (
     <ScatterChart
-      title="Speed-Distance"
+      title="Speed vs Distance"
       xAxis={{ label: 'Distance', unit: 'm' }}
       yAxis={{ label: 'Speed', unit: 'km/h' }}
       data={data}
