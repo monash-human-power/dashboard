@@ -24,7 +24,7 @@ export function V3SpeedDistanceChart() {
 
   // Reset when start message received
   const reset = () => setStateData([]);
-  useChannel('start', reset);
+  useChannel('module-3-start', reset);
 
   // Store data for session
   const setData = (newData: ChartPoint[]) => {
