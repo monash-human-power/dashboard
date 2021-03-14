@@ -19,11 +19,11 @@ export const V3MapZoomKey = 'v3-dashboard-location-map-zoom';
 function isValidLocation(location: LocationTimeSeriesPoint): boolean {
   return (
     Number.isFinite(location.lat) &&
-    location.lat >= -90 &&
-    location.lat <= 90 &&
+    location.lat >= -180 &&
+    location.lat <= 180 &&
     Number.isFinite(location.long) &&
-    location.long >= -90 &&
-    location.long <= 90
+    location.long >= -180 &&
+    location.long <= 180
   );
 }
 
@@ -42,7 +42,7 @@ export default function V3LocationMap(): JSX.Element {
 
   // Reset on start
   const reset = () => setStateLocationHistory([]);
-  useChannel('start', reset);
+  useChannel('module-3-start', reset);
 
   const setLocationHistory = (data: LocationTimeSeriesPoint[]) => {
     sessionStorage.setItem(V3MapKey, JSON.stringify(data));
