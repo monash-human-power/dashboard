@@ -12,25 +12,6 @@ import { Runtype } from 'runtypes';
 type payloadAction = 'upload' | 'delete';
 
 /**
- * Check that the given content is of the type given
- *
- * @param content the content to check for it's type
- * @param typeRequired the type the content is expected to be
- *
- * @returns true if the content satisfies the given type else false
- */
-function isCorrectContentType(content: any, typeRequired: Runtype) {
-  try {
-    if (typeRequired.check(content)) {
-      return true;
-    }
-  } catch (error) {
-    return false;
-  }
-  return false;
-}
-
-/**
  * Send configuration status over MQTT on topic 'boost/configs/action'
  *
  * @param actionType represents whether the config is being uploaded or deleted
@@ -104,6 +85,18 @@ export default function uploadConfig(
   reader.onload = () => {
     const fileContent = reader.result as string;
     const configContent = JSON.parse(fileContent);
+
+    // Checks that the given content is of the type given
+    const isCorrectContentType = (content: any, typeRequired: Runtype) => {
+      try {
+        if (typeRequired.check(content)) {
+          return true;
+        }
+      } catch (error) {
+        return false;
+      }
+      return false;
+    };
 
     if (!isCorrectContentType(configContent, fileConfigTypeToRuntype[type])) {
       displayErr(
