@@ -61,8 +61,6 @@ function uploadMultipleConfigs(configs: ConfigBundleT, fileName: string) {
 
     sendConfig('upload', configType, file, config);
   });
-
-  toast.success(`Uploaded configs in ${fileName}`);
 }
 
 /**
@@ -102,6 +100,7 @@ export default function uploadConfig(
       );
     } else if (type === 'bundle') {
       uploadMultipleConfigs(configContent, configFile.name);
+      toast.success(`Uploaded configs in ${configFile.name}`);
     } else {
       // Single config uploaded
       sendConfig('upload', type, configFile.name, configContent);
