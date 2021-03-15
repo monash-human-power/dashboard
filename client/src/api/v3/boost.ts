@@ -7,7 +7,7 @@ import {
   fileConfigTypeToRuntype,
 } from 'types/boost';
 import toast from 'react-hot-toast';
-import { Runtype } from 'runtypes';
+import { Runtype, Static } from 'runtypes';
 
 type payloadAction = 'upload' | 'delete';
 
@@ -23,7 +23,7 @@ function sendConfig(
   actionType: payloadAction,
   type: ConfigT,
   name: string,
-  configContent: string | null,
+  configContent: Static<typeof ConfigObjT> | null,
 ) {
   const channel = 'send-config';
   const payload = {
@@ -59,7 +59,7 @@ function uploadMultipleConfigs(configs: ConfigBundleT, fileName: string) {
     // Since this config was uploaded as a bundle give it a different file name to differentiate it's config type.
     const file = fileName.replace('.json', configTypeToFileSuffix[configType]);
 
-    sendConfig('upload', configType, file, JSON.stringify(config));
+    sendConfig('upload', configType, file, config);
   });
 
   toast.success(`Uploaded configs in ${fileName}`);
@@ -104,7 +104,7 @@ export default function uploadConfig(
       uploadMultipleConfigs(configContent, configFile.name);
     } else {
       // Single config uploaded
-      sendConfig('upload', type, configFile.name, fileContent);
+      sendConfig('upload', type, configFile.name, configContent);
       toast.success(`Uploaded ${configFile.name}!`);
     }
   };
