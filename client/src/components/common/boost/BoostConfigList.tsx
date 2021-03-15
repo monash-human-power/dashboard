@@ -5,19 +5,13 @@ import { BoostConfig } from 'types/boost';
 import FontAwesomeIcon from 'components/common/FontAwesomeIcon';
 import WidgetListGroupItem from 'components/common/WidgetListGroupItem';
 import styles from 'components/common/boost/BoostConfigList.module.css';
+import { alterFileSuffix } from 'api/v3/boost';
 
 export interface BoostConfigListProps {
   config: BoostConfig;
   onSelectConfig: (configName: string) => void;
   onDeleteConfig: (configName: string) => void;
 }
-
-const fileNameSuffixes = [
-  '_rider.json',
-  '_bike.json',
-  '_track.json',
-  '_powerPlan.json',
-];
 
 /**
  * Selectors for BOOST config
@@ -37,16 +31,6 @@ export default function BoostConfigList({
   const handleDelete = (event: React.MouseEvent, configName: string) => {
     event.stopPropagation();
     onDeleteConfig(configName);
-  };
-
-  const getOriginalFileName = (fileName: string) => {
-    let originalFileName = fileName;
-    fileNameSuffixes.forEach((suffix: string) => {
-      if (fileName.includes(suffix)) {
-        originalFileName = fileName.replace(suffix, '.json');
-      }
-    });
-    return originalFileName;
   };
 
   if (config.options.length === 0)
@@ -72,7 +56,7 @@ export default function BoostConfigList({
           <span>
             {configName.displayName}
             <span className={styles.file_name_display}>
-              ({getOriginalFileName(configName.fileName)})
+              ({alterFileSuffix(configName.fileName, config.type, false)})
             </span>
           </span>
 
