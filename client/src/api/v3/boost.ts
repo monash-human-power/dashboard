@@ -45,7 +45,7 @@ const configTypeToFileSuffix: { [K in ConfigT]: string } = {
 };
 
 /**
- * Split the given configurations object into inidvidual configs and then send them over MQTT
+ * Split the given configurations object into individual configs and then send them over MQTT
  *
  * @param configs dictionary containign the 4 config types (`powerPlan`, `rider`, `track` and `bike`)
  * @param fileName name of the file that contained all the configs
