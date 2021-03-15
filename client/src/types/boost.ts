@@ -8,51 +8,51 @@ import {
   Static,
 } from 'runtypes';
 
-const RiderT = Record({
+const RiderRT = Record({
   name: String,
   mass: Number,
 });
 
-const CdaFunctionalT = Record({
+const CdaFunctionalRT = Record({
   type: String,
   velocity: Array(Number),
   cda: Array(Number),
 });
-const CdaConstantT = Record({
+const CdaConstantRT = Record({
   type: String,
   constant: Number,
 });
 
-const WheelT = Record({
+const WheelRT = Record({
   rollResZeroSpeed: Number,
   rollResMoving: Number,
   loading: Number,
   momentOfInertia: Number,
   diameter: Number,
 });
-const BikeT = Record({
+const BikeRT = Record({
   name: String,
   bikeMass: Number,
   dtLoss: Number,
-  cda: Union(CdaFunctionalT, CdaConstantT),
-  frontWheel: WheelT,
-  backWheel: WheelT,
+  cda: Union(CdaFunctionalRT, CdaConstantRT),
+  frontWheel: WheelRT,
+  backWheel: WheelRT,
 });
 
-const ZonesT = Record({ power: Number, duration: Number });
-const ParametersT = Record({
+const ZonesRT = Record({ power: Number, duration: Number });
+const ParametersRT = Record({
   lowerBound: Number,
   upperBound: Number,
   step: Number,
 });
-const PowerPlanT = Record({
+const PowerPlanRT = Record({
   name: String,
   inrunPower: Number,
-  zones: Array(ZonesT),
-  searchParams: ParametersT,
+  zones: Array(ZonesRT),
+  searchParams: ParametersRT,
 });
 
-const TrackConstantT = Record({
+const TrackConstantRT = Record({
   name: String,
   length: Number,
   trapStart: Number,
@@ -64,7 +64,7 @@ const TrackConstantT = Record({
     constant: Number,
   }),
 });
-const TrackSlopedT = Record({
+const TrackSlopedRT = Record({
   name: String,
   length: Number,
   trapStart: Number,
@@ -76,22 +76,22 @@ const TrackSlopedT = Record({
     filename: String,
   }),
 });
-const TrackT = Union(TrackConstantT, TrackSlopedT);
+const TrackRT = Union(TrackConstantRT, TrackSlopedRT);
 
-const ConfigBundle = Record({
-  rider: RiderT,
-  bike: BikeT,
-  track: TrackT,
-  powerPlan: PowerPlanT,
+const ConfigBundleRT = Record({
+  rider: RiderRT,
+  bike: BikeRT,
+  track: TrackRT,
+  powerPlan: PowerPlanRT,
 });
-export type ConfigBundleT = Static<typeof ConfigBundle>;
+export type ConfigBundleT = Static<typeof ConfigBundleRT>;
 
-export const ConfigObjT = Union(RiderT, BikeT, TrackT, PowerPlanT);
+export const ConfigObjRT = Union(RiderRT, BikeRT, TrackRT, PowerPlanRT);
 
 export type FileConfigT = keyof ConfigBundleT | 'bundle';
 export type ConfigT = keyof ConfigBundleT;
 
-type ConfigName = {
+type ConfigNameT = {
   displayName: string;
   fileName: string;
 };
@@ -100,16 +100,16 @@ export interface BoostConfig {
   /** The input of BOOST that this config is for */
   type: ConfigT;
   /** List of available BOOST configuration files */
-  options: ConfigName[];
+  options: ConfigNameT[];
   /** Currently selected BOOST configuration */
-  active?: ConfigName;
+  active?: ConfigNameT;
 }
 
-type ConfigDictionary = { [K in FileConfigT]: Runtype };
-export const fileConfigTypeToRuntype: ConfigDictionary = {
-  rider: RiderT,
-  bike: BikeT,
-  track: TrackT,
-  powerPlan: PowerPlanT,
-  bundle: ConfigBundle,
+type ConfigDictionaryT = { [K in FileConfigT]: Runtype };
+export const fileConfigTypeToRuntype: ConfigDictionaryT = {
+  rider: RiderRT,
+  bike: BikeRT,
+  track: TrackRT,
+  powerPlan: PowerPlanRT,
+  bundle: ConfigBundleRT,
 };

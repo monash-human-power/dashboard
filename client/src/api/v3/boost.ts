@@ -2,14 +2,14 @@ import { emit } from 'api/common/socket';
 import {
   FileConfigT,
   ConfigBundleT,
-  ConfigObjT,
+  ConfigObjRT,
   ConfigT,
   fileConfigTypeToRuntype,
 } from 'types/boost';
 import toast from 'react-hot-toast';
 import { Runtype, Static } from 'runtypes';
 
-type payloadAction = 'upload' | 'delete';
+type payloadActionT = 'upload' | 'delete';
 
 /**
  * Send configuration status over MQTT on topic 'boost/configs/action'
@@ -20,10 +20,10 @@ type payloadAction = 'upload' | 'delete';
  * @param configContent configuration content
  */
 function sendConfig(
-  actionType: payloadAction,
+  actionType: payloadActionT,
   type: ConfigT,
   name: string,
-  configContent: Static<typeof ConfigObjT> | null,
+  configContent: Static<typeof ConfigObjRT> | null,
 ) {
   const channel = 'send-config';
   const payload = {
@@ -54,7 +54,7 @@ function uploadMultipleConfigs(configs: ConfigBundleT, fileName: string) {
   // For each config, send the config content over MQTT
   Object.entries(configs).forEach((configEntry) => {
     const configType = configEntry[0] as ConfigT;
-    const config = ConfigObjT.check(configEntry[1]);
+    const config = ConfigObjRT.check(configEntry[1]);
 
     // Since this config was uploaded as a bundle give it a different file name to differentiate it's config type.
     const file = fileName.replace('.json', configTypeToFileSuffix[configType]);
