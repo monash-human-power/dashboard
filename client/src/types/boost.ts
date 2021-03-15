@@ -9,7 +9,7 @@ import {
 } from 'runtypes';
 
 const RiderRT = Record({
-  name: String,
+  displayName: String,
   mass: Number,
 });
 
@@ -31,7 +31,7 @@ const WheelRT = Record({
   diameter: Number,
 });
 const BikeRT = Record({
-  name: String,
+  displayName: String,
   bikeMass: Number,
   dtLoss: Number,
   cda: Union(CdaFunctionalRT, CdaConstantRT),
@@ -46,14 +46,14 @@ const ParametersRT = Record({
   step: Number,
 });
 const PowerPlanRT = Record({
-  name: String,
+  displayName: String,
   inrunPower: Number,
   zones: Array(ZonesRT),
   searchParams: ParametersRT,
 });
 
 const TrackConstantRT = Record({
-  name: String,
+  displayName: String,
   length: Number,
   trapStart: Number,
   trapEnd: Number,
@@ -65,7 +65,7 @@ const TrackConstantRT = Record({
   }),
 });
 const TrackSlopedRT = Record({
-  name: String,
+  displayName: String,
   length: Number,
   trapStart: Number,
   trapEnd: Number,
