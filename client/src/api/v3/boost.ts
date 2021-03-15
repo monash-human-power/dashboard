@@ -89,13 +89,11 @@ export default function uploadConfig(
     // Checks that the given content is of the type given
     const isCorrectContentType = (content: any, typeRequired: Runtype) => {
       try {
-        if (typeRequired.check(content)) {
-          return true;
-        }
+        typeRequired.check(content);
+        return true;
       } catch (error) {
         return false;
       }
-      return false;
     };
 
     if (!isCorrectContentType(configContent, fileConfigTypeToRuntype[type])) {
