@@ -47,7 +47,7 @@ const configTypeToFileSuffix: { [K in ConfigT]: string } = {
 /**
  * Split the given configurations object into individual configs and then send them over MQTT
  *
- * @param configs dictionary containign the 4 config types (`powerPlan`, `rider`, `track` and `bike`)
+ * @param configs dictionary containing the 4 config types (`powerPlan`, `rider`, `track` and `bike`)
  * @param fileName name of the file that contained all the configs
  */
 function uploadMultipleConfigs(configs: ConfigBundleT, fileName: string) {
@@ -56,7 +56,7 @@ function uploadMultipleConfigs(configs: ConfigBundleT, fileName: string) {
     const configType = configEntry[0] as ConfigT;
     const config = ConfigObjT.check(configEntry[1]);
 
-    // Since this config was uploaded as a bundle give it a different file name to differnetiate it's config type.
+    // Since this config was uploaded as a bundle give it a different file name to differentiate it's config type.
     const file = fileName.replace('.json', configTypeToFileSuffix[configType]);
 
     sendConfig('upload', configType, file, JSON.stringify(config));
