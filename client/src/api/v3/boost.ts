@@ -1,7 +1,6 @@
 import { emit } from 'api/common/socket';
 import {
   FileConfigT,
-  ConfigBundleT,
   ConfigObjRT,
   ConfigT,
   fileConfigTypeToRuntype,
@@ -65,25 +64,6 @@ function sendConfig(
 }
 
 /**
- * Split the given configurations object into individual configs and then send them over MQTT
- *
- * @param configs dictionary containing the 4 config types (`powerPlan`, `rider`, `track` and `bike`)
- * @param fileName name of the file that contained all the configs
- */
-function uploadMultipleConfigs(configs: ConfigBundleT, fileName: string) {
-  // For each config, send the config content over MQTT
-  Object.entries(configs).forEach((configEntry) => {
-    const configType = configEntry[0] as ConfigT;
-    const config = ConfigObjRT.check(configEntry[1]);
-
-    // Since this config was uploaded as a bundle give it a different file name to differentiate it's config type, by adding a suffix
-    const file = alterFileSuffix(fileName, configType, true);
-
-    sendConfig('upload', configType, file, config);
-  });
-}
-
-/**
  * Read content from the given file and send it on `boost/configs/action` over MQTT.
  * If the content contains more than one config (i.e. `type` is 'all'), the content is
  * split into the different configurations before sending.
@@ -119,7 +99,15 @@ export default function uploadConfig(
         `${configFile.name} is not of the correct type for ${type} config`,
       );
     } else if (type === 'bundle') {
-      uploadMultipleConfigs(configContent, configFile.name);
+      Object.entries(configContent).forEach((configEntry) => {
+        const configType = configEntry[0] as ConfigT;
+        const config = ConfigObjRT.check(configEntry[1]);
+
+        // Since this config was uploaded as a bundle give it a different file name to differentiate it's config type, by adding a suffix
+        const file = alterFileSuffix(configFile.name, configType, true);
+
+        sendConfig('upload', configType, file, config);
+      });
       toast.success(`Uploaded configs in ${configFile.name}`);
     } else {
       // Single config uploaded
