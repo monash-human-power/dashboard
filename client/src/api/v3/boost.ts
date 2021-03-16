@@ -10,32 +10,12 @@ import { Runtype, Static } from 'runtypes';
 
 type payloadActionT = 'upload' | 'delete';
 
-const configTypeToFileSuffix: { [K in ConfigT]: string } = {
+export const configTypeToFileSuffix: { [K in ConfigT]: string } = {
   rider: '_rider.json',
   bike: '_bike.json',
   track: '_track.json',
   powerPlan: '_powerPlan.json',
 };
-
-/**
- * Alters the given string (by either adding a suffix or replacing it with '.json'). The suffix applied is determined by the config type provided.
- *
- * @param name the string to be altered
- * @param configType the type of config to determine the relevant suffix to use
- * @param addSuffix true if the suffix should be added to the file name, false if it should be replaced with '.json' instead.
- *
- * @returns the given name altered
- */
-export function alterFileSuffix(
-  name: string,
-  configType: ConfigT,
-  addSuffix: boolean,
-) {
-  if (addSuffix) {
-    return name.replace('.json', configTypeToFileSuffix[configType]);
-  }
-  return name.replace(configTypeToFileSuffix[configType], '.json');
-}
 
 /**
  * Send configuration status over MQTT on topic 'boost/configs/action'
@@ -104,7 +84,10 @@ export default function uploadConfig(
         const config = ConfigObjRT.check(configEntry[1]);
 
         // Since this config was uploaded as a bundle give it a different file name to differentiate it's config type, by adding a suffix
-        const file = alterFileSuffix(configFile.name, configType, true);
+        const file = configFile.name.replace(
+          '.json',
+          configTypeToFileSuffix[configType],
+        );
 
         sendConfig('upload', configType, file, config);
       });

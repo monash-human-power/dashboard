@@ -5,7 +5,7 @@ import { BoostConfig } from 'types/boost';
 import FontAwesomeIcon from 'components/common/FontAwesomeIcon';
 import WidgetListGroupItem from 'components/common/WidgetListGroupItem';
 import styles from 'components/common/boost/BoostConfigList.module.css';
-import { alterFileSuffix } from 'api/v3/boost';
+import { configTypeToFileSuffix } from 'api/v3/boost';
 
 export interface BoostConfigListProps {
   config: BoostConfig;
@@ -33,6 +33,9 @@ export default function BoostConfigList({
     onDeleteConfig(configName);
   };
 
+  const removeSuffix = (name: string) =>
+    name.replace(configTypeToFileSuffix[config.type], '.json');
+
   if (config.options.length === 0)
     return (
       <div className={styles.empty_dialogue}>
@@ -56,7 +59,7 @@ export default function BoostConfigList({
           <span>
             {configName.displayName}
             <span className={styles.file_name_display}>
-              ({alterFileSuffix(configName.fileName, config.type, false)})
+              ({removeSuffix(configName.fileName)})
             </span>
           </span>
 
