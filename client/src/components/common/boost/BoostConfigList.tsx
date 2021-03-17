@@ -5,7 +5,7 @@ import { BoostConfig } from 'types/boost';
 import FontAwesomeIcon from 'components/common/FontAwesomeIcon';
 import WidgetListGroupItem from 'components/common/WidgetListGroupItem';
 import styles from 'components/common/boost/BoostConfigList.module.css';
-import { configTypeToFileSuffix } from 'api/v3/boost';
+import { configTypeToFileSuffix } from 'utils/boost';
 
 export interface BoostConfigListProps {
   config: BoostConfig;

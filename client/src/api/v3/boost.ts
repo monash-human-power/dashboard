@@ -5,17 +5,11 @@ import {
   ConfigT,
   fileConfigTypeToRuntype,
 } from 'types/boost';
+import { configTypeToFileSuffix } from 'utils/boost';
 import toast from 'react-hot-toast';
 import { Runtype, Static } from 'runtypes';
 
 type payloadActionT = 'upload' | 'delete';
-
-export const configTypeToFileSuffix: { [K in ConfigT]: string } = {
-  rider: '_rider.json',
-  bike: '_bike.json',
-  track: '_track.json',
-  powerPlan: '_powerPlan.json',
-};
 
 /**
  * Send configuration status over MQTT on topic 'boost/configs/action'
