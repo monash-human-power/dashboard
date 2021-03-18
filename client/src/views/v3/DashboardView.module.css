@@ -10,17 +10,16 @@
   margin-right: 8px;
 }
 
-.content {
-  margin-left: 16px;
-  margin-right: 16px;
-}
-
 .contentContainer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
+  width: 97vw;
+  height: 60vh;
   margin-top: 25px;
   margin-bottom: 25px;
+  margin-left: 1.2vw
+}
+
+.content {
+  height: 85vh;
 }
 
 .line {
@@ -29,11 +28,11 @@
 }
 
 .graph {
-  height: 700px;
-  width: 650px;
+  height: 85vh - 170px;
+  min-height: 400px;
 }
 
 .bigGraph {
-  height: 900px;
-  width: 700px;
+  height: 100%;
+  min-height: 400px;
 }
