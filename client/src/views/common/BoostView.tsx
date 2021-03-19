@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ContentPage from 'components/common/ContentPage';
 import BoostCalibration from 'components/common/boost/BoostCalibration';
 import BoostConfigurator from 'components/common/boost/BoostConfigurator';
 import { setCalibration, resetCalibration } from 'api/common/powerModel';
 import uploadConfig from 'api/v3/boost';
 import { BoostConfig, ConfigT } from 'types/boost';
+import { useSensorData, Sensor } from 'api/common/data';
+import { Number } from 'runtypes';
 
 // TODO: Implement actual functions for `onSelectConfig`, `onDeleteConfig` and true values for `baseConfigs` (provided from `boost`)
 
@@ -77,12 +79,23 @@ const baseConfigs: BoostConfig[] = [
  */
 export default function BoostView() {
   // TODO: remove the hardcoded value for `distTravelled` with actual value read from MQTT
+  const [dist, setDist] = useState(0);
+
+  // fetch teh reed distance from wireless module #3
+  const reedDistance = useSensorData(3, Sensor.ReedDistance, Number);
+
+  useEffect(() => {
+    if (reedDistance) {
+      setDist(Math.round(reedDistance * 100) / 100);
+    }
+  }, [reedDistance]);
+
   return (
     <ContentPage title="Boost Configuration">
       <BoostCalibration
         onSet={setCalibration}
         onReset={resetCalibration}
-        distTravelled={30}
+        distTravelled={dist}
         calibrationDiff={10}
       />
       <BoostConfigurator
