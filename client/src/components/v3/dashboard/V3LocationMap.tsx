@@ -40,14 +40,14 @@ export default function V3LocationMap(): JSX.Element {
     LocationTimeSeriesPoint[]
   >(storedData ? JSON.parse(storedData) : []);
 
-  // Reset on start
-  const reset = () => setStateLocationHistory([]);
-  useChannel('module-3-start', reset);
-
   const setLocationHistory = (data: LocationTimeSeriesPoint[]) => {
     sessionStorage.setItem(V3MapKey, JSON.stringify(data));
     setStateLocationHistory(data);
   };
+
+  // Reset on start
+  const reset = () => setLocationHistory([]);
+  useChannel('module-3-start', reset);
 
   // Extract location info from GPS
   const GPS = useSensorData(3, Sensor.GPS, GPSRT);

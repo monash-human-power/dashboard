@@ -4,7 +4,7 @@ import { Sensor, useSensorData } from 'api/common/data';
 import { useChannel } from 'api/common/socket';
 import SpeedDistanceChart from 'components/common/charts/SpeedDistanceChart';
 import { ChartPoint } from 'types/chart';
-import { ReedDistanceRT, ReedVelocityRT } from 'types/data';
+import { GPSRT, ReedDistanceRT } from 'types/data';
 
 export const V3SDChartKey = 'v3-dashboard-speed-distance-chart-data';
 
@@ -20,11 +20,7 @@ export function V3SpeedDistanceChart() {
   const [data, setStateData] = useState<ChartPoint[]>(
     storedData ? JSON.parse(storedData) : [],
   );
-  const maxPoint = useRef(-1);
-
-  // Reset when start message received
-  const reset = () => setStateData([]);
-  useChannel('module-3-start', reset);
+  const maxSpeed = useRef(data.reduce((acc, { y }) => Math.max(acc, y), 0));
 
   // Store data for session
   const setData = (newData: ChartPoint[]) => {
@@ -32,30 +28,34 @@ export function V3SpeedDistanceChart() {
     setStateData(newData);
   };
 
+  // Reset when start message received
+  const reset = () => setData([]);
+  useChannel('module-3-start', reset);
+
   // Speed
-  const point = useSensorData(3, Sensor.ReedVelocity, ReedVelocityRT);
+  const speed = useSensorData(3, Sensor.GPS, GPSRT)?.speed;
   const distance = useSensorData(3, Sensor.ReedDistance, ReedDistanceRT);
 
   // Update data whenever the point is updated
   useEffect(() => {
     // Add new data point
     if (
-      point &&
+      speed &&
       distance && // Non null
       // New distance measurement
-      distance !== data[data.length - 1]?.y
+      distance !== data[data.length - 1]?.x
     ) {
-      maxPoint.current = Math.max(maxPoint.current, point);
-      setData([...data, { x: distance, y: point }]);
+      maxSpeed.current = Math.max(maxSpeed.current, speed);
+      setData([...data, { x: distance, y: speed }]);
     }
     // Omit data in deps as otherwise there would be an infinite render loop
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [point]);
+  }, [speed]);
 
   return (
     <SpeedDistanceChart
       // Maximum of data set
-      max={maxPoint.current}
+      max={maxSpeed.current}
       data={data}
     />
   );
