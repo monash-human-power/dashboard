@@ -8,24 +8,15 @@ import { Button } from 'react-bootstrap';
  * @returns Component
  */
 export default function DASRecording(): JSX.Element {
-    return (
-        < >
-            <span style={{ fontWeight: 'bold' }}>DAS Recording:</span>
-            <Button
-                className='ml-3'
-                variant="outline-success"
-                onClick={startLogging}
-            >
-                Start
-            </Button>
-            <Button
-                className='ml-2'
-                variant="outline-danger"
-                onClick={stopLogging}
-            >
-                Stop
-            </Button>
-
-        </>
-    );
+  return (
+    <>
+      <span style={{ fontWeight: 'bold' }}>DAS Recording:</span>
+      <Button className="ml-3" variant="outline-success" onClick={startLogging}>
+        Start
+      </Button>
+      <Button className="ml-2" variant="outline-danger" onClick={stopLogging}>
+        Stop
+      </Button>
+    </>
+  );
 }

@@ -1,24 +1,38 @@
-.content {
-  margin-left: 16px;
-  margin-right: 16px;
+.statContainer {
+  display: flex;
+  margin-top: 25px;
+  margin-bottom: 30px;
+  margin-left: -8px;
+}
+
+.stat {
+  margin-left: 8px;
+  margin-right: 8px;
 }
 
 .contentContainer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
+  width: 97vw;
+  height: 60vh;
   margin-top: 25px;
   margin-bottom: 25px;
+  margin-left: 1.2vw
+}
+
+.content {
+  height: 85vh;
+}
+
+.line {
+  height: 67px;
+  border: 1px solid #CCCCCC;
 }
 
 .graph {
-  height: 700px;
-  width: 650px;
-  border: 5px solid black;
+  height: 85vh - 170px;
+  min-height: 400px;
 }
 
 .bigGraph {
-  height: 900px;
-  width: 700px;
-  border: 5px solid black;
+  height: 100%;
+  min-height: 400px;
 }

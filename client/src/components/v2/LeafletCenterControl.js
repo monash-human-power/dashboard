@@ -1,8 +1,9 @@
-import React, { useCallback } from 'react';
+import { faLocationArrow } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
+import React, { useCallback } from 'react';
 import { useLeaflet } from 'react-leaflet';
 import Control from 'react-leaflet-control';
-import { faLocationArrow } from '@fortawesome/free-solid-svg-icons';
+
 import FontAwesomeIcon from 'components/common/FontAwesomeIcon';
 
 /**
@@ -14,7 +15,7 @@ import FontAwesomeIcon from 'components/common/FontAwesomeIcon';
  * Re-center button control for Leaflet
  *
  * @param {LeafletCenterControlProps} props Props
- * @returns {React.Component<LeafletCenterControlProps>} Component
+ * @returns {JSX.Element} Component
  */
 export default function LeafletCenterControl({ center }) {
   const context = useLeaflet();
