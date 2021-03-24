@@ -7,7 +7,7 @@ import {
 } from 'types/boost';
 import { addSuffix } from 'utils/boost';
 import toast from 'react-hot-toast';
-import { Runtype, Static } from 'runtypes';
+import { Static } from 'runtypes';
 
 type payloadActionT = 'upload' | 'delete';
 
@@ -44,12 +44,12 @@ function sendConfig(
  *
  * @param type the type of the configuration
  * @param configFile file containing content of the configuration
- * @param displayErr function to display error if uploaded config is not correct
+ * @param dispErr function to display error if uploaded config is not correct
  */
 export default function uploadConfig(
   type: FileConfigT,
   configFile: File,
-  displayErr: (message: string) => void,
+  dispErr: (msg: string) => void,
 ) {
   const reader = new FileReader();
 
@@ -58,35 +58,45 @@ export default function uploadConfig(
     const fileContent = reader.result as string;
     const configContent = JSON.parse(fileContent);
 
-    // Checks that the given content is of the type given
-    const isCorrectContentType = (content: any, typeRequired: Runtype) => {
-      try {
-        typeRequired.check(content);
-        return true;
-      } catch (error) {
-        return false;
+    if (type === 'bundle') {
+      // Check that all 4 configs are included in the bundle
+      if (Object.entries(configContent).length !== 4) {
+        dispErr(
+          `${configFile.name} should have exactly 4 configs (one each for rider, track, bike and power plan)`,
+        );
+      } else {
+        let error = false;
+        Object.entries(configContent).forEach((configEntry) => {
+          console.log(configEntry);
+          const configType = configEntry[0] as ConfigT;
+          console.log(configType);
+          try {
+            const config = ConfigObjRT.check(configEntry[1]);
+
+            // Since this config was uploaded as a bundle give it a different file name by adding a suffix, to differentiate it's config type
+            const file = addSuffix(configFile.name, configType);
+
+            sendConfig('upload', configType, file, config);
+          } catch (err) {
+            dispErr(
+              `${configFile.name} is not of the correct form for a config bundle`,
+            );
+            error = true;
+          }
+        });
+        if (!error) toast.success(`Uploaded configs in ${configFile.name}`);
       }
-    };
-
-    if (!isCorrectContentType(configContent, fileConfigTypeToRuntype[type])) {
-      displayErr(
-        `${configFile.name} is not of the correct type for ${type} config`,
-      );
-    } else if (type === 'bundle') {
-      Object.entries(configContent).forEach((configEntry) => {
-        const configType = configEntry[0] as ConfigT;
-        const config = ConfigObjRT.check(configEntry[1]);
-
-        // Since this config was uploaded as a bundle give it a different file name by adding a suffix, to differentiate it's config type
-        const file = addSuffix(configFile.name, configType);
-
-        sendConfig('upload', configType, file, config);
-      });
-      toast.success(`Uploaded configs in ${configFile.name}`);
     } else {
-      // Single config uploaded
-      sendConfig('upload', type, configFile.name, configContent);
-      toast.success(`Uploaded ${configFile.name}!`);
+      try {
+        // Single config uploaded
+        fileConfigTypeToRuntype[type].check(configContent);
+        sendConfig('upload', type, configFile.name, configContent);
+        toast.success(`Uploaded ${configFile.name}!`);
+      } catch (err) {
+        dispErr(
+          `${configFile.name} is not of the correct form for ${type} config`,
+        );
+      }
     }
   };
 

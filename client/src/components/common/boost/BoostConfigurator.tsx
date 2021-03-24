@@ -16,7 +16,7 @@ export interface BoostConfiguratorProps {
   onUploadConfig: (
     configType: FileConfigT | 'bundle',
     configFile: File,
-    displayErr: (message: string) => void,
+    dispErr: (msg: string) => void,
   ) => void;
 }
 
