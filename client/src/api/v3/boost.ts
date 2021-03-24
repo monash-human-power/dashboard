@@ -5,7 +5,7 @@ import {
   ConfigT,
   fileConfigTypeToRuntype,
 } from 'types/boost';
-import { configTypeToFileSuffix } from 'utils/boost';
+import { addSuffix } from 'utils/boost';
 import toast from 'react-hot-toast';
 import { Runtype, Static } from 'runtypes';
 
@@ -77,11 +77,8 @@ export default function uploadConfig(
         const configType = configEntry[0] as ConfigT;
         const config = ConfigObjRT.check(configEntry[1]);
 
-        // Since this config was uploaded as a bundle give it a different file name to differentiate it's config type, by adding a suffix
-        const file = configFile.name.replace(
-          '.json',
-          configTypeToFileSuffix[configType],
-        );
+        // Since this config was uploaded as a bundle give it a different file name by adding a suffix, to differentiate it's config type
+        const file = addSuffix(configFile.name, configType);
 
         sendConfig('upload', configType, file, config);
       });
