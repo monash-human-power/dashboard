@@ -5,9 +5,15 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import FontAwesomeIcon from 'components/common/FontAwesomeIcon';
 import { Accordion, Button, Card, Modal } from 'react-bootstrap';
-import { BoostConfig, FileConfigT, ConfigT } from 'types/boost';
+import {
+  BoostConfig,
+  FileConfigT,
+  ConfigT,
+  fileConfigTypeToRuntype,
+} from 'types/boost';
 import { camelCaseToStartCase } from 'utils/string';
 import BoostConfigList from 'components/common/boost/BoostConfigList';
+import { Runtype } from 'runtypes';
 
 export interface BoostConfiguratorProps {
   configs: BoostConfig[];
@@ -16,6 +22,7 @@ export interface BoostConfiguratorProps {
   onUploadConfig: (
     configType: FileConfigT | 'bundle',
     configFile: File,
+    shape: Runtype,
     dispErr: (msg: string) => void,
   ) => void;
 }
@@ -75,7 +82,12 @@ export default function BoostConfigurator({
           'A file of the same name already exists, please change the name and re-upload',
         );
       } else {
-        onUploadConfig(configType, event.target.files[0], dispErr);
+        onUploadConfig(
+          configType,
+          event.target.files[0],
+          fileConfigTypeToRuntype[configType],
+          dispErr,
+        );
       }
     }
   };
