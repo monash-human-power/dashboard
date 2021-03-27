@@ -13,6 +13,7 @@ import {
 import { useSensorData, Sensor } from 'api/common/data';
 import { Number, Static } from 'runtypes';
 import { useChannelShaped } from 'api/common/socket';
+import toast from 'react-hot-toast';
 
 // TODO: Implement actual functions for `onSelectConfig`, `onDeleteConfig` and true values for `baseConfigs` (provided from `boost`)
 
@@ -102,11 +103,16 @@ export default function BoostView() {
     handleDistOffsetReceived,
   );
 
+  const handleReset = () => {
+    toast.success('Reset Calibration!');
+    resetCalibration();
+  };
+
   return (
     <ContentPage title="Boost Configuration">
       <BoostCalibration
         onSet={setCalibration}
-        onReset={resetCalibration}
+        onReset={handleReset}
         distTravelled={dist}
         calibrationDiff={distOffset}
       />
