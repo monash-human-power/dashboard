@@ -5,7 +5,7 @@ export interface BoostCalibrationProps {
   onSet: (calibValue: number) => void;
   onReset: () => void;
   distTravelled: number;
-  calibrationDiff: number;
+  calibrationDiff: number | null;
 }
 
 /**
@@ -68,7 +68,9 @@ export default function BoostCalibration({
         <div className="pb-3">
           <b>Calibrated distance </b>
           <span className="float-right pr-4">
-            {distTravelled + calibrationDiff} m
+            {calibrationDiff !== null
+              ? `${distTravelled + calibrationDiff} m`
+              : 'N/A'}
           </span>
         </div>
         <Form

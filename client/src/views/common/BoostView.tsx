@@ -4,7 +4,12 @@ import BoostCalibration from 'components/common/boost/BoostCalibration';
 import BoostConfigurator from 'components/common/boost/BoostConfigurator';
 import { setCalibration, resetCalibration } from 'api/common/powerModel';
 import uploadConfig from 'api/v3/boost';
-import { ConfigT, BoostConfig, ConfigPayloadRT } from 'types/boost';
+import {
+  ConfigT,
+  BoostConfig,
+  ConfigPayloadRT,
+  RecommendedSPRT,
+} from 'types/boost';
 import { useSensorData, Sensor } from 'api/common/data';
 import { Number, Static } from 'runtypes';
 import { useChannelShaped } from 'api/common/socket';
@@ -43,6 +48,7 @@ function onDeleteConfig(configType: ConfigT, name: string) {
 export default function BoostView() {
   // TODO: remove the hardcoded value for `distTravelled` with actual value read from MQTT
   const [dist, setDist] = useState(0);
+  const [distOffset, setOffset] = useState<number | null>(null);
   const [configs, setConfigs] = useState<BoostConfig[]>([
     {
       type: 'powerPlan',
@@ -82,7 +88,19 @@ export default function BoostView() {
     [configs],
   );
 
+  const handleDistOffsetReceived = useCallback(
+    (payload: Static<typeof RecommendedSPRT>) => {
+      setOffset(payload.distanceOffset);
+    },
+    [],
+  );
+
   useChannelShaped('boost/configs', ConfigPayloadRT, handleConfigsReceived);
+  useChannelShaped(
+    'boost/recommended_sp',
+    RecommendedSPRT,
+    handleDistOffsetReceived,
+  );
 
   return (
     <ContentPage title="Boost Configuration">
@@ -90,7 +108,7 @@ export default function BoostView() {
         onSet={setCalibration}
         onReset={resetCalibration}
         distTravelled={dist}
-        calibrationDiff={10}
+        calibrationDiff={distOffset}
       />
       <BoostConfigurator
         configs={configs}

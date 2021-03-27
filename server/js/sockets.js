@@ -204,6 +204,7 @@ sockets.init = function socketInit(server) {
               'power-model-recommended-SP',
               queryStringToJson(payloadString),
             );
+            socket.emit('boost/recommended_sp', payloadString);
             break;
           case BOOST.configs:
             socket.emit('boost/configs', payloadString);
