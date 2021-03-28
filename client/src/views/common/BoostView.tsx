@@ -69,17 +69,19 @@ export default function BoostView() {
     },
   ]);
 
-  // fetch teh reed distance from wireless module #3
+  // fetch the reed distance from wireless module #3
   const reedDistance = useSensorData(3, Sensor.ReedDistance, Number);
 
   useEffect(() => {
     if (reedDistance) {
+      // Set distance to 2 decimal places
       setDist(Math.round(reedDistance * 100) / 100);
     }
   }, [reedDistance]);
 
   const handleConfigsReceived = useCallback(
     (configsReceived: Static<typeof ConfigPayloadRT>) => {
+      // Replace the available config options with those received
       setConfigs(
         configs.map((config) => {
           return { ...config, options: configsReceived[config.type] };
@@ -104,7 +106,8 @@ export default function BoostView() {
   );
 
   const handleReset = () => {
-    toast.success('Reset Calibration!');
+    setOffset(0);
+    toast.success('Calibration Reset!');
     resetCalibration();
   };
 
