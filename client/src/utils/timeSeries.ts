@@ -1,16 +1,36 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 /**
  * Checks if a value is a real number
  *
- * @returns {boolean} is valid
- * @param {number} value Value to check
+ * @param value Value
+ * @returns is valid
  */
-function isValid(value) {
+function isValid(value: number): boolean {
   return (
     typeof value === 'number' && !Number.isNaN(value) && Number.isFinite(value)
   );
 }
+
+export interface TimeSeriesPoint {
+  /** Time since started running in ms */
+  time: number;
+  /** Average value at this time */
+  value: number;
+}
+
+export interface TimeSeriesHook {
+  /** Time-series data points for each dimension */
+  series: TimeSeriesPoint[][];
+  /** Maximum recorded raw value for each dimension */
+  max: number[];
+  /** Add a raw data point */
+  add: (values: number[]) => void;
+  /** Remove recorded values */
+  reset: () => void;
+}
+
+// These JSDocs are left for backwards compatability with .js files
 
 /**
  * @typedef {object} TimeSeriesPoint
@@ -29,15 +49,19 @@ function isValid(value) {
 /**
  * Create a value-time record, averaged every interval
  *
- * @param {number}  dimensions  Dimensions of data to record
- * @param {number}  interval    Time in ms between points
- * @param {boolean} running     Whether to record values
- * @returns {TimeSeriesHook} Hook
+ * @param dimensions  Dimensions of data to record
+ * @param interval    Time in ms between points
+ * @param running     Whether to record values
+ * @returns Hook
  */
-export function useTimeSeries(dimensions, interval, running) {
-  const [series, setSeries] = useState([]);
-  const max = useRef(Array(dimensions).fill(0));
-  const intermediateCount = useRef(Array(dimensions).fill(0));
+export function useTimeSeries(
+  dimensions: number,
+  interval: number,
+  running: boolean,
+): TimeSeriesHook {
+  const [series, setSeries] = useState<TimeSeriesPoint[][]>([]);
+  const max = useRef<number[]>(Array(dimensions).fill(0));
+  const intermediateCount = useRef<number[]>(Array(dimensions).fill(0));
   const pointCount = useRef(0);
   const time = useRef(0);
 
@@ -53,9 +77,9 @@ export function useTimeSeries(dimensions, interval, running) {
     time.current = 0;
   }, [resetCounters, dimensions]);
 
-  const add = useCallback((values) => {
+  const add = useCallback((values: number[]) => {
     if (values.every(isValid)) {
-      values.forEach((value, index) => {
+      values.forEach((value: number, index: number) => {
         intermediateCount.current[index] += value;
 
         if (value > max.current[index]) {

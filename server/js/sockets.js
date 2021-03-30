@@ -304,6 +304,18 @@ sockets.init = function socketInit(server) {
     socket.on('stop-camera-recording', () => {
       mqttClient.publish(Camera.recording_stop);
     });
+
+    socket.on('start-das-recording', () => {
+      [1, 2, 3, 4].forEach((n) =>
+        mqttClient.publish(WirelessModule.id(n).start),
+      );
+    });
+
+    socket.on('stop-das-recording', () => {
+      [1, 2, 3, 4].forEach((n) =>
+        mqttClient.publish(WirelessModule.id(n).stop),
+      );
+    });
   });
 };
 

@@ -103,6 +103,7 @@ export const ConfigNameRT = Record({
   displayName: String,
   fileName: String,
 });
+type ConfigNameT = Static<typeof ConfigNameRT>;
 
 // Type of the payload on 'boost/configs'
 export const ConfigPayloadRT = Record({
@@ -111,8 +112,6 @@ export const ConfigPayloadRT = Record({
   track: Array(ConfigNameRT),
   powerPlan: Array(ConfigNameRT),
 });
-
-type ConfigNameT = Static<typeof ConfigNameRT>;
 
 export interface BoostConfig {
   /** The input of BOOST that this config is for */

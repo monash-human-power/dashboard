@@ -1,34 +1,45 @@
-import { useState } from "react";
-import { Array, Null, Record, Runtype, Static, String, Union, Unknown } from "runtypes";
-import { SensorsT } from "types/data";
-import { useChannelShaped } from "./socket";
+import { useState } from 'react';
+import {
+  Array,
+  Null,
+  Record,
+  Runtype,
+  Static,
+  String,
+  Union,
+  Unknown,
+} from 'runtypes';
+import { SensorsT } from 'types/data';
+import { emit, useChannelShaped } from './socket';
 
 /** Enumerates the sensors available.
  *  Value should correspond to the sensor "type" attribute.
  */
 export enum Sensor {
-    Temperature = 'temperature',
-    Humidity = 'humidity',
-    SteeringAngle = 'steeringAngle',
-    CO2 = 'co2',
-    Accelerometer = 'accelerometer',
-    Gyroscope = 'gyroscope',
-    ReedVelocity = 'reedVelocity',
-    ReedDistance = 'reedDistance',
-    GPS = 'gps',
-    Power = 'power',
-    Cadence = 'cadence',
-    HeartRate = 'heartRate'
+  Temperature = 'temperature',
+  Humidity = 'humidity',
+  SteeringAngle = 'steeringAngle',
+  CO2 = 'co2',
+  Accelerometer = 'accelerometer',
+  Gyroscope = 'gyroscope',
+  ReedVelocity = 'reedVelocity',
+  ReedDistance = 'reedDistance',
+  GPS = 'gps',
+  Power = 'power',
+  Cadence = 'cadence',
+  HeartRate = 'heartRate',
 }
 
 const ModuleData = Record({
-    /** Sensor data */
-    sensors: Array(Record({
-        /** Type of data */
-        type: String,
-        /** Value */
-        value: Unknown
-    }))
+  /** Sensor data */
+  sensors: Array(
+    Record({
+      /** Type of data */
+      type: String,
+      /** Value */
+      value: Unknown,
+    }),
+  ),
 });
 
 type _ModuleData = Static<typeof ModuleData>;
@@ -42,11 +53,11 @@ export interface ModuleData extends _ModuleData {}
  * @returns Data
  */
 export function useModuleData(id: number): ModuleData {
-    const [data, setData] = useState<ModuleData>({ sensors: [] });
+  const [data, setData] = useState<ModuleData>({ sensors: [] });
 
-    useChannelShaped(`module-${id}-data`, ModuleData, setData);
+  useChannelShaped(`module-${id}-data`, ModuleData, setData);
 
-    return data;
+  return data;
 }
 
 /**
@@ -58,14 +69,28 @@ export function useModuleData(id: number): ModuleData {
  * @returns Value of sensor data
  */
 export function useSensorData<T extends SensorsT>(
-    id: number, sensor: Sensor, shape: Runtype<T>
+  id: number,
+  sensor: Sensor,
+  shape: Runtype<T>,
 ): T | null {
-    const module = useModuleData(id);
+  const module = useModuleData(id);
 
-    // Data from sensor
-    const data = module.sensors
-        .find((s) => s.type === sensor)  // Data for the sensor
-        ?.value ?? null;  // Extract value, defaulting to null
+  // Data from sensor
+  const data = module.sensors.find((s) => s.type === sensor)?.value ?? null; // Data for the sensor // Extract value, defaulting to null
 
-    return Union(shape, Null).check(data);
+  return Union(shape, Null).check(data);
+}
+
+/**
+ * Starts DAS log recording
+ */
+export function startLogging() {
+  emit('start-das-recording');
+}
+
+/**
+ * Stops DAS log recording
+ */
+export function stopLogging() {
+  emit('stop-das-recording');
 }
