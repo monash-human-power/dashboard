@@ -39,12 +39,8 @@ function sendConfig(
  *
  * @param type the type of the configuration
  * @param configFile file containing content of the configuration
-<<<<<<< HEAD
- * @param displayErr function to display error if uploaded config is not correct
-=======
  * @param shape the expected Runtype of the uploaded file
  * @param dispErr function to display error if uploaded config is not correct
->>>>>>> master
  */
 export default function uploadConfig(
   type: FileConfigT,

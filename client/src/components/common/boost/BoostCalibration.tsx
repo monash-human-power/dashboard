@@ -53,6 +53,14 @@ export default function BoostCalibration({
     [handleSubmit],
   );
 
+  const displayCalibrationDistance = () => {
+    if (calibrationDiff) {
+      const calibratedDist = distTravelled + calibrationDiff;
+      return `${Math.round(calibratedDist * 100) / 100} m`;
+    }
+    return 'N/A';
+  };
+
   return (
     <Card>
       <Card.Body>
@@ -68,9 +76,7 @@ export default function BoostCalibration({
         <div className="pb-3">
           <b>Calibrated distance </b>
           <span className="float-right pr-4">
-            {calibrationDiff !== null
-              ? `${distTravelled + calibrationDiff} m`
-              : 'N/A'}
+            {displayCalibrationDistance()}
           </span>
         </div>
         <Form
