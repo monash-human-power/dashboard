@@ -15,7 +15,7 @@ import { Number, Static } from 'runtypes';
 import { useChannelShaped } from 'api/common/socket';
 import toast from 'react-hot-toast';
 
-// TODO: Implement actual functions for `onSelectConfig`, `onDeleteConfig` and true values for `baseConfigs` (provided from `boost`)
+// TODO: Implement actual functions for `onSelectConfig` and `onDeleteConfig`
 
 /**
  * Send the config selection to `boost`
@@ -49,7 +49,7 @@ function onDeleteConfig(configType: ConfigT, name: string) {
 export default function BoostView() {
   // TODO: remove the hardcoded value for `distTravelled` with actual value read from MQTT
   const [dist, setDist] = useState(0);
-  const [distOffset, setOffset] = useState<number | null>(null);
+  const [distOffset, setDistOffset] = useState<number | null>(null);
   const [configs, setConfigs] = useState<BoostConfig[]>([
     {
       type: 'powerPlan',
@@ -93,7 +93,7 @@ export default function BoostView() {
 
   const handleDistOffsetReceived = useCallback(
     (payload: Static<typeof RecommendedSPRT>) => {
-      setOffset(payload.distanceOffset);
+      setDistOffset(payload.distanceOffset);
     },
     [],
   );
@@ -106,7 +106,7 @@ export default function BoostView() {
   );
 
   const handleReset = () => {
-    setOffset(0);
+    setDistOffset(0);
     toast.success('Calibration Reset!');
     resetCalibration();
   };
