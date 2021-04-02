@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+
 import { GREY, PURPLE } from 'components/common/charts/colours';
 import ScatterChart from 'components/common/charts/ScatterChart';
 
