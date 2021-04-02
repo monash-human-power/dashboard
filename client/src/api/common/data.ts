@@ -75,8 +75,8 @@ export function useSensorData<T extends SensorsT>(
 ): T | null {
   const module = useModuleData(id);
 
-  // Data from sensor
-  const data = module.sensors.find((s) => s.type === sensor)?.value ?? null; // Data for the sensor // Extract value, defaulting to null
+  // Find data from sensor, defaulting to null
+  const data = module.sensors.find((s) => s.type === sensor)?.value ?? null;
 
   return Union(shape, Null).check(data);
 }
