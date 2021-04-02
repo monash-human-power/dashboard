@@ -14,6 +14,7 @@ import { useSensorData, Sensor } from 'api/common/data';
 import { Number, Static } from 'runtypes';
 import { useChannelShaped } from 'api/common/socket';
 import toast from 'react-hot-toast';
+import { ReedDistanceRT } from 'types/data';
 
 // TODO: Implement actual functions for `onSelectConfig` and `onDeleteConfig`
 
@@ -70,7 +71,7 @@ export default function BoostView() {
   ]);
 
   // fetch the reed distance from wireless module #3
-  const reedDistance = useSensorData(3, Sensor.ReedDistance, Number);
+  const reedDistance = useSensorData(3, Sensor.ReedDistance, ReedDistanceRT);
 
   useEffect(() => {
     if (reedDistance) {
