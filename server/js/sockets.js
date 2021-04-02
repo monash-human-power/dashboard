@@ -3,7 +3,7 @@
  */
 require('dotenv').config();
 
-const { DAS, BOOST, Camera } = require('./topics');
+const { DAS, BOOST, Camera, WirelessModule } = require('./topics');
 
 const sockets = {};
 const mqtt = require('mqtt');
@@ -97,6 +97,7 @@ sockets.init = function socketInit(server) {
   mqttClient.subscribe(DAS.start);
   mqttClient.subscribe(DAS.stop);
   mqttClient.subscribe(DAS.data);
+  mqttClient.subscribe(WirelessModule.all().module);
   mqttClient.subscribe(BOOST.predicted_max_speed);
   mqttClient.subscribe(BOOST.recommended_sp);
   mqttClient.subscribe(Camera.push_overlays);
@@ -116,6 +117,8 @@ sockets.init = function socketInit(server) {
   // eslint-disable-next-line global-require
   const io = require('socket.io').listen(server);
   io.on('connection', function ioConnection(socket) {
+    socket.setMaxListeners(20);
+
     /*
       Must subscribe to these when the mqtt message handler is set
       otherwise the retained payloads will not be handled.
@@ -154,6 +157,22 @@ sockets.init = function socketInit(server) {
             `Error in parsing received payload\n\ttopic: ${topic}\n\tpayload: ${payloadString}\n`,
           );
         }
+      } else if (topic.startsWith(WirelessModule.base)) {
+        // Emit on appropriate channel
+        try {
+          const [, , id, property] = topic.split('/').slice(1); // Remove leading ""
+          // topicString: ["v3", "wireless_module", <id>, <property>]
+          const value = JSON.parse(payloadString);
+
+          // Emit parsed payload as is
+          socket.emit(`module-${id}-${property}`, value);
+
+          // If needs to be retained, that can be implemented here
+        } catch (e) {
+          console.error(
+            `Error in parsing received payload\n\ttopic: ${topic}\n\tpayload: ${payloadString}\n`,
+          );
+        }
       } else {
         switch (topic) {
           case DAS.start:
@@ -162,6 +181,8 @@ sockets.init = function socketInit(server) {
           case DAS.stop:
             socket.emit('stop');
             break;
+
+          // V2 data channel
           case DAS.data:
             mqttDataTopicHandler(socket, payloadString);
             if (sendToPublicMQTTBroker()) {
@@ -222,6 +243,10 @@ sockets.init = function socketInit(server) {
       mqttClient.publish(BOOST.calibrate_reset, 'true');
     });
 
+    socket.on('send-config', (configContent) => {
+      mqttClient.publish('boost/configs/action', configContent);
+    });
+
     socket.on('submit-calibration', (calibratedDistance) => {
       mqttClient.publish(BOOST.calibrate, `calibrate=${calibratedDistance}`);
     });
@@ -273,6 +298,18 @@ sockets.init = function socketInit(server) {
 
     socket.on('stop-camera-recording', () => {
       mqttClient.publish(Camera.recording_stop);
+    });
+
+    socket.on('start-das-recording', () => {
+      [1, 2, 3, 4].forEach((n) =>
+        mqttClient.publish(WirelessModule.id(n).start),
+      );
+    });
+
+    socket.on('stop-das-recording', () => {
+      [1, 2, 3, 4].forEach((n) =>
+        mqttClient.publish(WirelessModule.id(n).stop),
+      );
     });
   });
 };

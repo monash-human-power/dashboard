@@ -1,0 +1,64 @@
+{
+    "rider": {
+      "displayName": "Default rider",
+      "mass": 75
+    },
+    "track": {
+      "displayName": "Battle Mountain",
+      "length": 8047,
+      "trapStart": 7847,
+      "trapEnd": 8047,
+      "gravity": 9.81302,
+      "airDensity": 0.985,
+      "slope": {
+        "type": "constant",
+        "constant": -0.0066
+      }
+    },
+    "powerPlan": {
+      "displayName": "default",
+      "inrunPower": 100,
+      "zones": [
+        { "power": 210, "duration": 90 },
+        { "power": 280, "duration": 45 },
+        { "power": 350, "duration": 45 },
+        { "power": 400, "duration": 60 }
+      ],
+      "searchParams": {
+        "lowerBound": 1000,
+        "upperBound": 1200,
+        "step": 100
+      }
+    },
+    "bike": {
+        "displayName": "Wombat",
+        "bikeMass": 56.2,
+        "dtLoss": 0.06,
+        "cda": {
+            "type": "function",
+            "velocity": [5.765, 8.5784, 11.1828, 16.7719, 22.1711, 27.9375],
+            "cda": [
+                0.03154635,
+                0.032188888,
+                0.024934,
+                0.023817,
+                0.0229665,
+                0.0224342
+            ]
+        },
+        "frontWheel": {
+            "rollResZeroSpeed": 0.00375,
+            "rollResMoving": 0.000009,
+            "loading": 1,
+            "momentOfInertia": 0.0233,
+            "diameter": 0.52
+        },
+        "backWheel": {
+            "rollResZeroSpeed": 0.00375,
+            "rollResMoving": 0.000009,
+            "loading": 0,
+            "momentOfInertia": 0.0233,
+            "diameter": 0.64
+        }
+    }
+}

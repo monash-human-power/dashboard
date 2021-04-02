@@ -5,6 +5,7 @@ import { BoostConfig } from 'types/boost';
 import FontAwesomeIcon from 'components/common/FontAwesomeIcon';
 import WidgetListGroupItem from 'components/common/WidgetListGroupItem';
 import styles from 'components/common/boost/BoostConfigList.module.css';
+import { removeSuffix } from 'utils/boost';
 
 export interface BoostConfigListProps {
   config: BoostConfig;
@@ -23,13 +24,15 @@ export default function BoostConfigList({
   onSelectConfig,
   onDeleteConfig,
 }: BoostConfigListProps) {
-  const handleSelect = (configName: string) => {
-    if (configName !== config.active) onSelectConfig(configName);
+  const handleSelect = (configFileName: string) => {
+    if (configFileName !== config.active?.fileName)
+      onSelectConfig(configFileName);
   };
   const handleDelete = (event: React.MouseEvent, configName: string) => {
     event.stopPropagation();
     onDeleteConfig(configName);
   };
+
   if (config.options.length === 0)
     return (
       <div className={styles.empty_dialogue}>
@@ -44,16 +47,23 @@ export default function BoostConfigList({
     <>
       {config.options.map((configName) => (
         <WidgetListGroupItem
-          title={configName}
-          active={configName === config.active}
+          title=""
+          active={configName.fileName === config.active?.fileName}
           action
-          onClick={() => handleSelect(configName)}
+          onClick={() => handleSelect(configName.fileName)}
           as="a"
         >
+          <span>
+            {configName.displayName}
+            <span className={styles.file_name_display}>
+              ({removeSuffix(configName.fileName, config.type)})
+            </span>
+          </span>
+
           <Button
             variant="danger"
             size="sm"
-            onClick={(e) => handleDelete(e, configName)}
+            onClick={(e) => handleDelete(e, configName.fileName)}
           >
             <FontAwesomeIcon icon={faTrashAlt} />
           </Button>

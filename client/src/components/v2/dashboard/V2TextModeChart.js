@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
 import { useData } from 'api/v2/sensors';
-import { usePowerModel } from 'api/v2/powerModel';
+import { usePowerModel } from 'api/common/powerModel';
 import styles from 'components/v2/dashboard/V2TextModeChart.module.css';
 
 /**
@@ -70,7 +70,7 @@ export default function V2TextModeChart() {
           </td>
           <td>{formatData('cadence', 'rpm')}</td>
         </tr>
-        { /* eslint-disable camelcase */}
+        {/* eslint-disable camelcase */}
         <tr>
           <td rowSpan="6">
             <b>BOOST</b>
@@ -98,7 +98,7 @@ export default function V2TextModeChart() {
           <td>Total Distance Left</td>
           <td>{formatValue(recData?.distance_left, 'm')}</td>
         </tr>
-        { /* eslint-enable camelcase */}
+        {/* eslint-enable camelcase */}
         <tr>
           <td rowSpan="3">
             <b>GPS</b>
