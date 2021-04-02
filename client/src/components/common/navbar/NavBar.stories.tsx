@@ -18,7 +18,7 @@ const Template = addArgs<NavBarProps>((props) => (
   </Router>
 ));
 
-const baseProps = { bikeVersions: bikeVersions };
+const baseProps = { bikeVersions };
 
 export const V2 = createStory(Template, {
   ...baseProps,
