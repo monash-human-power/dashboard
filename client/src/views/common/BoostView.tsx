@@ -108,8 +108,8 @@ export default function BoostView() {
 
   const handleReset = () => {
     setDistOffset(0);
-    toast.success('Calibration Reset!');
     resetCalibration();
+    toast.success('Calibration Reset!');
   };
 
   return (
