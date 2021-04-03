@@ -11,7 +11,7 @@ import {
   RecommendedSPRT,
 } from 'types/boost';
 import { useSensorData, Sensor } from 'api/common/data';
-import { Number, Static } from 'runtypes';
+import { Static } from 'runtypes';
 import { useChannelShaped } from 'api/common/socket';
 import toast from 'react-hot-toast';
 import { ReedDistanceRT } from 'types/data';
@@ -76,7 +76,7 @@ export default function BoostView() {
   useEffect(() => {
     if (reedDistance) {
       // Set distance to 2 decimal places
-      setDist(Math.round(reedDistance * 100) / 100);
+      setDist(reedDistance);
     }
   }, [reedDistance]);
 
