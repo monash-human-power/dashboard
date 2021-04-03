@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import ContentPage from 'components/common/ContentPage';
 import BoostCalibration from 'components/common/boost/BoostCalibration';
 import BoostConfigurator from 'components/common/boost/BoostConfigurator';
@@ -48,8 +48,6 @@ function onDeleteConfig(configType: ConfigT, name: string) {
  * @returns {React.Component} Component
  */
 export default function BoostView() {
-  // TODO: remove the hardcoded value for `distTravelled` with actual value read from MQTT
-  const [dist, setDist] = useState(0);
   const [distOffset, setDistOffset] = useState<number | null>(null);
   const [configs, setConfigs] = useState<BoostConfig[]>([
     {
@@ -71,14 +69,8 @@ export default function BoostView() {
   ]);
 
   // fetch the reed distance from wireless module #3
-  const reedDistance = useSensorData(3, Sensor.ReedDistance, ReedDistanceRT);
-
-  useEffect(() => {
-    if (reedDistance) {
-      // Set distance to 2 decimal places
-      setDist(reedDistance);
-    }
-  }, [reedDistance]);
+  const reedDistance =
+    useSensorData(3, Sensor.ReedDistance, ReedDistanceRT) ?? 0;
 
   const handleConfigsReceived = useCallback(
     (configsReceived: Static<typeof ConfigPayloadRT>) => {
@@ -117,7 +109,7 @@ export default function BoostView() {
       <BoostCalibration
         onSet={setCalibration}
         onReset={handleReset}
-        distTravelled={dist}
+        distTravelled={reedDistance}
         calibrationDiff={distOffset}
       />
       <BoostConfigurator
