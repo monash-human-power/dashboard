@@ -34,7 +34,7 @@ export default function BoostCalibration({
   );
 
   const handleSubmit = useCallback(
-    (event: React.FormEvent<HTMLInputElement>) => {
+    (event: React.FormEvent<HTMLFormElement>) => {
       const form = event.currentTarget;
       if (form.checkValidity() === false) {
         event.stopPropagation();
@@ -45,13 +45,6 @@ export default function BoostCalibration({
       setValidated(true);
     },
     [calibValue, onSet, setValidated],
-  );
-
-  const handleKeyPressed = useCallback(
-    (event: React.KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === 'Enter') handleSubmit(event);
-    },
-    [handleSubmit],
   );
 
   const displayCalibratedDistance = () => {
@@ -95,7 +88,6 @@ export default function BoostCalibration({
               <Form.Control
                 type="number"
                 placeholder="Calibrate distance..."
-                onKeyPress={handleKeyPressed}
                 onChange={handleCalibrationChange}
                 required
               />
