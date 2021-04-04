@@ -1,6 +1,6 @@
 import { useRouteMatch } from 'react-router-dom';
 import HomeView from 'views/HomeView';
-import { RouteInfo } from 'router/route';
+import { RouteInfo } from 'types/route';
 import V2Routes from 'router/v2';
 import V3Routes from 'router/v3';
 

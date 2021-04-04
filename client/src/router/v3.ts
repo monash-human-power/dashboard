@@ -3,7 +3,7 @@ import LogsView from 'views/common/LogsView';
 import StatusView from 'views/v3/StatusView';
 import BoostView from 'views/common/BoostView';
 import CameraSystemView from 'views/v3/CameraSystemView';
-import { RouteInfo } from 'router/route';
+import { RouteInfo } from 'types/route';
 
 /**
  * V3 views
