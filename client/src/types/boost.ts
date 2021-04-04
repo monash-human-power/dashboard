@@ -91,10 +91,27 @@ export const ConfigObjRT = Union(RiderRT, BikeRT, TrackRT, PowerPlanRT);
 export type FileConfigT = keyof ConfigBundleT | 'bundle';
 export type ConfigT = keyof ConfigBundleT;
 
-type ConfigNameT = {
-  displayName: string;
-  fileName: string;
-};
+export const RecommendedSPRT = Record({
+  power: Number,
+  speed: Number,
+  zoneDistance: Number,
+  distanceOffset: Number,
+  distanceLeft: Number,
+});
+
+export const ConfigNameRT = Record({
+  displayName: String,
+  fileName: String,
+});
+type ConfigNameT = Static<typeof ConfigNameRT>;
+
+// Type of the payload on 'boost/configs'
+export const ConfigPayloadRT = Record({
+  rider: Array(ConfigNameRT),
+  bike: Array(ConfigNameRT),
+  track: Array(ConfigNameRT),
+  powerPlan: Array(ConfigNameRT),
+});
 
 export interface BoostConfig {
   /** The input of BOOST that this config is for */

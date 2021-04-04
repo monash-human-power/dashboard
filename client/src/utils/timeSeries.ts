@@ -14,20 +14,20 @@ function isValid(value: number): boolean {
 
 export interface TimeSeriesPoint {
   /** Time since started running in ms */
-  time: number
+  time: number;
   /** Average value at this time */
-  value: number
+  value: number;
 }
 
 export interface TimeSeriesHook {
   /** Time-series data points for each dimension */
-  series: TimeSeriesPoint[][]
+  series: TimeSeriesPoint[][];
   /** Maximum recorded raw value for each dimension */
-  max: number[]
+  max: number[];
   /** Add a raw data point */
-  add: (values: number[]) => void
+  add: (values: number[]) => void;
   /** Remove recorded values */
-  reset: () => void
+  reset: () => void;
 }
 
 // These JSDocs are left for backwards compatability with .js files
@@ -55,7 +55,9 @@ export interface TimeSeriesHook {
  * @returns Hook
  */
 export function useTimeSeries(
-  dimensions: number, interval: number, running: boolean
+  dimensions: number,
+  interval: number,
+  running: boolean,
 ): TimeSeriesHook {
   const [series, setSeries] = useState<TimeSeriesPoint[][]>([]);
   const max = useRef<number[]>(Array(dimensions).fill(0));
