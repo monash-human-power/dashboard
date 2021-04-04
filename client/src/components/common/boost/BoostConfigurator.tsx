@@ -42,10 +42,18 @@ export default function BoostConfigurator({
   const fileInput = createRef<HTMLInputElement>();
   const [configType, setConfigType] = useState<FileConfigT>('bundle');
 
-  const [displayMessage, setDisplayMessage] = useState('');
+  const [confirmDeletion, setConfirmDeletion] = useState({
+    show: false,
+    configName: '',
+    configType: 'rider',
+  });
 
+  const [displayMessage, setDisplayMessage] = useState('');
   const [showUploadErr, setShowUploadErr] = useState(false);
+
   const handleErrorClose = () => setShowUploadErr(false);
+  const handleConfirmDialogClose = () =>
+    setConfirmDeletion({ ...confirmDeletion, show: false });
 
   // Function to click the hidden file input button (this is a work around to avoid the ugly
   // UI of the default input file button)
@@ -92,8 +100,35 @@ export default function BoostConfigurator({
     }
   };
 
+  const handleDelete = () => {
+    onDeleteConfig(
+      confirmDeletion.configType as ConfigT,
+      confirmDeletion.configName,
+    );
+    handleConfirmDialogClose();
+  };
+
   return (
     <>
+      <Modal show={confirmDeletion.show} onHide={handleConfirmDialogClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <FontAwesomeIcon icon={faExclamationTriangle} />
+            <b className="mx-3"> Confirm Deletion</b>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete {confirmDeletion.configName}?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleConfirmDialogClose}>
+            No
+          </Button>
+          <Button variant="danger" onClick={handleDelete}>
+            Yes
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <Modal show={showUploadErr} onHide={handleErrorClose}>
         <Modal.Header closeButton>
           <Modal.Title>
@@ -163,7 +198,11 @@ export default function BoostConfigurator({
                         onSelectConfig(config.type, name)
                       }
                       onDeleteConfig={(name) =>
-                        onDeleteConfig(config.type, name)
+                        setConfirmDeletion({
+                          show: true,
+                          configName: name,
+                          configType: config.type,
+                        })
                       }
                     />
                   </Card.Body>
