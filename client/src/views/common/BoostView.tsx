@@ -3,7 +3,7 @@ import ContentPage from 'components/common/ContentPage';
 import BoostCalibration from 'components/common/boost/BoostCalibration';
 import BoostConfigurator from 'components/common/boost/BoostConfigurator';
 import { setCalibration, resetCalibration } from 'api/common/powerModel';
-import uploadConfig from 'api/v3/boost';
+import uploadConfig, { deleteConfig } from 'api/v3/boost';
 import {
   ConfigT,
   BoostConfig,
@@ -26,18 +26,6 @@ import { ReedDistanceRT } from 'types/data';
  */
 function onSelectConfig(configType: ConfigT, name: string) {
   console.log('Selected config:');
-  console.log(`type: ${configType}`);
-  console.log(`name: ${name}`);
-}
-
-/**
- * Inform boost of the deletion of the given config file
- *
- * @param configType the type of the config
- * @param name name of the config file
- */
-function onDeleteConfig(configType: ConfigT, name: string) {
-  console.log('Deleted config:');
   console.log(`type: ${configType}`);
   console.log(`name: ${name}`);
 }
@@ -115,7 +103,7 @@ export default function BoostView() {
       <BoostConfigurator
         configs={configs}
         onSelectConfig={onSelectConfig}
-        onDeleteConfig={onDeleteConfig}
+        onDeleteConfig={deleteConfig}
         onUploadConfig={uploadConfig}
       />
     </ContentPage>

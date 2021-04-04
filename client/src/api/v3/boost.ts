@@ -80,3 +80,16 @@ export default function uploadConfig(
 
   reader.readAsText(configFile);
 }
+
+/**
+ * Inform boost of the deletion of the given config file
+ *
+ * @param configType the type of the config
+ * @param name name of the config file
+ */
+function onDeleteConfig(configType: ConfigT, name: string) {
+  // FIXME: Should dashboard remove the config file from `configs`?
+  console.log(`Delete ${name} ${configType} config`);
+  sendConfig('delete', configType, name, null);
+  toast.success(`${name} deleted`);
+}
