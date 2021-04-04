@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap';
 import ContentPage from 'components/common/ContentPage';
 import DeleteModal from 'components/common/download_files/DeleteModal';
 import LogFileList from 'components/common/download_files/LogFileList';
-import { useFiles, useLatestFile } from 'api/common/files';
+import { LogFile, useFiles, useLatestFile } from 'api/common/files';
 
 /**
  * Download Files page component
@@ -13,20 +13,20 @@ import { useFiles, useLatestFile } from 'api/common/files';
 export default function DownloadFilesView() {
   const { files, deleteFile } = useFiles();
   const latestFileURL = useLatestFile();
-  const [deletingFile, setDeletingFile] = useState(null);
+  const [deletingFile, setDeletingFile] = useState<LogFile | null>(null);
 
   const hideConfirmDelete = useCallback(() => {
     setDeletingFile(null);
   }, []);
 
   const handleConfirmDelete = useCallback(() => {
-    deleteFile(deletingFile);
+    if (deletingFile) deleteFile(deletingFile);
     hideConfirmDelete();
   }, [deleteFile, deletingFile, hideConfirmDelete]);
 
   return (
     <ContentPage title="Files">
-      {files?.length > 0 && (
+      {files && files.length > 0 && (
         <Button
           href={latestFileURL}
           target="_blank"

@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Modal, Button } from 'react-bootstrap';
 
 /**
@@ -10,13 +9,29 @@ import { Modal, Button } from 'react-bootstrap';
  * @property {Function} onCancel  Called if delete cancelled
  */
 
+export interface DeleteModalProps {
+  /** Name of object to be deleted */
+  name: string;
+  /** Whether to show the model */
+  show: boolean;
+  /** Called if delete confirmed */
+  onDelete: () => void;
+  /** Called if delete cancelled */
+  onCancel: () => void;
+}
+
 /**
  * Delete confirmation modal component
  *
- * @param {DeleteModalProps} props Props
- * @returns {React.Component<DeleteModalProps>} Component
+ * @param props Props
+ * @returns Component
  */
-export default function DeleteModal({ name, show, onDelete, onCancel }) {
+export default function DeleteModal({
+  name,
+  show,
+  onDelete,
+  onCancel,
+}: DeleteModalProps) {
   return (
     <Modal show={show} onHide={onCancel}>
       <Modal.Header closeButton>
@@ -38,10 +53,3 @@ export default function DeleteModal({ name, show, onDelete, onCancel }) {
     </Modal>
   );
 }
-
-DeleteModal.propTypes = {
-  name: PropTypes.string.isRequired,
-  show: PropTypes.bool.isRequired,
-  onDelete: PropTypes.func.isRequired,
-  onCancel: PropTypes.func.isRequired,
-};
