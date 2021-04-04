@@ -11,9 +11,9 @@ import styles from 'components/common/navbar/NavBar.module.css';
  */
 export interface NavBarProps {
   /** Version info for bike */
-  bikeVersion: VersionInfo | null,
+  bikeVersion: VersionInfo | null;
   /** Version info for all bikes */
-  bikeVersions: VersionInfo[]
+  bikeVersions: VersionInfo[];
 }
 
 /**
@@ -22,7 +22,10 @@ export interface NavBarProps {
  * @param props Props
  * @returns Component
  */
-export default function NavBar({ bikeVersion, bikeVersions }: NavBarProps): JSX.Element {
+export default function NavBar({
+  bikeVersion,
+  bikeVersions,
+}: NavBarProps): JSX.Element {
   const bikeName = bikeVersion?.name;
   const linkItems = bikeVersion?.routes.map(({ name, path, exact }) => (
     <Nav.Link

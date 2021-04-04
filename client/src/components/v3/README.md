@@ -4,7 +4,7 @@ This folder holds components that are needed only for V3 views.
 
 ## Structure
 
-All components that relate to a *specific view* should be stored in a subfolder.
+All components that relate to a _specific view_ should be stored in a subfolder.
 
 ```
 # A Dashboard specific component should be in its own folder

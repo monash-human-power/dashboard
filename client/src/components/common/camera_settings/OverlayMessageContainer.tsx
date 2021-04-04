@@ -8,7 +8,5 @@ import OverlayMessage from 'components/common/camera_settings/OverlayMessage';
  * @returns Component
  */
 export default function OverlayMessageContainer() {
-    return (
-        <OverlayMessage sendMessage={sendMessage} />
-    );
+  return <OverlayMessage sendMessage={sendMessage} />;
 }

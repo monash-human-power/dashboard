@@ -27,22 +27,25 @@ interface SensorStates {
  * @returns Sensor statuses
  */
 function formatData(states: SensorStates) {
-  const sensorLabels: {[name in keyof SensorStates]: string} = {
-    'gps': 'GPS',
-    'power': 'Power',
-    'cadence': 'Cadence',
-    'reed': 'Reed Switch',
-    'accelerometer': 'Accelerometer',
-    'gyroscope': 'Gyroscope',
-    'potentiometer': 'Potentiometer',
-    'thermometer': 'Thermometer',
+  const sensorLabels: { [name in keyof SensorStates]: string } = {
+    gps: 'GPS',
+    power: 'Power',
+    cadence: 'Cadence',
+    reed: 'Reed Switch',
+    accelerometer: 'Accelerometer',
+    gyroscope: 'Gyroscope',
+    potentiometer: 'Potentiometer',
+    thermometer: 'Thermometer',
   };
 
-  return Object.entries(sensorLabels).map(([name, label]) => ({
-    label,
-    name,
-    state: states[name as keyof SensorStates],
-  } as SensorStatus));
+  return Object.entries(sensorLabels).map(
+    ([name, label]) =>
+      ({
+        label,
+        name,
+        state: states[name as keyof SensorStates],
+      } as SensorStatus),
+  );
 }
 
 /**

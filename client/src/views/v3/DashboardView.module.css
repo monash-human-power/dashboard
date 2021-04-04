@@ -15,7 +15,7 @@
   height: 60vh;
   margin-top: 25px;
   margin-bottom: 25px;
-  margin-left: 1.2vw
+  margin-left: 1.2vw;
 }
 
 .content {
@@ -24,7 +24,7 @@
 
 .line {
   height: 67px;
-  border: 1px solid #CCCCCC;
+  border: 1px solid #cccccc;
 }
 
 .graph {

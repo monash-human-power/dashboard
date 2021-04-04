@@ -9,7 +9,7 @@ import {
   Runtype,
   Static,
   String,
-  Union
+  Union,
 } from 'runtypes';
 import { capitalise, formatBytes, formatMinutes } from 'utils/string';
 
@@ -30,9 +30,9 @@ type CameraConfig = Static<typeof CameraConfig>;
 
 export interface CameraConfigT {
   /** Config defined by CameraConfig */
-  config: CameraConfig | null,
+  config: CameraConfig | null;
   /** Set the active overlay */
-  setActiveOverlay: (activeOverlay: string) => void
+  setActiveOverlay: (activeOverlay: string) => void;
 }
 
 /**
@@ -141,7 +141,9 @@ export interface CameraRecordingStatusItem {
  * @param payload Payload from MQTT message, parsed
  * @returns Formatted payload
  */
-export function formatRecordingPayload(payload: CameraRecordingStatusPayload | null) {
+export function formatRecordingPayload(
+  payload: CameraRecordingStatusPayload | null,
+) {
   if (!payload) return null;
 
   // Format data always present regardless of status
@@ -256,7 +258,7 @@ export const useCameraRecordingStatus = createStatusPayloadHook(
   CameraRecordingStatusPayload,
   {
     initValue: null,
-    returnHandler: (payload) => formatRecordingPayload(payload)
+    returnHandler: (payload) => formatRecordingPayload(payload),
   },
 );
 
@@ -266,7 +268,7 @@ const VideoFeedStatus = Record({
 });
 export interface VideoFeedStatus {
   /** Whether video feed is on/off */
-  online: boolean
+  online: boolean;
 }
 
 /**

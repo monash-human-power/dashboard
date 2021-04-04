@@ -5,7 +5,7 @@ import { Card } from 'react-bootstrap';
 
 export interface OverlaySelectionProps extends CameraConfigT {
   /** Camera screen */
-  device: 'primary' | 'secondary'
+  device: 'primary' | 'secondary';
 }
 
 /**
@@ -17,7 +17,7 @@ export interface OverlaySelectionProps extends CameraConfigT {
 export default function OverlaySelection({
   device,
   config,
-  setActiveOverlay
+  setActiveOverlay,
 }: OverlaySelectionProps): JSX.Element {
   const [selectedOverlay, setSelectedOverlay] = useState<string | null>(null);
   const name = getPrettyDeviceName(device);
@@ -48,8 +48,8 @@ export default function OverlaySelection({
             onChange={setSelectedOverlay}
           />
         ) : (
-            <Card.Subtitle>Waiting for response...</Card.Subtitle>
-          )}
+          <Card.Subtitle>Waiting for response...</Card.Subtitle>
+        )}
       </Card.Body>
       <Card.Footer>
         <Card.Link href="#" onClick={handleSave}>
