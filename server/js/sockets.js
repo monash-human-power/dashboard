@@ -100,6 +100,7 @@ sockets.init = function socketInit(server) {
   mqttClient.subscribe(WirelessModule.all().module);
   mqttClient.subscribe(BOOST.predicted_max_speed);
   mqttClient.subscribe(BOOST.recommended_sp);
+  mqttClient.subscribe(BOOST.configs);
   mqttClient.subscribe(Camera.push_overlays);
   // TODO: This subscription should be removed when handling of BOOST.generate.complete
   // is implemented.
@@ -203,6 +204,10 @@ sockets.init = function socketInit(server) {
               'power-model-recommended-SP',
               queryStringToJson(payloadString),
             );
+            socket.emit('boost/recommended_sp', payloadString);
+            break;
+          case BOOST.configs:
+            socket.emit('boost/configs', payloadString);
             break;
           // TODO: Remove this when handling of
           // BOOST.generate.complete is implemented.

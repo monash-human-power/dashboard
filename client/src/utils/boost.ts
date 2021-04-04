@@ -12,3 +12,7 @@ export const removeSuffix = (name: string, type: ConfigT) =>
 
 export const addSuffix = (name: string, type: ConfigT) =>
   name.replace('.json', configTypeToFileSuffix[type]);
+
+export const displayDistance = (num: number) => {
+  return `${Number.parseFloat(num.toString()).toFixed(2)} m`;
+};

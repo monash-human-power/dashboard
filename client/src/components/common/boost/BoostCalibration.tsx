@@ -1,11 +1,12 @@
 import React, { useState, useCallback } from 'react';
 import { Button, Card, Form, Col } from 'react-bootstrap';
+import { displayDistance } from 'utils/boost';
 
 export interface BoostCalibrationProps {
   onSet: (calibValue: number) => void;
   onReset: () => void;
   distTravelled: number;
-  calibrationDiff: number;
+  calibrationDiff: number | null;
 }
 
 /**
@@ -53,6 +54,13 @@ export default function BoostCalibration({
     [handleSubmit],
   );
 
+  const displayCalibratedDistance = () => {
+    if (calibrationDiff !== null) {
+      return displayDistance(distTravelled + calibrationDiff);
+    }
+    return 'N/A';
+  };
+
   return (
     <Card>
       <Card.Body>
@@ -63,12 +71,15 @@ export default function BoostCalibration({
         </Card.Text>
         <div className="pb-3">
           <b>Distance travelled </b>
-          <span className="float-right pr-4"> {distTravelled} m </span>
+          <span className="float-right pr-4">
+            {' '}
+            {displayDistance(distTravelled)}{' '}
+          </span>
         </div>
         <div className="pb-3">
           <b>Calibrated distance </b>
           <span className="float-right pr-4">
-            {distTravelled + calibrationDiff} m
+            {displayCalibratedDistance()}
           </span>
         </div>
         <Form
