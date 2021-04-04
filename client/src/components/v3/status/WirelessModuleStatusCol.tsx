@@ -31,7 +31,7 @@ export default function WirelessModuleStatusCol({
           {/* MQTT address */}
           <p style={{ fontSize: '0.75rem', color: 'gray' }}>{mqttAddress}</p>
 
-          <Table striped bordered hover>
+          <Table bordered hover>
             <tbody>
               {/* Battery Voltage */}
               <tr>
@@ -61,13 +61,7 @@ export default function WirelessModuleStatusCol({
               </Accordion.Toggle>
               <Accordion.Collapse eventKey="0">
                 <Card.Body>
-                  <Table striped bordered hover>
-                    <thead>
-                      <tr>
-                        <th>Sensor</th>
-                        <th>Data Value</th>
-                      </tr>
-                    </thead>
+                  <Table bordered hover>
                     <tbody>
                       {/* TODO: extract data */}
                       {/* Sensor Names and Data */}

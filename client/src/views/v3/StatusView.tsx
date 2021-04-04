@@ -4,7 +4,6 @@ import ContentPage from 'components/common/ContentPage';
 import CameraStatusCol from 'components/v3/status/CameraStatusCol';
 import WirelessModuleStatusCol from 'components/v3/status/WirelessModuleStatusCol';
 
-// TODO: REMOVE HARD CODING OF PROPS DATA
 const PrimaryCamera = {
   cameraName: 'Primary',
   isOnline: true,
@@ -59,9 +58,9 @@ const BackWM = {
 /**
  * Status View component
  *
- * @returns {React.Component} Component
+ * @returns Component
  */
-export default function StatusView() {
+export default function StatusView(): JSX.Element {
   return (
     <ContentPage title="System Status">
       <Row>

@@ -4,7 +4,7 @@ import OnlineStatusPill, {
   isOnlineT,
 } from 'components/common/OnlineStatusPill';
 
-export interface CameraStatusProps {
+export interface CameraStatusColProps {
   cameraName: string;
   isOnline: isOnlineT;
   batteryVoltage?: number;
@@ -18,7 +18,7 @@ export default function CameraStatusCol({
   ip,
   videoFeedStatus,
   cameraName,
-}: CameraStatusProps) {
+}: CameraStatusColProps) {
   return (
     <Col md xl="12" className="my-2">
       <span>
@@ -31,7 +31,7 @@ export default function CameraStatusCol({
           {/* IP address */}
           <p style={{ fontSize: '0.75rem', color: 'gray' }}>{ip}</p>
 
-          <Table striped bordered hover>
+          <Table bordered hover>
             <tbody>
               {/* Battery Voltage */}
               <tr>
