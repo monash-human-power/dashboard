@@ -1,14 +1,14 @@
 import React from 'react';
 import { addArgs, createStory } from 'utils/stories';
-import CameraStatusCol, { CameraStatusColProps } from './CameraStatusCol';
+import CameraStatus, { CameraStatusProps } from './CameraStatus';
 
 export default {
-  component: CameraStatusCol,
-  title: 'components/v3/status/CameraStatusCol',
+  component: CameraStatus,
+  title: 'components/v3/status/CameraStatus',
 };
 
-const Template = addArgs<CameraStatusColProps>((props) => (
-  <CameraStatusCol {...props} />
+const Template = addArgs<CameraStatusProps>((props) => (
+  <CameraStatus {...props} />
 ));
 
 /* ----------------------------------- Stories ----------------------------------- */

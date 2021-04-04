@@ -12,7 +12,7 @@ export interface WirelessModuleStatusProps {
   mqttAddress?: string;
 }
 
-export default function WirelessModuleStatusCol({
+export default function WirelessModuleStatus({
   moduleName,
   isOnline,
   sensorData,

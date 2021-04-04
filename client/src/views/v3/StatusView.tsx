@@ -1,8 +1,8 @@
 import React from 'react';
 import { Row, Col, Card } from 'react-bootstrap';
 import ContentPage from 'components/common/ContentPage';
-import CameraStatusCol from 'components/v3/status/CameraStatusCol';
-import WirelessModuleStatusCol from 'components/v3/status/WirelessModuleStatusCol';
+import CameraStatus from 'components/v3/status/CameraStatus';
+import WirelessModuleStatus from 'components/v3/status/WirelessModuleStatus';
 
 const PrimaryCamera = {
   cameraName: 'Primary',
@@ -71,10 +71,10 @@ export default function StatusView(): JSX.Element {
               <Card.Title>Camera System</Card.Title>
               <Row>
                 {/* Primary Camera Status */}
-                <CameraStatusCol {...PrimaryCamera} />
+                <CameraStatus {...PrimaryCamera} />
 
                 {/* Secondary Camera Status */}
-                <CameraStatusCol {...SecondaryCamera} />
+                <CameraStatus {...SecondaryCamera} />
               </Row>
             </Card.Body>
           </Card>
@@ -87,13 +87,13 @@ export default function StatusView(): JSX.Element {
               <Card.Title>Wireless Modules</Card.Title>
               <Row>
                 {/* Front WM Status */}
-                <WirelessModuleStatusCol {...FrontWM} />
+                <WirelessModuleStatus {...FrontWM} />
 
                 {/* Middle WM Status */}
-                <WirelessModuleStatusCol {...MiddleWM} />
+                <WirelessModuleStatus {...MiddleWM} />
 
                 {/* Back WM Status */}
-                <WirelessModuleStatusCol {...BackWM} />
+                <WirelessModuleStatus {...BackWM} />
               </Row>
             </Card.Body>
           </Card>
