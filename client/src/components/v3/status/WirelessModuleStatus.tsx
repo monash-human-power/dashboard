@@ -3,11 +3,12 @@ import { Col, Card, Accordion, Button, Table } from 'react-bootstrap';
 import OnlineStatusPill, {
   isOnlineT,
 } from 'components/common/OnlineStatusPill';
+import { SensorDataT } from 'types/data';
 
 export interface WirelessModuleStatusProps {
   moduleName: string;
   isOnline: isOnlineT;
-  sensorData: {};
+  data: SensorDataT[];
   batteryVoltage?: number;
   mqttAddress?: string;
 }
@@ -15,7 +16,7 @@ export interface WirelessModuleStatusProps {
 export default function WirelessModuleStatus({
   moduleName,
   isOnline,
-  sensorData,
+  data,
   batteryVoltage,
   mqttAddress,
 }: WirelessModuleStatusProps) {
@@ -31,21 +32,23 @@ export default function WirelessModuleStatus({
           {/* MQTT address */}
           <p style={{ fontSize: '0.75rem', color: 'gray' }}>{mqttAddress}</p>
 
-          <Table bordered hover>
+          <Table hover>
             <tbody>
               {/* Battery Voltage */}
               <tr>
-                <td>Battery Voltage</td>
+                <td>
+                  <strong>Battery Voltage</strong>
+                </td>
                 <td>{batteryVoltage}V</td>
               </tr>
 
               {/* Sensors List of Names */}
-              {Object.keys(sensorData).map((sensorName, index) => (
-                <tr>
-                  <td>Sensor-{index}</td>
-                  <td>{sensorName}</td>
-                </tr>
-              ))}
+              <tr>
+                <td>
+                  <strong>Sensors</strong>
+                </td>
+                <td>{data.map(({ type }) => type)}</td>
+              </tr>
             </tbody>
           </Table>
 
@@ -65,7 +68,7 @@ export default function WirelessModuleStatus({
                     <tbody>
                       {/* TODO: extract data */}
                       {/* Sensor Names and Data */}
-                      {Object.keys(sensorData).map((sensorName) => (
+                      {Object.keys(data).map((sensorName) => (
                         <tr>
                           <td>{sensorName}</td>
                           <td>{sensorName}</td>

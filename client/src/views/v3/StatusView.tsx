@@ -22,37 +22,19 @@ const FrontWM = {
   isOnline: true,
   batteryVoltage: 3.1,
   mqttAddress: '/v3/wireless_module/1/data',
-  sensorData: {
-    CO2: 123,
-    temperature: '21 Degrees',
-    humidity: '99%',
-    accelerometer: '120',
-    gyroscope: 360,
-  },
+  data: [],
 };
 
 const MiddleWM = {
   moduleName: 'Front WM',
   isOnline: false,
-  sensorData: {
-    CO2: null,
-    temperature: null,
-    humidity: null,
-    accelerometer: null,
-    gyroscope: null,
-  },
+  data: [],
 };
 
 const BackWM = {
   moduleName: 'Front WM',
   isOnline: null,
-  sensorData: {
-    CO2: null,
-    temperature: null,
-    humidity: null,
-    accelerometer: null,
-    gyroscope: null,
-  },
+  data: [],
 };
 
 /**

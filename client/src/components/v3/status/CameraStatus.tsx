@@ -35,13 +35,17 @@ export default function CameraStatus({
             <tbody>
               {/* Battery Voltage */}
               <tr>
-                <td>Battery Voltage</td>
+                <td>
+                  <strong>Battery Voltage</strong>
+                </td>
                 <td>{batteryVoltage}V</td>
               </tr>
 
               {/* Video Feed Status */}
               <tr>
-                <td>Video Feed</td>
+                <td>
+                  <strong>Video Feed</strong>
+                </td>
                 <td>{videoFeedStatus}</td>
               </tr>
             </tbody>

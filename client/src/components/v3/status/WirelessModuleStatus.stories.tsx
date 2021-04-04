@@ -18,25 +18,13 @@ const Template = addArgs<WirelessModuleStatusProps>((props) => (
 export const Disconnected = createStory(Template, {
   moduleName: 'Front WM',
   isOnline: null,
-  sensorData: {
-    CO2: null,
-    temperature: null,
-    humidity: null,
-    accelerometer: null,
-    gyroscope: null,
-  },
+  data: [],
 });
 
 export const Offline = createStory(Template, {
   moduleName: 'Front WM',
   isOnline: false,
-  sensorData: {
-    CO2: null,
-    temperature: null,
-    humidity: null,
-    accelerometer: null,
-    gyroscope: null,
-  },
+  data: [],
 });
 
 export const Online = createStory(Template, {
@@ -44,11 +32,5 @@ export const Online = createStory(Template, {
   isOnline: true,
   batteryVoltage: 3.1,
   mqttAddress: '/v3/wireless_module/1/data',
-  sensorData: {
-    CO2: 123,
-    temperature: '21 Degrees',
-    humidity: '99%',
-    accelerometer: '120',
-    gyroscope: 360,
-  },
+  data: [],
 });
