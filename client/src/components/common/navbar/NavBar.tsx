@@ -1,9 +1,10 @@
-import { ReactComponent as Logo } from 'assets/MHPLogo.svg';
 import React from 'react';
 import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
-import { VersionInfo } from 'router';
+
+import { ReactComponent as Logo } from 'assets/MHPLogo.svg';
 import styles from 'components/common/navbar/NavBar.module.css';
+import { VersionInfo } from 'router';
 
 /**
  * @property {VersionInfo} bikeVersion Version info for bike
