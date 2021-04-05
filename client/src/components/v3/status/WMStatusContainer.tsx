@@ -9,6 +9,8 @@ import WMStatus, { WMStatusProps } from 'components/v3/status/WMStatus';
  * @returns Component
  */
 export default function WMStatusContainer() {
+  // TODO: Link API
+
   const front: WMStatusProps = {
     moduleName: 'Front WM',
     isOnline: null,
