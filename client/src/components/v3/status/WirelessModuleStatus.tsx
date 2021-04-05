@@ -13,6 +13,12 @@ export interface WirelessModuleStatusProps {
   mqttAddress?: string;
 }
 
+/**
+ * Status for Wireless Modules
+ *
+ * @property props Props
+ * @returns component
+ */
 export default function WirelessModuleStatus({
   moduleName,
   isOnline,

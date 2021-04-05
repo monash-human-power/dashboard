@@ -12,6 +12,12 @@ export interface CameraStatusProps {
   videoFeedStatus?: string;
 }
 
+/**
+ * Status for Cameras
+ *
+ * @property props Props
+ * @returns component
+ */
 export default function CameraStatus({
   isOnline,
   batteryVoltage,
