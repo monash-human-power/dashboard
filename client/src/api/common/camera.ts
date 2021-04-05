@@ -298,13 +298,3 @@ export const useCameraStatus = (device: Device) =>
     initValue: { connected: false },
     returnHandler: (payload) => payload,
   })(device);
-
-const CameraBattery = Record({
-  /** Battery percentage */
-  percentage: Number,
-});
-
-export const useCameraBattery = (device: Device) =>
-  createStatusPayloadHook(device, CameraBattery, {
-    returnHandler: (payload) => payload,
-  })(device);

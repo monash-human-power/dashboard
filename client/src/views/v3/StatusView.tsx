@@ -1,8 +1,8 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
 import ContentPage from 'components/common/ContentPage';
-import CameraStatusContainer from './CameraStatusContainer';
-import WirelessModuleStatusContainer from './WirelessModuleStatusContainer';
+import CameraStatusContainer from 'components/v3/status/CameraStatusContainer';
+import WMStatusContainer from 'components/v3/status/WMStatusContainer';
 
 /**
  * Status View component
@@ -20,7 +20,7 @@ export default function StatusView(): JSX.Element {
 
         {/* Wireless Module Status */}
         <Col xl className="mb-2">
-          <WirelessModuleStatusContainer />
+          <WMStatusContainer />
         </Col>
       </Row>
     </ContentPage>

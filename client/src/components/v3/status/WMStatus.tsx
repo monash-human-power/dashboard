@@ -5,7 +5,7 @@ import OnlineStatusPill, {
 } from 'components/common/OnlineStatusPill';
 import { SensorDataT } from 'types/data';
 
-export interface WirelessModuleStatusProps {
+export interface WMStatusProps {
   moduleName: string;
   isOnline: isOnlineT;
   data: SensorDataT[];
@@ -19,13 +19,13 @@ export interface WirelessModuleStatusProps {
  * @property props Props
  * @returns component
  */
-export default function WirelessModuleStatus({
+export default function WMStatus({
   moduleName,
   isOnline,
   data,
   batteryVoltage,
   mqttAddress,
-}: WirelessModuleStatusProps) {
+}: WMStatusProps) {
   return (
     <Col md xl="12" className="my-2">
       <span>
