@@ -12,13 +12,11 @@ import {
   Union,
 } from 'runtypes';
 import { capitalise, formatBytes, formatMinutes } from 'utils/string';
-
-const CameraDevice = Union(Literal('primary'), Literal('secondary'));
-type CameraDevice = Static<typeof CameraDevice>;
+import { Device } from 'types/camera';
 
 const CameraConfig = Record({
   /** Device that the camera has been configured to be */
-  device: CameraDevice,
+  device: Device,
   /** Bike that the camera is configured to be on */
   bike: String,
   /** List of available overlays */
@@ -41,7 +39,7 @@ export interface CameraConfigT {
  * @param device Camera screen
  * @returns Status of overlays and function to set active overlay.
  */
-export function useCameraConfig(device: CameraDevice) {
+export function useCameraConfig(device: Device) {
   const [config, setConfig] = useState<CameraConfig | null>(null);
 
   const handleData = useCallback(
@@ -177,7 +175,7 @@ export function formatRecordingPayload(
  * @param subComponent The sub component to init for (e.g. recording, video feed)
  * @param device Device
  */
-function initStatus(subComponent: string, device?: CameraDevice) {
+function initStatus(subComponent: string, device?: Device) {
   const path = ['camera', subComponent];
   if (device) path.push(device);
   emit(`get-status-payload`, path);
@@ -191,7 +189,7 @@ function initStatus(subComponent: string, device?: CameraDevice) {
  * @param device Device
  * @returns  Prettied device name
  */
-export function getPrettyDeviceName(device: CameraDevice) {
+export function getPrettyDeviceName(device: Device) {
   return device === 'primary' ? 'Primary' : 'Secondary';
 }
 
@@ -206,10 +204,10 @@ interface StatusPayloadOptions<T, U> {
   payloadHandler?: (
     setter: React.Dispatch<React.SetStateAction<T | null>>,
     newPayload: T | null,
-    device: CameraDevice,
+    device: Device,
   ) => T | void;
   /** Handler for return value */
-  returnHandler: (payload: T | null, device?: CameraDevice) => U | null;
+  returnHandler: (payload: T | null, device?: Device) => U | null;
 }
 
 /**
@@ -232,7 +230,7 @@ function createStatusPayloadHook<T, U>(
     returnHandler,
   }: StatusPayloadOptions<T, U>,
 ) {
-  return function _hook(device: CameraDevice) {
+  return function _hook(device: Device) {
     // Only run init once per render
     useEffect(() => {
       initStatus(sub, device);
@@ -293,7 +291,7 @@ const CameraStatus = Record({
  * @param device Device
  * @returns Camera status
  */
-export const useCameraStatus = (device: CameraDevice) =>
+export const useCameraStatus = (device: Device) =>
   createStatusPayloadHook(device, CameraStatus, {
     initValue: { connected: false },
     returnHandler: (payload) => payload,
