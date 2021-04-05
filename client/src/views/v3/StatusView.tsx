@@ -10,8 +10,9 @@ import WMStatusContainer from 'components/v3/status/WMStatusContainer';
  * @returns Component
  */
 export default function StatusView(): JSX.Element {
+  // TODO: Remove WIP when done
   return (
-    <ContentPage title="System Status">
+    <ContentPage title="System Status (WIP)">
       <Row>
         {/* Camera Status */}
         <Col xl className="mb-2">
