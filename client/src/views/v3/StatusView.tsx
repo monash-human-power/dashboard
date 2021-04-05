@@ -1,41 +1,8 @@
 import React from 'react';
-import { Row, Col, Card } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import ContentPage from 'components/common/ContentPage';
-import CameraStatus from 'components/v3/status/CameraStatus';
-import WirelessModuleStatus from 'components/v3/status/WirelessModuleStatus';
-
-const PrimaryCamera = {
-  cameraName: 'Primary',
-  isOnline: true,
-  batteryVoltage: 3,
-  ip: '192.168.123.2',
-  videoFeedStatus: 'RECORDING',
-};
-
-const SecondaryCamera = {
-  cameraName: 'Secondary',
-  isOnline: false,
-};
-
-const FrontWM = {
-  moduleName: 'Front WM',
-  isOnline: true,
-  batteryVoltage: 3.1,
-  mqttAddress: '/v3/wireless_module/1/data',
-  data: [],
-};
-
-const MiddleWM = {
-  moduleName: 'Front WM',
-  isOnline: false,
-  data: [],
-};
-
-const BackWM = {
-  moduleName: 'Front WM',
-  isOnline: null,
-  data: [],
-};
+import CameraStatusContainer from './CameraStatusContainer';
+import WirelessModuleStatusContainer from './WirelessModuleStatusContainer';
 
 /**
  * Status View component
@@ -48,37 +15,12 @@ export default function StatusView(): JSX.Element {
       <Row>
         {/* Camera Status */}
         <Col xl className="mb-2">
-          <Card>
-            <Card.Body>
-              <Card.Title>Camera System</Card.Title>
-              <Row>
-                {/* Primary Camera Status */}
-                <CameraStatus {...PrimaryCamera} />
-
-                {/* Secondary Camera Status */}
-                <CameraStatus {...SecondaryCamera} />
-              </Row>
-            </Card.Body>
-          </Card>
+          <CameraStatusContainer />
         </Col>
 
         {/* Wireless Module Status */}
         <Col xl className="mb-2">
-          <Card>
-            <Card.Body>
-              <Card.Title>Wireless Modules</Card.Title>
-              <Row>
-                {/* Front WM Status */}
-                <WirelessModuleStatus {...FrontWM} />
-
-                {/* Middle WM Status */}
-                <WirelessModuleStatus {...MiddleWM} />
-
-                {/* Back WM Status */}
-                <WirelessModuleStatus {...BackWM} />
-              </Row>
-            </Card.Body>
-          </Card>
+          <WirelessModuleStatusContainer />
         </Col>
       </Row>
     </ContentPage>

@@ -1,15 +1,13 @@
 import React from 'react';
 import { Col, Table } from 'react-bootstrap';
-import OnlineStatusPill, {
-  isOnlineT,
-} from 'components/common/OnlineStatusPill';
+import OnlineStatusPill from 'components/common/OnlineStatusPill';
 
 export interface CameraStatusProps {
   cameraName: string;
-  isOnline: isOnlineT;
-  batteryVoltage?: number;
-  ip?: string;
-  videoFeedStatus?: string;
+  online: boolean;
+  ip: string | null;
+  battery: number | null;
+  videoFeedStatus: boolean | null;
 }
 
 /**
@@ -19,20 +17,20 @@ export interface CameraStatusProps {
  * @returns component
  */
 export default function CameraStatus({
-  isOnline,
-  batteryVoltage,
-  ip,
-  videoFeedStatus,
   cameraName,
+  online,
+  ip,
+  battery,
+  videoFeedStatus,
 }: CameraStatusProps) {
   return (
     <Col md xl="12" className="my-2">
       <span>
-        <b>{cameraName}</b> <OnlineStatusPill isOnline={isOnline} />
+        <b>{cameraName}</b> <OnlineStatusPill isOnline={online} />
       </span>
 
       {/* Only show more information if the camera is online */}
-      {isOnline && (
+      {online && (
         <>
           {/* IP address */}
           <p style={{ fontSize: '0.75rem', color: 'gray' }}>{ip}</p>
@@ -42,9 +40,9 @@ export default function CameraStatus({
               {/* Battery Voltage */}
               <tr>
                 <td>
-                  <strong>Battery Voltage</strong>
+                  <strong>Battery</strong>
                 </td>
-                <td>{batteryVoltage}V</td>
+                <td>{`${battery ?? '-'}  %`}</td>
               </tr>
 
               {/* Video Feed Status */}
@@ -52,7 +50,7 @@ export default function CameraStatus({
                 <td>
                   <strong>Video Feed</strong>
                 </td>
-                <td>{videoFeedStatus}</td>
+                <td>{videoFeedStatus ? 'RECORDING' : 'OFFLINE'}</td>
               </tr>
             </tbody>
           </Table>

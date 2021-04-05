@@ -9,16 +9,16 @@ import {
   Runtype,
   Static,
   String,
-  Union
+  Union,
 } from 'runtypes';
 import { capitalise, formatBytes, formatMinutes } from 'utils/string';
+import { Device } from 'types/camera';
 
-const CameraDevice = Union(Literal('primary'), Literal('secondary'));
-type CameraDevice = Static<typeof CameraDevice>;
+export const devices: Device[] = ['primary', 'secondary'];
 
 const CameraConfig = Record({
   /** Device that the camera has been configured to be */
-  device: CameraDevice,
+  device: Device,
   /** Bike that the camera is configured to be on */
   bike: String,
   /** List of available overlays */
@@ -30,9 +30,9 @@ type CameraConfig = Static<typeof CameraConfig>;
 
 export interface CameraConfigT {
   /** Config defined by CameraConfig */
-  config: CameraConfig | null,
+  config: CameraConfig | null;
   /** Set the active overlay */
-  setActiveOverlay: (activeOverlay: string) => void
+  setActiveOverlay: (activeOverlay: string) => void;
 }
 
 /**
@@ -41,7 +41,7 @@ export interface CameraConfigT {
  * @param device Camera screen
  * @returns Status of overlays and function to set active overlay.
  */
-export function useCameraConfig(device: CameraDevice) {
+export function useCameraConfig(device: Device) {
   const [config, setConfig] = useState<CameraConfig | null>(null);
 
   const handleData = useCallback(
@@ -141,7 +141,9 @@ export interface CameraRecordingStatusItem {
  * @param payload Payload from MQTT message, parsed
  * @returns Formatted payload
  */
-export function formatRecordingPayload(payload: CameraRecordingStatusPayload | null) {
+export function formatRecordingPayload(
+  payload: CameraRecordingStatusPayload | null,
+) {
   if (!payload) return null;
 
   // Format data always present regardless of status
@@ -175,7 +177,7 @@ export function formatRecordingPayload(payload: CameraRecordingStatusPayload | n
  * @param subComponent The sub component to init for (e.g. recording, video feed)
  * @param device Device
  */
-function initStatus(subComponent: string, device?: CameraDevice) {
+function initStatus(subComponent: string, device?: Device) {
   const path = ['camera', subComponent];
   if (device) path.push(device);
   emit(`get-status-payload`, path);
@@ -189,7 +191,7 @@ function initStatus(subComponent: string, device?: CameraDevice) {
  * @param device Device
  * @returns  Prettied device name
  */
-export function getPrettyDeviceName(device: CameraDevice) {
+export function getPrettyDeviceName(device: Device) {
   return device === 'primary' ? 'Primary' : 'Secondary';
 }
 
@@ -199,15 +201,15 @@ export function getPrettyDeviceName(device: CameraDevice) {
  */
 interface StatusPayloadOptions<T, U> {
   /** Initial value for the payload */
-  initValue: T | null;
+  initValue?: T | null;
   /** Handler for updating payload */
   payloadHandler?: (
     setter: React.Dispatch<React.SetStateAction<T | null>>,
     newPayload: T | null,
-    device: CameraDevice,
+    device: Device,
   ) => T | void;
   /** Handler for return value */
-  returnHandler: (payload: T | null, device?: CameraDevice) => U | null;
+  returnHandler: (payload: T | null, device?: Device) => U | null;
 }
 
 /**
@@ -230,7 +232,7 @@ function createStatusPayloadHook<T, U>(
     returnHandler,
   }: StatusPayloadOptions<T, U>,
 ) {
-  return function _hook(device: CameraDevice) {
+  return function _hook(device: Device) {
     // Only run init once per render
     useEffect(() => {
       initStatus(sub, device);
@@ -256,7 +258,7 @@ export const useCameraRecordingStatus = createStatusPayloadHook(
   CameraRecordingStatusPayload,
   {
     initValue: null,
-    returnHandler: (payload) => formatRecordingPayload(payload)
+    returnHandler: (payload) => formatRecordingPayload(payload),
   },
 );
 
@@ -266,7 +268,7 @@ const VideoFeedStatus = Record({
 });
 export interface VideoFeedStatus {
   /** Whether video feed is on/off */
-  online: boolean
+  online: boolean;
 }
 
 /**
@@ -291,8 +293,18 @@ const CameraStatus = Record({
  * @param device Device
  * @returns Camera status
  */
-export const useCameraStatus = (device: CameraDevice) =>
+export const useCameraStatus = (device: Device) =>
   createStatusPayloadHook(device, CameraStatus, {
     initValue: { connected: false },
+    returnHandler: (payload) => payload,
+  })(device);
+
+const CameraBattery = Record({
+  /** Battery percentage */
+  percentage: Number,
+});
+
+export const useCameraBattery = (device: Device) =>
+  createStatusPayloadHook(device, CameraBattery, {
     returnHandler: (payload) => payload,
   })(device);

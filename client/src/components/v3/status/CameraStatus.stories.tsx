@@ -15,13 +15,16 @@ const Template = addArgs<CameraStatusProps>((props) => (
 
 export const Offline = createStory(Template, {
   cameraName: 'Secondary',
-  isOnline: false,
+  online: false,
+  battery: null,
+  ip: '192.168.123.2',
+  videoFeedStatus: null,
 });
 
 export const Online = createStory(Template, {
   cameraName: 'Primary',
-  isOnline: true,
-  batteryVoltage: 3,
+  online: true,
+  battery: 30,
   ip: '192.168.123.2',
-  videoFeedStatus: 'RECORDING',
+  videoFeedStatus: true,
 });
