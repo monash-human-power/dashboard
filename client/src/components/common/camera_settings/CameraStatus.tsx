@@ -3,9 +3,9 @@ import { Badge, Card, Col, Row } from 'react-bootstrap';
 
 export interface CameraStatusProps {
   /** Status of primary device */
-  primaryStatus: boolean
+  primaryStatus: boolean;
   /** Status of secondary device */
-  secondaryStatus: boolean
+  secondaryStatus: boolean;
 }
 
 /**
@@ -18,7 +18,10 @@ export interface CameraStatusProps {
  * @param props Props
  * @returns Component
  */
-export default function CameraStatus({ primaryStatus, secondaryStatus }: CameraStatusProps) {
+export default function CameraStatus({
+  primaryStatus,
+  secondaryStatus,
+}: CameraStatusProps) {
   return (
     <Card>
       <Card.Body>
