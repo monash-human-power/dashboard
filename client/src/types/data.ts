@@ -122,6 +122,6 @@ export type SensorsT =
 
 /** Sensor data as incoming from MQTT */
 export type SensorDataT = {
-  type: String;
+  type: string;
   value: SensorsT;
 };

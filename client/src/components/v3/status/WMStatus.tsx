@@ -53,7 +53,7 @@ export default function WMStatus({
                 <td>
                   <strong>Sensors</strong>
                 </td>
-                <td>{data.map(({ type }) => type)}</td>
+                <td>{data.map(({ type }) => type).join(', ')}</td>
               </tr>
             </tbody>
           </Table>
@@ -74,10 +74,12 @@ export default function WMStatus({
                     <tbody>
                       {/* TODO: extract data */}
                       {/* Sensor Names and Data */}
-                      {Object.keys(data).map((sensorName) => (
+                      {data.map(({ type, value }) => (
                         <tr>
-                          <td>{sensorName}</td>
-                          <td>{sensorName}</td>
+                          <td>
+                            <strong>{type}</strong>
+                          </td>
+                          <td>{value}</td>
                         </tr>
                       ))}
                     </tbody>
