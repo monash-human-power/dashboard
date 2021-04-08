@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { Button, Card, FormControl, InputGroup } from 'react-bootstrap';
 
 export interface OverlayMessageProps {
-  sendMessage: (message: string) => void
+  sendMessage: (message: string) => void;
 }
 
 /**
@@ -19,17 +19,16 @@ export default function OverlayMessage({ sendMessage }: OverlayMessageProps) {
     [setMessage],
   );
 
-  const handleMessage = useCallback(
-    () => {
-      sendMessage(message);
-      setMessage('');
-    },
-    [message, setMessage, sendMessage],
-  );
+  const handleMessage = useCallback(() => {
+    sendMessage(message);
+    setMessage('');
+  }, [message, setMessage, sendMessage]);
 
   const handleKeyPressed = useCallback(
-    (event) => { if (event.key === 'Enter') handleMessage(); },
-    [handleMessage]
+    (event) => {
+      if (event.key === 'Enter') handleMessage();
+    },
+    [handleMessage],
   );
 
   return (

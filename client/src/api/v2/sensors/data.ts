@@ -36,9 +36,9 @@ export interface SensorData {
   /** Potentiometer (steering angle) */
   pot?: number;
   /** Reed switch velocity */
-  reed_velocity?: number
+  reed_velocity?: number;
   /** Reed switch distance */
-  reed_distance?: number
+  reed_distance?: number;
   /** Current log file name */
   filename?: string;
   /** Time since logging started */

@@ -1,17 +1,16 @@
 import { useRouteMatch } from 'react-router-dom';
 import HomeView from 'views/HomeView';
-import { RouteInfo } from 'router/route';
-import { routes as V2Routes } from 'router/v2';
-import { routes as V3Routes } from 'router/v3';
-
+import { RouteInfo } from 'types/route';
+import V2Routes from 'router/v2';
+import V3Routes from 'router/v3';
 
 export interface VersionInfo {
   /** Bike version friendly name */
-  name: string,
+  name: string;
   /** Base path for the version */
-  rootPath: string,
+  rootPath: string;
   /** List of routes under this version */
-  routes: RouteInfo[]
+  routes: RouteInfo[];
 }
 
 export const bikeVersions: VersionInfo[] = [
@@ -37,7 +36,7 @@ export const routes: RouteInfo[] = [
     name: 'Home',
     path: '/',
     exact: true,
-    component: HomeView as unknown as React.Component,
+    component: (HomeView as unknown) as React.Component,
   },
 ];
 

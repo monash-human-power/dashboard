@@ -8,6 +8,6 @@ import NavBar from 'components/common/navbar/NavBar';
  * @returns Component
  */
 export default function NavBarContainer() {
-    const bikeVersion = useBikeVersion();
-    return <NavBar bikeVersion={bikeVersion} bikeVersions={bikeVersions} />;
+  const bikeVersion = useBikeVersion();
+  return <NavBar bikeVersion={bikeVersion} bikeVersions={bikeVersions} />;
 }

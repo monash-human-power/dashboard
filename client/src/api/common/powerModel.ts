@@ -22,7 +22,6 @@ const EstimatedData = Record({
 });
 type EstimatedData = Static<typeof EstimatedData>;
 
-
 /**
  * Use current power model data
  *

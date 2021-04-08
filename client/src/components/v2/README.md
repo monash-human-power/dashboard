@@ -4,7 +4,7 @@ This folder contains react components that are **only used for V2 views**.
 
 ## Structure
 
-All components that relate to a *specific view* should be stored in a subfolder.
+All components that relate to a _specific view_ should be stored in a subfolder.
 
 ```
 # A Dashboard specific component should be in its own folder
@@ -21,4 +21,3 @@ All components that are shared between V2 views can stay in this folder.
 ./BigButton.stories.tsx
 ./BigButton.module.css
 ```
- 
