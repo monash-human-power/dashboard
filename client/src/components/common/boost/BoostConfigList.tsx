@@ -1,7 +1,7 @@
 import { faFile, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 import { Button } from 'react-bootstrap';
-import { BoostConfig } from 'types/boost';
+import { BoostConfig, ConfigNameT } from 'types/boost';
 import FontAwesomeIcon from 'components/common/FontAwesomeIcon';
 import WidgetListGroupItem from 'components/common/WidgetListGroupItem';
 import styles from 'components/common/boost/BoostConfigList.module.css';
@@ -9,7 +9,7 @@ import { removeSuffix } from 'utils/boost';
 
 export interface BoostConfigListProps {
   config: BoostConfig;
-  onSelectConfig: (configName: string) => void;
+  onSelectConfig: (configName: ConfigNameT) => void;
   onDeleteConfig: (configName: string) => void;
 }
 
@@ -24,9 +24,8 @@ export default function BoostConfigList({
   onSelectConfig,
   onDeleteConfig,
 }: BoostConfigListProps) {
-  const handleSelect = (configFileName: string) => {
-    if (configFileName !== config.active?.fileName)
-      onSelectConfig(configFileName);
+  const handleSelect = (configName: ConfigNameT) => {
+    if (configName !== config.active) onSelectConfig(configName);
   };
   const handleDelete = (event: React.MouseEvent, configName: string) => {
     event.stopPropagation();
@@ -50,7 +49,7 @@ export default function BoostConfigList({
           title=""
           active={configName.fileName === config.active?.fileName}
           action
-          onClick={() => handleSelect(configName.fileName)}
+          onClick={() => handleSelect(configName)}
           as="a"
         >
           <span>

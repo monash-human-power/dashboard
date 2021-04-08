@@ -1,5 +1,12 @@
 import { emit } from 'api/common/socket';
-import { FileConfigT, ConfigObjRT, ConfigT } from 'types/boost';
+import {
+  FileConfigT,
+  ConfigObjRT,
+  ConfigT,
+  SelectedConfigsT,
+  BoostConfig,
+  ConfigNameT,
+} from 'types/boost';
 import { addSuffix } from 'utils/boost';
 import toast from 'react-hot-toast';
 import { Runtype, Static } from 'runtypes';
@@ -87,9 +94,37 @@ export default function uploadConfig(
  * @param configType the type of the config
  * @param name name of the config file
  */
-function onDeleteConfig(configType: ConfigT, name: string) {
+export function deleteConfig(configType: ConfigT, name: string) {
   // FIXME: Should dashboard remove the config file from `configs`?
   console.log(`Delete ${name} ${configType} config`);
   sendConfig('delete', configType, name, null);
   toast.success(`${name} deleted`);
+}
+
+/**
+ * Send the selected configs to `boost`
+ *
+ * @param configs contains all actively selected configs
+ */
+export function sendConfigSelections(
+  configs: BoostConfig[],
+  configTypeSelected: ConfigT,
+  configNameSelected: ConfigNameT,
+) {
+  const payload: SelectedConfigsT = {
+    rider: '',
+    bike: '',
+    track: '',
+    powerPlan: '',
+  };
+
+  // Populate payload with the currently active config for each config type
+  configs.forEach((config) => {
+    if (config.type === configTypeSelected) {
+      payload[configTypeSelected] = configNameSelected.displayName;
+    } else {
+      payload[config.type] = config.active?.displayName;
+    }
+  });
+  emit('submit-selected-configs', JSON.stringify(payload));
 }

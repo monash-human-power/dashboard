@@ -103,7 +103,7 @@ export const ConfigNameRT = Record({
   displayName: String,
   fileName: String,
 });
-type ConfigNameT = Static<typeof ConfigNameRT>;
+export type ConfigNameT = Static<typeof ConfigNameRT>;
 
 // Type of the payload on 'boost/configs'
 export const ConfigPayloadRT = Record({
@@ -130,3 +130,5 @@ export const fileConfigTypeToRuntype: ConfigDictionaryT = {
   powerPlan: PowerPlanRT,
   bundle: ConfigBundleRT,
 };
+
+export type SelectedConfigsT = { [key in ConfigT]: string | undefined };

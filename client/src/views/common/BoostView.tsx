@@ -3,32 +3,19 @@ import ContentPage from 'components/common/ContentPage';
 import BoostCalibration from 'components/common/boost/BoostCalibration';
 import BoostConfigurator from 'components/common/boost/BoostConfigurator';
 import { setCalibration, resetCalibration } from 'api/common/powerModel';
-import uploadConfig, { deleteConfig } from 'api/v3/boost';
+import uploadConfig, { deleteConfig, sendConfigSelections } from 'api/v3/boost';
 import {
   ConfigT,
   BoostConfig,
   ConfigPayloadRT,
   RecommendedSPRT,
+  ConfigNameT,
 } from 'types/boost';
 import { useSensorData, Sensor } from 'api/common/data';
 import { Static } from 'runtypes';
-import { useChannelShaped } from 'api/common/socket';
+import { useChannelShaped, useChannel } from 'api/common/socket';
 import toast from 'react-hot-toast';
 import { ReedDistanceRT } from 'types/data';
-
-// TODO: Implement actual functions for `onSelectConfig` and `onDeleteConfig`
-
-/**
- * Send the config selection to `boost`
- *
- * @param configType the type of the config
- * @param name name of the config file
- */
-function onSelectConfig(configType: ConfigT, name: string) {
-  console.log('Selected config:');
-  console.log(`type: ${configType}`);
-  console.log(`name: ${name}`);
-}
 
 /**
  * Boost View component
@@ -37,6 +24,10 @@ function onSelectConfig(configType: ConfigT, name: string) {
  */
 export default function BoostView() {
   const [distOffset, setDistOffset] = useState<number | null>(null);
+  const [numConfigsSelected, setConfigsSelected] = useState(0);
+
+  // Keeps track of whether a power plan is being generated or not
+  const [powerPlanGenerating, setPowerPlanGenerating] = useState(false);
   const [configs, setConfigs] = useState<BoostConfig[]>([
     {
       type: 'powerPlan',
@@ -86,10 +77,40 @@ export default function BoostView() {
     handleDistOffsetReceived,
   );
 
+  const handlePPGenerationComplete = () => {
+    if (powerPlanGenerating) {
+      setPowerPlanGenerating(false);
+      toast.dismiss();
+      toast.success('Power Plan Generated!');
+    }
+  };
+
+  useChannel('boost/generate_complete', handlePPGenerationComplete);
+
   const handleReset = () => {
     setDistOffset(0);
     resetCalibration();
     toast.success('Calibration Reset!');
+  };
+
+  const handleSelect = (configType: ConfigT, configName: ConfigNameT) => {
+    setConfigs(
+      configs.map((config) => {
+        if (config.type === configType) {
+          if (!config.active) {
+            setConfigsSelected(numConfigsSelected + 1);
+          }
+          return { ...config, active: configName };
+        }
+        return config;
+      }),
+    );
+    if (numConfigsSelected >= 3) {
+      // All config types selected, ready to generate power plan!
+      sendConfigSelections(configs, configType, configName);
+      setPowerPlanGenerating(true);
+      toast.loading('Generating power plan...');
+    }
   };
 
   return (
@@ -102,7 +123,7 @@ export default function BoostView() {
       />
       <BoostConfigurator
         configs={configs}
-        onSelectConfig={onSelectConfig}
+        onSelectConfig={handleSelect}
         onDeleteConfig={deleteConfig}
         onUploadConfig={uploadConfig}
       />

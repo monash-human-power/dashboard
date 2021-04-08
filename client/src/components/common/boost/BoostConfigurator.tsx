@@ -10,6 +10,7 @@ import {
   FileConfigT,
   ConfigT,
   fileConfigTypeToRuntype,
+  ConfigNameT,
 } from 'types/boost';
 import { camelCaseToStartCase } from 'utils/string';
 import BoostConfigList from 'components/common/boost/BoostConfigList';
@@ -17,7 +18,7 @@ import { Runtype } from 'runtypes';
 
 export interface BoostConfiguratorProps {
   configs: BoostConfig[];
-  onSelectConfig: (configType: ConfigT, name: string) => void;
+  onSelectConfig: (configType: ConfigT, configName: ConfigNameT) => void;
   onDeleteConfig: (configType: ConfigT, name: string) => void;
   onUploadConfig: (
     configType: FileConfigT | 'bundle',
@@ -194,8 +195,8 @@ export default function BoostConfigurator({
                   <Card.Body>
                     <BoostConfigList
                       config={config}
-                      onSelectConfig={(name) =>
-                        onSelectConfig(config.type, name)
+                      onSelectConfig={(configName) =>
+                        onSelectConfig(config.type, configName)
                       }
                       onDeleteConfig={(name) =>
                         setConfirmDeletion({
