@@ -10,7 +10,7 @@ import { removeSuffix } from 'utils/boost';
 export interface BoostConfigListProps {
   config: BoostConfig;
   onSelectConfig: (configName: ConfigNameT) => void;
-  onDeleteConfig: (configName: string) => void;
+  onDeleteConfig: (configName: ConfigNameT) => void;
 }
 
 /**
@@ -27,7 +27,8 @@ export default function BoostConfigList({
   const handleSelect = (configName: ConfigNameT) => {
     if (configName !== config.active) onSelectConfig(configName);
   };
-  const handleDelete = (event: React.MouseEvent, configName: string) => {
+  const handleDelete = (event: React.MouseEvent, configName: ConfigNameT) => {
+    console.log('DEBUG: Handling delete');
     event.stopPropagation();
     onDeleteConfig(configName);
   };
@@ -62,7 +63,7 @@ export default function BoostConfigList({
           <Button
             variant="danger"
             size="sm"
-            onClick={(e) => handleDelete(e, configName.fileName)}
+            onClick={(e) => handleDelete(e, configName)}
           >
             <FontAwesomeIcon icon={faTrashAlt} />
           </Button>

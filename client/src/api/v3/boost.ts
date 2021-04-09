@@ -92,19 +92,21 @@ export default function uploadConfig(
  * Inform boost of the deletion of the given config file
  *
  * @param configType the type of the config
- * @param name name of the config file
+ * @param configName object containing displayName and fileName of the config
  */
-export function deleteConfig(configType: ConfigT, name: string) {
+export function deleteConfig(configType: ConfigT, configName: ConfigNameT) {
   // FIXME: Should dashboard remove the config file from `configs`?
-  console.log(`Delete ${name} ${configType} config`);
-  sendConfig('delete', configType, name, null);
-  toast.success(`${name} deleted`);
+  console.log(`Delete ${configName.displayName} ${configType} config`);
+  sendConfig('delete', configType, configName.displayName, null);
+  toast.success(`${configName.displayName} deleted`);
 }
 
 /**
  * Send the selected configs to `boost`
  *
  * @param configs contains all actively selected configs
+ * @param configTypeSelected the config type of the new config file selected
+ * @param configNameSelected object containing displayName and fileName of the new config selected
  */
 export function sendConfigSelections(
   configs: BoostConfig[],

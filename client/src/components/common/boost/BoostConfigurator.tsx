@@ -19,7 +19,7 @@ import { Runtype } from 'runtypes';
 export interface BoostConfiguratorProps {
   configs: BoostConfig[];
   onSelectConfig: (configType: ConfigT, configName: ConfigNameT) => void;
-  onDeleteConfig: (configType: ConfigT, name: string) => void;
+  onDeleteConfig: (configType: ConfigT, configName: ConfigNameT) => void;
   onUploadConfig: (
     configType: FileConfigT | 'bundle',
     configFile: File,
@@ -45,7 +45,7 @@ export default function BoostConfigurator({
 
   const [confirmDeletion, setConfirmDeletion] = useState({
     show: false,
-    configName: '',
+    configName: { displayName: '', fileName: '' },
     configType: 'rider',
   });
 
@@ -119,7 +119,9 @@ export default function BoostConfigurator({
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Are you sure you want to delete {confirmDeletion.configName}?
+          Are you sure you want to delete{' '}
+          <i>{confirmDeletion.configName.displayName}</i> (file:{' '}
+          {confirmDeletion.configName.fileName})?
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleConfirmDialogClose}>
