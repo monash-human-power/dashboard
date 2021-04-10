@@ -105,14 +105,8 @@ export function deleteConfig(configType: ConfigT, configName: ConfigNameT) {
  * Send the selected configs to `boost`
  *
  * @param configs contains all actively selected configs
- * @param configTypeSelected the config type of the new config file selected
- * @param configNameSelected object containing displayName and fileName of the new config selected
  */
-export function sendConfigSelections(
-  configs: BoostConfig[],
-  configTypeSelected: ConfigT,
-  configNameSelected: ConfigNameT,
-) {
+export function sendConfigSelections(configs: BoostConfig[]) {
   const payload: SelectedConfigsT = {
     rider: '',
     bike: '',
@@ -122,11 +116,8 @@ export function sendConfigSelections(
 
   // Populate payload with the currently active config for each config type
   configs.forEach((config) => {
-    if (config.type === configTypeSelected) {
-      payload[configTypeSelected] = configNameSelected.displayName;
-    } else {
-      payload[config.type] = config.active?.displayName;
-    }
+    payload[config.type] = config.active?.displayName;
   });
+  // Send selected configs to generate Power Plan
   emit('submit-selected-configs', JSON.stringify(payload));
 }

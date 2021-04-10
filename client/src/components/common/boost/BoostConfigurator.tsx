@@ -15,6 +15,9 @@ import {
 import { camelCaseToStartCase } from 'utils/string';
 import BoostConfigList from 'components/common/boost/BoostConfigList';
 import { Runtype } from 'runtypes';
+import { sendConfigSelections } from 'api/v3/boost';
+import toast from 'react-hot-toast';
+import { useChannel } from 'api/common/socket';
 
 export interface BoostConfiguratorProps {
   configs: BoostConfig[];
@@ -42,6 +45,7 @@ export default function BoostConfigurator({
 }: BoostConfiguratorProps) {
   const fileInput = createRef<HTMLInputElement>();
   const [configType, setConfigType] = useState<FileConfigT>('bundle');
+  const [toastId, setToastId] = useState<string | null>(null);
 
   const [confirmDeletion, setConfirmDeletion] = useState({
     show: false,
@@ -109,6 +113,30 @@ export default function BoostConfigurator({
     handleConfirmDialogClose();
   };
 
+  const handlePPGenerationComplete = () => {
+    if (toastId) toast.success('Power plan generated!', { id: toastId });
+  };
+  useChannel('boost/generate_complete', handlePPGenerationComplete);
+
+  const handleGenerate = () => {
+    let allConfigsSelected = true;
+    configs.forEach((config) => {
+      if (!config.active) {
+        allConfigsSelected = false;
+        toast.error(`Missing selection for ${config.type}`);
+      }
+    });
+    if (allConfigsSelected) {
+      sendConfigSelections(configs);
+      setToastId(toast.loading('Generating power plan...'));
+      // toast.promise(myPromise, {
+      //   loading: 'Generating power plan...',
+      //   success: 'Power Plan Generated',
+      //   error: 'Oops some error occurred',
+      // });
+    }
+  };
+
   return (
     <>
       <Modal show={confirmDeletion.show} onHide={handleConfirmDialogClose}>
@@ -156,6 +184,13 @@ export default function BoostConfigurator({
               onClick={() => handleClickUpload('bundle')}
             >
               Upload All Configs
+            </Button>
+            <Button
+              variant="outline-primary"
+              className="mx-3 float-right"
+              onClick={handleGenerate}
+            >
+              Generate
             </Button>
           </Card.Title>
           <>
