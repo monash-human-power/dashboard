@@ -115,6 +115,7 @@ export default function BoostConfigurator({
 
   const handlePPGenerationComplete = () => {
     if (toastId) {
+      // Update existing loading toast
       toast.success('Power plan generated!', { id: toastId });
       setToastId(null);
     }
@@ -132,11 +133,6 @@ export default function BoostConfigurator({
     if (allConfigsSelected) {
       sendConfigSelections(configs);
       setToastId(toast.loading('Generating power plan...'));
-      // toast.promise(myPromise, {
-      //   loading: 'Generating power plan...',
-      //   success: 'Power Plan Generated',
-      //   error: 'Oops some error occurred',
-      // });
     }
   };
 
