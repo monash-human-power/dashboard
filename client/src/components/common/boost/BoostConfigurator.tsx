@@ -114,7 +114,10 @@ export default function BoostConfigurator({
   };
 
   const handlePPGenerationComplete = () => {
-    if (toastId) toast.success('Power plan generated!', { id: toastId });
+    if (toastId) {
+      toast.success('Power plan generated!', { id: toastId });
+      setToastId(null);
+    }
   };
   useChannel('boost/generate_complete', handlePPGenerationComplete);
 
