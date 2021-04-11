@@ -44,7 +44,11 @@ export function useChannelShaped<T>(
 ) {
   const parsedCallback = (payload: string | object) => {
     const json = typeof payload === 'string' ? JSON.parse(payload) : payload;
-    callback(shape.check(json));
+    try {
+      callback(shape.check(json));
+    } catch {
+      console.log(`Channel ${channel} sending garbage`);
+    }
   };
   useChannel(channel, parsedCallback);
 }
