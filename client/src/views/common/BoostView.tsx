@@ -24,7 +24,6 @@ import { ReedDistanceRT } from 'types/data';
  */
 export default function BoostView() {
   const [distOffset, setDistOffset] = useState<number | null>(null);
-  const [numConfigsSelected, setConfigsSelected] = useState(0);
 
   const [configs, setConfigs] = useState<BoostConfig[]>([
     {
@@ -86,9 +85,6 @@ export default function BoostView() {
     setConfigs(
       configs.map((config) => {
         if (config.type === configType) {
-          if (!config.active) {
-            setConfigsSelected(numConfigsSelected + 1);
-          }
           return { ...config, active: configName };
         }
         return config;
