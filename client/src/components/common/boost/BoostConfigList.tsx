@@ -28,7 +28,6 @@ export default function BoostConfigList({
     if (configName !== config.active) onSelectConfig(configName);
   };
   const handleDelete = (event: React.MouseEvent, configName: ConfigNameT) => {
-    console.log('DEBUG: Handling delete');
     event.stopPropagation();
     onDeleteConfig(configName);
   };

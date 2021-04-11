@@ -5,7 +5,6 @@ import {
   ConfigT,
   SelectedConfigsT,
   BoostConfig,
-  ConfigNameT,
 } from 'types/boost';
 import { addSuffix } from 'utils/boost';
 import toast from 'react-hot-toast';
@@ -21,7 +20,7 @@ type payloadActionT = 'upload' | 'delete';
  * @param name name of the config file
  * @param configContent configuration content
  */
-function sendConfig(
+export function sendConfig(
   actionType: payloadActionT,
   type: ConfigT,
   name: string,
@@ -86,19 +85,6 @@ export default function uploadConfig(
   };
 
   reader.readAsText(configFile);
-}
-
-/**
- * Inform boost of the deletion of the given config file
- *
- * @param configType the type of the config
- * @param configName object containing displayName and fileName of the config
- */
-export function deleteConfig(configType: ConfigT, configName: ConfigNameT) {
-  // FIXME: Should dashboard remove the config file from `configs`?
-  console.log(`Delete ${configName.displayName} ${configType} config`);
-  sendConfig('delete', configType, configName.displayName, null);
-  toast.success(`${configName.displayName} deleted`);
 }
 
 /**

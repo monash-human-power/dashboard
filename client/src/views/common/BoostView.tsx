@@ -3,7 +3,7 @@ import ContentPage from 'components/common/ContentPage';
 import BoostCalibration from 'components/common/boost/BoostCalibration';
 import BoostConfigurator from 'components/common/boost/BoostConfigurator';
 import { setCalibration, resetCalibration } from 'api/common/powerModel';
-import uploadConfig, { deleteConfig } from 'api/v3/boost';
+import uploadConfig, { sendConfig } from 'api/v3/boost';
 import {
   ConfigT,
   BoostConfig,
@@ -26,8 +26,6 @@ export default function BoostView() {
   const [distOffset, setDistOffset] = useState<number | null>(null);
   const [numConfigsSelected, setConfigsSelected] = useState(0);
 
-  // // Keeps track of whether a power plan is being generated or not
-  // const [powerPlanGenerating, setPowerPlanGenerating] = useState(false);
   const [configs, setConfigs] = useState<BoostConfig[]>([
     {
       type: 'powerPlan',
@@ -77,16 +75,6 @@ export default function BoostView() {
     handleDistOffsetReceived,
   );
 
-  // const handlePPGenerationComplete = () => {
-  //   if (powerPlanGenerating) {
-  //     setPowerPlanGenerating(false);
-  //     toast.dismiss();
-  //     toast.success('Power Plan Generated!');
-  //   }
-  // };
-
-  // useChannel('boost/generate_complete', handlePPGenerationComplete);
-
   const handleReset = () => {
     setDistOffset(0);
     resetCalibration();
@@ -108,6 +96,34 @@ export default function BoostView() {
     );
   };
 
+  const handleDelete = (configType: ConfigT, configName: ConfigNameT) => {
+    // Inform `boost`
+    sendConfig('delete', configType, configName.displayName, null);
+
+    // Update `dashboard`
+    setConfigs(
+      configs.map((config) => {
+        if (config.type === configType) {
+          // Remove the deleted config from the available options
+          const newOptions = config.options.filter(
+            (value) => value !== configName,
+          );
+
+          // If the deleted config was currently selected, remove the selection
+          if (
+            config.active?.displayName === configName.displayName &&
+            config.active?.fileName === configName.fileName
+          ) {
+            return { ...config, options: newOptions, active: undefined };
+          }
+          return { ...config, options: newOptions };
+        }
+        return config;
+      }),
+    );
+    toast.success(`${configName.displayName} deleted`);
+  };
+
   return (
     <ContentPage title="Boost Configuration">
       <BoostCalibration
@@ -119,7 +135,7 @@ export default function BoostView() {
       <BoostConfigurator
         configs={configs}
         onSelectConfig={handleSelect}
-        onDeleteConfig={deleteConfig}
+        onDeleteConfig={handleDelete}
         onUploadConfig={uploadConfig}
       />
     </ContentPage>
