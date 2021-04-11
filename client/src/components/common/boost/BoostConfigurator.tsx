@@ -178,18 +178,18 @@ export default function BoostConfigurator({
           <Card.Title style={{ marginBottom: '1.5rem' }}>
             Configuration
             <Button
+              variant="primary"
+              className="mx-3 float-right"
+              onClick={handleGenerate}
+            >
+              Generate
+            </Button>
+            <Button
               variant="outline-primary"
               className="float-right"
               onClick={() => handleClickUpload('bundle')}
             >
               Upload All Configs
-            </Button>
-            <Button
-              variant="outline-primary"
-              className="mx-3 float-right"
-              onClick={handleGenerate}
-            >
-              Generate
             </Button>
           </Card.Title>
           <>
