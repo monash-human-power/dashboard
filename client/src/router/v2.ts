@@ -1,6 +1,6 @@
-import CameraSettingsView from 'views/common/CameraSettingsView';
+import CameraSystemView from 'views/common/CameraSystemView';
 import DashboardView from 'views/v2/DashboardView';
-import DownloadFilesView from 'views/v2/DownloadFilesView';
+import LogsView from 'views/common/LogsView';
 import OptionsView from 'views/v2/OptionsView';
 import PowerMapView from 'views/v2/PowerMapView';
 import PowerModelCalibrationView from 'views/v2/PowerModelCalibrationView';
@@ -24,7 +24,7 @@ const routes: RouteInfo[] = [
     name: 'Files',
     path: '/v2/download-files',
     exact: true,
-    component: (DownloadFilesView as unknown) as React.Component,
+    component: (LogsView as unknown) as React.Component,
   },
   {
     name: 'Sensors',
@@ -54,7 +54,7 @@ const routes: RouteInfo[] = [
     name: 'Camera',
     path: '/v2/camera',
     exact: true,
-    component: (CameraSettingsView as unknown) as React.Component,
+    component: (CameraSystemView as unknown) as React.Component,
   },
   {
     name: 'Options',
