@@ -31,7 +31,7 @@ export default function DeleteModal({
   show,
   onDelete,
   onCancel,
-}: DeleteModalProps) {
+}: DeleteModalProps): JSX.Element {
   return (
     <Modal show={show} onHide={onCancel}>
       <Modal.Header closeButton>

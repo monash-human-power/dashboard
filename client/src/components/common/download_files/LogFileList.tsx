@@ -16,7 +16,10 @@ export interface LogFileListProps {
  * @param Props props
  * @returns Component
  */
-export default function LogFileList({ files, onDeleteFile }: LogFileListProps) {
+export default function LogFileList({
+  files,
+  onDeleteFile,
+}: LogFileListProps): JSX.Element {
   if (!files) return <>Loading...</>;
   if (files.length === 0) return <>No log files found.</>;
 
