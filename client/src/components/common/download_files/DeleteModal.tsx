@@ -3,10 +3,10 @@ import { Modal, Button } from 'react-bootstrap';
 
 /**
  * @typedef DeleteModalProps
- * @property {string}   name      Name of object to be deleted
- * @property {boolean}  show      Whether to show the modal
- * @property {Function} onDelete  Called if delete confirmed
- * @property {Function} onCancel  Called if delete cancelled
+ * @property name      Name of object to be deleted
+ * @property show      Whether to show the modal
+ * @property onDelete  Called if delete confirmed
+ * @property onCancel  Called if delete cancelled
  */
 
 export interface DeleteModalProps {

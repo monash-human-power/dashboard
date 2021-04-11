@@ -8,7 +8,7 @@ import { LogFile, useFiles, useLatestFile } from 'api/common/files';
 /**
  * Download Files page component
  *
- * @returns {React.Component} Component
+ * @returns Component
  */
 export default function LogsView() {
   const { files, deleteFile } = useFiles();

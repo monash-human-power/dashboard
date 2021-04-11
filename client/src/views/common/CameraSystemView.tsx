@@ -9,7 +9,7 @@ import OverlaySelectionContainer from 'components/common/camera_settings/Overlay
 /**
  * Camera Settings page component
  *
- * @returns {React.Component} Component
+ * @returns Component
  */
 export default function CameraSystemView() {
   return (
