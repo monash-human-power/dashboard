@@ -8,14 +8,17 @@ import OverlaySelection from 'components/common/camera_settings/OverlaySelection
  * @returns Component
  */
 export default function OverlaySelectionContainer() {
-    return (
-        <>
-            <div className="mb-4">
-                <OverlaySelection device='primary' {...useCameraConfig('primary')} />
-            </div>
-            <div className="mb-4">
-                <OverlaySelection device='secondary' {...useCameraConfig('secondary')} />
-            </div>
-        </>
-    );
+  return (
+    <>
+      <div className="mb-4">
+        <OverlaySelection device="primary" {...useCameraConfig('primary')} />
+      </div>
+      <div className="mb-4">
+        <OverlaySelection
+          device="secondary"
+          {...useCameraConfig('secondary')}
+        />
+      </div>
+    </>
+  );
 }

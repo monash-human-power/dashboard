@@ -1,11 +1,12 @@
 import React, { useState, useCallback } from 'react';
 import { Button, Card, Form, Col } from 'react-bootstrap';
+import { displayDistance } from 'utils/boost';
 
 export interface BoostCalibrationProps {
   onSet: (calibValue: number) => void;
   onReset: () => void;
   distTravelled: number;
-  calibrationDiff: number;
+  calibrationDiff: number | null;
 }
 
 /**
@@ -33,7 +34,7 @@ export default function BoostCalibration({
   );
 
   const handleSubmit = useCallback(
-    (event: React.FormEvent<HTMLInputElement>) => {
+    (event: React.FormEvent<HTMLFormElement>) => {
       const form = event.currentTarget;
       if (form.checkValidity() === false) {
         event.stopPropagation();
@@ -46,12 +47,12 @@ export default function BoostCalibration({
     [calibValue, onSet, setValidated],
   );
 
-  const handleKeyPressed = useCallback(
-    (event: React.KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === 'Enter') handleSubmit(event);
-    },
-    [handleSubmit],
-  );
+  const displayCalibratedDistance = () => {
+    if (calibrationDiff !== null) {
+      return displayDistance(distTravelled + calibrationDiff);
+    }
+    return 'N/A';
+  };
 
   return (
     <Card>
@@ -63,12 +64,15 @@ export default function BoostCalibration({
         </Card.Text>
         <div className="pb-3">
           <b>Distance travelled </b>
-          <span className="float-right pr-4"> {distTravelled} m </span>
+          <span className="float-right pr-4">
+            {' '}
+            {displayDistance(distTravelled)}{' '}
+          </span>
         </div>
         <div className="pb-3">
           <b>Calibrated distance </b>
           <span className="float-right pr-4">
-            {distTravelled + calibrationDiff} m
+            {displayCalibratedDistance()}
           </span>
         </div>
         <Form
@@ -84,7 +88,6 @@ export default function BoostCalibration({
               <Form.Control
                 type="number"
                 placeholder="Calibrate distance..."
-                onKeyPress={handleKeyPressed}
                 onChange={handleCalibrationChange}
                 required
               />

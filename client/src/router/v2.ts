@@ -6,14 +6,14 @@ import PowerMapView from 'views/v2/PowerMapView';
 import PowerModelCalibrationView from 'views/v2/PowerModelCalibrationView';
 import PowerModelView from 'views/v2/PowerModelView';
 import SensorStatusView from 'views/v2/SensorStatusView';
-import { RouteInfo } from 'router/route';
+import { RouteInfo } from 'types/route';
 
 /**
  * Component type is force casted to React.Component.
  *
  * V2 views will have to be converted to ts otherwise.
  */
-export const routes: RouteInfo[] = [
+const routes: RouteInfo[] = [
   {
     name: 'Dashboard',
     path: '/v2/',
@@ -63,3 +63,5 @@ export const routes: RouteInfo[] = [
     component: (OptionsView as unknown) as React.Component,
   },
 ];
+
+export default routes;

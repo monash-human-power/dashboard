@@ -6,7 +6,7 @@ const defaultStatus = 'Waiting for status...';
 
 export interface CameraRecordingStatusProps {
   /** Status payload formatted to be human readable */
-  statusFormatted: CameraRecordingStatusItem[] | null
+  statusFormatted: CameraRecordingStatusItem[] | null;
 }
 
 /**
@@ -15,9 +15,9 @@ export interface CameraRecordingStatusProps {
  * @param props Props
  * @returns Component
  */
-export default function CameraRecordingStatus(
-  { statusFormatted }: CameraRecordingStatusProps
-): JSX.Element {
+export default function CameraRecordingStatus({
+  statusFormatted,
+}: CameraRecordingStatusProps): JSX.Element {
   return (
     <div>
       {statusFormatted ? (
@@ -28,8 +28,8 @@ export default function CameraRecordingStatus(
           </div>
         ))
       ) : (
-          <div className={styles.statusRow}>{`Status: ${defaultStatus}`}</div>
-        )}
+        <div className={styles.statusRow}>{`Status: ${defaultStatus}`}</div>
+      )}
     </div>
   );
 }

@@ -3,12 +3,12 @@ import LogsView from 'views/common/LogsView';
 import StatusView from 'views/v3/StatusView';
 import BoostView from 'views/common/BoostView';
 import CameraSystemView from 'views/common/CameraSystemView';
-import { RouteInfo } from 'router/route';
+import { RouteInfo } from 'types/route';
 
 /**
  * V3 views
  */
-export const routes: RouteInfo[] = [
+const routes: RouteInfo[] = [
   {
     name: 'Dashboard',
     path: '/v3/',
@@ -40,3 +40,5 @@ export const routes: RouteInfo[] = [
     component: (CameraSystemView as unknown) as React.Component,
   },
 ];
+
+export default routes;
