@@ -179,7 +179,7 @@ export default function BoostConfigurator({
             Configuration
             <Button
               variant="primary"
-              className="mx-3 float-right"
+              className="ml-3 float-right"
               onClick={handleGenerate}
             >
               Generate
