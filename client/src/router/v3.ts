@@ -1,6 +1,6 @@
 import BoostView from 'views/common/BoostView';
 import LogsView from 'views/common/LogsView';
-import CameraSystemView from 'views/v3/CameraSystemView';
+import CameraSystemView from 'views/common/CameraSystemView';
 import DashboardView from 'views/v3/DashboardView';
 import StatusView from 'views/v3/StatusView';
 import { RouteInfo } from 'types/route';
