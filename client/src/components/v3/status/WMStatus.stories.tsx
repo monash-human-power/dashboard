@@ -19,19 +19,17 @@ const sensorData = (type: string, value: SensorsT): SensorDataT => ({
 
 export const Disconnected = createStory(Template, {
   moduleName: 'Front WM',
-  isOnline: null,
-  data: [],
+  online: null,
 });
 
 export const Offline = createStory(Template, {
   moduleName: 'Front WM',
-  isOnline: false,
-  data: [],
+  online: false,
 });
 
 export const Online = createStory(Template, {
   moduleName: 'Front WM',
-  isOnline: true,
+  online: true,
   batteryVoltage: 3.1,
   mqttAddress: '/v3/wireless_module/1/data',
   data: [],
@@ -39,7 +37,7 @@ export const Online = createStory(Template, {
 
 export const Data = createStory(Template, {
   moduleName: 'Front WM',
-  isOnline: true,
+  online: true,
   batteryVoltage: 3.1,
   mqttAddress: '/v3/wireless_module/1/data',
   data: [

@@ -13,20 +13,17 @@ export default function WMStatusContainer() {
 
   const front: WMStatusProps = {
     moduleName: 'Front WM',
-    isOnline: null,
-    data: [],
+    online: null,
   };
 
   const middle: WMStatusProps = {
     moduleName: 'Middle WM',
-    isOnline: null,
-    data: [],
+    online: null,
   };
 
   const back: WMStatusProps = {
     moduleName: 'Back WM',
-    isOnline: null,
-    data: [],
+    online: null,
   };
 
   return (
