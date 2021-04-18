@@ -13,6 +13,7 @@ export interface OnlineStatusPillProps {
 
 /**
  * Bootstrap pill used to describe connectivity status for a component
+ *
  * @param props Props
  * @returns Component
  */
@@ -31,11 +32,6 @@ export default function OnlineStatusPill({ isOnline }: OnlineStatusPillProps) {
         </Badge>
       );
     case null:
-      return (
-        <Badge pill variant="danger">
-          ERROR
-        </Badge>
-      );
     default:
       return (
         <Badge pill variant="danger">
