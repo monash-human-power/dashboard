@@ -1,5 +1,11 @@
 import { emit } from 'api/common/socket';
-import { FileConfigT, ConfigObjRT, ConfigT } from 'types/boost';
+import {
+  FileConfigT,
+  ConfigObjRT,
+  ConfigT,
+  SelectedConfigsT,
+  BoostConfig,
+} from 'types/boost';
 import { addSuffix } from 'utils/boost';
 import toast from 'react-hot-toast';
 import { Runtype, Static } from 'runtypes';
@@ -14,7 +20,7 @@ type payloadActionT = 'upload' | 'delete';
  * @param name name of the config file
  * @param configContent configuration content
  */
-function sendConfig(
+export function sendConfig(
   actionType: payloadActionT,
   type: ConfigT,
   name: string,
@@ -79,4 +85,25 @@ export default function uploadConfig(
   };
 
   reader.readAsText(configFile);
+}
+
+/**
+ * Send the selected configs to `boost`
+ *
+ * @param configs contains all actively selected configs
+ */
+export function sendConfigSelections(configs: BoostConfig[]) {
+  const payload: SelectedConfigsT = {
+    rider: '',
+    bike: '',
+    track: '',
+    powerPlan: '',
+  };
+
+  // Populate payload with the currently active config for each config type
+  configs.forEach((config) => {
+    payload[config.type] = config.active?.displayName;
+  });
+  // Send selected configs to generate Power Plan
+  emit('submit-selected-configs', JSON.stringify(payload));
 }

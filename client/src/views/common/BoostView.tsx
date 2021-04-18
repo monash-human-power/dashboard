@@ -3,44 +3,19 @@ import ContentPage from 'components/common/ContentPage';
 import BoostCalibration from 'components/common/boost/BoostCalibration';
 import BoostConfigurator from 'components/common/boost/BoostConfigurator';
 import { setCalibration, resetCalibration } from 'api/common/powerModel';
-import uploadConfig from 'api/v3/boost';
+import uploadConfig, { sendConfig } from 'api/v3/boost';
 import {
   ConfigT,
   BoostConfig,
   ConfigPayloadRT,
   RecommendedSPRT,
+  ConfigNameT,
 } from 'types/boost';
 import { useSensorData, Sensor } from 'api/common/data';
 import { Static } from 'runtypes';
 import { useChannelShaped } from 'api/common/socket';
 import toast from 'react-hot-toast';
 import { ReedDistanceRT } from 'types/data';
-
-// TODO: Implement actual functions for `onSelectConfig` and `onDeleteConfig`
-
-/**
- * Send the config selection to `boost`
- *
- * @param configType the type of the config
- * @param name name of the config file
- */
-function onSelectConfig(configType: ConfigT, name: string) {
-  console.log('Selected config:');
-  console.log(`type: ${configType}`);
-  console.log(`name: ${name}`);
-}
-
-/**
- * Inform boost of the deletion of the given config file
- *
- * @param configType the type of the config
- * @param name name of the config file
- */
-function onDeleteConfig(configType: ConfigT, name: string) {
-  console.log('Deleted config:');
-  console.log(`type: ${configType}`);
-  console.log(`name: ${name}`);
-}
 
 /**
  * Boost View component
@@ -49,6 +24,7 @@ function onDeleteConfig(configType: ConfigT, name: string) {
  */
 export default function BoostView() {
   const [distOffset, setDistOffset] = useState<number | null>(null);
+
   const [configs, setConfigs] = useState<BoostConfig[]>([
     {
       type: 'powerPlan',
@@ -104,6 +80,46 @@ export default function BoostView() {
     toast.success('Calibration Reset!');
   };
 
+  const handleSelect = (configType: ConfigT, configName: ConfigNameT) => {
+    // Update the active field of the selected config in `configs`
+    setConfigs(
+      configs.map((config) => {
+        if (config.type === configType) {
+          return { ...config, active: configName };
+        }
+        return config;
+      }),
+    );
+  };
+
+  const handleDelete = (configType: ConfigT, configName: ConfigNameT) => {
+    // Inform `boost`
+    sendConfig('delete', configType, configName.displayName, null);
+
+    // Update `dashboard`
+    setConfigs(
+      configs.map((config) => {
+        if (config.type === configType) {
+          // Remove the deleted config from the available options
+          const newOptions = config.options.filter(
+            (value) => value !== configName,
+          );
+
+          // If the deleted config was currently selected, remove the selection
+          if (
+            config.active?.displayName === configName.displayName &&
+            config.active?.fileName === configName.fileName
+          ) {
+            return { ...config, options: newOptions, active: undefined };
+          }
+          return { ...config, options: newOptions };
+        }
+        return config;
+      }),
+    );
+    toast.success(`${configName.displayName} deleted`);
+  };
+
   return (
     <ContentPage title="Boost Configuration">
       <BoostCalibration
@@ -114,8 +130,8 @@ export default function BoostView() {
       />
       <BoostConfigurator
         configs={configs}
-        onSelectConfig={onSelectConfig}
-        onDeleteConfig={onDeleteConfig}
+        onSelectConfig={handleSelect}
+        onDeleteConfig={handleDelete}
         onUploadConfig={uploadConfig}
       />
     </ContentPage>
