@@ -4,7 +4,7 @@ import { Badge } from 'react-bootstrap';
 export type isOnlineT = boolean | null;
 
 /**
- * @property {boolean | null} isOnline Whether the status is on, off or error
+ * @property isOnline Whether the status is on, off or error
  */
 export interface OnlineStatusPillProps {
   /** Specify whether the status is on, off or error */
