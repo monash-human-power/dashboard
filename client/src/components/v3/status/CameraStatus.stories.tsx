@@ -18,7 +18,7 @@ export const Offline = createStory(Template, {
   online: false,
   battery: null,
   ip: '192.168.123.2',
-  videoFeedStatus: null,
+  videoFeedEnabled: null,
 });
 
 export const Online = createStory(Template, {
@@ -26,5 +26,5 @@ export const Online = createStory(Template, {
   online: true,
   battery: 30,
   ip: '192.168.123.2',
-  videoFeedStatus: true,
+  videoFeedEnabled: true,
 });

@@ -7,7 +7,7 @@ export interface CameraStatusProps {
   online: boolean;
   ip: string | null;
   battery: number | null;
-  videoFeedStatus: boolean | null;
+  videoFeedEnabled: boolean | null;
 }
 
 /**
@@ -21,7 +21,7 @@ export default function CameraStatus({
   online,
   ip,
   battery,
-  videoFeedStatus,
+  videoFeedEnabled,
 }: CameraStatusProps) {
   return (
     <Col md xl="12" className="my-2">
@@ -50,7 +50,7 @@ export default function CameraStatus({
                 <td>
                   <strong>Video Feed</strong>
                 </td>
-                <td>{videoFeedStatus ? 'RECORDING' : 'OFFLINE'}</td>
+                <td>{videoFeedEnabled ? 'On' : 'Off'}</td>
               </tr>
             </tbody>
           </Table>
