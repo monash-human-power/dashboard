@@ -268,12 +268,18 @@ sockets.init = function socketInit(server) {
       }
     });
 
+    // TODO: Remove in refactor, kept here for backwards compatability
     socket.on('get-status-payload', (path) => {
       if (path instanceof Array && path.length > 0)
         socket.emit(
           `status-${path.join('-')}`,
           getPropWithPath(retained.status, path),
         );
+    });
+
+    socket.on('get-payload', (path) => {
+      if (path instanceof Array && path.length > 0)
+        socket.emit(path.join('-'), getPropWithPath(retained.status, path));
     });
 
     // TODO: Fix up below socket.io handlers
