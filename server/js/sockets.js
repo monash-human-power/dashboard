@@ -20,6 +20,7 @@ let PUBLIC_MQTT_CLIENT;
 const retained = {
   status: {},
   camera: {},
+  wireless_module: {},
 };
 
 function connectToPublicMQTTBroker(clientID = '') {
@@ -168,7 +169,7 @@ sockets.init = function socketInit(server) {
           // topicString: ["v3", "wireless_module", <id>, <property>]
           const value = JSON.parse(payloadString);
 
-          const path = topicString;
+          const path = topicString.slice(1); // Path is from "wireless_module"
 
           // Add to global
           retained[path[0]] = setPropWithPath(
