@@ -163,9 +163,19 @@ sockets.init = function socketInit(server) {
       } else if (topic.startsWith(WirelessModule.base)) {
         // Emit on appropriate channel
         try {
-          const [, , id, property] = topic.split('/').slice(1); // Remove leading ""
+          const topicString = topic.split('/').slice(1); // Remove leading ""
+          const [, , id, property] = topicString;
           // topicString: ["v3", "wireless_module", <id>, <property>]
           const value = JSON.parse(payloadString);
+
+          const path = topicString;
+
+          // Add to global
+          retained[path[0]] = setPropWithPath(
+            retained[path[0]],
+            path.slice(1),
+            value,
+          );
 
           // Emit parsed payload as is
           socket.emit(`module-${id}-${property}`, value);
