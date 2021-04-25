@@ -3,11 +3,11 @@
  */
 require('dotenv').config();
 
-const { DAS, BOOST, Camera, WirelessModule } = require('./topics');
-
 const sockets = {};
 const mqtt = require('mqtt');
 const os = require('os');
+
+const { DAS, BOOST, Camera, WirelessModule } = require('./topics');
 const { getPropWithPath, setPropWithPath } = require('./util');
 
 // Public MQTT broker
@@ -212,7 +212,7 @@ sockets.init = function socketInit(server) {
             break;
           case BOOST.generate_complete:
             socket.emit('boost/generate_complete', payloadString);
-              break;
+            break;
           // TODO: Remove this when handling of
           // BOOST.generate.complete is implemented.
           case 'power_model/plan_generated':
