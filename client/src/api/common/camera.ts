@@ -10,9 +10,10 @@ import {
   Static,
   String,
   Union,
+  Unknown,
 } from 'runtypes';
 import { capitalise, formatBytes, formatMinutes } from 'utils/string';
-import { Device } from 'types/camera';
+import { Battery, Device } from 'types/camera';
 
 export const devices: Device[] = ['primary', 'secondary'];
 
@@ -298,3 +299,30 @@ export const useCameraStatus = (device: Device) =>
     initValue: { connected: false },
     returnHandler: (payload) => payload,
   })(device);
+
+export const CameraBattery = Union(
+  Record({
+    /** Battery percentage */
+    percentage: Battery,
+  }),
+  Record({
+    /** Battery percentage */
+    percentage: Battery,
+    /** Indicates low battery */
+    low: Unknown,
+  }),
+);
+
+export type CameraBattery = Static<typeof CameraBattery>;
+
+/**
+ * Returns the last received battery percentage of the camera
+ *
+ * @param device Device
+ * @returns Battery
+ */
+export function useCameraBattery(device: Device): CameraBattery | null {
+  const [payload, setPayload] = useState<CameraBattery | null>(null);
+  useChannelShaped(`camera-${device}-battery`, CameraBattery, setPayload);
+  return payload;
+}

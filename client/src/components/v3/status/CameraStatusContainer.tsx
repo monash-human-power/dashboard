@@ -7,6 +7,7 @@ import CameraStatus, {
 } from 'components/v3/status/CameraStatus';
 import {
   getPrettyDeviceName,
+  useCameraBattery,
   useCameraStatus,
   useVideoFeedStatus,
 } from 'api/common/camera';
@@ -21,7 +22,7 @@ export default function CameraStatusContainer(): JSX.Element {
     cameraName: getPrettyDeviceName('primary'),
     online: useCameraStatus('primary')?.connected ?? false,
     ip: '501 not implemented', // TODO: Use API
-    battery: null, // TODO: Use API
+    battery: useCameraBattery('primary')?.percentage ?? null,
     videoFeedEnabled: useVideoFeedStatus('primary')?.online ?? null,
   };
 
@@ -29,7 +30,7 @@ export default function CameraStatusContainer(): JSX.Element {
     cameraName: getPrettyDeviceName('secondary'),
     online: useCameraStatus('secondary')?.connected ?? false,
     ip: '501 not implemented', // TODO: Use API
-    battery: null, // TODO: Use API
+    battery: useCameraBattery('secondary')?.percentage ?? null,
     videoFeedEnabled: useVideoFeedStatus('secondary')?.online ?? null,
   };
 
