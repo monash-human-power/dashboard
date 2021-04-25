@@ -22,7 +22,7 @@ export default function CameraStatusContainer(): JSX.Element {
     online: useCameraStatus('primary')?.connected ?? false,
     ip: '501 not implemented', // TODO: Use API
     battery: null, // TODO: Use API
-    videoFeedStatus: useVideoFeedStatus('primary')?.online ?? null,
+    videoFeedEnabled: useVideoFeedStatus('primary')?.online ?? null,
   };
 
   const secondaryProps: CameraStatusProps = {
@@ -30,7 +30,7 @@ export default function CameraStatusContainer(): JSX.Element {
     online: useCameraStatus('secondary')?.connected ?? false,
     ip: '501 not implemented', // TODO: Use API
     battery: null, // TODO: Use API
-    videoFeedStatus: useVideoFeedStatus('secondary')?.online ?? null,
+    videoFeedEnabled: useVideoFeedStatus('secondary')?.online ?? null,
   };
 
   return (
