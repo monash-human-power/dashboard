@@ -13,7 +13,7 @@ export interface WMStatusOnline {
 
 export interface WMStatusOffline {
   moduleName: string;
-  online: false | null;
+  online: false;
 }
 
 export type WMStatusProps = WMStatusOnline | WMStatusOffline;

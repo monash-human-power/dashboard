@@ -17,11 +17,6 @@ const sensorData = (type: string, value: SensorsT): SensorDataT => ({
 
 /* ----------------------------------- Stories ----------------------------------- */
 
-export const Disconnected = createStory(Template, {
-  moduleName: 'Front WM',
-  online: null,
-});
-
 export const Offline = createStory(Template, {
   moduleName: 'Front WM',
   online: false,
