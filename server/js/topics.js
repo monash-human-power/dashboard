@@ -24,21 +24,23 @@ class BOOST {
 }
 
 class Camera {
+  static base = 'camera';
+
   // Getting/setting overlays
-  static get_overlays = 'camera/get_overlays';
-  static set_overlay = 'camera/set_overlay';
-  static push_overlays = 'camera/push_overlays';
+  static get_overlays = `${Camera.base}/get_overlays`;
+  static set_overlay = `${Camera.base}/set_overlay`;
+  static push_overlays = `${Camera.base}/push_overlays`;
 
   // Error topic
-  static errors = 'camera/errors';
+  static errors = `${Camera.base}/errors`;
 
   // Messages to be shown on DAShboard
-  static overlay_message = 'camera/message';
+  static overlay_message = `${Camera.base}/message`;
 
   // Recording
-  static recording = 'camera/recording/+';
-  static recording_start = 'camera/recording/start';
-  static recording_stop = 'camera/recording/stop';
+  static recording = `${Camera.base}/recording/+`;
+  static recording_start = `${Camera.base}/recording/start`;
+  static recording_stop = `${Camera.base}/recording/stop`;
 
   // Camera status
   static status_recording = 'status/camera/recording';

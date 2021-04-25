@@ -19,6 +19,7 @@ let PUBLIC_MQTT_CLIENT;
  */
 const retained = {
   status: {},
+  camera: {},
 };
 
 function connectToPublicMQTTBroker(clientID = '') {
@@ -168,6 +169,31 @@ sockets.init = function socketInit(server) {
 
           // Emit parsed payload as is
           socket.emit(`module-${id}-${property}`, value);
+
+          // If needs to be retained, that can be implemented here
+        } catch (e) {
+          console.error(
+            `Error in parsing received payload\n\ttopic: ${topic}\n\tpayload: ${payloadString}\n`,
+          );
+        }
+      } else if (topic.startsWith(Camera.base)) {
+        // Emit on appropriate channel
+        try {
+          const topicString = topic.split('/');
+          // topicString: ["camera", device, property]
+          const [, device, property] = topicString;
+          const value = JSON.parse(payloadString);
+          const path = topicString;
+
+          // Add to global
+          retained[path[0]] = setPropWithPath(
+            retained[path[0]],
+            path.slice(1),
+            value,
+          );
+
+          // Emit parsed payload as is
+          socket.emit(`camera-${device}-${property}`, value);
 
           // If needs to be retained, that can be implemented here
         } catch (e) {
