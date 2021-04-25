@@ -99,6 +99,7 @@ sockets.init = function socketInit(server) {
   mqttClient.subscribe(DAS.data);
   mqttClient.subscribe(WirelessModule.all().module);
   mqttClient.subscribe(BOOST.predicted_max_speed);
+  mqttClient.subscribe(BOOST.generate_complete);
   mqttClient.subscribe(BOOST.recommended_sp);
   mqttClient.subscribe(BOOST.configs);
   mqttClient.subscribe(Camera.push_overlays);
@@ -209,6 +210,9 @@ sockets.init = function socketInit(server) {
           case BOOST.configs:
             socket.emit('boost/configs', payloadString);
             break;
+          case BOOST.generate_complete:
+            socket.emit('boost/generate_complete', payloadString);
+              break;
           // TODO: Remove this when handling of
           // BOOST.generate.complete is implemented.
           case 'power_model/plan_generated':
@@ -250,6 +254,10 @@ sockets.init = function socketInit(server) {
 
     socket.on('send-config', (configContent) => {
       mqttClient.publish('boost/configs/action', configContent);
+    });
+
+    socket.on('submit-selected-configs', (selectedConfigs) => {
+      mqttClient.publish(BOOST.generate, selectedConfigs);
     });
 
     socket.on('submit-calibration', (calibratedDistance) => {
