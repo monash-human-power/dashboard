@@ -1,9 +1,10 @@
+import React from 'react';
+
 import { BLUE, GREEN, GREY, PURPLE } from 'components/common/charts/colours';
 import ScatterChart, {
   AxisProps,
   DataProps,
 } from 'components/common/charts/ScatterChart';
-import React from 'react';
 import { createStory, StoryTemplate } from 'utils/stories';
 
 export default {

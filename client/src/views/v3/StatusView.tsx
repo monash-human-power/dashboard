@@ -1,15 +1,29 @@
 import React from 'react';
+import { Row, Col } from 'react-bootstrap';
 import ContentPage from 'components/common/ContentPage';
+import CameraStatusContainer from 'components/v3/status/CameraStatusContainer';
+import WMStatusContainer from 'components/v3/status/WMStatusContainer';
 
 /**
  * Status View component
  *
- * @returns {React.Component} Component
+ * @returns Component
  */
-export default function StatusView() {
+export default function StatusView(): JSX.Element {
+  // TODO: Remove WIP when done
   return (
-    <ContentPage>
-      <h1>Hi I&apos;m the Status View</h1>
+    <ContentPage title="System Status (WIP)">
+      <Row>
+        {/* Camera Status */}
+        <Col xl className="mb-2">
+          <CameraStatusContainer />
+        </Col>
+
+        {/* Wireless Module Status */}
+        <Col xl className="mb-2">
+          <WMStatusContainer />
+        </Col>
+      </Row>
     </ContentPage>
   );
 }

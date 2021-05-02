@@ -119,3 +119,9 @@ export type SensorsT =
   | PowerT
   | CadenceT
   | HeartRateT;
+
+/** Sensor data as incoming from MQTT */
+export type SensorDataT = {
+  type: string;
+  value: SensorsT;
+};

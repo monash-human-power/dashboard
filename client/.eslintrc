@@ -48,7 +48,13 @@
     "jsdoc/require-returns-type": "off",
     "jsdoc/require-param-type": "off",
     "jsdoc/no-undefined-types": "off",
-    "indent": ["warn", 2]
+    "indent": [
+      "warn",
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ]
   },
   "settings": {
     "import/resolver": {

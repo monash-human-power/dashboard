@@ -14,6 +14,8 @@ import {
 import { capitalise, formatBytes, formatMinutes } from 'utils/string';
 import { Device } from 'types/camera';
 
+export const devices: Device[] = ['primary', 'secondary'];
+
 const CameraConfig = Record({
   /** Device that the camera has been configured to be */
   device: Device,
@@ -199,7 +201,7 @@ export function getPrettyDeviceName(device: Device) {
  */
 interface StatusPayloadOptions<T, U> {
   /** Initial value for the payload */
-  initValue: T | null;
+  initValue?: T | null;
   /** Handler for updating payload */
   payloadHandler?: (
     setter: React.Dispatch<React.SetStateAction<T | null>>,
