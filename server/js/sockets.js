@@ -279,7 +279,7 @@ sockets.init = function socketInit(server) {
 
     socket.on('get-payload', (path) => {
       if (path instanceof Array && path.length > 0)
-        socket.emit(path.join('-'), getPropWithPath(retained.status, path));
+        socket.emit(path.join('-'), getPropWithPath(retained, path));
     });
 
     // TODO: Fix up below socket.io handlers
