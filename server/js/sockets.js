@@ -20,7 +20,9 @@ let PUBLIC_MQTT_CLIENT;
 const retained = {
   status: {},
   camera: {},
-  wireless_module: {},
+  wireless_module: {
+    online: null,
+  },
 };
 
 function connectToPublicMQTTBroker(clientID = '') {
