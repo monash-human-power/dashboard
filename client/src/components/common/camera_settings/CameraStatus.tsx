@@ -9,11 +9,7 @@ export interface CameraStatusProps {
 }
 
 /**
- * Camera recording buttons for starting and stopping video recording.
- *
- * Starts/stops recording for both displays.
- *
- * This is a feature intended for V3 but is currently in V2 for testing.
+ * Status of Cameras
  *
  * @param props Props
  * @returns Component

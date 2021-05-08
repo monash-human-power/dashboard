@@ -1,4 +1,4 @@
-import { emit, useChannelShaped } from 'api/common/socket';
+import { emit, useChannel, useChannelShaped } from 'api/common/socket';
 import { useCallback, useEffect, useState } from 'react';
 import {
   Array,
@@ -239,7 +239,7 @@ function createStatusPayloadHook<T, U>(
     }, [device]);
 
     const [payload, setPayload] = useState(initValue);
-    useChannelShaped(`status-camera-${sub}`, shape, (newPayload: T) =>
+    useChannelShaped(`status-camera-${sub}-${device}`, shape, (newPayload: T) =>
       payloadHandler(setPayload, newPayload, device),
     );
 
@@ -285,7 +285,15 @@ export const useVideoFeedStatus = createStatusPayloadHook(
 const CameraStatus = Record({
   /** Whether camera is connected / not connected */
   connected: Boolean,
+  /** IP address */
+  ip_address: Number,
+  /** Brightness */
+  brightness: Number,
+  /** Contrast */
+  contrast: Number,
 });
+
+type CameraStatus = Static<typeof CameraStatus>;
 
 /**
  * Returns the last received connection status of the camera client to the mqtt broker
@@ -293,8 +301,13 @@ const CameraStatus = Record({
  * @param device Device
  * @returns Camera status
  */
-export const useCameraStatus = (device: Device) =>
-  createStatusPayloadHook(device, CameraStatus, {
-    initValue: { connected: false },
-    returnHandler: (payload) => payload,
-  })(device);
+export function useCameraStatus(device: Device): CameraStatus | null {
+  const [status, setStatus] = useState<CameraStatus | null>(null);
+  const path = ['status', 'camera', device];
+  useEffect(() => {
+    emit('get-payload', path);
+  }, [path]);
+  useChannel(path.join('-'), setStatus);
+
+  return status;
+}
