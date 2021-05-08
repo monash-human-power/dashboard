@@ -171,12 +171,18 @@ sockets.init = function socketInit(server) {
 
           const path = topicString.slice(1); // Path is from "wireless_module"
 
-          // Add to global
-          retained[path[0]] = setPropWithPath(
-            retained[path[0]],
-            path.slice(1),
-            value,
-          );
+          if (property === 'start') {
+            retained[path[0]].online = true;
+          } else if (property === 'stop') {
+            retained[path[0]].online = false;
+          } else {
+            // Add to global
+            retained[path[0]] = setPropWithPath(
+              retained[path[0]],
+              path.slice(1),
+              value,
+            );
+          }
 
           // Emit parsed payload as is
           socket.emit(`wireless_module-${id}-${property}`, value);
