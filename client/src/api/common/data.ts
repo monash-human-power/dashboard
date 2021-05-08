@@ -101,7 +101,7 @@ export function useModuleStatus(id: number, name: string): WMStatus {
     online: true,
     data,
     batteryPercentage,
-    mqttAddress: '502',
+    mqttAddress: '501',
   };
 }
 
