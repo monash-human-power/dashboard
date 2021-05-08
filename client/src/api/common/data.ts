@@ -55,7 +55,7 @@ export interface ModuleData extends _ModuleData {}
 export function useModuleData(id: number): ModuleData {
   const [data, setData] = useState<ModuleData>({ sensors: [] });
 
-  useChannelShaped(`module-${id}-data`, ModuleData, setData);
+  useChannelShaped(`wireless_module-${id}-data`, ModuleData, setData);
 
   return data;
 }
