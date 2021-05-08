@@ -179,7 +179,7 @@ sockets.init = function socketInit(server) {
           );
 
           // Emit parsed payload as is
-          socket.emit(`module-${id}-${property}`, value);
+          socket.emit(`wireless_module-${id}-${property}`, value);
 
           // If needs to be retained, that can be implemented here
         } catch (e) {
