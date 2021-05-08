@@ -2,6 +2,7 @@ import { useState } from 'react';
 import {
   Array,
   Null,
+  Number,
   Record,
   Runtype,
   Static,
@@ -58,6 +59,29 @@ export function useModuleData(id: number): ModuleData {
   useChannelShaped(`wireless_module-${id}-data`, ModuleData, setData);
 
   return data;
+}
+
+const ModuleBattery = Record({
+  /** Battery percentage */
+  percentage: Number,
+});
+
+type _ModuleBattery = Static<typeof ModuleBattery>;
+
+export interface ModuleBattery extends _ModuleBattery {}
+
+/**
+ * Get battery percentage for wireless module
+ *
+ * @param id ID of module
+ * @returns Data
+ */
+export function useModuleBattery(id: number): ModuleBattery | null {
+  const [battery, setBattery] = useState<ModuleBattery | null>(null);
+
+  useChannelShaped(`wireless_module-${id}-battery`, ModuleBattery, setBattery);
+
+  return battery;
 }
 
 /**
