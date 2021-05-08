@@ -1,4 +1,4 @@
-import { WMStatusOffline, WMStatusOnline } from 'types/data';
+import { WMStatus, WMStatusOnline } from 'types/data';
 
 /**
  * Type guard for online state
@@ -6,8 +6,6 @@ import { WMStatusOffline, WMStatusOnline } from 'types/data';
  * @param props Props
  * @returns guard
  */
-export function isOnline(
-  props: WMStatusOffline | WMStatusOnline,
-): props is WMStatusOnline {
+export function isOnline(props: WMStatus): props is WMStatusOnline {
   return !!props.online;
 }

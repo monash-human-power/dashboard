@@ -1,16 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Array,
+  Boolean,
   Null,
   Number,
   Record,
   Runtype,
   Static,
-  String,
   Union,
-  Unknown,
 } from 'runtypes';
-import { SensorsT } from 'types/data';
+
+import { SensorDataRT, SensorsT, WMStatus } from 'types/data';
+
 import { emit, useChannelShaped } from './socket';
 
 /** Enumerates the sensors available.
@@ -33,14 +34,7 @@ export enum Sensor {
 
 const ModuleData = Record({
   /** Sensor data */
-  sensors: Array(
-    Record({
-      /** Type of data */
-      type: String,
-      /** Value */
-      value: Unknown,
-    }),
-  ),
+  sensors: Array(SensorDataRT),
 });
 
 type _ModuleData = Static<typeof ModuleData>;
@@ -82,6 +76,43 @@ export function useModuleBattery(id: number): ModuleBattery | null {
   useChannelShaped(`wireless_module-${id}-battery`, ModuleBattery, setBattery);
 
   return battery;
+}
+
+/**
+ * Get status for module
+ *
+ * @param id ID of module
+ * @param name Name used for display
+ * @returns Status
+ */
+export function useModuleStatus(id: number, name: string): WMStatus {
+  // Check if module is online
+  const [online, setOnline] = useState<boolean>(false);
+  useEffect(() => {
+    emit('get-payload', ['wireless_module', `${id}`, 'online']);
+  }, [id]);
+  useChannelShaped(
+    `wireless_module-${id}-online`,
+    Union(Boolean, Null),
+    (data) => setOnline(data ?? false),
+  );
+
+  const data = useModuleData(id).sensors;
+  const batteryPercentage = useModuleBattery(id)?.percentage ?? -1;
+
+  if (online)
+    return {
+      moduleName: name,
+      online: false,
+    };
+
+  return {
+    moduleName: name,
+    online: true,
+    data,
+    batteryPercentage,
+    mqttAddress: '502',
+  };
 }
 
 /**
