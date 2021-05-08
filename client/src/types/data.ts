@@ -125,3 +125,16 @@ export type SensorDataT = {
   type: string;
   value: SensorsT;
 };
+
+export interface WMStatusOnline {
+  moduleName: string;
+  online: true;
+  data: SensorDataT[];
+  batteryVoltage: number;
+  mqttAddress: string;
+}
+
+export interface WMStatusOffline {
+  moduleName: string;
+  online: false;
+}

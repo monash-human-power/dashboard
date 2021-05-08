@@ -1,32 +1,11 @@
 import React from 'react';
-import { Col, Card, Accordion, Button, Table } from 'react-bootstrap';
-import { SensorDataT } from 'types/data';
+import { Accordion, Button, Card, Col, Table } from 'react-bootstrap';
+
 import OnlineStatusPill from 'components/common/OnlineStatusPill';
-
-export interface WMStatusOnline {
-  moduleName: string;
-  online: true;
-  data: SensorDataT[];
-  batteryVoltage: number;
-  mqttAddress: string;
-}
-
-export interface WMStatusOffline {
-  moduleName: string;
-  online: false;
-}
+import { WMStatusOffline, WMStatusOnline } from 'types/data';
+import { isOnline } from 'utils/data';
 
 export type WMStatusProps = WMStatusOnline | WMStatusOffline;
-
-/**
- * Type guard for online state
- *
- * @param props Props
- * @returns guard
- */
-function isOnline(props: WMStatusProps): props is WMStatusOnline {
-  return !!props.online;
-}
 
 /**
  * Status for Wireless Modules
