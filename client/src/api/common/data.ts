@@ -1,18 +1,9 @@
 import { useEffect, useState } from 'react';
-import {
-  Array,
-  Boolean,
-  Null,
-  Number,
-  Record,
-  Runtype,
-  Static,
-  Union,
-} from 'runtypes';
+import { Array, Null, Number, Record, Runtype, Static, Union } from 'runtypes';
 
 import { SensorDataRT, SensorsT, WMStatus } from 'types/data';
 
-import { emit, useChannelShaped } from './socket';
+import { emit, useChannel, useChannelShaped } from './socket';
 
 /** Enumerates the sensors available.
  *  Value should correspond to the sensor "type" attribute.
@@ -91,20 +82,19 @@ export function useModuleStatus(id: number, name: string): WMStatus {
   useEffect(() => {
     emit('get-payload', ['wireless_module', `${id}`, 'online']);
   }, [id]);
-  useChannelShaped(
-    `wireless_module-${id}-online`,
-    Union(Boolean, Null),
-    (data) => setOnline(data ?? false),
+  useChannel(`wireless_module-${id}-online`, (data: boolean | null) =>
+    setOnline(data ?? false),
   );
 
   const data = useModuleData(id).sensors;
   const batteryPercentage = useModuleBattery(id)?.percentage ?? -1;
 
-  if (online)
+  if (!online) {
     return {
       moduleName: name,
       online: false,
     };
+  }
 
   return {
     moduleName: name,

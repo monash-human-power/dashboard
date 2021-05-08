@@ -173,9 +173,20 @@ sockets.init = function socketInit(server) {
 
           const path = topicString.slice(1); // Path is from "wireless_module"
 
-          // Online status
-          if (property === 'start') retained[path[0]].online = true;
-          else if (property === 'stop') retained[path[0]].online = false;
+          // Module's online
+          if (property === 'start') {
+            retained[path[0]].online = true;
+
+            socket.emit(`wireless_module-${id}-online`, true);
+          }
+
+          // Module's offline
+          else if (property === 'stop') {
+            retained[path[0]].online = false;
+
+            socket.emit(`wireless_module-${id}-online`, false);
+          }
+
           // Add to global
           else {
             retained[path[0]] = setPropWithPath(
@@ -183,12 +194,10 @@ sockets.init = function socketInit(server) {
               path.slice(1),
               value,
             );
+
+            // Emit parsed payload as is
+            socket.emit(`wireless_module-${id}-${property}`, value);
           }
-
-          // Emit parsed payload as is
-          socket.emit(`wireless_module-${id}-${property}`, value);
-
-          // If needs to be retained, that can be implemented here
         } catch (e) {
           console.error(
             `Error in parsing received payload\n\ttopic: ${topic}\n\tpayload: ${payloadString}\n`,

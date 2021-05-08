@@ -2,10 +2,10 @@ import React from 'react';
 import { Accordion, Button, Card, Col, Table } from 'react-bootstrap';
 
 import OnlineStatusPill from 'components/common/OnlineStatusPill';
-import { WMStatusOffline, WMStatusOnline } from 'types/data';
+import { WMStatus as WMStatusT } from 'types/data';
 import { isOnline } from 'utils/data';
 
-export type WMStatusProps = WMStatusOnline | WMStatusOffline;
+export type WMStatusProps = WMStatusT;
 
 /**
  * Status for Wireless Modules
@@ -68,11 +68,11 @@ export default function WMStatus(props: WMStatusProps) {
                     {/* TODO: extract data */}
                     {/* Sensor Names and Data */}
                     {data.map(({ type, value }) => (
-                      <tr>
+                      <tr key={`${moduleName} ${type}`}>
                         <td>
                           <strong>{type}</strong>
                         </td>
-                        <td>{value}</td>
+                        <td>{JSON.stringify(value)}</td>
                       </tr>
                     ))}
                   </tbody>
