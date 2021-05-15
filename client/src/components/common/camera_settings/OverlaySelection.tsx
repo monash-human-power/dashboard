@@ -1,7 +1,8 @@
-import { CameraConfig, getPrettyDeviceName } from 'api/common/camera';
+import { CameraConfig } from 'api/common/camera';
 import RadioSelector from 'components/v2/RadioSelector';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Card } from 'react-bootstrap';
+import { getPrettyDeviceName } from 'utils/string';
 
 export interface OverlaySelectionProps {
   /** Config defined by CameraConfig */

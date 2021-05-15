@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   Array,
   Null,
@@ -10,7 +9,8 @@ import {
   Unknown,
 } from 'runtypes';
 import { SensorsT } from 'types/data';
-import { emit, useChannelShaped } from './socket';
+import { usePayload } from './server';
+import { emit } from './socket';
 
 /** Enumerates the sensors available.
  *  Value should correspond to the sensor "type" attribute.
@@ -42,9 +42,7 @@ const ModuleData = Record({
   ),
 });
 
-type _ModuleData = Static<typeof ModuleData>;
-
-export interface ModuleData extends _ModuleData {}
+export type ModuleData = Static<typeof ModuleData>;
 
 /**
  * Pass on incoming data from the wireless module channel
@@ -53,11 +51,7 @@ export interface ModuleData extends _ModuleData {}
  * @returns Data
  */
 export function useModuleData(id: number): ModuleData {
-  const [data, setData] = useState<ModuleData>({ sensors: [] });
-
-  useChannelShaped(`module-${id}-data`, ModuleData, setData);
-
-  return data;
+  return usePayload(`module-${id}-data`, ModuleData) ?? { sensors: [] };
 }
 
 /**

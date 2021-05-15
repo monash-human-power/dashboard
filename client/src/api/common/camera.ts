@@ -6,13 +6,13 @@ import {
   Literal,
   Number,
   Record,
-  Runtype,
   Static,
   String,
   Union,
 } from 'runtypes';
 import { capitalise, formatBytes, formatMinutes } from 'utils/string';
 import { Device } from 'types/camera';
+import { usePayload } from './server';
 
 export const devices: Device[] = ['primary', 'secondary'];
 
@@ -90,37 +90,6 @@ export function startRecording() {
  */
 export function stopRecording() {
   emit('stop-camera-recording');
-}
-
-/**
- * Makes the device name pretty.
- *
- * Hardcoded for efficiency.
- *
- * @param device Device
- * @returns  Prettied device name
- */
-export function getPrettyDeviceName(device: Device) {
-  return device === 'primary' ? 'Primary' : 'Secondary';
-}
-
-/**
- * Create hooks for getting payloads
- *
- * @param path Path to payload
- * @param shape RunType shape of payload
- * @returns Hook for getting a payload
- */
-export function usePayload<T>(path: string, shape: Runtype<T>) {
-  // Only run init once per render
-  useEffect(() => {
-    emit(path);
-  }, [path]);
-
-  const [payload, setPayload] = useState<T | null>(null);
-  useChannelShaped(path, shape, (data) => setPayload(data));
-
-  return payload;
 }
 
 const CameraRecordingOffPayload = Record({
