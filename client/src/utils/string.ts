@@ -1,3 +1,5 @@
+import { Device } from 'types/camera';
+
 /**
  * Capitalise a string
  *
@@ -56,4 +58,16 @@ export function formatMinutes(totalMinutes: number): string {
   const mins = Math.floor(totalMinutes);
   const secs = Math.floor((totalMinutes - mins) * 60);
   return `${mins}m ${secs}s`;
+}
+
+/**
+ * Makes the device name pretty.
+ *
+ * Hardcoded for efficiency.
+ *
+ * @param device Device
+ * @returns  Prettied device name
+ */
+export function getPrettyDeviceName(device: Device) {
+  return device === 'primary' ? 'Primary' : 'Secondary';
 }

@@ -5,11 +5,8 @@ import { Card, Row } from 'react-bootstrap';
 import CameraStatus, {
   CameraStatusProps,
 } from 'components/v3/status/CameraStatus';
-import {
-  getPrettyDeviceName,
-  useCameraStatus,
-  useVideoFeedStatus,
-} from 'api/common/camera';
+import { useCameraStatus, useVideoFeedStatus } from 'api/common/camera';
+import { getPrettyDeviceName } from 'utils/string';
 
 /**
  * Container for CameraStatus

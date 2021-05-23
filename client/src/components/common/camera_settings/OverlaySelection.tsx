@@ -1,9 +1,14 @@
-import { CameraConfigT, getPrettyDeviceName } from 'api/common/camera';
+import { CameraConfig } from 'api/common/camera';
 import RadioSelector from 'components/v2/RadioSelector';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Card } from 'react-bootstrap';
+import { getPrettyDeviceName } from 'utils/string';
 
-export interface OverlaySelectionProps extends CameraConfigT {
+export interface OverlaySelectionProps {
+  /** Config defined by CameraConfig */
+  config: CameraConfig | null;
+  /** Set the active overlay */
+  setActiveOverlay: (activeOverlay: string) => void;
   /** Camera screen */
   device: 'primary' | 'secondary';
 }
