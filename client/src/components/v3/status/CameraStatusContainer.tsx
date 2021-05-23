@@ -6,11 +6,11 @@ import CameraStatus, {
   CameraStatusProps,
 } from 'components/v3/status/CameraStatus';
 import {
-  getPrettyDeviceName,
   useCameraBattery,
   useCameraStatus,
   useVideoFeedStatus,
 } from 'api/common/camera';
+import { getPrettyDeviceName } from 'utils/string';
 
 /**
  * Container for CameraStatus

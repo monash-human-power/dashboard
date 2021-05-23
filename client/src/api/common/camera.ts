@@ -6,7 +6,6 @@ import {
   Literal,
   Number,
   Record,
-  Runtype,
   Static,
   String,
   Union,
@@ -14,6 +13,7 @@ import {
 } from 'runtypes';
 import { capitalise, formatBytes, formatMinutes } from 'utils/string';
 import { Battery, Device } from 'types/camera';
+import { usePayload } from './server';
 
 export const devices: Device[] = ['primary', 'secondary'];
 
@@ -27,14 +27,7 @@ const CameraConfig = Record({
   /** Name of currently active overlay */
   activeOverlay: String,
 });
-type CameraConfig = Static<typeof CameraConfig>;
-
-export interface CameraConfigT {
-  /** Config defined by CameraConfig */
-  config: CameraConfig | null;
-  /** Set the active overlay */
-  setActiveOverlay: (activeOverlay: string) => void;
-}
+export type CameraConfig = Static<typeof CameraConfig>;
 
 /**
  * Use a list of camera overlays
@@ -137,7 +130,6 @@ export interface CameraRecordingStatusItem {
  * Parse the recording payload into an object and format the values
  *
  * Payload structure is defined in the 'V3 MQTT Topics' page on Notion.
- * Topic is /v3/camera/recording/status/<primary/>secondary>.
  *
  * @param payload Payload from MQTT message, parsed
  * @returns Formatted payload
@@ -173,132 +165,41 @@ export function formatRecordingPayload(
 }
 
 /**
- * Initiate receiving status payloads
- *
- * @param subComponent The sub component to init for (e.g. recording, video feed)
- * @param device Device
- */
-function initStatus(subComponent: string, device?: Device) {
-  const path = ['camera', subComponent];
-  if (device) path.push(device);
-  emit(`get-status-payload`, path);
-}
-
-/**
- * Makes the device name pretty.
- *
- * Hardcoded for efficiency. If you don't like it, complain to Angus Trau :).
- *
- * @param device Device
- * @returns  Prettied device name
- */
-export function getPrettyDeviceName(device: Device) {
-  return device === 'primary' ? 'Primary' : 'Secondary';
-}
-
-/**
- * `T` Type of the socket.io payload
- * `U` Type to be returned by the handler
- */
-interface StatusPayloadOptions<T, U> {
-  /** Initial value for the payload */
-  initValue?: T | null;
-  /** Handler for updating payload */
-  payloadHandler?: (
-    setter: React.Dispatch<React.SetStateAction<T | null>>,
-    newPayload: T | null,
-    device: Device,
-  ) => T | void;
-  /** Handler for return value */
-  returnHandler: (payload: T | null, device?: Device) => U | null;
-}
-
-/**
- * Create hooks for getting payloads
- *
- * @param sub Subcomponent
- * @param shape Shape of received payloads
- * @param opts Options
- * @returns Hook for getting a payload
- */
-function createStatusPayloadHook<T, U>(
-  sub: string,
-  shape: Runtype<T>,
-  {
-    initValue = null,
-    payloadHandler = (
-      setter: React.Dispatch<React.SetStateAction<T | null>>,
-      newPayload: T | null,
-    ) => setter(newPayload ?? initValue),
-    returnHandler,
-  }: StatusPayloadOptions<T, U>,
-) {
-  return function _hook(device: Device) {
-    // Only run init once per render
-    useEffect(() => {
-      initStatus(sub, device);
-    }, [device]);
-
-    const [payload, setPayload] = useState(initValue);
-    useChannelShaped(`status-camera-${sub}`, shape, (newPayload: T) =>
-      payloadHandler(setPayload, newPayload, device),
-    );
-
-    return returnHandler(payload, device);
-  };
-}
-
-/**
  * Returns the last status payload published
  *
  * @param device Device
  * @returns Recording status
  */
-export const useCameraRecordingStatus = createStatusPayloadHook(
-  'recording',
-  CameraRecordingStatusPayload,
-  {
-    initValue: null,
-    returnHandler: (payload) => formatRecordingPayload(payload),
-  },
-);
+export function useCameraRecordingStatus(
+  device: Device,
+): CameraRecordingStatusItem[] | null {
+  const payload = usePayload(
+    `status-camera-recording-${device}`,
+    CameraRecordingStatusPayload,
+  );
+  return formatRecordingPayload(payload);
+}
 
 const VideoFeedStatus = Record({
   /** Whether video feed is on/off */
   online: Boolean,
 });
-export interface VideoFeedStatus {
-  /** Whether video feed is on/off */
-  online: boolean;
-}
-
+export type VideoFeedStatus = Static<typeof VideoFeedStatus>;
 /**
- * Returns the last received status of the video feeds from `/v3/camera/video_feed/status/<primary/secondary>`
+ * Returns the last received status of the video feeds
  *
+ * @param device Device
  * @returns A VideoFeedStatus for each device
  */
-export const useVideoFeedStatus = createStatusPayloadHook(
-  'video_feed',
-  VideoFeedStatus,
-  { initValue: null, returnHandler: (payload) => payload },
-);
+export function useVideoFeedStatus(device: Device): VideoFeedStatus | null {
+  return usePayload(`status-camera-video_feed-${device}`, VideoFeedStatus);
+}
 
 const CameraStatus = Record({
   /** Whether camera is connected / not connected */
   connected: Boolean,
 });
-
-/**
- * Returns the last received connection status of the camera client to the mqtt broker
- *
- * @param device Device
- * @returns Camera status
- */
-export const useCameraStatus = (device: Device) =>
-  createStatusPayloadHook(device, CameraStatus, {
-    initValue: { connected: false },
-    returnHandler: (payload) => payload,
-  })(device);
+export type CameraStatus = Static<typeof CameraStatus>;
 
 export const CameraBattery = Union(
   Record({
@@ -322,7 +223,15 @@ export type CameraBattery = Static<typeof CameraBattery>;
  * @returns Battery
  */
 export function useCameraBattery(device: Device): CameraBattery | null {
-  const [payload, setPayload] = useState<CameraBattery | null>(null);
-  useChannelShaped(`camera-${device}-battery`, CameraBattery, setPayload);
-  return payload;
+  return usePayload(`camera-${device}-battery`, CameraBattery);
+}
+
+/**
+ * Returns the last received connection status of the camera client to the mqtt broker
+ *
+ * @param device Device
+ * @returns Camera status
+ */
+export function useCameraStatus(device: Device): CameraStatus | null {
+  return usePayload(`status-camera-${device}`, CameraStatus);
 }

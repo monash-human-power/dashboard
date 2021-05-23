@@ -1,9 +1,16 @@
 import { useEffect, useState } from 'react';
-import { Array, Null, Number, Record, Runtype, Static, Union } from 'runtypes';
-
+import {
+  Array,
+  Null,
+  Record,
+  Runtype,
+  Static,
+  Union,
+  Number,
+  Boolean,
+} from 'runtypes';
 import { SensorDataRT, SensorsT, WMStatus } from 'types/data';
-
-import { emit, useChannel, useChannelShaped } from './socket';
+import { emit, useChannelShaped } from './socket';
 
 /** Enumerates the sensors available.
  *  Value should correspond to the sensor "type" attribute.
@@ -28,9 +35,7 @@ const ModuleData = Record({
   sensors: Array(SensorDataRT),
 });
 
-type _ModuleData = Static<typeof ModuleData>;
-
-export interface ModuleData extends _ModuleData {}
+export type ModuleData = Static<typeof ModuleData>;
 
 /**
  * Pass on incoming data from the wireless module channel
@@ -41,6 +46,7 @@ export interface ModuleData extends _ModuleData {}
 export function useModuleData(id: number): ModuleData {
   const [data, setData] = useState<ModuleData>({ sensors: [] });
 
+  // eslint-disable-next-line no-undef
   useChannelShaped(`wireless_module-${id}-data`, ModuleData, setData);
 
   return data;
@@ -82,8 +88,10 @@ export function useModuleStatus(id: number, name: string): WMStatus {
   useEffect(() => {
     emit('get-payload', ['wireless_module', `${id}`, 'online']);
   }, [id]);
-  useChannel(`wireless_module-${id}-online`, (data: boolean | null) =>
-    setOnline(data ?? false),
+  useChannelShaped(
+    `wireless_module-${id}-online`,
+    Boolean,
+    (data: boolean | null) => setOnline(data ?? false),
   );
 
   const data = useModuleData(id).sensors;
