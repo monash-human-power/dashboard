@@ -53,8 +53,8 @@ export function useModuleData(id: number): ModuleData {
 }
 
 const ModuleBattery = Record({
-  /** Battery percentage */
-  percentage: Number,
+  /** Battery voltage */
+  voltage: Number,
 });
 
 type _ModuleBattery = Static<typeof ModuleBattery>;
@@ -62,7 +62,7 @@ type _ModuleBattery = Static<typeof ModuleBattery>;
 export interface ModuleBattery extends _ModuleBattery {}
 
 /**
- * Get battery percentage for wireless module
+ * Get battery voltage for wireless module
  *
  * @param id ID of module
  * @returns Data
@@ -95,7 +95,7 @@ export function useModuleStatus(id: number, name: string): WMStatus {
   );
 
   const data = useModuleData(id).sensors;
-  const batteryPercentage = useModuleBattery(id)?.percentage ?? -1;
+  const batteryVoltage = useModuleBattery(id)?.voltage ?? -1;
 
   if (!online) {
     return {
@@ -108,7 +108,7 @@ export function useModuleStatus(id: number, name: string): WMStatus {
     moduleName: name,
     online: true,
     data,
-    batteryPercentage,
+    batteryVoltage,
     mqttAddress: '501',
   };
 }

@@ -135,7 +135,7 @@ export interface WMStatusOnline {
   moduleName: string;
   online: true;
   data: SensorDataT[];
-  batteryPercentage: number;
+  batteryVoltage: number;
   mqttAddress: string;
 }
 

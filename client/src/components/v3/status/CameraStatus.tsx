@@ -42,7 +42,7 @@ export default function CameraStatus({
                 <td>
                   <strong>Battery</strong>
                 </td>
-                <td>{`${battery ?? '-'} %`}</td>
+                <td>{`${battery ?? '-'} V`}</td>
               </tr>
 
               {/* Video Feed Status */}

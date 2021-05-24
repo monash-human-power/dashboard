@@ -203,12 +203,12 @@ export type CameraStatus = Static<typeof CameraStatus>;
 
 export const CameraBattery = Union(
   Record({
-    /** Battery percentage */
-    percentage: Battery,
+    /** Battery voltage */
+    voltage: Battery,
   }),
   Record({
-    /** Battery percentage */
-    percentage: Battery,
+    /** Battery voltage */
+    voltage: Battery,
     /** Indicates low battery */
     low: Unknown,
   }),
@@ -217,7 +217,7 @@ export const CameraBattery = Union(
 export type CameraBattery = Static<typeof CameraBattery>;
 
 /**
- * Returns the last received battery percentage of the camera
+ * Returns the last received battery voltage of the camera
  *
  * @param device Device
  * @returns Battery

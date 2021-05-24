@@ -25,7 +25,7 @@ export default function WMStatus(props: WMStatusProps) {
   let info = <> </>;
 
   if (isOnline(props)) {
-    const { data, mqttAddress, batteryPercentage } = props;
+    const { data, mqttAddress, batteryVoltage } = props;
     info = (
       <>
         {/* MQTT address */}
@@ -33,12 +33,12 @@ export default function WMStatus(props: WMStatusProps) {
 
         <Table hover>
           <tbody>
-            {/* Battery Percentage */}
+            {/* Battery Voltage */}
             <tr>
               <td>
-                <strong>Battery Percentage</strong>
+                <strong>Battery Voltage</strong>
               </td>
-              <td>{batteryPercentage} %</td>
+              <td>{batteryVoltage} V</td>
             </tr>
 
             {/* Sensors List of Names */}
