@@ -92,7 +92,8 @@ sockets.init = function socketInit(server) {
     console.log('I am using a Heroku instance');
     mqttClient = connectToPublicMQTTBroker(`${os.hostname()}-HEROKU`);
   } else {
-    mqttClient = mqtt.connect('mqtt://localhost:1883', mqttOptions);
+    // TODO: ADD ENVIRONMENT VARIABLE
+    mqttClient = mqtt.connect('mqtt://dashboard-mqtt-server:1883', mqttOptions);
   }
   mqttClient.subscribe(DAS.start);
   mqttClient.subscribe(DAS.stop);
@@ -212,7 +213,7 @@ sockets.init = function socketInit(server) {
             break;
           case BOOST.generate_complete:
             socket.emit('boost/generate_complete', payloadString);
-              break;
+            break;
           // TODO: Remove this when handling of
           // BOOST.generate.complete is implemented.
           case 'power_model/plan_generated':
