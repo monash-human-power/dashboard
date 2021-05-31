@@ -9,9 +9,10 @@ import {
   Static,
   String,
   Union,
+  Unknown,
 } from 'runtypes';
 import { capitalise, formatBytes, formatMinutes } from 'utils/string';
-import { Device } from 'types/camera';
+import { Battery, Device } from 'types/camera';
 import { usePayload } from './server';
 
 export const devices: Device[] = ['primary', 'secondary'];
@@ -199,6 +200,32 @@ const CameraStatus = Record({
   connected: Boolean,
 });
 export type CameraStatus = Static<typeof CameraStatus>;
+
+export const CameraBattery = Union(
+  Record({
+    /** Battery voltage */
+    voltage: Battery,
+  }),
+  Record({
+    /** Battery voltage */
+    voltage: Battery,
+    /** Indicates low battery */
+    low: Unknown,
+  }),
+);
+
+export type CameraBattery = Static<typeof CameraBattery>;
+
+/**
+ * Returns the last received battery voltage of the camera
+ *
+ * @param device Device
+ * @returns Battery
+ */
+export function useCameraBattery(device: Device): CameraBattery | null {
+  return usePayload(`camera-${device}-battery`, CameraBattery);
+}
+
 /**
  * Returns the last received connection status of the camera client to the mqtt broker
  *

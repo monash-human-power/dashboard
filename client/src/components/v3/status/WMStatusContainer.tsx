@@ -1,7 +1,8 @@
 import React from 'react';
 import { Card, Row } from 'react-bootstrap';
 
-import WMStatus, { WMStatusProps } from 'components/v3/status/WMStatus';
+import WMStatus from 'components/v3/status/WMStatus';
+import { useModuleStatus } from 'api/common/data';
 
 /**
  * Container for Wireless Module Statuses
@@ -9,22 +10,10 @@ import WMStatus, { WMStatusProps } from 'components/v3/status/WMStatus';
  * @returns Component
  */
 export default function WMStatusContainer() {
-  // TODO: Link API
-
-  const front: WMStatusProps = {
-    moduleName: 'Front WM',
-    online: false,
-  };
-
-  const middle: WMStatusProps = {
-    moduleName: 'Middle WM',
-    online: false,
-  };
-
-  const back: WMStatusProps = {
-    moduleName: 'Back WM',
-    online: false,
-  };
+  const front = useModuleStatus(1, 'Front WM');
+  const middle = useModuleStatus(2, 'Middle WM');
+  const back = useModuleStatus(3, 'Back WM');
+  const ant = useModuleStatus(4, 'ANT/DAS WM');
 
   return (
     <Card>
@@ -39,6 +28,9 @@ export default function WMStatusContainer() {
 
           {/* Back WM Status */}
           <WMStatus {...back} />
+
+          {/* ANT/DAS Status */}
+          <WMStatus {...ant} />
         </Row>
       </Card.Body>
     </Card>

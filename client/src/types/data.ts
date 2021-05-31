@@ -1,4 +1,4 @@
-import { Number, Record, Static, String } from 'runtypes';
+import { Number, Record, Static, String, Union } from 'runtypes';
 
 /* ------------------------------------ RunTypes ------------------------------------ */
 
@@ -67,6 +67,28 @@ export const CadenceRT = Number;
 /** Value runtype of heartRate sensor data */
 export const HeartRateRT = Number;
 
+/** Union type of all sensor value types */
+export const SensorsRT = Union(
+  TemperatureRT,
+  HumidityRT,
+  SteeringAngleRT,
+  CO2RT,
+  AccelerometerRT,
+  GyroscopeRT,
+  ReedVelocityRT,
+  ReedDistanceRT,
+  GPSRT,
+  PowerRT,
+  CadenceRT,
+  HeartRateRT,
+);
+
+/** Sensor data as incoming from MQTT */
+export const SensorDataRT = Record({
+  type: String,
+  value: SensorsRT,
+});
+
 /* ------------------------------------ Types ------------------------------------ */
 
 /** Value type of temperature sensor data */
@@ -105,23 +127,21 @@ export type CadenceT = Static<typeof CadenceRT>;
 /** Value type of heartRate sensor data */
 export type HeartRateT = Static<typeof HeartRateRT>;
 
-/** Union type of all sensor value types */
-export type SensorsT =
-  | TemperatureT
-  | HumidityT
-  | SteeringAngleT
-  | CO2T
-  | AccelerometerT
-  | GyroscopeT
-  | ReedVelocityT
-  | ReedDistanceT
-  | GPST
-  | PowerT
-  | CadenceT
-  | HeartRateT;
+export type SensorsT = Static<typeof SensorsRT>;
 
-/** Sensor data as incoming from MQTT */
-export type SensorDataT = {
-  type: string;
-  value: SensorsT;
-};
+export type SensorDataT = Static<typeof SensorDataRT>;
+
+export interface WMStatusOnline {
+  moduleName: string;
+  online: true;
+  data: SensorDataT[];
+  batteryVoltage: number;
+  mqttAddress: string;
+}
+
+export interface WMStatusOffline {
+  moduleName: string;
+  online: false;
+}
+
+export type WMStatus = WMStatusOnline | WMStatusOffline;

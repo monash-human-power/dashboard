@@ -5,7 +5,11 @@ import { Card, Row } from 'react-bootstrap';
 import CameraStatus, {
   CameraStatusProps,
 } from 'components/v3/status/CameraStatus';
-import { useCameraStatus, useVideoFeedStatus } from 'api/common/camera';
+import {
+  useCameraBattery,
+  useCameraStatus,
+  useVideoFeedStatus,
+} from 'api/common/camera';
 import { getPrettyDeviceName } from 'utils/string';
 
 /**
@@ -18,7 +22,7 @@ export default function CameraStatusContainer(): JSX.Element {
     cameraName: getPrettyDeviceName('primary'),
     online: useCameraStatus('primary')?.connected ?? false,
     ip: '501 not implemented', // TODO: Use API
-    battery: null, // TODO: Use API
+    battery: useCameraBattery('primary')?.voltage ?? null,
     videoFeedEnabled: useVideoFeedStatus('primary')?.online ?? null,
   };
 
@@ -26,7 +30,7 @@ export default function CameraStatusContainer(): JSX.Element {
     cameraName: getPrettyDeviceName('secondary'),
     online: useCameraStatus('secondary')?.connected ?? false,
     ip: '501 not implemented', // TODO: Use API
-    battery: null, // TODO: Use API
+    battery: useCameraBattery('secondary')?.voltage ?? null,
     videoFeedEnabled: useVideoFeedStatus('secondary')?.online ?? null,
   };
 

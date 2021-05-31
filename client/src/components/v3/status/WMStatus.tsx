@@ -1,32 +1,11 @@
 import React from 'react';
-import { Col, Card, Accordion, Button, Table } from 'react-bootstrap';
-import { SensorDataT } from 'types/data';
+import { Accordion, Button, Card, Col, Table } from 'react-bootstrap';
+
 import OnlineStatusPill from 'components/common/OnlineStatusPill';
+import { WMStatus as WMStatusT } from 'types/data';
+import { isOnline } from 'utils/data';
 
-export interface WMStatusOnline {
-  moduleName: string;
-  online: true;
-  data: SensorDataT[];
-  batteryVoltage: number;
-  mqttAddress: string;
-}
-
-export interface WMStatusOffline {
-  moduleName: string;
-  online: false;
-}
-
-export type WMStatusProps = WMStatusOnline | WMStatusOffline;
-
-/**
- * Type guard for online state
- *
- * @param props Props
- * @returns guard
- */
-function isOnline(props: WMStatusProps): props is WMStatusOnline {
-  return !!props.online;
-}
+export type WMStatusProps = WMStatusT;
 
 /**
  * Status for Wireless Modules
@@ -59,7 +38,7 @@ export default function WMStatus(props: WMStatusProps) {
               <td>
                 <strong>Battery Voltage</strong>
               </td>
-              <td>{batteryVoltage}V</td>
+              <td>{batteryVoltage} V</td>
             </tr>
 
             {/* Sensors List of Names */}
@@ -89,11 +68,11 @@ export default function WMStatus(props: WMStatusProps) {
                     {/* TODO: extract data */}
                     {/* Sensor Names and Data */}
                     {data.map(({ type, value }) => (
-                      <tr>
+                      <tr key={`${moduleName} ${type}`}>
                         <td>
                           <strong>{type}</strong>
                         </td>
-                        <td>{value}</td>
+                        <td>{JSON.stringify(value)}</td>
                       </tr>
                     ))}
                   </tbody>

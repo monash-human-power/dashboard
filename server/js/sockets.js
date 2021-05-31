@@ -3,11 +3,11 @@
  */
 require('dotenv').config();
 
-const { DAS, BOOST, Camera, WirelessModule } = require('./topics');
-
 const sockets = {};
 const mqtt = require('mqtt');
 const os = require('os');
+
+const { DAS, BOOST, Camera, WirelessModule } = require('./topics');
 const { getPropWithPath, setPropWithPath } = require('./util');
 
 // Public MQTT broker
@@ -19,6 +19,10 @@ let PUBLIC_MQTT_CLIENT;
  */
 const retained = {
   status: {},
+  camera: {},
+  wireless_module: {
+    online: null,
+  },
 };
 
 function connectToPublicMQTTBroker(clientID = '') {
@@ -162,12 +166,61 @@ sockets.init = function socketInit(server) {
       } else if (topic.startsWith(WirelessModule.base)) {
         // Emit on appropriate channel
         try {
-          const [, , id, property] = topic.split('/').slice(1); // Remove leading ""
+          const topicString = topic.split('/').slice(1); // Remove leading ""
+          const [, , id, property] = topicString;
           // topicString: ["v3", "wireless_module", <id>, <property>]
           const value = JSON.parse(payloadString);
 
+          const path = topicString.slice(1); // Path is from "wireless_module"
+
+          // Module's online
+          if (property === 'start') {
+            retained[path[0]].online = true;
+
+            socket.emit(`wireless_module-${id}-online`, true);
+          }
+
+          // Module's offline
+          else if (property === 'stop') {
+            retained[path[0]].online = false;
+
+            socket.emit(`wireless_module-${id}-online`, false);
+          }
+
+          // Add to global
+          else {
+            retained[path[0]] = setPropWithPath(
+              retained[path[0]],
+              path.slice(1),
+              value,
+            );
+
+            // Emit parsed payload as is
+            socket.emit(`wireless_module-${id}-${property}`, value);
+          }
+        } catch (e) {
+          console.error(
+            `Error in parsing received payload\n\ttopic: ${topic}\n\tpayload: ${payloadString}\n`,
+          );
+        }
+      } else if (topic.startsWith(Camera.base)) {
+        // Emit on appropriate channel
+        try {
+          const topicString = topic.split('/');
+          // topicString: ["camera", device, property]
+          const [, device, property] = topicString;
+          const value = JSON.parse(payloadString);
+          const path = topicString;
+
+          // Add to global
+          retained[path[0]] = setPropWithPath(
+            retained[path[0]],
+            path.slice(1),
+            value,
+          );
+
           // Emit parsed payload as is
-          socket.emit(`module-${id}-${property}`, value);
+          socket.emit(`camera-${device}-${property}`, value);
 
           // If needs to be retained, that can be implemented here
         } catch (e) {
@@ -212,7 +265,7 @@ sockets.init = function socketInit(server) {
             break;
           case BOOST.generate_complete:
             socket.emit('boost/generate_complete', payloadString);
-              break;
+            break;
           // TODO: Remove this when handling of
           // BOOST.generate.complete is implemented.
           case 'power_model/plan_generated':
@@ -231,12 +284,18 @@ sockets.init = function socketInit(server) {
       }
     });
 
+    // TODO: Remove in refactor, kept here for backwards compatability
     socket.on('get-status-payload', (path) => {
       if (path instanceof Array && path.length > 0)
         socket.emit(
           `status-${path.join('-')}`,
           getPropWithPath(retained.status, path),
         );
+    });
+
+    socket.on('get-payload', (path) => {
+      if (path instanceof Array && path.length > 0)
+        socket.emit(path.join('-'), getPropWithPath(retained, path));
     });
 
     // TODO: Fix up below socket.io handlers

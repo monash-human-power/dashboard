@@ -1,16 +1,16 @@
+import { useEffect, useState } from 'react';
 import {
   Array,
   Null,
   Record,
   Runtype,
   Static,
-  String,
   Union,
-  Unknown,
+  Number,
+  Boolean,
 } from 'runtypes';
-import { SensorsT } from 'types/data';
-import { usePayload } from './server';
-import { emit } from './socket';
+import { SensorDataRT, SensorsT, WMStatus } from 'types/data';
+import { emit, useChannelShaped } from './socket';
 
 /** Enumerates the sensors available.
  *  Value should correspond to the sensor "type" attribute.
@@ -32,14 +32,7 @@ export enum Sensor {
 
 const ModuleData = Record({
   /** Sensor data */
-  sensors: Array(
-    Record({
-      /** Type of data */
-      type: String,
-      /** Value */
-      value: Unknown,
-    }),
-  ),
+  sensors: Array(SensorDataRT),
 });
 
 export type ModuleData = Static<typeof ModuleData>;
@@ -51,7 +44,73 @@ export type ModuleData = Static<typeof ModuleData>;
  * @returns Data
  */
 export function useModuleData(id: number): ModuleData {
-  return usePayload(`module-${id}-data`, ModuleData) ?? { sensors: [] };
+  const [data, setData] = useState<ModuleData>({ sensors: [] });
+
+  // eslint-disable-next-line no-undef
+  useChannelShaped(`wireless_module-${id}-data`, ModuleData, setData);
+
+  return data;
+}
+
+const ModuleBattery = Record({
+  /** Battery voltage */
+  voltage: Number,
+});
+
+type _ModuleBattery = Static<typeof ModuleBattery>;
+
+export interface ModuleBattery extends _ModuleBattery {}
+
+/**
+ * Get battery voltage for wireless module
+ *
+ * @param id ID of module
+ * @returns Data
+ */
+export function useModuleBattery(id: number): ModuleBattery | null {
+  const [battery, setBattery] = useState<ModuleBattery | null>(null);
+
+  useChannelShaped(`wireless_module-${id}-battery`, ModuleBattery, setBattery);
+
+  return battery;
+}
+
+/**
+ * Get status for module
+ *
+ * @param id ID of module
+ * @param name Name used for display
+ * @returns Status
+ */
+export function useModuleStatus(id: number, name: string): WMStatus {
+  // Check if module is online
+  const [online, setOnline] = useState<boolean>(false);
+  useEffect(() => {
+    emit('get-payload', ['wireless_module', `${id}`, 'online']);
+  }, [id]);
+  useChannelShaped(
+    `wireless_module-${id}-online`,
+    Boolean,
+    (data: boolean | null) => setOnline(data ?? false),
+  );
+
+  const data = useModuleData(id).sensors;
+  const batteryVoltage = useModuleBattery(id)?.voltage ?? -1;
+
+  if (!online) {
+    return {
+      moduleName: name,
+      online: false,
+    };
+  }
+
+  return {
+    moduleName: name,
+    online: true,
+    data,
+    batteryVoltage,
+    mqttAddress: '501 Not Implemented',
+  };
 }
 
 /**
