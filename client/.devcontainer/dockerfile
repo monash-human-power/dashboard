@@ -1,0 +1,7 @@
+# Set up docker
+FROM node:latest
+WORKDIR "/home/client"
+
+# Start the client server
+EXPOSE 5000
+CMD yarn start

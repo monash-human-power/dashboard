@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  mosquitto-mqtt-server:
+    image: "eclipse-mosquitto"
+    ports:
+        - "1883:1883"
+    container_name: dashboard-mqtt-server    
+    volumes:
+        - "./.mosquitto:/mosquitto"
+
+  dashboard-server:
+    depends_on:
+      - mosquitto-mqtt-server
+    build: 
+      context: ./server/.devcontainer
+    ports:
+      - "5000:5000"
+    container_name: dashboard-server
+    volumes: 
+      - "./server:/home/server"
+    working_dir: /home/server
+
+  dashboard-client:
+    depends_on:
+      - mosquitto-mqtt-server
+      - dashboard-server
+    build: 
+      context: ./client/.devcontainer
+    ports:
+      - "3000:3000"
+    container_name: dashboard-client
+    stdin_open: true
+    volumes: 
+      - "./client:/home/client"
+    working_dir: /home/client

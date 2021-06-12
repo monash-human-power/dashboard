@@ -29,8 +29,8 @@
     "customize-cra": "^0.9.1",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-jsdoc": "^20.0.5",
     "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsdoc": "^20.0.5",
     "http-proxy-middleware": "^0.20.0",
     "leaflet": "^1.6.0",
     "lodash": "^4.17.19",
@@ -80,7 +80,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.11.6",
+    "@babel/core": "^7.14.3",
     "@types/react-leaflet": "^2.8.0",
     "babel-loader": "~8.1.0",
     "husky": "^4.3.8",
