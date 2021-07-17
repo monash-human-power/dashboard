@@ -132,3 +132,11 @@ export const fileConfigTypeToRuntype: ConfigDictionaryT = {
 };
 
 export type SelectedConfigsT = { [key in ConfigT]: string | undefined };
+
+const ZoneDistanceRT = Record({ power: Number, distance: Number });
+export const BoostResultRT = Record({
+  fileName: String,
+  maxSpeed: Number,
+  zones: Array(ZoneDistanceRT),
+});
+export type BoostResultT = Static<typeof BoostResultRT>;
