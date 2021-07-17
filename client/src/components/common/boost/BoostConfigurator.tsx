@@ -219,6 +219,7 @@ export default function BoostConfigurator({
                 <Accordion.Toggle
                   as={Card.Header}
                   variant="link"
+                  style={{ cursor: 'pointer' }}
                   eventKey={String(index)}
                 >
                   {camelCaseToStartCase(config.type)}

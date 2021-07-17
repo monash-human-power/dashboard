@@ -29,7 +29,12 @@ export default function BoostResult(props: BoostResultProps) {
         </div>
         <Accordion className="small p-0">
           <Card>
-            <Accordion.Toggle className="p-2" eventKey="0" as={Card.Header}>
+            <Accordion.Toggle
+              className="p-2"
+              eventKey="0"
+              as={Card.Header}
+              style={{ cursor: 'pointer' }}
+            >
               View plan{' '}
               <i className="small">{results ? `(${results.fileName})` : ''}</i>
             </Accordion.Toggle>
