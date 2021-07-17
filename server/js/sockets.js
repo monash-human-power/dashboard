@@ -299,11 +299,11 @@ sockets.init = function socketInit(server) {
     });
 
     // TODO: Fix up below socket.io handlers
-    socket.on('start-power-model', () => {
+    socket.on('start-boost', () => {
       mqttClient.publish(BOOST.start, 'true');
     });
 
-    socket.on('stop-power-model', () => {
+    socket.on('stop-boost', () => {
       mqttClient.publish(BOOST.stop, 'true');
     });
 
@@ -374,13 +374,13 @@ sockets.init = function socketInit(server) {
 
     socket.on('start-das-recording', () => {
       [1, 2, 3, 4].forEach((n) =>
-        mqttClient.publish(WirelessModule.id(n).start),
+        mqttClient.publish(WirelessModule.id(n).start, 'true'),
       );
     });
 
     socket.on('stop-das-recording', () => {
       [1, 2, 3, 4].forEach((n) =>
-        mqttClient.publish(WirelessModule.id(n).stop),
+        mqttClient.publish(WirelessModule.id(n).stop, 'true'),
       );
     });
   });
