@@ -1,5 +1,4 @@
-import { startLogging, stopLogging } from 'api/common/data';
-import { emit } from 'api/common/socket';
+import { startLogging, stopLogging, startBoosting, stopBoosting } from 'api/common/data';
 import React from 'react';
 import { Button } from 'react-bootstrap';
 
@@ -9,16 +8,6 @@ import { Button } from 'react-bootstrap';
  * @returns Component
  */
 export default function DASRecording(): JSX.Element {
-
-  // start & stop boosting 
-  function startBoosting(){
-    emit('start-boost');
-    
-  }
-
-  function stopBoosting(){
-    emit('stop-boost');
-  }
 
   return (
     <>
