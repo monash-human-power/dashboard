@@ -151,14 +151,13 @@ export function stopLogging() {
 /**
  * Start Boosting
  */
-export function startBoosting(){
-  emit('start-boost');
-  
+export function startBoost(){
+  emit('start-boost'); 
 }
 
 /**
  * Stop Boosting
  */
-export function stopBoosting(){
+export function stopBoost(){
   emit('stop-boost');
 }
