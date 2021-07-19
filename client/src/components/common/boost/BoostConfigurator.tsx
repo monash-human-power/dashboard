@@ -11,12 +11,12 @@ import {
   ConfigT,
   fileConfigTypeToRuntype,
   ConfigNameT,
-  BoostResultT,
-  BoostResultRT,
+  BoostResultsT,
+  BoostResultsRT,
 } from 'types/boost';
 import { camelCaseToStartCase } from 'utils/string';
 import BoostConfigList from 'components/common/boost/BoostConfigList';
-import BoostResult from 'components/common/boost/BoostResults';
+import BoostResults from 'components/common/boost/BoostResults';
 import { Runtype } from 'runtypes';
 import { sendConfigSelections } from 'api/v3/boost';
 import toast from 'react-hot-toast';
@@ -50,7 +50,7 @@ export default function BoostConfigurator({
   const [configType, setConfigType] = useState<FileConfigT>('bundle');
   const [toastId, setToastId] = useState<string | null>(null);
 
-  const [boostResult, setBoostResult] = useState<BoostResultT | null>(null);
+  const [boostResult, setBoostResult] = useState<BoostResultsT | null>(null);
 
   const [confirmDeletion, setConfirmDeletion] = useState({
     show: false,
@@ -118,7 +118,7 @@ export default function BoostConfigurator({
     handleConfirmDialogClose();
   };
 
-  const handlePPGenerationComplete = (results: BoostResultT) => {
+  const handlePPGenerationComplete = (results: BoostResultsT) => {
     if (toastId) {
       // Update existing loading toast
       toast.success('Power plan generated!', { id: toastId });
@@ -128,7 +128,7 @@ export default function BoostConfigurator({
   };
   useChannelShaped(
     'boost/generate_complete',
-    BoostResultRT,
+    BoostResultsRT,
     handlePPGenerationComplete,
   );
 
@@ -201,7 +201,7 @@ export default function BoostConfigurator({
             >
               Upload All Configs
             </Button>
-            <BoostResult results={boostResult} />
+            <BoostResults results={boostResult} />
           </Card.Title>
           <>
             <input

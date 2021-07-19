@@ -1,8 +1,8 @@
 import React from 'react';
 import { addArgs, createStory } from 'utils/stories';
-import { BoostResultT } from 'types/boost';
+import { BoostResultsT } from 'types/boost';
 import BoostResults, {
-  BoostResultProps,
+  BoostResultsProps,
 } from 'components/common/boost/BoostResults';
 
 export default {
@@ -10,17 +10,17 @@ export default {
   component: BoostResults,
 };
 
-const Template = addArgs<BoostResultProps>((props) => (
+const Template = addArgs<BoostResultsProps>((props) => (
   <BoostResults {...props} />
 ));
 
-const exampleResults: BoostResultT = {
+const exampleResults: BoostResultsT = {
   fileName: 'example-File-Name',
   maxSpeed: 25,
   zones: [
     {
-      power: 20,
-      distance: 25,
+      power: 20.33,
+      distance: 25.1,
     },
     {
       power: 30,
