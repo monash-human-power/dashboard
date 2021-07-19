@@ -300,11 +300,11 @@ sockets.init = function socketInit(server) {
 
     // TODO: Fix up below socket.io handlers
     socket.on('start-boost', () => {
-      mqttClient.publish(BOOST.start, 'true');
+      mqttClient.publish(BOOST.start);
     });
 
     socket.on('stop-boost', () => {
-      mqttClient.publish(BOOST.stop, 'true');
+      mqttClient.publish(BOOST.stop);
     });
 
     socket.on('reset-calibration', () => {
@@ -374,13 +374,13 @@ sockets.init = function socketInit(server) {
 
     socket.on('start-das-recording', () => {
       [1, 2, 3, 4].forEach((n) =>
-        mqttClient.publish(WirelessModule.id(n).start, 'true'),
+        mqttClient.publish(WirelessModule.id(n).start),
       );
     });
 
     socket.on('stop-das-recording', () => {
       [1, 2, 3, 4].forEach((n) =>
-        mqttClient.publish(WirelessModule.id(n).stop, 'true'),
+        mqttClient.publish(WirelessModule.id(n).stop),
       );
     });
   });
