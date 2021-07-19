@@ -147,3 +147,17 @@ export function startLogging() {
 export function stopLogging() {
   emit('stop-das-recording');
 }
+
+/**
+ * Start Boosting
+ */
+export function startBoost(){
+  emit('start-boost'); 
+}
+
+/**
+ * Stop Boosting
+ */
+export function stopBoost(){
+  emit('stop-boost');
+}
