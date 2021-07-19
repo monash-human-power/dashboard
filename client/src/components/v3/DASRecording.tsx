@@ -11,7 +11,7 @@ export default function DASRecording(): JSX.Element {
 
   return (
     <>
-      <span style={{ fontWeight: 'bold' }}>DAS Recording:</span>
+      <span style={{ fontWeight: 'bold' }}>DAS & BOOST Recording:</span>
       <Button className="ml-3" variant="outline-success" onClick={() => {startLogging(); startBoost();}}>
         Start
       </Button>
