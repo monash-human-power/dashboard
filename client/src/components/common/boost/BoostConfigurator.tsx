@@ -50,7 +50,7 @@ export default function BoostConfigurator({
   const [configType, setConfigType] = useState<FileConfigT>('bundle');
   const [toastId, setToastId] = useState<string | null>(null);
 
-  const [boostResult, setBoostResult] = useState<BoostResultsT | null>(null);
+  const [boostResults, setBoostResults] = useState<BoostResultsT | null>(null);
 
   const [confirmDeletion, setConfirmDeletion] = useState({
     show: false,
@@ -124,7 +124,7 @@ export default function BoostConfigurator({
       toast.success('Power plan generated!', { id: toastId });
       setToastId(null);
     }
-    setBoostResult(results);
+    setBoostResults(results);
   };
   useChannelShaped(
     'boost/generate_complete',
@@ -201,7 +201,6 @@ export default function BoostConfigurator({
             >
               Upload All Configs
             </Button>
-            <BoostResults results={boostResult} />
           </Card.Title>
           <>
             <input
@@ -258,6 +257,24 @@ export default function BoostConfigurator({
                 </Accordion.Collapse>
               </Card>
             ))}
+          </Accordion>
+          <Accordion className="small p-0 my-4">
+            <Card>
+              <Accordion.Toggle
+                className="p-2"
+                eventKey="0"
+                variant="outline-primary"
+                as={Button}
+                style={{ cursor: 'pointer' }}
+              >
+                View Plan
+              </Accordion.Toggle>
+              <Accordion.Collapse eventKey="0">
+                <Card.Body>
+                  <BoostResults results={boostResults} />
+                </Card.Body>
+              </Accordion.Collapse>
+            </Card>
           </Accordion>
         </Card.Body>
       </Card>
