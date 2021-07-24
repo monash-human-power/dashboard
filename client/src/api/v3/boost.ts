@@ -30,7 +30,7 @@ export function sendConfig(
   const payload = {
     action: actionType,
     configType: type,
-    fileName: name,
+    configFileName: name,
     content: configContent,
   };
   // To check things work without needing the server started
