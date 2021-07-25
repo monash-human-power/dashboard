@@ -102,6 +102,7 @@ sockets.init = function socketInit(server) {
   mqttClient.subscribe(DAS.stop);
   mqttClient.subscribe(DAS.data);
   mqttClient.subscribe(WirelessModule.all().module);
+  mqttClient.subscribe(BOOST.achieved_max_speed);
   mqttClient.subscribe(BOOST.predicted_max_speed);
   mqttClient.subscribe(BOOST.generate_complete);
   mqttClient.subscribe(BOOST.recommended_sp);
@@ -244,13 +245,21 @@ sockets.init = function socketInit(server) {
               PUBLIC_MQTT_CLIENT.publish(DAS.data, payloadString);
             }
             break;
-
+          case BOOST.achieved_max_speed:
+            socket.emit('power-model-running');
+            socket.emit(
+              'power-model-achieved-max-speed',
+              queryStringToJson(payloadString),
+            );
+            socket.emit('boost/achieved_max_speed', payloadString);
+            break;
           case BOOST.predicted_max_speed:
             socket.emit('power-model-running');
             socket.emit(
-              'power-model-max-speed',
+              'power-model-predicted-max-speed',
               queryStringToJson(payloadString),
             );
+            socket.emit('boost/predicted_max_speed', payloadString);
             break;
           case BOOST.recommended_sp:
             socket.emit('power-model-running');
