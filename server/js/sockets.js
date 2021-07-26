@@ -299,12 +299,12 @@ sockets.init = function socketInit(server) {
     });
 
     // TODO: Fix up below socket.io handlers
-    socket.on('start-power-model', () => {
-      mqttClient.publish(BOOST.start, 'true');
+    socket.on('start-boost', () => {
+      mqttClient.publish(BOOST.start);
     });
 
-    socket.on('stop-power-model', () => {
-      mqttClient.publish(BOOST.stop, 'true');
+    socket.on('stop-boost', () => {
+      mqttClient.publish(BOOST.stop);
     });
 
     socket.on('reset-calibration', () => {
