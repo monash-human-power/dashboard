@@ -253,6 +253,10 @@ sockets.init = function socketInit(server) {
             socket.emit('boost-running');
             socket.emit(BOOST.recommended_sp, JSON.parse(payloadString));
             break;
+          case BOOST.achieved_max_speed:
+            socket.emit('boost_running');
+            socket.emit(BOOST.achieved_max_speed, JSON.parse(payloadString));
+            break;
           case BOOST.configs:
             socket.emit('boost/configs', payloadString);
             break;
