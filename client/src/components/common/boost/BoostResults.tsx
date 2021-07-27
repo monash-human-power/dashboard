@@ -23,7 +23,7 @@ export default function BoostResults(props: BoostResultsProps) {
   return (
     <>
       <div className="ml-2">
-        Max Speed:
+        <b>Max Speed: </b>
         <span className="float-right">
           {' '}
           {results
@@ -32,7 +32,7 @@ export default function BoostResults(props: BoostResultsProps) {
         </span>
       </div>
       <div className="my-2 ml-2">
-        File name:{' '}
+        <b>File name:</b>
         <i className="small float-right">
           {results ? `(${results.fileName})` : ''}
         </i>
