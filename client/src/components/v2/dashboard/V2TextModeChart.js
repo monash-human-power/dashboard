@@ -11,7 +11,7 @@ import styles from 'components/v2/dashboard/V2TextModeChart.module.css';
  */
 export default function V2TextModeChart() {
   const data = useData();
-  const { recData, estData } = usePowerModel();
+  const { recData, maxData } = usePowerModel();
 
   /**
    * Format a value into text
@@ -76,27 +76,27 @@ export default function V2TextModeChart() {
             <b>BOOST</b>
           </td>
           <td>Recommended Speed</td>
-          <td>{formatValue(recData?.rec_speed, 'km/h')}</td>
+          <td>{formatValue(recData?.speed, 'km/h')}</td>
         </tr>
         <tr>
           <td>Recommended Power</td>
-          <td>{formatValue(recData?.rec_power, 'W')}</td>
+          <td>{formatValue(recData?.power, 'W')}</td>
         </tr>
         <tr>
           <td>Predicted Max Speed</td>
-          <td>{formatValue(estData?.predictedMaxSpeed, 'km/h')}</td>
+          <td>{formatValue(maxData?.speed, 'km/h')}</td>
         </tr>
         <tr>
           <td>Zone Distance Left</td>
-          <td>{formatValue(recData?.zdist, 'm')}</td>
+          <td>{formatValue(recData?.zoneDistance, 'm')}</td>
         </tr>
         <tr>
           <td>Distance Offset</td>
-          <td>{formatValue(recData?.distance_offset, 'm')}</td>
+          <td>{formatValue(recData?.distanceOffset, 'm')}</td>
         </tr>
         <tr>
           <td>Total Distance Left</td>
-          <td>{formatValue(recData?.distance_left, 'm')}</td>
+          <td>{formatValue(recData?.distanceLeft, 'm')}</td>
         </tr>
         {/* eslint-enable camelcase */}
         <tr>
