@@ -4,21 +4,21 @@ import { Number, Record, Static } from 'runtypes';
 
 const RecommendedData = Record({
   /** Recommended speed */
-  rec_speed: Number,
+  speed: Number,
   /** Recommended power */
-  rec_power: Number,
+  power: Number,
   /** Distance remaining in current power zone */
-  zdist: Number,
+  zoneDistance: Number,
   /** Distance offset */
-  distance_offset: Number,
+  distanceOffset: Number,
   /** Total distance remaining */
-  distance_left: Number,
+  distanceLeft: Number,
 });
 type RecommendedData = Static<typeof RecommendedData>;
 
 const EstimatedData = Record({
   /** Predicted maximum speed */
-  predicted_max_speed: Number,
+  speed: Number,
 });
 type EstimatedData = Static<typeof EstimatedData>;
 
@@ -34,12 +34,12 @@ export function usePowerModel() {
   const recHandler = useCallback((data: RecommendedData) => {
     setRecData(data);
   }, []);
-  useChannelShaped('power-model-recommended-SP', RecommendedData, recHandler);
+  useChannelShaped('boost/recommended_sp', RecommendedData, recHandler);
 
   const maxHandler = useCallback((data: EstimatedData) => {
     setEstData(data);
   }, []);
-  useChannelShaped('power-model-max-speed', EstimatedData, maxHandler);
+  useChannelShaped('boost/predicted_max_speed', EstimatedData, maxHandler);
 
   return { recData, maxData: estData };
 }

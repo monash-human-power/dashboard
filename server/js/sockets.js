@@ -246,19 +246,16 @@ sockets.init = function socketInit(server) {
             break;
 
           case BOOST.predicted_max_speed:
-            socket.emit('power-model-running');
-            socket.emit(
-              'power-model-max-speed',
-              queryStringToJson(payloadString),
-            );
+            socket.emit('boost-running');
+            socket.emit(BOOST.predicted_max_speed, JSON.parse(payloadString));
             break;
           case BOOST.recommended_sp:
-            socket.emit('power-model-running');
-            socket.emit(
-              'power-model-recommended-SP',
-              queryStringToJson(payloadString),
-            );
-            socket.emit('boost/recommended_sp', payloadString);
+            socket.emit('boost-running');
+            socket.emit(BOOST.recommended_sp, JSON.parse(payloadString));
+            break;
+          case BOOST.achieved_max_speed:
+            socket.emit('boost_running');
+            socket.emit(BOOST.achieved_max_speed, JSON.parse(payloadString));
             break;
           case BOOST.configs:
             socket.emit('boost/configs', payloadString);
