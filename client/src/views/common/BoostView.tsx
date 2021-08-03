@@ -94,7 +94,7 @@ export default function BoostView() {
 
   const handleDelete = (configType: ConfigT, configName: ConfigNameT) => {
     // Inform `boost`
-    sendConfig('delete', configType, configName.displayName, null);
+    sendConfig('delete', configType, configName.fileName, null);
 
     // Update `dashboard`
     setConfigs(
@@ -117,7 +117,6 @@ export default function BoostView() {
         return config;
       }),
     );
-    toast.success(`${configName.displayName} deleted`);
   };
 
   return (
