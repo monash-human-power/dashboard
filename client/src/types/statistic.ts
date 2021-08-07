@@ -4,12 +4,7 @@
 
 import { Number, Record, Static } from 'runtypes';
 
-export const PredictedPayload = Record({
+export const SpeedPayload = Record({
   speed: Number,
 });
-export type PredictedPayload = Static<typeof PredictedPayload>;
-
-export const AchievedPayload = Record({
-  speed: Number,
-});
-export type AchievedPayload = Static<typeof AchievedPayload>;
+export type SpeedPayload = Static<typeof SpeedPayload>;
