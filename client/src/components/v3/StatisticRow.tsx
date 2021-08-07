@@ -31,23 +31,27 @@ export default function StatisticRow(): JSX.Element {
   const [prevTrapSpeed, setPrevTrapSpeed] = useState<number | null>(null);
 
   const handleAchivedMaxSpeed = useCallback((payload: AchievedPayload) => {
-      setPrevTrapSpeed(payload.speed);
-    },
-    [],
+    setPrevTrapSpeed(payload.speed);
+  }, []);
+  useChannelShaped(
+    'boost/achieved_max_speed',
+    AchievedPayload,
+    handleAchivedMaxSpeed,
   );
-  useChannelShaped('boost/achieved_max_speed',AchievedPayload, handleAchivedMaxSpeed);
 
   // Next Trap Speed (Predicted)
   // eslint-disable-next-line no-unused-vars
   const [nextTrapSpeed, setNextTrapSpeed] = useState<number | null>(null);
 
   const handlePredictedMaxSpeed = useCallback((payload: PredictedPayload) => {
-      setNextTrapSpeed(payload.speed);
-    },
-    [],
+    setNextTrapSpeed(payload.speed);
+  }, []);
+  useChannelShaped(
+    'boost/predicted_max_speed',
+    PredictedPayload,
+    handlePredictedMaxSpeed,
   );
-  useChannelShaped('boost/predicted_max_speed', PredictedPayload, handlePredictedMaxSpeed);
-  
+
   const power = useSensorData(4, Sensor.Power, PowerRT);
 
   const heartRate = useSensorData(4, Sensor.HeartRate, HeartRateRT);

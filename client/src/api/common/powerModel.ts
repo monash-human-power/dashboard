@@ -23,9 +23,9 @@ const EstimatedData = Record({
 type EstimatedData = Static<typeof EstimatedData>;
 
 const AchievedData = Record({
-  /**Achieved maximum (previous trap) speed */
+  /** Achieved maximum (previous trap) speed */
   achieved_max_speed: Number,
-})
+});
 type AchievedData = Static<typeof AchievedData>;
 /**
  * Use current power model data
@@ -45,14 +45,22 @@ export function usePowerModel() {
   const maxHandler = useCallback((data: EstimatedData) => {
     setEstData(data);
   }, []);
-  useChannelShaped('power-model-predicted-max-speed', EstimatedData, maxHandler);
+  useChannelShaped(
+    'power-model-predicted-max-speed',
+    EstimatedData,
+    maxHandler,
+  );
 
   const handleAchivedMaxData = useCallback((data: AchievedData) => {
     setAchievedData(data);
   }, []);
-  useChannelShaped('power-model-achieved-max-speed', AchievedData, handleAchivedMaxData);
+  useChannelShaped(
+    'power-model-achieved-max-speed',
+    AchievedData,
+    handleAchivedMaxData,
+  );
 
-  return { recData, maxData: estData, achievedMaxData: achievedData};
+  return { recData, maxData: estData, achievedMaxData: achievedData };
 }
 
 /**
