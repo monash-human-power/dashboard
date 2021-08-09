@@ -30,13 +30,13 @@ export default function StatisticRow(): JSX.Element {
   // eslint-disable-next-line no-unused-vars
   const [prevTrapSpeed, setPrevTrapSpeed] = useState<number | null>(null);
 
-  const handleAchivedMaxSpeed = useCallback((payload: SpeedPayload) => {
+  const handleAchievedMaxSpeed = useCallback((payload: SpeedPayload) => {
     setPrevTrapSpeed(payload.speed);
   }, []);
   useChannelShaped(
     'boost/achieved_max_speed',
     SpeedPayload,
-    handleAchivedMaxSpeed,
+    handleAchievedMaxSpeed,
   );
 
   // Next Trap Speed (Predicted)

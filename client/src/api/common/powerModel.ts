@@ -51,13 +51,13 @@ export function usePowerModel() {
     maxHandler,
   );
 
-  const handleAchivedMaxData = useCallback((data: AchievedData) => {
+  const handleAchievedMaxData = useCallback((data: AchievedData) => {
     setAchievedData(data);
   }, []);
   useChannelShaped(
     'power-model-achieved-max-speed',
     AchievedData,
-    handleAchivedMaxData,
+    handleAchievedMaxData,
   );
 
   return { recData, maxData: estData, achievedMaxData: achievedData };
