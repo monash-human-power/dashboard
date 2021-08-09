@@ -23,6 +23,9 @@ const retained = {
   wireless_module: {
     online: null,
   },
+  boost: {
+    configs: null,
+  }
 };
 
 function connectToPublicMQTTBroker(clientID = '') {
@@ -258,6 +261,7 @@ sockets.init = function socketInit(server) {
             socket.emit(BOOST.achieved_max_speed, JSON.parse(payloadString));
             break;
           case BOOST.configs:
+            retained["boost"].configs = payloadString;
             socket.emit('boost/configs', payloadString);
             break;
           case BOOST.generate_complete:
@@ -293,6 +297,11 @@ sockets.init = function socketInit(server) {
     socket.on('get-payload', (path) => {
       if (path instanceof Array && path.length > 0)
         socket.emit(path.join('-'), getPropWithPath(retained, path));
+    });
+
+    socket.on('get-boost-configs', (path) => {
+      if (retained["boost"].configs)
+        socket.emit(path, retained["boost"].configs);
     });
 
     // TODO: Fix up below socket.io handlers
