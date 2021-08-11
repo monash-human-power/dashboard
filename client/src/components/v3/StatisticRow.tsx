@@ -25,11 +25,11 @@ export default function StatisticRow(): JSX.Element {
   }, [currVel]);
 
   // TODO: Trap locations
-  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const [prevTrapSpeed, setPrevTrapSpeed] = useState(null);
 
   // TODO: Predicted trap speed
-  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const [nextTrapSpeed, setNextTrapSpeed] = useState(null);
 
   const power = useSensorData(4, Sensor.Power, PowerRT);
