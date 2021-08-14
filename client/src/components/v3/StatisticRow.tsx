@@ -26,8 +26,6 @@ export default function StatisticRow(): JSX.Element {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currVel]);
 
-  // Previous Trap Speed (Achieved)
-  // eslint-disable-next-line no-unused-vars
   const [prevTrapSpeed, setPrevTrapSpeed] = useState<number | null>(null);
 
   const handleAchievedMaxSpeed = useCallback((payload: SpeedPayload) => {
@@ -39,8 +37,6 @@ export default function StatisticRow(): JSX.Element {
     handleAchievedMaxSpeed,
   );
 
-  // Next Trap Speed (Predicted)
-  // eslint-disable-next-line no-unused-vars
   const [nextTrapSpeed, setNextTrapSpeed] = useState<number | null>(null);
 
   const handlePredictedMaxSpeed = useCallback((payload: SpeedPayload) => {

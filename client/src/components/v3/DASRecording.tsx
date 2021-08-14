@@ -16,9 +16,7 @@ import toast from 'react-hot-toast';
 export default function DASRecording(): JSX.Element {
   const [startClicked, setNextStatus] = useState(false);
 
-  /**
-   * Start boost and DAS Recording
-   */
+  /** Start DAS recording and BOOST computations */
   function startRecording() {
     toast.success('DAS & BOOST Recording is started!');
     setNextStatus(true);
@@ -26,9 +24,7 @@ export default function DASRecording(): JSX.Element {
     startBoost();
   }
 
-  /**
-   * Stop Boost and DAS Recording
-   */
+  /** Stop DAS recording and BOOST computations */
   function stopRecording() {
     toast.success('DAS & BOOST Recording is stopped!');
     setNextStatus(false);
