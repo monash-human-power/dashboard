@@ -1,6 +1,8 @@
 import { Sensor, useSensorData } from 'api/common/data';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { HeartRateRT, PowerRT, ReedVelocityRT } from 'types/data';
+import { useChannelShaped } from 'api/common/socket';
+import { SpeedPayload } from 'types/statistic';
 import Statistic from './Statistic';
 import styles from './StatisticRow.module.css';
 
@@ -24,13 +26,27 @@ export default function StatisticRow(): JSX.Element {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currVel]);
 
-  // TODO: Trap locations
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-  const [prevTrapSpeed, setPrevTrapSpeed] = useState(null);
+  const [prevTrapSpeed, setPrevTrapSpeed] = useState<number | null>(null);
 
-  // TODO: Predicted trap speed
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-  const [nextTrapSpeed, setNextTrapSpeed] = useState(null);
+  const handleAchievedMaxSpeed = useCallback((payload: SpeedPayload) => {
+    setPrevTrapSpeed(payload.speed);
+  }, []);
+  useChannelShaped(
+    'boost/achieved_max_speed',
+    SpeedPayload,
+    handleAchievedMaxSpeed,
+  );
+
+  const [nextTrapSpeed, setNextTrapSpeed] = useState<number | null>(null);
+
+  const handlePredictedMaxSpeed = useCallback((payload: SpeedPayload) => {
+    setNextTrapSpeed(payload.speed);
+  }, []);
+  useChannelShaped(
+    'boost/predicted_max_speed',
+    SpeedPayload,
+    handlePredictedMaxSpeed,
+  );
 
   const power = useSensorData(4, Sensor.Power, PowerRT);
 
