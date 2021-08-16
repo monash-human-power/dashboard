@@ -25,6 +25,7 @@ const retained = {
   },
   boost: {
     configs: null,
+    results: null,
   }
 };
 
@@ -111,9 +112,6 @@ sockets.init = function socketInit(server) {
   mqttClient.subscribe(BOOST.recommended_sp);
   mqttClient.subscribe(BOOST.configs);
   mqttClient.subscribe(Camera.push_overlays);
-  // TODO: This subscription should be removed when handling of BOOST.generate.complete
-  // is implemented.
-  mqttClient.subscribe('power_model/plan_generated');
   // Camera recording status subscription occurs when mqttClient message handler is set
   // Camera video feed status subscription occurs when mqttClient message handler is set
   mqttClient.on('connect', mqttConnected);
@@ -265,15 +263,9 @@ sockets.init = function socketInit(server) {
             socket.emit('boost/configs', payloadString);
             break;
           case BOOST.generate_complete:
+            retained["boost"].results = payloadString;
             socket.emit('boost/generate_complete', payloadString);
             break;
-          // TODO: Remove this when handling of
-          // BOOST.generate.complete is implemented.
-          case 'power_model/plan_generated':
-            socket.emit('power-model-running');
-            socket.emit('power-plan-generated');
-            break;
-
           case Camera.push_overlays:
             socket.emit('push-overlays', payloadString);
             break;
@@ -303,6 +295,11 @@ sockets.init = function socketInit(server) {
       if (retained["boost"].configs)
         socket.emit(path, retained["boost"].configs);
     });
+
+    socket.on('get-boost-results', (path) => {
+      if (retained["boost"].results)
+        socket.emit(path, retained["boost"].results);
+    })
 
     // TODO: Fix up below socket.io handlers
     socket.on('start-boost', () => {

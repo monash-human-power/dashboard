@@ -70,6 +70,7 @@ export default function BoostView() {
   // Ask server for boost configs when page reloads
   useEffect(() => {
     emit('get-boost-configs', 'boost/configs');
+    emit('get-boost-results', 'boost/generate_complete');
   }, []);
 
   useChannelShaped('boost/configs', ConfigPayloadRT, handleConfigsReceived);
