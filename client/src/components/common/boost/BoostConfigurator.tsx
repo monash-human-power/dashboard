@@ -11,13 +11,16 @@ import {
   ConfigT,
   fileConfigTypeToRuntype,
   ConfigNameT,
+  BoostResultsT,
+  BoostResultsRT,
 } from 'types/boost';
 import { camelCaseToStartCase } from 'utils/string';
 import BoostConfigList from 'components/common/boost/BoostConfigList';
+import BoostResults from 'components/common/boost/BoostResults';
 import { Runtype } from 'runtypes';
 import { sendConfigSelections } from 'api/v3/boost';
 import toast from 'react-hot-toast';
-import { useChannel } from 'api/common/socket';
+import { useChannelShaped } from 'api/common/socket';
 
 export interface BoostConfiguratorProps {
   configs: BoostConfig[];
@@ -46,6 +49,8 @@ export default function BoostConfigurator({
   const fileInput = createRef<HTMLInputElement>();
   const [configType, setConfigType] = useState<FileConfigT>('bundle');
   const [toastId, setToastId] = useState<string | null>(null);
+
+  const [boostResults, setBoostResults] = useState<BoostResultsT | null>(null);
 
   const [confirmDeletion, setConfirmDeletion] = useState({
     show: false,
@@ -113,14 +118,19 @@ export default function BoostConfigurator({
     handleConfirmDialogClose();
   };
 
-  const handlePPGenerationComplete = () => {
+  const handlePPGenerationComplete = (results: BoostResultsT) => {
     if (toastId) {
       // Update existing loading toast
       toast.success('Power plan generated!', { id: toastId });
       setToastId(null);
     }
+    setBoostResults(results);
   };
-  useChannel('boost/generate_complete', handlePPGenerationComplete);
+  useChannelShaped(
+    'boost/generate_complete',
+    BoostResultsRT,
+    handlePPGenerationComplete,
+  );
 
   const handleGenerate = () => {
     let allConfigsSelected = true;
@@ -208,6 +218,7 @@ export default function BoostConfigurator({
                 <Accordion.Toggle
                   as={Card.Header}
                   variant="link"
+                  style={{ cursor: 'pointer' }}
                   eventKey={String(index)}
                 >
                   {camelCaseToStartCase(config.type)}
@@ -247,6 +258,7 @@ export default function BoostConfigurator({
               </Card>
             ))}
           </Accordion>
+          {boostResults ? <BoostResults results={boostResults} /> : null}
         </Card.Body>
       </Card>
     </>

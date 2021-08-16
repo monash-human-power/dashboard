@@ -18,7 +18,7 @@ class BOOST {
 
   // Plan generation
   static generate = 'boost/generate';
-  static generate_complete = 'boost/generate_complete';
+  static generate_complete = 'boost/generate/complete';
 
   // Distance calibration
   static calibrate = 'boost/calibrate';
