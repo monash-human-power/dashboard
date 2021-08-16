@@ -100,7 +100,7 @@ sockets.init = function socketInit(server) {
     console.log('I am using a Heroku instance');
     mqttClient = connectToPublicMQTTBroker(`${os.hostname()}-HEROKU`);
   } else {
-    mqttClient = mqtt.connect('mqtt://localhost:1883', mqttOptions);
+    mqttClient = mqtt.connect('mqtt://mosquitto-mqtt-server:1883', mqttOptions);
   }
   // Camera recording status subscription occurs when mqttClient message handler is set
   // Camera video feed status subscription occurs when mqttClient message handler is set
