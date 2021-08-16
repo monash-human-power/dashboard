@@ -1,6 +1,6 @@
 import React from 'react';
 import { BoostResultsT } from 'types/boost';
-import { Table } from 'react-bootstrap';
+import { Table, Accordion, Button, Card } from 'react-bootstrap';
 
 export interface BoostResultsProps {
   results: BoostResultsT | null;
@@ -16,45 +16,58 @@ export default function BoostResults(props: BoostResultsProps) {
   const { results } = props;
   const speedPrecision = 2;
 
-  if (!results) {
-    return <div>No Power Plan Profile Generated Yet...</div>;
-  }
-
   return (
     <>
-      <div className="ml-2">
-        <b>Max Speed: </b>
-        <span className="float-right">
-          {' '}
-          {results
-            ? `${results.maxSpeed.toFixed(speedPrecision)} km/h`
-            : 'N/A'}{' '}
-        </span>
-      </div>
-      <div className="my-2 ml-2">
-        <b>File name:</b>
-        <i className="small float-right">
-          {results ? `(${results.fileName})` : ''}
-        </i>
-      </div>
-      <Table striped bordered hover size="sm m-1">
-        <thead>
-          <tr>
-            <th>Distance (m)</th>
-            <th>Power (W)</th>
-          </tr>
-        </thead>
-        <tbody>
-          {results?.zones.map((value) => {
-            return (
-              <tr>
-                <td>{Math.round(value.distance)}</td>
-                <td>{Math.round(value.power)}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
+      <Accordion className="small p-0 my-4">
+        <Card>
+          <Accordion.Toggle
+            className="p-2"
+            eventKey="0"
+            variant="outline-primary"
+            as={Button}
+            style={{ cursor: 'pointer' }}
+          >
+            View Plan
+          </Accordion.Toggle>
+          <Accordion.Collapse eventKey="0">
+            <Card.Body>
+              <div className="ml-2">
+                <b>Max Speed: </b>
+                <span className="float-right">
+                  {' '}
+                  {results
+                    ? `${results.maxSpeed.toFixed(speedPrecision)} km/h`
+                    : 'N/A'}{' '}
+                </span>
+              </div>
+              <div className="my-2 ml-2">
+                <b>File name:</b>
+                <i className="small float-right">
+                  {results ? `(${results.fileName})` : ''}
+                </i>
+              </div>
+              <Table striped bordered hover size="sm m-1">
+                <thead>
+                  <tr>
+                    <th>Distance (m)</th>
+                    <th>Power (W)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {results?.zones.map((value) => {
+                    return (
+                      <tr>
+                        <td>{Math.round(value.distance)}</td>
+                        <td>{Math.round(value.power)}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
+            </Card.Body>
+          </Accordion.Collapse>
+        </Card>
+      </Accordion>
     </>
   );
 }

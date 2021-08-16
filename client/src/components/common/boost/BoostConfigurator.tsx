@@ -258,24 +258,7 @@ export default function BoostConfigurator({
               </Card>
             ))}
           </Accordion>
-          <Accordion className="small p-0 my-4">
-            <Card>
-              <Accordion.Toggle
-                className="p-2"
-                eventKey="0"
-                variant="outline-primary"
-                as={Button}
-                style={{ cursor: 'pointer' }}
-              >
-                View Plan
-              </Accordion.Toggle>
-              <Accordion.Collapse eventKey="0">
-                <Card.Body>
-                  <BoostResults results={boostResults} />
-                </Card.Body>
-              </Accordion.Collapse>
-            </Card>
-          </Accordion>
+          {boostResults ? <BoostResults results={boostResults} /> : null}
         </Card.Body>
       </Card>
     </>
