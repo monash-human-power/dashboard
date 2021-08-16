@@ -102,7 +102,7 @@ export function sendConfigSelections(configs: BoostConfig[]) {
 
   // Populate payload with the currently active config for each config type
   configs.forEach((config) => {
-    payload[config.type] = config.active?.displayName;
+    payload[config.type] = config.active?.fileName;
   });
   // Send selected configs to generate Power Plan
   emit('submit-selected-configs', JSON.stringify(payload));
