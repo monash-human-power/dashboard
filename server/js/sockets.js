@@ -102,16 +102,7 @@ sockets.init = function socketInit(server) {
   } else {
     mqttClient = mqtt.connect('mqtt://localhost:1883', mqttOptions);
   }
-  mqttClient.subscribe(DAS.start);
-  mqttClient.subscribe(DAS.stop);
-  mqttClient.subscribe(DAS.data);
-  mqttClient.subscribe(WirelessModule.all().module);
-  mqttClient.subscribe(BOOST.achieved_max_speed);
-  mqttClient.subscribe(BOOST.predicted_max_speed);
-  mqttClient.subscribe(BOOST.generate_complete);
-  mqttClient.subscribe(BOOST.recommended_sp);
-  mqttClient.subscribe(BOOST.configs);
-  mqttClient.subscribe(Camera.push_overlays);
+  
   // Camera recording status subscription occurs when mqttClient message handler is set
   // Camera video feed status subscription occurs when mqttClient message handler is set
   mqttClient.on('connect', mqttConnected);
@@ -260,6 +251,7 @@ sockets.init = function socketInit(server) {
             break;
           case BOOST.configs:
             retained["boost"].configs = payloadString;
+            console.log("recieved");
             socket.emit('boost/configs', payloadString);
             break;
           case BOOST.generate_complete:
@@ -276,6 +268,17 @@ sockets.init = function socketInit(server) {
         }
       }
     });
+
+    mqttClient.subscribe(DAS.start);
+    mqttClient.subscribe(DAS.stop);
+    mqttClient.subscribe(DAS.data);
+    mqttClient.subscribe(WirelessModule.all().module);
+    mqttClient.subscribe(BOOST.achieved_max_speed);
+    mqttClient.subscribe(BOOST.predicted_max_speed);
+    mqttClient.subscribe(BOOST.generate_complete);
+    mqttClient.subscribe(BOOST.recommended_sp);
+    mqttClient.subscribe(BOOST.configs);
+    mqttClient.subscribe(Camera.push_overlays);
 
     // TODO: Remove in refactor, kept here for backwards compatability
     socket.on('get-status-payload', (path) => {
