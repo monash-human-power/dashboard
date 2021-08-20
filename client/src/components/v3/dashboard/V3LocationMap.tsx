@@ -47,7 +47,7 @@ export default function V3LocationMap(): JSX.Element {
 
   // Reset on start
   const reset = () => setLocationHistory([]);
-  useChannel('module-3-start', reset);
+  useChannel('wireless_module-3-start', reset);
 
   // Extract location info from GPS
   const GPS = useSensorData(3, Sensor.GPS, GPSRT);

@@ -171,6 +171,7 @@ sockets.init = function socketInit(server) {
             retained[path[0]].online = true;
 
             socket.emit(`wireless_module-${id}-online`, true);
+            socket.emit(`wireless_module-${id}-start`, true);
           }
 
           // Module's offline
@@ -251,7 +252,6 @@ sockets.init = function socketInit(server) {
             break;
           case BOOST.configs:
             retained["boost"].configs = payloadString;
-            console.log("recieved");
             socket.emit('boost/configs', payloadString);
             break;
           case BOOST.generate_complete:
