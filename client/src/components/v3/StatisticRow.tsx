@@ -28,14 +28,10 @@ export default function StatisticRow(): JSX.Element {
 
   const [prevTrapSpeed, setPrevTrapSpeed] = useState<number | null>(null);
 
-  const handleAchievedMaxSpeed = useCallback((payload: SpeedPayload) => {
+  const handlePrevTrapSpeed = useCallback((payload: SpeedPayload) => {
     setPrevTrapSpeed(payload.speed);
   }, []);
-  useChannelShaped(
-    'boost/achieved_max_speed',
-    SpeedPayload,
-    handleAchievedMaxSpeed,
-  );
+  useChannelShaped('boost/prev_trap_speed', SpeedPayload, handlePrevTrapSpeed);
 
   const [nextTrapSpeed, setNextTrapSpeed] = useState<number | null>(null);
 

@@ -102,7 +102,19 @@ sockets.init = function socketInit(server) {
   } else {
     mqttClient = mqtt.connect('mqtt://localhost:1883', mqttOptions);
   }
-  
+  mqttClient.subscribe(DAS.start);
+  mqttClient.subscribe(DAS.stop);
+  mqttClient.subscribe(DAS.data);
+  mqttClient.subscribe(WirelessModule.all().module);
+  mqttClient.subscribe(BOOST.prev_trap_speed);
+  mqttClient.subscribe(BOOST.predicted_max_speed);
+  mqttClient.subscribe(BOOST.generate_complete);
+  mqttClient.subscribe(BOOST.recommended_sp);
+  mqttClient.subscribe(BOOST.configs);
+  mqttClient.subscribe(Camera.push_overlays);
+  // TODO: This subscription should be removed when handling of BOOST.generate.complete
+  // is implemented.
+  mqttClient.subscribe('power_model/plan_generated');
   // Camera recording status subscription occurs when mqttClient message handler is set
   // Camera video feed status subscription occurs when mqttClient message handler is set
   mqttClient.on('connect', mqttConnected);
@@ -246,9 +258,9 @@ sockets.init = function socketInit(server) {
             socket.emit('boost-running');
             socket.emit(BOOST.recommended_sp, JSON.parse(payloadString));
             break;
-          case BOOST.achieved_max_speed:
+          case BOOST.prev_trap_speed:
             socket.emit('boost_running');
-            socket.emit(BOOST.achieved_max_speed, JSON.parse(payloadString));
+            socket.emit(BOOST.prev_trap_speed, JSON.parse(payloadString));
             break;
           case BOOST.configs:
             retained["boost"].configs = payloadString;
