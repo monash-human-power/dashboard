@@ -102,7 +102,7 @@ sockets.init = function socketInit(server) {
   mqttClient.subscribe(DAS.stop);
   mqttClient.subscribe(DAS.data);
   mqttClient.subscribe(WirelessModule.all().module);
-  mqttClient.subscribe(BOOST.achieved_max_speed);
+  mqttClient.subscribe(BOOST.prev_trap_speed);
   mqttClient.subscribe(BOOST.predicted_max_speed);
   mqttClient.subscribe(BOOST.generate_complete);
   mqttClient.subscribe(BOOST.recommended_sp);
@@ -253,9 +253,9 @@ sockets.init = function socketInit(server) {
             socket.emit('boost-running');
             socket.emit(BOOST.recommended_sp, JSON.parse(payloadString));
             break;
-          case BOOST.achieved_max_speed:
+          case BOOST.prev_trap_speed:
             socket.emit('boost_running');
-            socket.emit(BOOST.achieved_max_speed, JSON.parse(payloadString));
+            socket.emit(BOOST.prev_trap_speed, JSON.parse(payloadString));
             break;
           case BOOST.configs:
             socket.emit('boost/configs', payloadString);
