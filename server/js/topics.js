@@ -11,9 +11,8 @@ class BOOST {
 
   // BOOST output
   static recommended_sp = 'boost/recommended_sp';
-  static achieved_max_speed = 'boost/achieved_max_speed';
+  static prev_trap_speed = 'boost/prev_trap_speed';
   static predicted_max_speed = 'boost/predicted_max_speed';
-  static achieved_max_speed = 'boost/achieved_max_speed';
   static configs = 'boost/configs';
 
   // Plan generation
