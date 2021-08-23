@@ -30,7 +30,7 @@ export function V3SpeedDistanceChart() {
 
   // Reset when start message received
   const reset = () => setData([]);
-  useChannel('module-3-start', reset);
+  useChannel('wireless_module-3-start', reset);
 
   // Speed
   const speed = useSensorData(3, Sensor.GPS, GPSRT)?.speed;

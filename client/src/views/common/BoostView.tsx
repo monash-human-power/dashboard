@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import ContentPage from 'components/common/ContentPage';
 import BoostCalibration from 'components/common/boost/BoostCalibration';
 import BoostConfigurator from 'components/common/boost/BoostConfigurator';
@@ -13,7 +13,7 @@ import {
 } from 'types/boost';
 import { useSensorData, Sensor } from 'api/common/data';
 import { Static } from 'runtypes';
-import { useChannelShaped } from 'api/common/socket';
+import { useChannelShaped, emit } from 'api/common/socket';
 import toast from 'react-hot-toast';
 import { ReedDistanceRT } from 'types/data';
 
@@ -66,6 +66,12 @@ export default function BoostView() {
     },
     [],
   );
+
+  // Ask server for boost configs when page reloads
+  useEffect(() => {
+    emit('get-boost-configs', 'boost/configs');
+    emit('get-boost-results', 'boost/generate_complete');
+  }, []);
 
   useChannelShaped('boost/configs', ConfigPayloadRT, handleConfigsReceived);
   useChannelShaped(
