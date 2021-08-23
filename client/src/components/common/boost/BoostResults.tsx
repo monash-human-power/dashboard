@@ -14,7 +14,10 @@ export interface BoostResultsProps {
  */
 export default function BoostResults(props: BoostResultsProps) {
   const { results } = props;
-  const speedPrecision = 2;
+  const SPEED_PRECISION = 2;
+  const MS_TO_KMH = 3.6
+
+  const maxSpeed = results ? results.maxSpeed * MS_TO_KMH : null;
 
   return (
     <>
@@ -35,8 +38,8 @@ export default function BoostResults(props: BoostResultsProps) {
                 <b>Max Speed: </b>
                 <span className="float-right">
                   {' '}
-                  {results
-                    ? `${results.maxSpeed.toFixed(speedPrecision)} km/h`
+                  {maxSpeed
+                    ? `${maxSpeed.toFixed(SPEED_PRECISION)} km/h`
                     : 'N/A'}{' '}
                 </span>
               </div>
