@@ -15,7 +15,7 @@ export interface BoostResultsProps {
 export default function BoostResults(props: BoostResultsProps) {
   const { results } = props;
   const SPEED_PRECISION = 2;
-  const MS_TO_KMH = 3.6
+  const MS_TO_KMH = 3.6;
 
   const maxSpeed = results ? results.maxSpeed * MS_TO_KMH : null;
 
