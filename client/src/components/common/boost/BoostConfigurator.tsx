@@ -133,16 +133,17 @@ export default function BoostConfigurator({
   );
 
   const handleGenerate = () => {
-    let allConfigsSelected = true;
+    const configsNotSelected: string[] = [];
     configs.forEach((config) => {
       if (!config.active) {
-        allConfigsSelected = false;
-        toast.error(`Missing selection for ${config.type}`);
+        configsNotSelected.push(config.type);
       }
     });
-    if (allConfigsSelected) {
+    if (configsNotSelected.length === 0) {
       sendConfigSelections(configs);
       setToastId(toast.loading('Generating power plan...'));
+    } else {
+      toast.error(`Missing selection for ${configsNotSelected.join(', ')}`);
     }
   };
 

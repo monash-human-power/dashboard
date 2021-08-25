@@ -23,6 +23,10 @@ const retained = {
   wireless_module: {
     online: null,
   },
+  boost: {
+    configs: null,
+    results: null,
+  }
 };
 
 function connectToPublicMQTTBroker(clientID = '') {
@@ -179,6 +183,7 @@ sockets.init = function socketInit(server) {
             retained[path[0]].online = true;
 
             socket.emit(`wireless_module-${id}-online`, true);
+            socket.emit(`wireless_module-${id}-start`, true);
           }
 
           // Module's offline
@@ -258,18 +263,13 @@ sockets.init = function socketInit(server) {
             socket.emit(BOOST.prev_trap_speed, JSON.parse(payloadString));
             break;
           case BOOST.configs:
+            retained["boost"].configs = payloadString;
             socket.emit('boost/configs', payloadString);
             break;
           case BOOST.generate_complete:
+            retained["boost"].results = payloadString;
             socket.emit('boost/generate_complete', payloadString);
             break;
-          // TODO: Remove this when handling of
-          // BOOST.generate.complete is implemented.
-          case 'power_model/plan_generated':
-            socket.emit('power-model-running');
-            socket.emit('power-plan-generated');
-            break;
-
           case Camera.push_overlays:
             socket.emit('push-overlays', payloadString);
             break;
@@ -280,6 +280,17 @@ sockets.init = function socketInit(server) {
         }
       }
     });
+
+    mqttClient.subscribe(DAS.start);
+    mqttClient.subscribe(DAS.stop);
+    mqttClient.subscribe(DAS.data);
+    mqttClient.subscribe(WirelessModule.all().module);
+    mqttClient.subscribe(BOOST.achieved_max_speed);
+    mqttClient.subscribe(BOOST.predicted_max_speed);
+    mqttClient.subscribe(BOOST.generate_complete);
+    mqttClient.subscribe(BOOST.recommended_sp);
+    mqttClient.subscribe(BOOST.configs);
+    mqttClient.subscribe(Camera.push_overlays);
 
     // TODO: Remove in refactor, kept here for backwards compatability
     socket.on('get-status-payload', (path) => {
@@ -294,6 +305,16 @@ sockets.init = function socketInit(server) {
       if (path instanceof Array && path.length > 0)
         socket.emit(path.join('-'), getPropWithPath(retained, path));
     });
+
+    socket.on('get-boost-configs', (path) => {
+      if (retained["boost"].configs)
+        socket.emit(path, retained["boost"].configs);
+    });
+
+    socket.on('get-boost-results', (path) => {
+      if (retained["boost"].results)
+        socket.emit(path, retained["boost"].results);
+    })
 
     // TODO: Fix up below socket.io handlers
     socket.on('start-boost', () => {
