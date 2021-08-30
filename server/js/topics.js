@@ -31,6 +31,7 @@ class Camera {
   static get_overlays = `${Camera.base}/get_overlays`;
   static set_overlay = `${Camera.base}/set_overlay`;
   static push_overlays = `${Camera.base}/push_overlays`;
+  static flip_video_feed = `${Camera.base}/flip_video_feed`
 
   // Error topic
   static errors = `${Camera.base}/errors`;

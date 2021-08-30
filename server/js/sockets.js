@@ -26,7 +26,7 @@ const retained = {
   boost: {
     configs: null,
     results: null,
-  }
+  },
 };
 
 function connectToPublicMQTTBroker(clientID = '') {
@@ -102,19 +102,7 @@ sockets.init = function socketInit(server) {
   } else {
     mqttClient = mqtt.connect('mqtt://localhost:1883', mqttOptions);
   }
-  mqttClient.subscribe(DAS.start);
-  mqttClient.subscribe(DAS.stop);
-  mqttClient.subscribe(DAS.data);
-  mqttClient.subscribe(WirelessModule.all().module);
-  mqttClient.subscribe(BOOST.prev_trap_speed);
-  mqttClient.subscribe(BOOST.predicted_max_speed);
-  mqttClient.subscribe(BOOST.generate_complete);
-  mqttClient.subscribe(BOOST.recommended_sp);
-  mqttClient.subscribe(BOOST.configs);
-  mqttClient.subscribe(Camera.push_overlays);
-  // TODO: This subscription should be removed when handling of BOOST.generate.complete
-  // is implemented.
-  mqttClient.subscribe('power_model/plan_generated');
+
   // Camera recording status subscription occurs when mqttClient message handler is set
   // Camera video feed status subscription occurs when mqttClient message handler is set
   mqttClient.on('connect', mqttConnected);
@@ -263,11 +251,11 @@ sockets.init = function socketInit(server) {
             socket.emit(BOOST.prev_trap_speed, JSON.parse(payloadString));
             break;
           case BOOST.configs:
-            retained["boost"].configs = payloadString;
+            retained.boost.configs = payloadString;
             socket.emit('boost/configs', payloadString);
             break;
           case BOOST.generate_complete:
-            retained["boost"].results = payloadString;
+            retained.boost.results = payloadString;
             socket.emit('boost/generate_complete', payloadString);
             break;
           case Camera.push_overlays:
@@ -285,7 +273,7 @@ sockets.init = function socketInit(server) {
     mqttClient.subscribe(DAS.stop);
     mqttClient.subscribe(DAS.data);
     mqttClient.subscribe(WirelessModule.all().module);
-    mqttClient.subscribe(BOOST.achieved_max_speed);
+    mqttClient.subscribe(BOOST.prev_trap_speed);
     mqttClient.subscribe(BOOST.predicted_max_speed);
     mqttClient.subscribe(BOOST.generate_complete);
     mqttClient.subscribe(BOOST.recommended_sp);
@@ -307,14 +295,12 @@ sockets.init = function socketInit(server) {
     });
 
     socket.on('get-boost-configs', (path) => {
-      if (retained["boost"].configs)
-        socket.emit(path, retained["boost"].configs);
+      if (retained.boost.configs) socket.emit(path, retained.boost.configs);
     });
 
     socket.on('get-boost-results', (path) => {
-      if (retained["boost"].results)
-        socket.emit(path, retained["boost"].results);
-    })
+      if (retained.boost.results) socket.emit(path, retained.boost.results);
+    });
 
     // TODO: Fix up below socket.io handlers
     socket.on('start-boost', () => {
@@ -390,15 +376,20 @@ sockets.init = function socketInit(server) {
       mqttClient.publish(Camera.recording_stop);
     });
 
+    socket.on('flip-video-feed', () => {
+      console.log('got to this point too sir no problem');
+      mqttClient.publish(Camera.flip_video_feed);
+    });
+
     socket.on('start-das-recording', () => {
       [1, 2, 3, 4].forEach((n) =>
-        mqttClient.publish(WirelessModule.id(n).start, 'true'),
+        mqttClient.publish(WirelessModule.id(n).start),
       );
     });
 
     socket.on('stop-das-recording', () => {
       [1, 2, 3, 4].forEach((n) =>
-        mqttClient.publish(WirelessModule.id(n).stop, 'true'),
+        mqttClient.publish(WirelessModule.id(n).stop),
       );
     });
   });
