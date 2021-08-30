@@ -163,22 +163,24 @@ sockets.init = function socketInit(server) {
           const [, , id, property] = topicString;
           // topicString: ["v3", "wireless_module", <id>, <property>]
           const value = JSON.parse(payloadString);
-
+          // const value = JSON.parse('{"online": true}');
+          console.log(value)
+          console.log(property)
           const path = topicString.slice(1); // Path is from "wireless_module"
-
           // Module's online
           if (property === 'start') {
+            console.log(property)
             retained[path[0]].online = true;
 
-            socket.emit(`wireless_module-${id}-online`, true);
+            // socket.emit(`wireless_module-${id}-online`, true);
             socket.emit(`wireless_module-${id}-start`, true);
           }
-
           // Module's offline
-          else if (property === 'stop') {
-            retained[path[0]].online = false;
-
-            socket.emit(`wireless_module-${id}-online`, false);
+          // change to make it look at the status topic of WM 
+          else if (property === 'status') {
+            retained[path[0]].online = value["online"];
+            
+            socket.emit(`wireless_module-${id}-online`, value["online"]);
           }
 
           // Add to global

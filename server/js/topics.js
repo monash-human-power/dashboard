@@ -62,6 +62,7 @@ class WirelessModule {
       start: `${module_base}/start`,
       stop: `${module_base}/stop`,
       module: `${module_base}/#`,
+      status: `${module_base}/status`
     };
   }
 
