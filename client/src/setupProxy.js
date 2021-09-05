@@ -1,17 +1,19 @@
 const proxy = require('http-proxy-middleware');
 
+const serverRoute = process.env.DOCKER_SERVER ?? 'localhost:5000';
+
 module.exports = function (app) {
   app.use(
     ['/files', '/server/status'],
     proxy({
-      target: 'http://dashboard-server:5000',
+      target: `http://${serverRoute}`,
     }),
   );
 
   app.use(
     '/socket.io',
     proxy({
-      target: 'ws://dashboard-server:5000',
+      target: `ws://${serverRoute}`,
       ws: true,
     }),
   );
