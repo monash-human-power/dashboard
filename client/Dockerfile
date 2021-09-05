@@ -2,6 +2,8 @@ FROM node:14.17.5
 
 WORKDIR /root/dashboard/client
 
-EXPOSE 3000
+COPY package.json .
 
-CMD yarn start
+RUN yarn install
+
+EXPOSE 3000
