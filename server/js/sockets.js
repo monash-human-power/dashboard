@@ -26,7 +26,7 @@ const retained = {
   boost: {
     configs: null,
     results: null,
-  }
+  },
 };
 
 function connectToPublicMQTTBroker(clientID = '') {
@@ -102,7 +102,6 @@ sockets.init = function socketInit(server) {
   } else {
     mqttClient = mqtt.connect('mqtt://localhost:1883', mqttOptions);
   }
-  
   // Camera recording status subscription occurs when mqttClient message handler is set
   // Camera video feed status subscription occurs when mqttClient message handler is set
   mqttClient.on('connect', mqttConnected);
@@ -246,16 +245,16 @@ sockets.init = function socketInit(server) {
             socket.emit('boost-running');
             socket.emit(BOOST.recommended_sp, JSON.parse(payloadString));
             break;
-          case BOOST.achieved_max_speed:
+          case BOOST.prev_trap_speed:
             socket.emit('boost_running');
-            socket.emit(BOOST.achieved_max_speed, JSON.parse(payloadString));
+            socket.emit(BOOST.prev_trap_speed, JSON.parse(payloadString));
             break;
           case BOOST.configs:
-            retained["boost"].configs = payloadString;
+            retained.boost.configs = payloadString;
             socket.emit('boost/configs', payloadString);
             break;
           case BOOST.generate_complete:
-            retained["boost"].results = payloadString;
+            retained.boost.results = payloadString;
             socket.emit('boost/generate_complete', payloadString);
             break;
           case Camera.push_overlays:
@@ -273,7 +272,7 @@ sockets.init = function socketInit(server) {
     mqttClient.subscribe(DAS.stop);
     mqttClient.subscribe(DAS.data);
     mqttClient.subscribe(WirelessModule.all().module);
-    mqttClient.subscribe(BOOST.achieved_max_speed);
+    mqttClient.subscribe(BOOST.prev_trap_speed);
     mqttClient.subscribe(BOOST.predicted_max_speed);
     mqttClient.subscribe(BOOST.generate_complete);
     mqttClient.subscribe(BOOST.recommended_sp);
@@ -295,14 +294,12 @@ sockets.init = function socketInit(server) {
     });
 
     socket.on('get-boost-configs', (path) => {
-      if (retained["boost"].configs)
-        socket.emit(path, retained["boost"].configs);
+      if (retained.boost.configs) socket.emit(path, retained.boost.configs);
     });
 
     socket.on('get-boost-results', (path) => {
-      if (retained["boost"].results)
-        socket.emit(path, retained["boost"].results);
-    })
+      if (retained.boost.results) socket.emit(path, retained.boost.results);
+    });
 
     // TODO: Fix up below socket.io handlers
     socket.on('start-boost', () => {
