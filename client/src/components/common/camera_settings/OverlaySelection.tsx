@@ -1,8 +1,10 @@
 import { CameraConfig } from 'api/common/camera';
+import { emit } from 'api/common/socket';
 import RadioSelector from 'components/v2/RadioSelector';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Card } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
 import { getPrettyDeviceName } from 'utils/string';
+import toast from 'react-hot-toast';
 
 export interface OverlaySelectionProps {
   /** Config defined by CameraConfig */
@@ -42,6 +44,12 @@ export default function OverlaySelection({
     [selectedOverlay, setActiveOverlay],
   );
 
+  /** Flipping Video Feed */
+  function flipVideo() {
+    emit('flip-video-feed');
+    toast.success('Video feed is flipped!');
+  }
+
   return (
     <Card>
       <Card.Body>
@@ -57,9 +65,12 @@ export default function OverlaySelection({
         )}
       </Card.Body>
       <Card.Footer>
-        <Card.Link href="#" onClick={handleSave}>
+        <Button className="ml-2" variant="outline-success" onClick={handleSave}>
           Save
-        </Card.Link>
+        </Button>
+        <Button className="ml-2" variant="outline-primary" onClick={flipVideo}>
+          Flip Video
+        </Button>
       </Card.Footer>
     </Card>
   );

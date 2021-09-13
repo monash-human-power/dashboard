@@ -375,6 +375,11 @@ sockets.init = function socketInit(server) {
       mqttClient.publish(Camera.recording_stop);
     });
 
+    socket.on('flip-video-feed', () => {
+      console.log('got to this point too sir no problem');
+      mqttClient.publish(Camera.flip_video_feed);
+    });
+
     socket.on('start-das-recording', () => {
       [1, 2, 3, 4].forEach((n) =>
         mqttClient.publish(WirelessModule.id(n).start),

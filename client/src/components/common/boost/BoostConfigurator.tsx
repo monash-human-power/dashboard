@@ -142,8 +142,7 @@ export default function BoostConfigurator({
     if (configsNotSelected.length === 0) {
       sendConfigSelections(configs);
       setToastId(toast.loading('Generating power plan...'));
-    }
-    else {
+    } else {
       toast.error(`Missing selection for ${configsNotSelected.join(', ')}`);
     }
   };
