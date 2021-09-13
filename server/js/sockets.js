@@ -26,7 +26,7 @@ const retained = {
   boost: {
     configs: null,
     results: null,
-  }
+  },
 };
 
 function connectToPublicMQTTBroker(clientID = '') {
@@ -102,7 +102,7 @@ sockets.init = function socketInit(server) {
   } else {
     mqttClient = mqtt.connect('mqtt://localhost:1883', mqttOptions);
   }
-  
+
   // Camera recording status subscription occurs when mqttClient message handler is set
   // Camera video feed status subscription occurs when mqttClient message handler is set
   mqttClient.on('connect', mqttConnected);
@@ -114,7 +114,7 @@ sockets.init = function socketInit(server) {
   }
 
   // eslint-disable-next-line global-require
-  const  io = require('socket.io').listen(server);
+  const io = require('socket.io').listen(server);
   io.on('connection', function ioConnection(socket) {
     socket.setMaxListeners(20);
     /*
@@ -144,16 +144,15 @@ sockets.init = function socketInit(server) {
           // Emit subcomponent
           const component = topicString[1] ?? '';
           const subcomponent = topicString[2] ?? '';
-          const device = topicString[3] ?? ''
+          const device = topicString[3] ?? '';
           // if there is a third part to the component
-          const channel = device ? `status-${component}-${subcomponent}-${device}`
-            : `status-${component}-${subcomponent}`
-          const retainedStatus = device ? retained.status?.[component]?.[subcomponent]?.[device] :
-            retained.status?.[component]?.[subcomponent] 
-          socket.emit( 
-            channel,
-            retainedStatus,
-          );
+          const channel = device
+            ? `status-${component}-${subcomponent}-${device}`
+            : `status-${component}-${subcomponent}`;
+          const retainedStatus = device
+            ? retained.status?.[component]?.[subcomponent]?.[device]
+            : retained.status?.[component]?.[subcomponent];
+          socket.emit(channel, retainedStatus);
         } catch (e) {
           console.error(
             `Error in parsing received payload\n\ttopic: ${topic}\n\tpayload: ${payloadString}\n`,
@@ -175,10 +174,10 @@ sockets.init = function socketInit(server) {
             socket.emit(`wireless_module-${id}-start`, true);
           }
           // Module's offline
-          // change to make it look at the status topic of WM 
+          // change to make it look at the status topic of WM
           else if (property === 'status') {
-            retained[path[0]].online = value["online"];
-            socket.emit(`wireless_module-${id}-online`, value["online"]);
+            retained[path[0]].online = value['online'];
+            socket.emit(`wireless_module-${id}-online`, value['online']);
           }
 
           // Add to global
@@ -205,7 +204,7 @@ sockets.init = function socketInit(server) {
           const [, device, property] = topicString;
           const value = JSON.parse(payloadString);
           const path = topicString;
-          
+
           // Add to global
           retained[path[0]] = setPropWithPath(
             retained[path[0]],
@@ -251,11 +250,11 @@ sockets.init = function socketInit(server) {
             socket.emit(BOOST.achieved_max_speed, JSON.parse(payloadString));
             break;
           case BOOST.configs:
-            retained["boost"].configs = payloadString;
+            retained['boost'].configs = payloadString;
             socket.emit('boost/configs', payloadString);
             break;
           case BOOST.generate_complete:
-            retained["boost"].results = payloadString;
+            retained['boost'].results = payloadString;
             socket.emit('boost/generate_complete', payloadString);
             break;
           case Camera.push_overlays:
@@ -295,14 +294,14 @@ sockets.init = function socketInit(server) {
     });
 
     socket.on('get-boost-configs', (path) => {
-      if (retained["boost"].configs)
-        socket.emit(path, retained["boost"].configs);
+      if (retained['boost'].configs)
+        socket.emit(path, retained['boost'].configs);
     });
 
     socket.on('get-boost-results', (path) => {
-      if (retained["boost"].results)
-        socket.emit(path, retained["boost"].results);
-    })
+      if (retained['boost'].results)
+        socket.emit(path, retained['boost'].results);
+    });
 
     // TODO: Fix up below socket.io handlers
     socket.on('start-boost', () => {
