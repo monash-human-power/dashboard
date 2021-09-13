@@ -114,10 +114,9 @@ sockets.init = function socketInit(server) {
   }
 
   // eslint-disable-next-line global-require
-  const io = require('socket.io').listen(server);
+  const  io = require('socket.io').listen(server);
   io.on('connection', function ioConnection(socket) {
     socket.setMaxListeners(20);
-
     /*
       Must subscribe to these when the mqtt message handler is set
       otherwise the retained payloads will not be handled.
@@ -126,30 +125,34 @@ sockets.init = function socketInit(server) {
         for the topics
     */
     mqttClient.subscribe('status/#');
+    mqttClient.subscribe('camera/#');
 
     mqttClient.on('message', function mqttMessage(topic, payload) {
       const payloadString = payload.toString();
-
       if (topic.startsWith('status')) {
         try {
           const topicString = topic.split('/');
           // topicString: ["status", "<component>", "<subcomponent>", ...properties]
           const value = JSON.parse(payloadString);
           const path = topicString;
-
           // Add to global
           retained[path[0]] = setPropWithPath(
             retained[path[0]],
             path.slice(1),
             value,
           );
-
           // Emit subcomponent
           const component = topicString[1] ?? '';
           const subcomponent = topicString[2] ?? '';
-          socket.emit(
-            `status-${component}-${subcomponent}`,
-            retained.status?.[component]?.[subcomponent],
+          const device = topicString[3] ?? ''
+          // if there is a third part to the component
+          const channel = device ? `status-${component}-${subcomponent}-${device}`
+            : `status-${component}-${subcomponent}`
+          const retainedStatus = device ? retained.status?.[component]?.[subcomponent]?.[device] :
+            retained.status?.[component]?.[subcomponent] 
+          socket.emit( 
+            channel,
+            retainedStatus,
           );
         } catch (e) {
           console.error(
@@ -164,14 +167,10 @@ sockets.init = function socketInit(server) {
           // topicString: ["v3", "wireless_module", <id>, <property>]
           const value = JSON.parse(payloadString);
           // const value = JSON.parse('{"online": true}');
-          console.log(value)
-          console.log(property)
           const path = topicString.slice(1); // Path is from "wireless_module"
           // Module's online
           if (property === 'start') {
-            console.log(property)
             retained[path[0]].online = true;
-
             // socket.emit(`wireless_module-${id}-online`, true);
             socket.emit(`wireless_module-${id}-start`, true);
           }
@@ -179,7 +178,6 @@ sockets.init = function socketInit(server) {
           // change to make it look at the status topic of WM 
           else if (property === 'status') {
             retained[path[0]].online = value["online"];
-            
             socket.emit(`wireless_module-${id}-online`, value["online"]);
           }
 
@@ -207,7 +205,7 @@ sockets.init = function socketInit(server) {
           const [, device, property] = topicString;
           const value = JSON.parse(payloadString);
           const path = topicString;
-
+          
           // Add to global
           retained[path[0]] = setPropWithPath(
             retained[path[0]],
