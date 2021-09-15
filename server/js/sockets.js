@@ -124,8 +124,6 @@ sockets.init = function socketInit(server) {
         Subscribe with the other topics and add a new message handler
         for the topics
     */
-    mqttClient.subscribe('status/#');
-    mqttClient.subscribe('camera/#');
 
     mqttClient.on('message', function mqttMessage(topic, payload) {
       const payloadString = payload.toString();
@@ -165,12 +163,10 @@ sockets.init = function socketInit(server) {
           const [, , id, property] = topicString;
           // topicString: ["v3", "wireless_module", <id>, <property>]
           const value = JSON.parse(payloadString);
-          // const value = JSON.parse('{"online": true}');
           const path = topicString.slice(1); // Path is from "wireless_module"
           // Module's online
           if (property === 'start') {
             retained[path[0]].online = true;
-            // socket.emit(`wireless_module-${id}-online`, true);
             socket.emit(`wireless_module-${id}-start`, true);
           }
           // Module's offline
@@ -278,7 +274,8 @@ sockets.init = function socketInit(server) {
     mqttClient.subscribe(BOOST.recommended_sp);
     mqttClient.subscribe(BOOST.configs);
     mqttClient.subscribe(Camera.push_overlays);
-
+    mqttClient.subscribe(`${Camera.base}/#`);
+    mqttClient.subscribe('status/#');
     // TODO: Remove in refactor, kept here for backwards compatability
     socket.on('get-status-payload', (path) => {
       if (path instanceof Array && path.length > 0)
