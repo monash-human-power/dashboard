@@ -21,7 +21,11 @@ const retained = {
   status: {},
   camera: {},
   wireless_module: {
-    online: null,
+    1: { online: null },
+    2: { online: null },
+    3: { online: null },
+    4: { online: null },
+    // online: null,
   },
   boost: {
     configs: null,
@@ -102,7 +106,6 @@ sockets.init = function socketInit(server) {
   } else {
     mqttClient = mqtt.connect('mqtt://localhost:1883', mqttOptions);
   }
-
   // Camera recording status subscription occurs when mqttClient message handler is set
   // Camera video feed status subscription occurs when mqttClient message handler is set
   mqttClient.on('connect', mqttConnected);
@@ -172,7 +175,7 @@ sockets.init = function socketInit(server) {
           // Module's offline
           // change to make it look at the status topic of WM
           else if (property === 'status') {
-            retained[path[0]].online = value['online'];
+            retained[path[0]][id].online = value['online'];
             socket.emit(`wireless_module-${id}-online`, value['online']);
           }
 
@@ -284,7 +287,7 @@ sockets.init = function socketInit(server) {
           getPropWithPath(retained.status, path),
         );
     });
-
+    // for wireless-module
     socket.on('get-payload', (path) => {
       if (path instanceof Array && path.length > 0)
         socket.emit(path.join('-'), getPropWithPath(retained, path));
