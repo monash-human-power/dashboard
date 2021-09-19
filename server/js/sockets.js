@@ -295,12 +295,12 @@ sockets.init = function socketInit(server) {
 
     socket.on('get-boost-configs', (path) => {
       if (retained.boost.configs)
-        socket.emit(path, retained['boost'].configs);
+        socket.emit(path, retained.boost.configs);
     });
 
     socket.on('get-boost-results', (path) => {
       if (retained.boost.results)
-        socket.emit(path, retained['boost'].results);
+        socket.emit(path, retained.boost.results);
     });
 
     // TODO: Fix up below socket.io handlers
