@@ -249,11 +249,11 @@ sockets.init = function socketInit(server) {
             socket.emit(BOOST.achieved_max_speed, JSON.parse(payloadString));
             break;
           case BOOST.configs:
-            retained['boost'].configs = payloadString;
+            retained.boost.configs = payloadString;
             socket.emit('boost/configs', payloadString);
             break;
           case BOOST.generate_complete:
-            retained['boost'].results = payloadString;
+            retained.boost.results = payloadString;
             socket.emit('boost/generate_complete', payloadString);
             break;
           case Camera.push_overlays:
@@ -294,12 +294,12 @@ sockets.init = function socketInit(server) {
     });
 
     socket.on('get-boost-configs', (path) => {
-      if (retained['boost'].configs)
+      if (retained.boost.configs)
         socket.emit(path, retained['boost'].configs);
     });
 
     socket.on('get-boost-results', (path) => {
-      if (retained['boost'].results)
+      if (retained.boost.results)
         socket.emit(path, retained['boost'].results);
     });
 
