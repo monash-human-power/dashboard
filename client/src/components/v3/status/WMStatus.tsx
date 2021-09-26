@@ -22,6 +22,91 @@ export default function WMStatus(props: WMStatusProps) {
     </span>
   );
 
+  function convertToSentenceCase(str: String) {
+    /**
+     * convert Camel Case words to sentence case
+     *
+     * @param str - camel case string
+     * @returns string in sentence format
+     */
+    const result = str.replace(/([A-Z])/g, ' $1');
+    const final = result.charAt(0).toUpperCase() + result.slice(1);
+    return final;
+  }
+
+  function extractData(type: string, data: any) {
+    /**
+     * extract data from JSON objects and present them on client side so its user friendly
+     *
+     * @param type -  type of the data
+     * @param data - data JSON received from the mqtt broker
+     * @returns JSON-string
+     */
+
+    function formatValue(value: any, unit: any) {
+      /**
+       * receives a value and it unit and format them appropriately
+       *
+       * @param value - any value
+       * @param unit
+       * @returns string containing hte value and its unit
+       */
+      let displayValue;
+      if (value !== null && value !== undefined) {
+        displayValue = Math.floor(value * 100) / 100;
+      } else {
+        displayValue = '-';
+      }
+      const displayUnit = unit ? ` ${unit}` : '';
+
+      return `${displayValue}${displayUnit}`;
+    }
+
+    if (type === 'gps') {
+      return (
+        <>
+          <table>
+            <tbody>
+              <tr style={{ borderTop: 'none' }}>
+                <td colSpan={2}>Altitude</td>
+                <td>{formatValue(data.altitude, 'm')}</td>
+              </tr>
+              <tr>
+                <td colSpan={2}>Course</td>
+                <td>{formatValue(data.course, '')}</td>
+              </tr>
+              <tr>
+                <td colSpan={2}>Date-Time</td>
+                <td>{data.datetime}</td>
+              </tr>
+              <tr>
+                <td colSpan={2}>Latitude</td>
+                <td>{formatValue(data.latitude, 'N')}</td>
+              </tr>
+              <tr>
+                <td colSpan={2}>Longitude</td>
+                <td>{formatValue(data.longitude, 'E')}</td>
+              </tr>
+              <tr>
+                <td colSpan={2}>pdop</td>
+                <td>{formatValue(data.pdop, '')}</td>
+              </tr>
+              <tr>
+                <td colSpan={2}>Satellites</td>
+                <td>{formatValue(data.satellites, '')}</td>
+              </tr>
+              <tr>
+                <td colSpan={2}>speed</td>
+                <td>{formatValue(data.speed, 'km/h')}</td>
+              </tr>
+            </tbody>
+          </table>
+        </>
+      );
+    }
+    return JSON.stringify(data);
+  }
+
   let info = <> </>;
 
   if (isOnline(props)) {
@@ -38,7 +123,7 @@ export default function WMStatus(props: WMStatusProps) {
               <td>
                 <strong>Battery Voltage</strong>
               </td>
-              <td>{batteryVoltage} V</td>
+              <td>{batteryVoltage.toFixed(2)} V</td>
             </tr>
 
             {/* Sensors List of Names */}
@@ -46,7 +131,9 @@ export default function WMStatus(props: WMStatusProps) {
               <td>
                 <strong>Sensors</strong>
               </td>
-              <td>{data.map(({ type }) => type).join(', ')}</td>
+              <td>
+                {data.map(({ type }) => convertToSentenceCase(type)).join(', ')}
+              </td>
             </tr>
           </tbody>
         </Table>
@@ -70,9 +157,9 @@ export default function WMStatus(props: WMStatusProps) {
                     {data.map(({ type, value }) => (
                       <tr key={`${moduleName} ${type}`}>
                         <td>
-                          <strong>{type}</strong>
+                          <strong>{convertToSentenceCase(type)}</strong>
                         </td>
-                        <td>{JSON.stringify(value)}</td>
+                        <td>{extractData(type, value)}</td>
                       </tr>
                     ))}
                   </tbody>
