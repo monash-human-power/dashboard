@@ -7,7 +7,7 @@ const sockets = {};
 const mqtt = require('mqtt');
 const os = require('os');
 
-const { DAS, BOOST, Camera, WirelessModule } = require('./topics');
+const { DAS, BOOST, Camera, WirelessModule } = require('mhp');
 const { getPropWithPath, setPropWithPath } = require('./util');
 
 // Public MQTT broker
