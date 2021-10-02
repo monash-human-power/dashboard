@@ -25,7 +25,6 @@ const retained = {
     2: { online: null },
     3: { online: null },
     4: { online: null },
-    // online: null,
   },
   boost: {
     configs: null,
