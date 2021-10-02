@@ -21,7 +21,11 @@ const retained = {
   status: {},
   camera: {},
   wireless_module: {
-    online: null,
+    1: { online: null },
+    2: { online: null },
+    3: { online: null },
+    4: { online: null },
+    // online: null,
   },
   boost: {
     configs: null,
@@ -116,7 +120,6 @@ sockets.init = function socketInit(server) {
   const io = require('socket.io').listen(server);
   io.on('connection', function ioConnection(socket) {
     socket.setMaxListeners(20);
-
     /*
       Must subscribe to these when the mqtt message handler is set
       otherwise the retained payloads will not be handled.
@@ -124,32 +127,33 @@ sockets.init = function socketInit(server) {
         Subscribe with the other topics and add a new message handler
         for the topics
     */
-    mqttClient.subscribe('status/#');
 
     mqttClient.on('message', function mqttMessage(topic, payload) {
       const payloadString = payload.toString();
-
       if (topic.startsWith('status')) {
         try {
           const topicString = topic.split('/');
           // topicString: ["status", "<component>", "<subcomponent>", ...properties]
           const value = JSON.parse(payloadString);
           const path = topicString;
-
           // Add to global
           retained[path[0]] = setPropWithPath(
             retained[path[0]],
             path.slice(1),
             value,
           );
-
           // Emit subcomponent
           const component = topicString[1] ?? '';
           const subcomponent = topicString[2] ?? '';
-          socket.emit(
-            `status-${component}-${subcomponent}`,
-            retained.status?.[component]?.[subcomponent],
-          );
+          const device = topicString[3] ?? '';
+          // if there is a third part to the component
+          const channel = device
+            ? `status-${component}-${subcomponent}-${device}`
+            : `status-${component}-${subcomponent}`;
+          const retainedStatus = device
+            ? retained.status?.[component]?.[subcomponent]?.[device]
+            : retained.status?.[component]?.[subcomponent];
+          socket.emit(channel, retainedStatus);
         } catch (e) {
           console.error(
             `Error in parsing received payload\n\ttopic: ${topic}\n\tpayload: ${payloadString}\n`,
@@ -162,22 +166,17 @@ sockets.init = function socketInit(server) {
           const [, , id, property] = topicString;
           // topicString: ["v3", "wireless_module", <id>, <property>]
           const value = JSON.parse(payloadString);
-
           const path = topicString.slice(1); // Path is from "wireless_module"
-
           // Module's online
           if (property === 'start') {
             retained[path[0]].online = true;
-
-            socket.emit(`wireless_module-${id}-online`, true);
             socket.emit(`wireless_module-${id}-start`, true);
           }
-
           // Module's offline
-          else if (property === 'stop') {
-            retained[path[0]].online = false;
-
-            socket.emit(`wireless_module-${id}-online`, false);
+          // change to make it look at the status topic of WM
+          else if (property === 'status') {
+            retained[path[0]][id].online = value['online'];
+            socket.emit(`wireless_module-${id}-online`, value['online']);
           }
 
           // Add to global
@@ -278,7 +277,8 @@ sockets.init = function socketInit(server) {
     mqttClient.subscribe(BOOST.recommended_sp);
     mqttClient.subscribe(BOOST.configs);
     mqttClient.subscribe(Camera.push_overlays);
-
+    mqttClient.subscribe(`${Camera.base}/#`);
+    mqttClient.subscribe('status/#');
     // TODO: Remove in refactor, kept here for backwards compatability
     socket.on('get-status-payload', (path) => {
       if (path instanceof Array && path.length > 0)
@@ -287,7 +287,7 @@ sockets.init = function socketInit(server) {
           getPropWithPath(retained.status, path),
         );
     });
-
+    // for wireless-module
     socket.on('get-payload', (path) => {
       if (path instanceof Array && path.length > 0)
         socket.emit(path.join('-'), getPropWithPath(retained, path));
