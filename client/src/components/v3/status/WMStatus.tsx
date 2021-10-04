@@ -22,38 +22,103 @@ export default function WMStatus(props: WMStatusProps) {
     </span>
   );
 
-  function convertToSentenceCase(str: String) {
-    /**
-     * convert Camel Case words to sentence case
-     *
-     * @param str - camel case string
-     * @returns string in sentence format
-     */
-    const result = str.replace(/([A-Z])/g, ' $1');
+  /**
+   * convert Camel Case words to sentence case
+   *
+   * @param str - camel case string
+   * @returns string in sentence format
+   */
+  function convertToTitleCase(str: String) {
+    let title = str.toLowerCase();
+    if (title === 'co2' || title === 'gps' || title === 'pdop') {
+      return title.toUpperCase();
+    }
+    const result = title.replace(/([A-Z])/g, ' $1');
     const final = result.charAt(0).toUpperCase() + result.slice(1);
     return final;
   }
 
+  /**
+   * extract data from JSON objects and present them on client side so its user friendly
+   *
+   * @param type -  type of the data
+   * @param data - data JSON received from the mqtt broker
+   * @returns JSON-string
+   */
   function extractData(type: string, data: any) {
-    /**
-     * extract data from JSON objects and present them on client side so its user friendly
-     *
-     * @param type -  type of the data
-     * @param data - data JSON received from the mqtt broker
-     * @returns JSON-string
-     */
+    interface strMap {
+      [key: string]: string | undefined;
+    }
+    interface numMap2 {
+      [key: string]: number;
+    }
 
-    function formatValue(value: any, unit: any) {
-      /**
-       * receives a value and it unit and format them appropriately
-       *
-       * @param value - any value
-       * @param unit
-       * @returns string containing hte value and its unit
-       */
+    const units: strMap = {
+      speed: 'km/h',
+      satellites: '',
+      pdop: '',
+      latitude: '°N',
+      longitude: '°E',
+      altitude: 'm',
+      course: '°',
+      datetime: '',
+      temperature: '°C',
+      humidity: '%',
+      steeringAngle: '°',
+      co2: 'ppm',
+      power: 'W',
+      cadence: 'rpm',
+      heartRate: 'bpm',
+      reedVelocity: 'km/h',
+      reedDistance: 'km',
+    };
+
+    const decimals: numMap2 = {
+      speed: 1,
+      satellites: 0,
+      pdop: 2,
+      latitude: 5,
+      longitude: 5,
+      altitude: 1,
+      course: 1,
+      temperature: 1,
+      humidity: 0,
+      steeringAngle: 1,
+      co2: 0,
+      power: 0,
+      cadence: 0,
+      heartRate: 0,
+      reedVelocity: 1,
+      reedDistance: 0,
+      x: 2,
+      y: 2,
+      z: 2,
+    };
+
+    /**
+     * receives a value and it unit and format them appropriately
+     *
+     * @param name
+     * @param value
+     * @param unit
+     * @returns string containing hte value and its unit
+     */
+    function formatValue(name: string, value: any, unit: any) {
       let displayValue;
-      if (value !== null && value !== undefined) {
-        displayValue = Math.floor(value * 100) / 100;
+      let val = value;
+      if (val !== null && val !== undefined) {
+        if (name === 'Date' || name === 'Time') {
+          displayValue =
+            name === 'Date' ? value.substring(0, 10) : value.substring(11, 19);
+        } else {
+          const dec = decimals[name];
+          if (unit === 'km') {
+            val /= 1000;
+          } else if (unit === 'km/h') {
+            val *= 3.6;
+          }
+          displayValue = Math.floor(val * 10 ** dec) / 10 ** dec;
+        }
       } else {
         displayValue = '-';
       }
@@ -62,49 +127,111 @@ export default function WMStatus(props: WMStatusProps) {
       return `${displayValue}${displayUnit}`;
     }
 
-    if (type === 'gps') {
-      return (
-        <>
-          <table>
-            <tbody>
-              <tr style={{ borderTop: 'none' }}>
-                <td colSpan={2}>Altitude</td>
-                <td>{formatValue(data.altitude, 'm')}</td>
+    let output = <></>;
+
+    if (type === 'accelerometer') {
+      const accRows: any[] = [];
+      Object.entries(data).forEach((arr) => {
+        accRows.push({ name: arr[0], value: arr[1] });
+      });
+
+      output = (
+        <Table borderless>
+          <tbody>
+            {accRows.map(({ name, value }) => (
+              <tr
+                key={name}
+                style={{
+                  width: '150px',
+                  borderBottomWidth: 1,
+                  borderBottomColor: 'gray',
+                  borderBottomStyle: 'solid',
+                }}
+              >
+                <td>{convertToTitleCase(name)}</td>
+                <td>
+                  <div style={{ float: 'right' }}>
+                    {formatValue(name, value, '')}
+                  </div>
+                </td>
               </tr>
-              <tr>
-                <td colSpan={2}>Course</td>
-                <td>{formatValue(data.course, '')}</td>
+            ))}
+          </tbody>
+        </Table>
+      );
+    } else if (type === 'gyroscope') {
+      const gyroRows: any[] = [];
+      Object.entries(data).forEach((arr) => {
+        gyroRows.push({ name: arr[0], value: arr[1] });
+      });
+      output = (
+        <Table borderless>
+          <tbody>
+            {gyroRows.map(({ name, value }) => (
+              <tr
+                key={name}
+                style={{
+                  width: '150px',
+                  borderBottomWidth: 1,
+                  borderBottomColor: 'gray',
+                  borderBottomStyle: 'solid',
+                }}
+              >
+                <td>{convertToTitleCase(name)}</td>
+                <td>
+                  <div style={{ float: 'right' }}>
+                    {formatValue(name, value, '')}
+                  </div>
+                </td>
               </tr>
-              <tr>
-                <td colSpan={2}>Date-Time</td>
-                <td>{data.datetime}</td>
-              </tr>
-              <tr>
-                <td colSpan={2}>Latitude</td>
-                <td>{formatValue(data.latitude, 'N')}</td>
-              </tr>
-              <tr>
-                <td colSpan={2}>Longitude</td>
-                <td>{formatValue(data.longitude, 'E')}</td>
-              </tr>
-              <tr>
-                <td colSpan={2}>pdop</td>
-                <td>{formatValue(data.pdop, '')}</td>
-              </tr>
-              <tr>
-                <td colSpan={2}>Satellites</td>
-                <td>{formatValue(data.satellites, '')}</td>
-              </tr>
-              <tr>
-                <td colSpan={2}>speed</td>
-                <td>{formatValue(data.speed, 'km/h')}</td>
-              </tr>
-            </tbody>
-          </table>
-        </>
+            ))}
+          </tbody>
+        </Table>
       );
     }
-    return JSON.stringify(data);
+    // output = JSON.stringify(data);
+    else if (type === 'gps') {
+      const gpsRows: any[] = [];
+
+      Object.entries(data).forEach((arr) => {
+        if (arr[0] === 'datetime') {
+          gpsRows.push({ name: 'Date', value: arr[1], unit: '' });
+          gpsRows.push({ name: 'Time', value: arr[1], unit: '' });
+        } else {
+          gpsRows.push({ name: arr[0], value: arr[1], unit: units[arr[0]] });
+        }
+      });
+
+      output = (
+        <Table borderless>
+          <tbody>
+            {gpsRows.map(({ name, value, unit }) => (
+              <tr
+                key={name}
+                style={{
+                  width: '150px',
+                  borderBottomWidth: 1,
+                  borderBottomColor: 'gray',
+                  borderBottomStyle: 'solid',
+                }}
+              >
+                <td>{convertToTitleCase(name)}</td>
+                <td>
+                  <div style={{ float: 'right' }}>
+                    {formatValue(name, value, unit)}
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      );
+    } else {
+      output = (
+        <div>{formatValue(type, JSON.stringify(data), units[type])}</div>
+      );
+    }
+    return output;
   }
 
   let info = <> </>;
@@ -132,7 +259,7 @@ export default function WMStatus(props: WMStatusProps) {
                 <strong>Sensors</strong>
               </td>
               <td>
-                {data.map(({ type }) => convertToSentenceCase(type)).join(', ')}
+                {data.map(({ type }) => convertToTitleCase(type)).join(', ')}
               </td>
             </tr>
           </tbody>
@@ -152,14 +279,16 @@ export default function WMStatus(props: WMStatusProps) {
               <Card.Body>
                 <Table bordered hover>
                   <tbody>
-                    {/* TODO: extract data */}
-                    {/* Sensor Names and Data */}
                     {data.map(({ type, value }) => (
                       <tr key={`${moduleName} ${type}`}>
                         <td>
-                          <strong>{convertToSentenceCase(type)}</strong>
+                          <strong>{convertToTitleCase(type)}</strong>
                         </td>
-                        <td>{extractData(type, value)}</td>
+                        <td>
+                          <div style={{ float: 'right' }}>
+                            {extractData(type, value)}
+                          </div>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
