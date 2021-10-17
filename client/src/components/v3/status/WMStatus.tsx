@@ -4,6 +4,7 @@ import { Accordion, Button, Card, Col, Table } from 'react-bootstrap';
 import OnlineStatusPill from 'components/common/OnlineStatusPill';
 import { WMStatus as WMStatusT } from 'types/data';
 import { isOnline } from 'utils/data';
+import { camelCaseToStartCase } from 'utils/string';
 
 export type WMStatusProps = WMStatusT;
 
@@ -23,22 +24,6 @@ export default function WMStatus(props: WMStatusProps) {
   );
 
   /**
-   * convert Camel Case words to sentence case
-   *
-   * @param str - camel case string
-   * @returns string in sentence format
-   */
-  function convertToTitleCase(str: String) {
-    let title = str.toLowerCase();
-    if (title === 'co2' || title === 'gps' || title === 'pdop') {
-      return title.toUpperCase();
-    }
-    const result = title.replace(/([A-Z])/g, ' $1');
-    const final = result.charAt(0).toUpperCase() + result.slice(1);
-    return final;
-  }
-
-  /**
    * extract data from JSON objects and present them on client side so its user friendly
    *
    * @param type -  type of the data
@@ -47,7 +32,7 @@ export default function WMStatus(props: WMStatusProps) {
    */
   function extractData(type: string, data: any) {
     interface strMap {
-      [key: string]: string | undefined;
+      [key: string]: string;
     }
     interface numMap2 {
       [key: string]: number;
@@ -96,12 +81,12 @@ export default function WMStatus(props: WMStatusProps) {
     };
 
     /**
-     * receives a value and it unit and format them appropriately
+     * receives a value and its unit and format them appropriately
      *
-     * @param name
-     * @param value
-     * @param unit
-     * @returns string containing hte value and its unit
+     * @param name type's name
+     * @param value type's value
+     * @param unit the unit
+     * @returns string containing the value and its unit
      */
     function formatValue(name: string, value: any, unit: any) {
       let displayValue;
@@ -148,7 +133,7 @@ export default function WMStatus(props: WMStatusProps) {
                   borderBottomStyle: 'solid',
                 }}
               >
-                <td>{convertToTitleCase(name)}</td>
+                <td>{camelCaseToStartCase(name.toLowerCase())}</td>
                 <td>
                   <div style={{ float: 'right' }}>
                     {formatValue(name, value, '')}
@@ -177,7 +162,7 @@ export default function WMStatus(props: WMStatusProps) {
                   borderBottomStyle: 'solid',
                 }}
               >
-                <td>{convertToTitleCase(name)}</td>
+                <td>{camelCaseToStartCase(name.toLowerCase())}</td>
                 <td>
                   <div style={{ float: 'right' }}>
                     {formatValue(name, value, '')}
@@ -215,7 +200,7 @@ export default function WMStatus(props: WMStatusProps) {
                   borderBottomStyle: 'solid',
                 }}
               >
-                <td>{convertToTitleCase(name)}</td>
+                <td>{camelCaseToStartCase(name.toLowerCase())}</td>
                 <td>
                   <div style={{ float: 'right' }}>
                     {formatValue(name, value, unit)}
@@ -228,7 +213,9 @@ export default function WMStatus(props: WMStatusProps) {
       );
     } else {
       output = (
-        <div>{formatValue(type, JSON.stringify(data), units[type])}</div>
+        <div style={{ float: 'right' }}>
+          {formatValue(type, JSON.stringify(data), units[type])}
+        </div>
       );
     }
     return output;
@@ -259,7 +246,9 @@ export default function WMStatus(props: WMStatusProps) {
                 <strong>Sensors</strong>
               </td>
               <td>
-                {data.map(({ type }) => convertToTitleCase(type)).join(', ')}
+                {data
+                  .map(({ type }) => camelCaseToStartCase(type.toLowerCase()))
+                  .join(', ')}
               </td>
             </tr>
           </tbody>
@@ -282,13 +271,11 @@ export default function WMStatus(props: WMStatusProps) {
                     {data.map(({ type, value }) => (
                       <tr key={`${moduleName} ${type}`}>
                         <td>
-                          <strong>{convertToTitleCase(type)}</strong>
+                          <strong>
+                            {camelCaseToStartCase(type.toLowerCase())}
+                          </strong>
                         </td>
-                        <td>
-                          <div style={{ float: 'right' }}>
-                            {extractData(type, value)}
-                          </div>
-                        </td>
+                        <td>{extractData(type, value)}</td>
                       </tr>
                     ))}
                   </tbody>
