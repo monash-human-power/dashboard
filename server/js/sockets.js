@@ -167,8 +167,8 @@ sockets.init = function socketInit(server) {
           const value = JSON.parse(payloadString);
           const path = topicString.slice(1); // Path is from "wireless_module"
           // Module's online
+          console.log(retained);
           if (property === 'start') {
-            retained[path[0]].online = true;
             socket.emit(`wireless_module-${id}-start`, true);
           }
           // Module's offline
