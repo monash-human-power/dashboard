@@ -29,7 +29,7 @@ export default function CameraStatusContainer(): JSX.Element {
   const secondaryProps: CameraStatusProps = {
     cameraName: getPrettyDeviceName('secondary'),
     online: useCameraStatus('secondary')?.connected ?? false,
-    ip: useCameraStatus('primary')?.ipAddress ?? 'Error no IP', // TODO: Use API
+    ip: useCameraStatus('primary')?.ipAddress ?? 'Error no IP',
     battery: useCameraBattery('secondary')?.voltage ?? null,
     videoFeedEnabled: useVideoFeedStatus('secondary')?.online ?? null,
   };
