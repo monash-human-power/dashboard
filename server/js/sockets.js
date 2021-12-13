@@ -7,7 +7,7 @@ const sockets = {};
 const mqtt = require('mqtt');
 const os = require('os');
 
-const { DAS, BOOST, Camera, WirelessModule } = require('./topics');
+const { DAS, BOOST, Camera, WirelessModule } = require('mhp');
 const { getPropWithPath, setPropWithPath } = require('./util');
 
 // Public MQTT broker
@@ -25,7 +25,6 @@ const retained = {
     2: { online: null },
     3: { online: null },
     4: { online: null },
-    // online: null,
   },
   boost: {
     configs: null,
@@ -169,7 +168,6 @@ sockets.init = function socketInit(server) {
           const path = topicString.slice(1); // Path is from "wireless_module"
           // Module's online
           if (property === 'start') {
-            retained[path[0]].online = true;
             socket.emit(`wireless_module-${id}-start`, true);
           }
           // Module's offline
