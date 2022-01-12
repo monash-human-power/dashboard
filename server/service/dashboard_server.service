@@ -7,4 +7,4 @@ WantedBy=default.target
 [Service]
 Restart=on-failure
 # Note for this to work we need to run the below command from the DAShboard repository root directory, the Working directory is set by install.sh script
-ExecStart=yarn start
+ExecStart=node server.js
