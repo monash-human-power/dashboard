@@ -21,7 +21,7 @@ export default function CameraStatusContainer(): JSX.Element {
   const primaryProps: CameraStatusProps = {
     cameraName: getPrettyDeviceName('primary'),
     online: useCameraStatus('primary')?.connected ?? false,
-    ip: '501 not implemented', // TODO: Use API
+    ip: useCameraStatus('primary')?.ipAddress ?? 'Error no IP',
     battery: useCameraBattery('primary')?.voltage ?? null,
     videoFeedEnabled: useVideoFeedStatus('primary')?.online ?? null,
   };
@@ -29,7 +29,7 @@ export default function CameraStatusContainer(): JSX.Element {
   const secondaryProps: CameraStatusProps = {
     cameraName: getPrettyDeviceName('secondary'),
     online: useCameraStatus('secondary')?.connected ?? false,
-    ip: '501 not implemented', // TODO: Use API
+    ip: useCameraStatus('primary')?.ipAddress ?? 'Error no IP',
     battery: useCameraBattery('secondary')?.voltage ?? null,
     videoFeedEnabled: useVideoFeedStatus('secondary')?.online ?? null,
   };

@@ -198,6 +198,7 @@ export function useVideoFeedStatus(device: Device): VideoFeedStatus | null {
 const CameraStatus = Record({
   /** Whether camera is connected / not connected */
   connected: Boolean,
+  ipAddress: String,
 });
 export type CameraStatus = Static<typeof CameraStatus>;
 
