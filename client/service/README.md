@@ -29,4 +29,4 @@ The PID of the unit can be found using
 ## Troubleshooting
 1)
 A known error is when `serve not found` is thrown in the logs for the service.
-In this case find the path to `serve` using `yarn global bin` and add the explicit path to `dashboard_client.service` instead of using `serve` directly.
+In this case find the path to `serve` using `yarn global bin` and add the explicit path to `serve` inside `dashboard_client.service` instead of using `serve` directly.
