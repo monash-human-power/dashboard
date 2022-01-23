@@ -3,6 +3,14 @@ This folder contains scripts needed to create our own systemd unit service for D
 
 This allows us to start DAShboard `client` when our Raspberry Pi boots up and be able to restart the script if the program crashes.
 
+## Dependency
+1) The service requires the website to be pre-built and utilizes the `build` folder to 'serve' the website. 
+Use `yarn run build` to build the website. A folder named `build` should be created if the command ran successfully.
+
+If the service is to be used on a raspberry pi 3 or lower, it's advised to build the website on an external computer and then copy it onto the pi, using `scp` or `rsync`. This will make the process faster.
+
+2) The service depends on `serve`, download it using `yarn global add serve`
+
 ## Usage
 Run `install.sh` to add `dashboard_client` to the `~/.config/systemd/user/` folder on the OS system.
 

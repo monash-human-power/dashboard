@@ -8,5 +8,4 @@ WantedBy=default.target
 Environment=NODE_PORT=3000
 Restart=on-failure
 # Note for this to work we need to run the below command from the DAShboard repository client directory, the Working directory is set by install.sh script
-# Ensure serve is downloaded: `yarn global add serve`
 ExecStart=/home/pi/.yarn/bin/serve -s build
