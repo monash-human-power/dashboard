@@ -5,7 +5,7 @@
 
 [![Generic badge](https://img.shields.io/badge/PROJECT_BOARD-green.svg)](https://github.com/monash-human-power/dashboard/projects/1)
 
-A web server for the Data Acquisition System (DAS) for Monash Human Power.
+A web server for the Data Acquisition System (DAS) for MHP.
 
 The node.js + Express HTTP REST server is used to host the real-time dashboard whilst the MQTT broker is used to transfer data from the sensors to all the necessary scripts that need it.
 
