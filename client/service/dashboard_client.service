@@ -1,0 +1,11 @@
+[Unit]
+Description=MHP DAShboard client
+
+[Install]
+WantedBy=default.target
+
+[Service]
+Environment=NODE_PORT=3000
+Restart=on-failure
+# Note for this to work we need to run the below command from the DAShboard repository client directory, the Working directory is set by install.sh script
+ExecStart=/home/pi/.yarn/bin/serve -s build
