@@ -3,6 +3,9 @@ This folder contains scripts needed to create our own systemd unit service for D
 
 This allows us to start DAShboard `server` when our Raspberry Pi boots up and be able to restart the script if the program crashes.
 
+Note: 
+We do not necessarily need to run dashboard client separately, `server.js` also serves the front-end using the built image from `client/build`. The front-end can then be accessed at port 5000. Hence, we can run dashboard by only running `dashboard_server.service`.
+
 ## Usage
 Run `install.sh` to add `dashboard_server` to the `~/.config/systemd/user/` folder on the OS system.
 
