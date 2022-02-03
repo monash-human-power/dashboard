@@ -234,5 +234,8 @@ export function useCameraBattery(device: Device): CameraBattery | null {
  * @returns Camera status
  */
 export function useCameraStatus(device: Device): CameraStatus | null {
+  useEffect(() => {
+    emit('get-payload', ['status', `camera`, `${device}`]);
+  }, [device]);
   return usePayload(`status-camera-${device}`, CameraStatus);
 }
