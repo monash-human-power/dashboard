@@ -44,6 +44,7 @@ async function getFiles() {
   const dataFolderPath = path.join(__dirname, 'data');
   const files = await fs.promises.readdir(dataFolderPath);
 
+  // Sorting by last modified date (credit Gaurav Gandhi, https://stackoverflow.com/questions/30727864/how-to-read-a-file-from-directory-sorting-date-modified-in-node-js)
   return files
     .map(fileName => ({
       name: fileName,
