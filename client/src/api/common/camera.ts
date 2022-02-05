@@ -173,6 +173,10 @@ export function formatRecordingPayload(
 export function useCameraRecordingStatus(
   device: Device,
 ): CameraRecordingStatusItem[] | null {
+  useEffect(() => {
+    emit('get-payload', ['status', `camera`, 'recording', `${device}`]);
+  }, [device]);
+
   const payload = usePayload(
     `status-camera-recording-${device}`,
     CameraRecordingStatusPayload,
@@ -192,6 +196,9 @@ export type VideoFeedStatus = Static<typeof VideoFeedStatus>;
  * @returns A VideoFeedStatus for each device
  */
 export function useVideoFeedStatus(device: Device): VideoFeedStatus | null {
+  useEffect(() => {
+    emit('get-payload', ['status', `camera`, 'video_feed', `${device}`]);
+  }, [device]);
   return usePayload(`status-camera-video_feed-${device}`, VideoFeedStatus);
 }
 
