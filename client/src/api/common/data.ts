@@ -38,6 +38,19 @@ const ModuleData = Record({
 export type ModuleData = Static<typeof ModuleData>;
 
 /**
+ * Call a function when WM data is received
+ *
+ * @param id ID of module
+ * @param callback The function to be called
+ */
+export function useModuleDataCallback(
+  id: number,
+  callback: (data: ModuleData) => void,
+) {
+  useChannelShaped(`wireless_module-${id}-data`, ModuleData, callback);
+}
+
+/**
  * Pass on incoming data from the wireless module channel
  *
  * @param id ID of module
@@ -46,8 +59,7 @@ export type ModuleData = Static<typeof ModuleData>;
 export function useModuleData(id: number): ModuleData {
   const [data, setData] = useState<ModuleData>({ sensors: [] });
 
-  // eslint-disable-next-line no-undef
-  useChannelShaped(`wireless_module-${id}-data`, ModuleData, setData);
+  useModuleDataCallback(id, setData);
 
   return data;
 }
@@ -151,13 +163,13 @@ export function stopLogging() {
 /**
  * Start Boosting
  */
-export function startBoost(){
-  emit('start-boost'); 
+export function startBoost() {
+  emit('start-boost');
 }
 
 /**
  * Stop Boosting
  */
-export function stopBoost(){
+export function stopBoost() {
   emit('stop-boost');
 }

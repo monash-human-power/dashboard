@@ -3,6 +3,7 @@ import {
   stopLogging,
   startBoost,
   stopBoost,
+  useModuleDataCallback,
 } from 'api/common/data';
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
@@ -14,20 +15,25 @@ import toast from 'react-hot-toast';
  * @returns Component
  */
 export default function DASRecording(): JSX.Element {
-  const [startClicked, setNextStatus] = useState(false);
+  const [loggingEnabled, setLoggingEnabled] = useState(false);
+
+  useModuleDataCallback(1, () => setLoggingEnabled(true));
+  useModuleDataCallback(2, () => setLoggingEnabled(true));
+  useModuleDataCallback(3, () => setLoggingEnabled(true));
+  useModuleDataCallback(4, () => setLoggingEnabled(true));
 
   /** Start DAS recording and BOOST computations */
   function startRecording() {
-    toast.success('DAS & BOOST Recording is started!');
-    setNextStatus(true);
+    toast.success('DAS & BOOST recording is started!');
+    setLoggingEnabled(true);
     startLogging();
     startBoost();
   }
 
   /** Stop DAS recording and BOOST computations */
   function stopRecording() {
-    toast.success('DAS & BOOST Recording is stopped!');
-    setNextStatus(false);
+    toast.success('DAS & BOOST recording is stopped!');
+    setLoggingEnabled(false);
     stopLogging();
     stopBoost();
   }
@@ -39,7 +45,7 @@ export default function DASRecording(): JSX.Element {
         className="ml-3"
         variant="outline-success"
         onClick={startRecording}
-        disabled={startClicked}
+        disabled={loggingEnabled}
       >
         Start
       </Button>
@@ -47,7 +53,7 @@ export default function DASRecording(): JSX.Element {
         className="ml-2"
         variant="outline-danger"
         onClick={stopRecording}
-        disabled={!startClicked}
+        disabled={!loggingEnabled}
       >
         Stop
       </Button>
