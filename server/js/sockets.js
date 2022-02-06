@@ -14,6 +14,9 @@ const { getPropWithPath, setPropWithPath } = require('./util');
 let PUBLISH_ONLINE = false;
 let PUBLIC_MQTT_CLIENT;
 
+// TODO: Add this to the topics.yml file in 'mhp' package
+Camera["base"] = "camera";
+
 /**
  * Structure can be found in the MQTT V3 Topics page on Notion
  */
