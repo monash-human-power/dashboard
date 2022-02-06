@@ -34,8 +34,64 @@ const ModuleData = Record({
   /** Sensor data */
   sensors: Array(SensorDataRT),
 });
+const StartStopData = Record({});
 
 export type ModuleData = Static<typeof ModuleData>;
+
+/**
+ * Call a function when a WM message is received
+ *
+ * @param id ID of module
+ * @param type The type of message to react to
+ * @param callback The function to be called
+ */
+function useModuleCallback<T>(
+  id: number,
+  type: 'start' | 'stop' | 'data',
+  callback: (payload: T) => void,
+) {
+  const payloadShape: any = type === 'data' ? ModuleData : StartStopData;
+  useChannelShaped(`wireless_module-${id}-${type}`, payloadShape, callback);
+}
+
+/**
+ * Call a function when a WM start message is received
+ *
+ * @param id ID of module
+ * @param callback The function to be called
+ */
+export function useModuleStartCallback(
+  id: number,
+  callback: (data: ModuleData) => void,
+) {
+  useModuleCallback(id, 'start', callback);
+}
+
+/**
+ * Call a function when a WM stop message is received
+ *
+ * @param id ID of module
+ * @param callback The function to be called
+ */
+export function useModuleStopCallback(
+  id: number,
+  callback: (data: ModuleData) => void,
+) {
+  useModuleCallback(id, 'stop', callback);
+}
+
+/**
+ * Call a function when a WM data message is received
+ *
+ * @param id ID of module
+ * @param callback The function to be called
+ */
+export function useModuleDataCallback(
+  id: number,
+  callback: (data: ModuleData) => void,
+) {
+  useModuleCallback(id, 'data', callback);
+}
 
 /**
  * Pass on incoming data from the wireless module channel
@@ -46,8 +102,7 @@ export type ModuleData = Static<typeof ModuleData>;
 export function useModuleData(id: number): ModuleData {
   const [data, setData] = useState<ModuleData>({ sensors: [] });
 
-  // eslint-disable-next-line no-undef
-  useChannelShaped(`wireless_module-${id}-data`, ModuleData, setData);
+  useModuleDataCallback(id, setData);
 
   return data;
 }
@@ -151,13 +206,13 @@ export function stopLogging() {
 /**
  * Start Boosting
  */
-export function startBoost(){
-  emit('start-boost'); 
+export function startBoost() {
+  emit('start-boost');
 }
 
 /**
  * Stop Boosting
  */
-export function stopBoost(){
+export function stopBoost() {
   emit('stop-boost');
 }

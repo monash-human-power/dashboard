@@ -170,6 +170,9 @@ sockets.init = function socketInit(server) {
           if (property === 'start') {
             socket.emit(`wireless_module-${id}-start`, true);
           }
+          if (property === 'stop') {
+            socket.emit(`wireless_module-${id}-stop`, true);
+          }
           // Module's offline
           // change to make it look at the status topic of WM
           else if (property === 'status') {
