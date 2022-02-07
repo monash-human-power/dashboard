@@ -231,7 +231,7 @@ export type CameraBattery = Static<typeof CameraBattery>;
  * @returns Battery
  */
 export function useCameraBattery(device: Device): CameraBattery | null {
-  return usePayload(`camera-${device}-battery`, CameraBattery);
+  return usePayload(`status-camera-${device}-battery`, CameraBattery);
 }
 
 /**
