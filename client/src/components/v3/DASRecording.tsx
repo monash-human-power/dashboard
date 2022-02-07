@@ -78,11 +78,7 @@ export default function DASRecording(): JSX.Element {
         </Modal.Header>
         <Modal.Body>Stopping the logger will cause messy CSV files!</Modal.Body>
         <Modal.Footer>
-          <Button
-            className="align-left"
-            variant="outline-danger"
-            onClick={closeConfirmModal}
-          >
+          <Button variant="outline-danger" onClick={closeConfirmModal}>
             Cancel
           </Button>
           <Button
