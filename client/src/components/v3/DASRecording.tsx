@@ -74,9 +74,12 @@ export default function DASRecording(): JSX.Element {
 
       <Modal show={showConfirmModal} onHide={closeConfirmModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Are you Sure?</Modal.Title>
+          <Modal.Title>Are You Sure?</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Stopping the logger will cause messy CSV files!</Modal.Body>
+        <Modal.Body>
+          This will stop the wireless module from sending data and cause messy
+          CSV files!
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="outline-danger" onClick={closeConfirmModal}>
             Cancel
