@@ -78,7 +78,7 @@ export default function DASRecording(): JSX.Element {
         </Modal.Header>
         <Modal.Body>
           Stopping DAS will stop all data flow, causing the data received so far
-          to be saved into a csv file for later use.!
+          to be saved into a csv file for later use.
         </Modal.Body>
         <Modal.Footer>
           <Button variant="outline-danger" onClick={closeConfirmModal}>
