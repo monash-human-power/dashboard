@@ -77,8 +77,8 @@ export default function DASRecording(): JSX.Element {
           <Modal.Title>Are You Sure?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          This will stop the wireless module from sending data and cause messy
-          CSV files!
+          Stopping DAS will stop all data flow, causing the data received so far
+          to be saved into a csv file for later use.!
         </Modal.Body>
         <Modal.Footer>
           <Button variant="outline-danger" onClick={closeConfirmModal}>
