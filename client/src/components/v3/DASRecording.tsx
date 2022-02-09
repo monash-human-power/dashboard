@@ -8,9 +8,8 @@ import {
   useModuleStopCallback,
 } from 'api/common/data';
 import React, { useState } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import toast from 'react-hot-toast';
-
 /**
  * Turn recording off and on
  *
@@ -18,6 +17,9 @@ import toast from 'react-hot-toast';
  */
 export default function DASRecording(): JSX.Element {
   const [loggingEnabled, setLoggingEnabled] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const closeConfirmModal = () => setShowConfirmModal(false);
+  const openConfirmModal = () => setShowConfirmModal(true);
 
   useModuleStartCallback(1, () => setLoggingEnabled(true));
   useModuleStartCallback(2, () => setLoggingEnabled(true));
@@ -64,11 +66,35 @@ export default function DASRecording(): JSX.Element {
       <Button
         className="ml-2"
         variant="outline-danger"
-        onClick={stopRecording}
+        onClick={openConfirmModal}
         disabled={!loggingEnabled}
       >
         Stop
       </Button>
+
+      <Modal show={showConfirmModal} onHide={closeConfirmModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Are You Sure?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Stopping DAS will stop all data flow, causing the data received so far
+          to be saved into a csv file for later use.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="outline-danger" onClick={closeConfirmModal}>
+            Cancel
+          </Button>
+          <Button
+            variant="outline-success"
+            onClick={() => {
+              closeConfirmModal();
+              stopRecording();
+            }}
+          >
+            Yes
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }
