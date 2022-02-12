@@ -193,6 +193,12 @@ sockets.init = function socketInit(server) {
 
             // Emit parsed payload as is
             socket.emit(`wireless_module-${id}-${property}`, value);
+
+            // Temporary fix, if ant+ is sending data, it should be considered online
+            // TODO: Make ant+ send a status message on the status topic instead.
+            if (id === '4') {
+              socket.emit(`wireless_module-${id}-online`, true);
+            }
           }
         } catch (e) {
           console.error(
