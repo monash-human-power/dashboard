@@ -136,7 +136,6 @@ export interface WMStatusOnline {
   online: true;
   data: SensorDataT[];
   batteryVoltage: number;
-  mqttAddress: string;
 }
 
 export interface WMStatusOffline {

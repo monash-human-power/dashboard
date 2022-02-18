@@ -164,7 +164,6 @@ export function useModuleStatus(id: number, name: string): WMStatus {
     online: true,
     data,
     batteryVoltage,
-    mqttAddress: '501 Not Implemented',
   };
 }
 

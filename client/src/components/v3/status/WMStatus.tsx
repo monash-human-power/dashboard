@@ -224,12 +224,9 @@ export default function WMStatus(props: WMStatusProps) {
   let info = <> </>;
 
   if (isOnline(props)) {
-    const { data, mqttAddress, batteryVoltage } = props;
+    const { data, batteryVoltage } = props;
     info = (
       <>
-        {/* MQTT address */}
-        <p style={{ fontSize: '0.75rem', color: 'gray' }}>{mqttAddress}</p>
-
         <Table hover>
           <tbody>
             {/* Battery Voltage */}
