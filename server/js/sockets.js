@@ -35,6 +35,9 @@ const retained = {
   },
 };
 
+// globals
+max_speed_achieved = -1;
+
 function connectToPublicMQTTBroker(clientID = '') {
   const publicMqttOptions = {
     reconnectPeriod: 1000,
@@ -193,6 +196,18 @@ sockets.init = function socketInit(server) {
 
             // Emit parsed payload as is
             socket.emit(`wireless_module-${id}-${property}`, value);
+
+            // TODO: We should probably get BOOST to store this Max achieved value, so all instances of dashboard can get access to the same consistent value
+            if (id === '3') {
+              current_speed = value.sensors.find((s) => s.type === 'reedVelocity')?.value ?? 
+              value.sensors.find((s) => s.type === 'gps')?.value?.speed;
+              console.log(current_speed);
+              if (current_speed && current_speed > max_speed_achieved) {
+                console.log('Sending data');
+                max_speed_achieved = current_speed;
+                socket.emit('max-speed-achieved', max_speed_achieved);
+              }
+            }
 
             // Temporary fix, if ant+ is sending data, it should be considered online
             // TODO: Make ant+ send a status message on the status topic instead.
@@ -400,6 +415,9 @@ sockets.init = function socketInit(server) {
       [1, 2, 3, 4].forEach((n) =>
         mqttClient.publish(WirelessModule.id(n).stop),
       );
+    });
+    socket.on('get-max-speed-achieved', () => {
+      if (max_speed_achieved >= 0) socket.emit('max-speed-achieved', max_speed_achieved);
     });
   });
 };
