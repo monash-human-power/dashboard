@@ -400,9 +400,9 @@ sockets.init = function socketInit(server) {
       mqttClient.publish(Camera.recording_stop);
     });
 
-    socket.on('flip-video-feed', () => {
-      console.log('got to this point too sir no problem');
-      mqttClient.publish(Camera.flip_video_feed);
+    socket.on('flip-video-feed', (device) => {
+      // device is the name of the camera system, i.e. primary/secondary
+      mqttClient.publish(`${Camera.flip_video_feed}/${device}`);
     });
 
     socket.on('start-das-recording', () => {
