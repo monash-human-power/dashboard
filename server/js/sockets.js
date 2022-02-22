@@ -201,9 +201,8 @@ sockets.init = function socketInit(server) {
             if (id === '3') {
               current_speed = value.sensors.find((s) => s.type === 'reedVelocity')?.value ?? 
               value.sensors.find((s) => s.type === 'gps')?.value?.speed;
-              console.log(current_speed);
+
               if (current_speed && current_speed > max_speed_achieved) {
-                console.log('Sending data');
                 max_speed_achieved = current_speed;
                 socket.emit('max-speed-achieved', max_speed_achieved);
               }

@@ -18,12 +18,7 @@ export default function StatisticRow(): JSX.Element {
   // TODO: Multiple sensor data
   const currVel = useSensorData(3, Sensor.ReedVelocity, ReedVelocityRT);
 
-  const temp = (value: number | null) => {
-    console.log(value);
-    setMaxSpeed(value);
-  };
-
-  useChannelShaped('max-speed-achieved', ReedVelocityRT, temp);
+  useChannelShaped('max-speed-achieved', ReedVelocityRT, setMaxSpeed);
 
   // Get max-speed upon page refresh
   useEffect(() => {
