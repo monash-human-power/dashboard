@@ -24,7 +24,7 @@ function isValidLocation(location: LocationTimeSeriesPoint): boolean {
     Number.isFinite(location.long) &&
     location.long >= -180 &&
     location.long <= 180 &&
-    (location.lat != 0 || location.long != 0)
+    (location.lat !== 0 || location.long !== 0)
   );
 }
 
