@@ -74,7 +74,7 @@ export default function WMStatus(props: WMStatusProps) {
       cadence: 0,
       heartRate: 0,
       reedVelocity: 1,
-      reedDistance: 0,
+      reedDistance: 2,
       x: 2,
       y: 2,
       z: 2,

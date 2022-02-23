@@ -55,10 +55,18 @@ export default function StatisticRow(): JSX.Element {
   return (
     <div className={styles.statContainer}>
       <div className={styles.statSpeed}>
-        <Statistic value={currVel} unit="km/h" desc="Current speed" />
+        <Statistic
+          value={currVel ? Math.round(currVel * 100) / 100 : null}
+          unit="km/h"
+          desc="Current speed"
+        />
       </div>
       <div className={styles.statSpeed}>
-        <Statistic value={maxSpeed} unit="km/h" desc="Max. speed" />
+        <Statistic
+          value={maxSpeed ? Math.round(maxSpeed * 100) / 100 : null}
+          unit="km/h"
+          desc="Max. speed"
+        />
       </div>
       <div className={styles.statSpeed}>
         <Statistic
