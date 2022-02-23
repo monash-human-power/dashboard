@@ -43,7 +43,16 @@ server.listen(PORT, () => {
 async function getFiles() {
   const dataFolderPath = path.join(__dirname, 'data');
   const files = await fs.promises.readdir(dataFolderPath);
-  return files;
+
+  // Sorting by last modified date (credit Gaurav Gandhi, https://stackoverflow.com/questions/30727864/how-to-read-a-file-from-directory-sorting-date-modified-in-node-js)
+  return files
+    .map(fileName => ({
+      name: fileName,
+      time: fs.statSync(`${dataFolderPath}/${fileName}`).mtime.getTime(),
+    }))
+    .sort((a, b) => b.time - a.time)
+    .map(file => file.name);
+    
 }
 
 // Endpoint to get a list of files stored on the server

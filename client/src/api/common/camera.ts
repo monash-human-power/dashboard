@@ -173,6 +173,10 @@ export function formatRecordingPayload(
 export function useCameraRecordingStatus(
   device: Device,
 ): CameraRecordingStatusItem[] | null {
+  useEffect(() => {
+    emit('get-payload', ['status', `camera`, 'recording', `${device}`]);
+  }, [device]);
+
   const payload = usePayload(
     `status-camera-recording-${device}`,
     CameraRecordingStatusPayload,
@@ -192,6 +196,9 @@ export type VideoFeedStatus = Static<typeof VideoFeedStatus>;
  * @returns A VideoFeedStatus for each device
  */
 export function useVideoFeedStatus(device: Device): VideoFeedStatus | null {
+  useEffect(() => {
+    emit('get-payload', ['status', `camera`, 'video_feed', `${device}`]);
+  }, [device]);
   return usePayload(`status-camera-video_feed-${device}`, VideoFeedStatus);
 }
 
@@ -224,7 +231,7 @@ export type CameraBattery = Static<typeof CameraBattery>;
  * @returns Battery
  */
 export function useCameraBattery(device: Device): CameraBattery | null {
-  return usePayload(`camera-${device}-battery`, CameraBattery);
+  return usePayload(`status-camera-${device}-battery`, CameraBattery);
 }
 
 /**
@@ -234,5 +241,8 @@ export function useCameraBattery(device: Device): CameraBattery | null {
  * @returns Camera status
  */
 export function useCameraStatus(device: Device): CameraStatus | null {
+  useEffect(() => {
+    emit('get-payload', ['status', `camera`, `${device}`]);
+  }, [device]);
   return usePayload(`status-camera-${device}`, CameraStatus);
 }

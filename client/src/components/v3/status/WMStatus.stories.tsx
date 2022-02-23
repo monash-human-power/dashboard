@@ -26,7 +26,6 @@ export const Online = createStory(Template, {
   moduleName: 'Front WM',
   online: true,
   batteryVoltage: 3.123,
-  mqttAddress: '/v3/wireless_module/1/data',
   data: [],
 });
 
@@ -34,7 +33,6 @@ export const Data = createStory(Template, {
   moduleName: 'Front WM',
   online: true,
   batteryVoltage: 3.123,
-  mqttAddress: '/v3/wireless_module/1/data',
   data: [
     sensorData('temperature', 26),
     sensorData('humidity', 62),

@@ -11,7 +11,6 @@ import { useModuleStatus } from 'api/common/data';
  */
 export default function WMStatusContainer() {
   const front = useModuleStatus(1, 'Front WM');
-  const middle = useModuleStatus(2, 'Middle WM');
   const back = useModuleStatus(3, 'Back WM');
   const ant = useModuleStatus(4, 'ANT/DAS WM');
 
@@ -22,9 +21,6 @@ export default function WMStatusContainer() {
         <Row>
           {/* Front WM Status */}
           <WMStatus {...front} />
-
-          {/* Middle WM Status */}
-          <WMStatus {...middle} />
 
           {/* Back WM Status */}
           <WMStatus {...back} />
