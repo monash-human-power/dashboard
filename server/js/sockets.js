@@ -15,7 +15,7 @@ let PUBLISH_ONLINE = false;
 let PUBLIC_MQTT_CLIENT;
 
 // TODO: Add this to the topics.yml file in 'mhp' package
-Camera["base"] = "camera";
+Camera['base'] = 'camera';
 
 /**
  * Structure can be found in the MQTT V3 Topics page on Notion
@@ -417,7 +417,8 @@ sockets.init = function socketInit(server) {
       );
     });
     socket.on('get-max-speed-achieved', () => {
-      if (max_speed_achieved >= 0) socket.emit('max-speed-achieved', max_speed_achieved);
+      if (max_speed_achieved >= 0)
+        socket.emit('max-speed-achieved', max_speed_achieved);
     });
   });
 };
