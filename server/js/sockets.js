@@ -36,7 +36,8 @@ const retained = {
 };
 
 // globals
-max_speed_achieved = -1;
+default_max_speed = -1;
+max_speed_achieved = default_max_speed;
 
 function connectToPublicMQTTBroker(clientID = '') {
   const publicMqttOptions = {
@@ -174,6 +175,9 @@ sockets.init = function socketInit(server) {
           const path = topicString.slice(1); // Path is from "wireless_module"
           // Module's online
           if (property === 'start') {
+            // Reset max_speed_achieved for new round of data
+            max_speed_achieved = default_max_speed;
+
             socket.emit(`wireless_module-${id}-start`, true);
           }
           if (property === 'stop') {
