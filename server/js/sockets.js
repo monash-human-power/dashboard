@@ -199,8 +199,9 @@ sockets.init = function socketInit(server) {
 
             // TODO: We should probably get BOOST to store this Max achieved value, so all instances of dashboard can get access to the same consistent value
             if (id === '3') {
-              current_speed = value.sensors.find((s) => s.type === 'reedVelocity')?.value ?? 
-              value.sensors.find((s) => s.type === 'gps')?.value?.speed;
+              current_speed =
+                value.sensors.find((s) => s.type === 'gps')?.value?.speed ??
+                value.sensors.find((s) => s.type === 'reedVelocity')?.value;
 
               if (current_speed && current_speed > max_speed_achieved) {
                 max_speed_achieved = current_speed;
