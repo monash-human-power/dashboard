@@ -9,3 +9,6 @@ import { WMStatus, WMStatusOnline } from 'types/data';
 export function isOnline(props: WMStatus): props is WMStatusOnline {
   return !!props.online;
 }
+export const roundNum = (num: number, precision: number) => {
+  return `${Number.parseFloat(num.toString()).toFixed(precision)}`;
+};
