@@ -1,6 +1,9 @@
-import { Number, Record, Static, String, Union } from 'runtypes';
+import { Number, Record, Static, String, Union, Null } from 'runtypes';
 
 /* ------------------------------------ RunTypes ------------------------------------ */
+
+/** Value runtype of temperature sensor data */
+export const MaxSpeedRT = Union(Number, Null);
 
 /** Value runtype of temperature sensor data */
 export const TemperatureRT = Number;
