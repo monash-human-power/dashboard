@@ -20,7 +20,6 @@ export default function Statistic({
   unit,
   desc,
 }: StatisticProps): JSX.Element {
-  console.log(value);
   return (
     <>
       <div className={styles.top}>

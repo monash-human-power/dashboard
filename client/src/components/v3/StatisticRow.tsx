@@ -53,8 +53,6 @@ export default function StatisticRow(): JSX.Element {
 
   const heartRate = useSensorData(4, Sensor.HeartRate, HeartRateRT);
 
-  console.log(roundNum(100.0, 2));
-
   return (
     <div className={styles.statContainer}>
       <div className={styles.statSpeed}>

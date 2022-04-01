@@ -103,7 +103,6 @@ export default function WMStatus(props: WMStatusProps) {
             val *= 3.6;
           }
           displayValue = roundNum(val, dec);
-          console.log(`${name}: ${displayValue}`);
         }
       } else {
         displayValue = '-';
