@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { Button, Card, Form, Col } from 'react-bootstrap';
-import { displayDistance } from 'utils/boost';
+import { roundNum } from 'utils/data';
 
 export interface BoostCalibrationProps {
   onSet: (calibValue: number) => void;
@@ -49,7 +49,7 @@ export default function BoostCalibration({
 
   const displayCalibratedDistance = () => {
     if (calibrationDiff !== null) {
-      return displayDistance(distTravelled + calibrationDiff);
+      return `${roundNum(distTravelled + calibrationDiff, 2)} m`;
     }
     return 'N/A';
   };
@@ -66,7 +66,8 @@ export default function BoostCalibration({
           <b>Distance travelled </b>
           <span className="float-right pr-4">
             {' '}
-            {displayDistance(distTravelled)}{' '}
+            {roundNum(distTravelled, 2)}
+            {' m'}
           </span>
         </div>
         <div className="pb-3">

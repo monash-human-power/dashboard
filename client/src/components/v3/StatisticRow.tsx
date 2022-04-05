@@ -3,6 +3,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { HeartRateRT, PowerRT, ReedVelocityRT } from 'types/data';
 import { useChannelShaped } from 'api/common/socket';
 import { SpeedPayload } from 'types/statistic';
+import { roundNum } from 'utils/data';
 import Statistic from './Statistic';
 import styles from './StatisticRow.module.css';
 
@@ -55,10 +56,18 @@ export default function StatisticRow(): JSX.Element {
   return (
     <div className={styles.statContainer}>
       <div className={styles.statSpeed}>
-        <Statistic value={currVel} unit="km/h" desc="Current speed" />
+        <Statistic
+          value={currVel ? roundNum(currVel, 2) : null}
+          unit="km/h"
+          desc="Current speed"
+        />
       </div>
       <div className={styles.statSpeed}>
-        <Statistic value={maxSpeed} unit="km/h" desc="Max. speed" />
+        <Statistic
+          value={maxSpeed ? roundNum(maxSpeed, 2) : null}
+          unit="km/h"
+          desc="Max. speed"
+        />
       </div>
       <div className={styles.statSpeed}>
         <Statistic

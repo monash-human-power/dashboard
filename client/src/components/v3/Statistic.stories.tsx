@@ -18,7 +18,7 @@ export const Null = createStory(Template, {
 });
 
 export const Speed = createStory(Template, {
-  value: 81.4,
+  value: '81.4',
   unit: 'km/h',
   desc: 'Current speed',
 });

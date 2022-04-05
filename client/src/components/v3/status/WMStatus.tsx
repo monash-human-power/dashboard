@@ -3,7 +3,7 @@ import { Accordion, Button, Card, Col, Table } from 'react-bootstrap';
 
 import OnlineStatusPill from 'components/common/OnlineStatusPill';
 import { WMStatus as WMStatusT } from 'types/data';
-import { isOnline } from 'utils/data';
+import { isOnline, roundNum } from 'utils/data';
 import { camelCaseToStartCase } from 'utils/string';
 
 export type WMStatusProps = WMStatusT;
@@ -59,7 +59,7 @@ export default function WMStatus(props: WMStatusProps) {
     };
 
     const decimals: numMap2 = {
-      speed: 1,
+      speed: 2,
       satellites: 0,
       pdop: 2,
       latitude: 5,
@@ -73,8 +73,8 @@ export default function WMStatus(props: WMStatusProps) {
       power: 0,
       cadence: 0,
       heartRate: 0,
-      reedVelocity: 1,
-      reedDistance: 0,
+      reedVelocity: 2,
+      reedDistance: 2,
       x: 2,
       y: 2,
       z: 2,
@@ -102,7 +102,7 @@ export default function WMStatus(props: WMStatusProps) {
           } else if (unit === 'km/h') {
             val *= 3.6;
           }
-          displayValue = Math.floor(val * 10 ** dec) / 10 ** dec;
+          displayValue = roundNum(val, dec);
         }
       } else {
         displayValue = '-';

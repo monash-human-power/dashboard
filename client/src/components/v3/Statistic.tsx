@@ -3,7 +3,7 @@ import React from 'react';
 
 export interface StatisticProps {
   /** Value to be shown */
-  value: number | null;
+  value: number | string | null;
   /** Unit of the value */
   unit: string;
   /** Description */
