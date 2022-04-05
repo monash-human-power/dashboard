@@ -59,7 +59,7 @@ export default function WMStatus(props: WMStatusProps) {
     };
 
     const decimals: numMap2 = {
-      speed: 1,
+      speed: 2,
       satellites: 0,
       pdop: 2,
       latitude: 5,
@@ -73,7 +73,7 @@ export default function WMStatus(props: WMStatusProps) {
       power: 0,
       cadence: 0,
       heartRate: 0,
-      reedVelocity: 1,
+      reedVelocity: 2,
       reedDistance: 2,
       x: 2,
       y: 2,
