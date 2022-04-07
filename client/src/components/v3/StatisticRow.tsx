@@ -1,6 +1,6 @@
 import { Sensor, useSensorData } from 'api/common/data';
 import React, { useEffect, useState, useCallback } from 'react';
-import { MaxSpeedRT, HeartRateRT, PowerRT, ReedVelocityRT } from 'types/data';
+import { MaxSpeedRT, HeartRateRT, PowerRT, AntSpeedRT } from 'types/data';
 import { useChannelShaped, emit } from 'api/common/socket';
 import { SpeedPayload } from 'types/statistic';
 import { roundNum } from 'utils/data';
@@ -17,7 +17,7 @@ export default function StatisticRow(): JSX.Element {
   const [maxSpeed, setMaxSpeed] = useState<number | null>(null);
 
   // TODO: Multiple sensor data
-  const currVel = useSensorData(3, Sensor.ReedVelocity, ReedVelocityRT);
+  const currVel = useSensorData(4, Sensor.AntSpeed, AntSpeedRT);
 
   useChannelShaped('boost/max_speed_achieved', MaxSpeedRT, setMaxSpeed);
   // Get max speed whenever page refreshes

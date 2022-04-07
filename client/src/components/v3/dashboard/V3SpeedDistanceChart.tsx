@@ -4,7 +4,7 @@ import { Sensor, useSensorData } from 'api/common/data';
 import { useChannel } from 'api/common/socket';
 import SpeedDistanceChart from 'components/common/charts/SpeedDistanceChart';
 import { ChartPoint } from 'types/chart';
-import { GPSRT, ReedDistanceRT } from 'types/data';
+import { AntDistanceRT, AntSpeedRT } from 'types/data';
 
 export const V3SDChartKey = 'v3-dashboard-speed-distance-chart-data';
 
@@ -30,11 +30,11 @@ export function V3SpeedDistanceChart() {
 
   // Reset when start message received
   const reset = () => setData([]);
-  useChannel('wireless_module-3-start', reset);
+  useChannel('wireless_module-4-start', reset);
 
   // Speed
-  const speed = useSensorData(3, Sensor.GPS, GPSRT)?.speed;
-  const distance = useSensorData(3, Sensor.ReedDistance, ReedDistanceRT);
+  const speed = useSensorData(4, Sensor.AntSpeed, AntSpeedRT);
+  const distance = useSensorData(4, Sensor.AntDistance, AntDistanceRT);
 
   // Update data whenever the point is updated
   useEffect(() => {

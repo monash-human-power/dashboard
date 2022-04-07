@@ -43,6 +43,12 @@ export const ReedVelocityRT = Number;
 /** Value runtype of reedDistance sensor data */
 export const ReedDistanceRT = Number;
 
+/** Value runtype of antSpeed sensor data */
+export const AntSpeedRT = Number;
+
+/** Value runtype of antDistance sensor data */
+export const AntDistanceRT = Number;
+
 /** Value runtype of gps sensor data */
 export const GPSRT = Record({
   /** Speed */

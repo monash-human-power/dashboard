@@ -24,6 +24,8 @@ export enum Sensor {
   Gyroscope = 'gyroscope',
   ReedVelocity = 'reedVelocity',
   ReedDistance = 'reedDistance',
+  AntSpeed = 'antSpeed',
+  AntDistance = 'antDistance',
   GPS = 'gps',
   Power = 'power',
   Cadence = 'cadence',
