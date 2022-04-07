@@ -1,7 +1,7 @@
 import { Sensor, useSensorData } from 'api/common/data';
 import React, { useEffect, useState, useCallback } from 'react';
-import { HeartRateRT, PowerRT, ReedVelocityRT } from 'types/data';
-import { useChannelShaped } from 'api/common/socket';
+import { MaxSpeedRT, HeartRateRT, PowerRT, ReedVelocityRT } from 'types/data';
+import { useChannelShaped, emit } from 'api/common/socket';
 import { SpeedPayload } from 'types/statistic';
 import { roundNum } from 'utils/data';
 import Statistic from './Statistic';
@@ -19,13 +19,11 @@ export default function StatisticRow(): JSX.Element {
   // TODO: Multiple sensor data
   const currVel = useSensorData(3, Sensor.ReedVelocity, ReedVelocityRT);
 
-  // Update max speed whenever the speed is updated
+  useChannelShaped('boost/max_speed_achieved', MaxSpeedRT, setMaxSpeed);
+  // Get max speed whenever page refreshes
   useEffect(() => {
-    // Update max speed as the greater of current velocity and previous max
-    if (currVel) setMaxSpeed(Math.max(Math.abs(currVel), maxSpeed ?? 0));
-    // Omit maxSpeed to avoid infinite render loop
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currVel]);
+    emit('get-max-speed-achieved', 'boost/max_speed_achieved');
+  }, []);
 
   // Previous Trap Speed (Achieved)
   // eslint-disable-next-line no-unused-vars

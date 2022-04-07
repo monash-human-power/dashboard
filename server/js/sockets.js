@@ -33,6 +33,7 @@ const retained = {
     configs: null,
     results: null,
   },
+  max_speed_achieved: null,
 };
 
 function connectToPublicMQTTBroker(clientID = '') {
@@ -173,7 +174,7 @@ sockets.init = function socketInit(server) {
           if (property === 'start') {
             socket.emit(`wireless_module-${id}-start`, true);
           }
-          if (property === 'stop') {
+          else if (property === 'stop') {
             socket.emit(`wireless_module-${id}-stop`, true);
           }
           // Module's offline
@@ -194,11 +195,6 @@ sockets.init = function socketInit(server) {
             // Emit parsed payload as is
             socket.emit(`wireless_module-${id}-${property}`, value);
 
-            // Temporary fix, if ant+ is sending data, it should be considered online
-            // TODO: Make ant+ send a status message on the status topic instead.
-            if (id === '4') {
-              socket.emit(`wireless_module-${id}-online`, true);
-            }
           }
         } catch (e) {
           console.error(
@@ -247,8 +243,15 @@ sockets.init = function socketInit(server) {
             }
             break;
           case BOOST.predicted_max_speed:
+            // FIXME: Not sure why we send this currently?
             socket.emit('boost-running');
             socket.emit(BOOST.predicted_max_speed, JSON.parse(payloadString));
+            break;
+          case BOOST.max_speed_achieved:
+            console.log(payloadString);
+            const max_speed = payloadString ? JSON.parse(payloadString)["speed"] : null;
+            retained.max_speed_achieved = max_speed;
+            socket.emit(BOOST.max_speed_achieved, max_speed);
             break;
           case BOOST.recommended_sp:
             socket.emit('boost-running');
@@ -283,6 +286,7 @@ sockets.init = function socketInit(server) {
     mqttClient.subscribe(WirelessModule.all().module);
     mqttClient.subscribe(BOOST.prev_trap_speed);
     mqttClient.subscribe(BOOST.predicted_max_speed);
+    mqttClient.subscribe(BOOST.max_speed_achieved);
     mqttClient.subscribe(BOOST.generate_complete);
     mqttClient.subscribe(BOOST.recommended_sp);
     mqttClient.subscribe(BOOST.configs);
@@ -302,6 +306,9 @@ sockets.init = function socketInit(server) {
       if (path instanceof Array && path.length > 0)
         socket.emit(path.join('-'), getPropWithPath(retained, path));
     });
+    socket.on('get-max-speed-achieved', (path) => {
+      if (retained.max_speed_achieved) socket.emit(path, retained.max_speed_achieved);
+    })
 
     socket.on('get-boost-configs', (path) => {
       if (retained.boost.configs) socket.emit(path, retained.boost.configs);
@@ -385,9 +392,9 @@ sockets.init = function socketInit(server) {
       mqttClient.publish(Camera.recording_stop);
     });
 
-    socket.on('flip-video-feed', () => {
-      console.log('got to this point too sir no problem');
-      mqttClient.publish(Camera.flip_video_feed);
+    socket.on('flip-video-feed', (device) => {
+      // device is the name of the camera system, i.e. primary/secondary
+      mqttClient.publish(`${Camera.flip_video_feed}/${device}`);
     });
 
     socket.on('start-das-recording', () => {

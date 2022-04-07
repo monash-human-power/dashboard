@@ -46,7 +46,7 @@ export default function OverlaySelection({
 
   /** Flipping Video Feed */
   function flipVideo() {
-    emit('flip-video-feed');
+    emit('flip-video-feed', device);
     toast.success('Video feed is flipped!');
   }
 
