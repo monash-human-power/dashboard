@@ -45,8 +45,9 @@ export function V3SpeedDistanceChart() {
       // New distance measurement
       distance !== data[data.length - 1]?.x
     ) {
-      maxSpeed.current = Math.max(maxSpeed.current, speed);
-      setData([...data, { x: distance, y: speed }]);
+      const speedKmh = speed * 3.6;
+      maxSpeed.current = Math.max(maxSpeed.current, speedKmh);
+      setData([...data, { x: distance, y: speedKmh }]);
     }
     // Omit data in deps as otherwise there would be an infinite render loop
     // eslint-disable-next-line react-hooks/exhaustive-deps
