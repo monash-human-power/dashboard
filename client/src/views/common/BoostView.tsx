@@ -15,7 +15,7 @@ import { useSensorData, Sensor } from 'api/common/data';
 import { Static } from 'runtypes';
 import { useChannelShaped, emit } from 'api/common/socket';
 import toast from 'react-hot-toast';
-import { ReedDistanceRT } from 'types/data';
+import { AntDistanceRT } from 'types/data';
 
 /**
  * Boost View component
@@ -44,9 +44,8 @@ export default function BoostView() {
     },
   ]);
 
-  // fetch the reed distance from wireless module #3
-  const reedDistance =
-    useSensorData(3, Sensor.ReedDistance, ReedDistanceRT) ?? 0;
+  // fetch the ant+ distance from wireless module #4
+  const antDistance = useSensorData(4, Sensor.AntDistance, AntDistanceRT) ?? 0;
 
   const handleConfigsReceived = useCallback(
     (configsReceived: Static<typeof ConfigPayloadRT>) => {
@@ -130,7 +129,7 @@ export default function BoostView() {
       <BoostCalibration
         onSet={setCalibration}
         onReset={handleReset}
-        distTravelled={reedDistance}
+        distTravelled={antDistance}
         calibrationDiff={distOffset}
       />
       <BoostConfigurator
