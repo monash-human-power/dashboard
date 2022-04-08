@@ -1350,8 +1350,8 @@ methods@~1.1.2:
   integrity sha1-VSmk1nZUE07cxSZmVoNbD4Ua/O4=
 
 "mhp@ssh://git@github.com:monash-human-power/common.git":
-  version "1.0.0"
-  resolved "ssh://git@github.com:monash-human-power/common.git#ab014798c5b1d246ee7bb4d1a25a25ad9da31228"
+  version "1.2.0"
+  resolved "ssh://git@github.com:monash-human-power/common.git#4d92c39926898704b2ed244ba890f57bee1aa84e"
   dependencies:
     js-yaml "^4.1.0"
     mustache "^4.2.0"
