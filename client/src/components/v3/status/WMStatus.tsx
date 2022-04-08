@@ -56,6 +56,8 @@ export default function WMStatus(props: WMStatusProps) {
       heartRate: 'bpm',
       reedVelocity: 'km/h',
       reedDistance: 'km',
+      antSpeed: 'km/h',
+      antDistance: 'km',
     };
 
     const decimals: numMap2 = {
@@ -75,6 +77,8 @@ export default function WMStatus(props: WMStatusProps) {
       heartRate: 0,
       reedVelocity: 2,
       reedDistance: 2,
+      antSpeed: 2,
+      antDistance: 2,
       x: 2,
       y: 2,
       z: 2,

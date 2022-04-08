@@ -248,7 +248,6 @@ sockets.init = function socketInit(server) {
             socket.emit(BOOST.predicted_max_speed, JSON.parse(payloadString));
             break;
           case BOOST.max_speed_achieved:
-            console.log(payloadString);
             const max_speed = payloadString ? JSON.parse(payloadString)["speed"] : null;
             retained.max_speed_achieved = max_speed;
             socket.emit(BOOST.max_speed_achieved, max_speed);

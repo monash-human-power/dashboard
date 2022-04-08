@@ -43,6 +43,12 @@ export const ReedVelocityRT = Number;
 /** Value runtype of reedDistance sensor data */
 export const ReedDistanceRT = Number;
 
+/** Value runtype of antSpeed sensor data */
+export const AntSpeedRT = Number;
+
+/** Value runtype of antDistance sensor data */
+export const AntDistanceRT = Number;
+
 /** Value runtype of gps sensor data */
 export const GPSRT = Record({
   /** Speed */
@@ -80,6 +86,8 @@ export const SensorsRT = Union(
   GyroscopeRT,
   ReedVelocityRT,
   ReedDistanceRT,
+  AntSpeedRT,
+  AntDistanceRT,
   GPSRT,
   PowerRT,
   CadenceRT,
@@ -117,6 +125,12 @@ export type ReedVelocityT = Static<typeof ReedVelocityRT>;
 
 /** Value type of reedDistance sensor data */
 export type ReedDistanceT = Static<typeof ReedDistanceRT>;
+
+/** Value type of antSpeed sensor data */
+export type AntSpeedT = Static<typeof AntSpeedRT>;
+
+/** Value type of antDistance sensor data */
+export type AntDistanceT = Static<typeof AntDistanceRT>;
 
 /** Value type of gps sensor data */
 export type GPST = Static<typeof GPSRT>;
