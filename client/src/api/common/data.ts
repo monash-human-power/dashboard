@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   Array,
   Null,
@@ -142,9 +142,6 @@ export function useModuleBattery(id: number): ModuleBattery | null {
 export function useModuleStatus(id: number, name: string): WMStatus {
   // Check if module is online
   const [online, setOnline] = useState<boolean>(false);
-  useEffect(() => {
-    emit('get-payload', ['wireless_module', `${id}`, 'online']);
-  }, [id]);
   useChannelShaped(
     `wireless_module-${id}-online`,
     Boolean,

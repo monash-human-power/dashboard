@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import ContentPage from 'components/common/ContentPage';
 import CameraStatusContainer from 'components/v3/status/CameraStatusContainer';

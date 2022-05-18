@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, Row } from 'react-bootstrap';
 
 import CameraStatus, {
@@ -10,6 +10,7 @@ import {
   useCameraStatus,
   useVideoFeedStatus,
 } from 'api/common/camera';
+import { emit } from 'api/common/socket';
 import { getPrettyDeviceName } from 'utils/string';
 
 /**
@@ -33,6 +34,11 @@ export default function CameraStatusContainer(): JSX.Element {
     battery: useCameraBattery('secondary')?.voltage ?? null,
     videoFeedEnabled: useVideoFeedStatus('secondary')?.online ?? null,
   };
+
+  useEffect(() => {
+    emit('get-payload', ['status', `camera`, `primary`, 'battery']);
+    emit('get-payload', ['status', `camera`, `secondary`, 'battery']);
+  }, []);
 
   return (
     <Card>
