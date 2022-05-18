@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Array,
   Null,
@@ -126,7 +126,10 @@ export interface ModuleBattery extends _ModuleBattery {}
  */
 export function useModuleBattery(id: number): ModuleBattery | null {
   const [battery, setBattery] = useState<ModuleBattery | null>(null);
-
+  // Fetch battery data upon refresh
+  useEffect(() => {
+    emit('get-payload', ['wireless_module', `${id}`, 'battery']);
+  }, [id]);
   useChannelShaped(`wireless_module-${id}-battery`, ModuleBattery, setBattery);
 
   return battery;
@@ -142,6 +145,9 @@ export function useModuleBattery(id: number): ModuleBattery | null {
 export function useModuleStatus(id: number, name: string): WMStatus {
   // Check if module is online
   const [online, setOnline] = useState<boolean>(false);
+  useEffect(() => {
+    emit('get-payload', ['wireless_module', `${id}`, 'online']);
+  }, [id]);
   useChannelShaped(
     `wireless_module-${id}-online`,
     Boolean,
