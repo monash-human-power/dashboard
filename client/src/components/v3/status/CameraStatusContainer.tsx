@@ -10,7 +10,6 @@ import {
   useCameraStatus,
   useVideoFeedStatus,
 } from 'api/common/camera';
-import { emit } from 'api/common/socket';
 import { getPrettyDeviceName } from 'utils/string';
 
 /**

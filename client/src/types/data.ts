@@ -152,7 +152,7 @@ export interface WMStatusOnline {
   moduleName: string;
   online: true;
   data: SensorDataT[];
-  batteryVoltage: number;
+  batteryVoltage: number | null;
 }
 
 export interface WMStatusOffline {

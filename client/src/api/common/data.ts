@@ -155,7 +155,7 @@ export function useModuleStatus(id: number, name: string): WMStatus {
   );
 
   const data = useModuleData(id).sensors;
-  const batteryVoltage = useModuleBattery(id)?.voltage ?? -1;
+  const batteryVoltage = useModuleBattery(id)?.voltage ?? null;
 
   if (!online) {
     return {

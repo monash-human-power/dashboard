@@ -238,7 +238,7 @@ export default function WMStatus(props: WMStatusProps) {
               <td>
                 <strong>Battery Voltage</strong>
               </td>
-              <td>{batteryVoltage.toFixed(2)} V</td>
+              <td>{batteryVoltage ? batteryVoltage.toFixed(2) : '-'} V</td>
             </tr>
 
             {/* Sensors List of Names */}
