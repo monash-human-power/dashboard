@@ -1,6 +1,7 @@
 import React from 'react';
 import { Col, Table } from 'react-bootstrap';
 import OnlineStatusPill from 'components/common/OnlineStatusPill';
+import { roundNum } from 'utils/data';
 
 export interface CameraStatusProps {
   cameraName: string;
@@ -23,6 +24,8 @@ export default function CameraStatus({
   battery,
   videoFeedEnabled,
 }: CameraStatusProps) {
+  const voltageDP = 2;
+
   return (
     <Col md xl="12" className="my-2">
       <span>
@@ -42,7 +45,7 @@ export default function CameraStatus({
                 <td>
                   <strong>Battery</strong>
                 </td>
-                <td>{`${battery ?? '-'} V`}</td>
+                <td>{`${battery ? roundNum(battery, voltageDP) : '-'} V`}</td>
               </tr>
 
               {/* Video Feed Status */}

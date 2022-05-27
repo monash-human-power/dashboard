@@ -279,6 +279,7 @@ sockets.init = function socketInit(server) {
       }
     });
 
+    // Subscribe to topics after defining the 'on' method to ensure we catch any message sent immediately upon subscribing (e.g. retained messages)
     mqttClient.subscribe(DAS.start);
     mqttClient.subscribe(DAS.stop);
     mqttClient.subscribe(DAS.data);
