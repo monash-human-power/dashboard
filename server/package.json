@@ -24,7 +24,7 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "dotenv": "^8.0.0",
-    "ejs": "^2.6.2",
+    "ejs": "^3.1.7",
     "express": "^4.17.1",
     "mhp": "ssh://git@github.com:monash-human-power/common.git",
     "mqtt": "^2.18.8",
