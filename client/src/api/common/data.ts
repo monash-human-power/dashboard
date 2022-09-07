@@ -220,3 +220,17 @@ export function startBoost() {
 export function stopBoost() {
   emit('stop-boost');
 }
+
+/***
+ * Start V3
+ */
+export function startV3() {
+  emit('start-V3');
+}
+
+/***
+ * Stop V3
+ */
+export function stopV3() {
+  emit('stop-V3');
+}

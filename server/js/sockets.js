@@ -7,7 +7,7 @@ const sockets = {};
 const mqtt = require('mqtt');
 const os = require('os');
 
-const { DAS, BOOST, Camera, WirelessModule } = require('mhp');
+const { DAS, BOOST, Camera, WirelessModule, V3 } = require('mhp');
 const { getPropWithPath, setPropWithPath } = require('./util');
 
 // Public MQTT broker
@@ -234,6 +234,19 @@ sockets.init = function socketInit(server) {
           case DAS.stop:
             socket.emit('stop');
             break;
+          case V3.start:
+            const msg = JSON.parse(payload);
+            if (msg.start){
+                [1, 2, 3, 4].forEach((n) =>
+                socket.emit(`wireless_module-${id}-start`, true),
+              );
+              }
+            else{
+              [1, 2, 3, 4].forEach((n) =>
+                socket.emit(`wireless_module-${id}-stop`, true),
+              );
+            }
+            break;
 
           // V2 data channel
           case DAS.data:
@@ -282,6 +295,7 @@ sockets.init = function socketInit(server) {
     // Subscribe to topics after defining the 'on' method to ensure we catch any message sent immediately upon subscribing (e.g. retained messages)
     mqttClient.subscribe(DAS.start);
     mqttClient.subscribe(DAS.stop);
+    mqttClient.subscribe(V3.start);
     mqttClient.subscribe(DAS.data);
     mqttClient.subscribe(WirelessModule.all().module);
     mqttClient.subscribe(BOOST.prev_trap_speed);
@@ -408,6 +422,15 @@ sockets.init = function socketInit(server) {
         mqttClient.publish(WirelessModule.id(n).stop),
       );
     });
+    
+    socket.on('start-V3', ()=>{
+      mqttClient.publish(V3.start, JSON.stringify({"start": true}));      
+    })
+
+    socket.on('stop-V3', ()=>{
+      mqttClient.publish(V3.start, JSON.stringify({"start": false}));
+    })
+
   });
 };
 

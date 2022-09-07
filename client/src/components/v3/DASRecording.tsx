@@ -3,6 +3,8 @@ import {
   stopLogging,
   startBoost,
   stopBoost,
+  startV3,
+  stopV3,
   useModuleDataCallback,
   useModuleStartCallback,
   useModuleStopCallback,
@@ -42,6 +44,7 @@ export default function DASRecording(): JSX.Element {
     setLoggingEnabled(true);
     startLogging();
     startBoost();
+    startV3();
   }
 
   /** Stop DAS recording and BOOST computations */
@@ -50,6 +53,7 @@ export default function DASRecording(): JSX.Element {
     setLoggingEnabled(false);
     stopLogging();
     stopBoost();
+    stopV3();
   }
 
   return (
