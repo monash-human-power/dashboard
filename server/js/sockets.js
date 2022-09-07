@@ -237,12 +237,12 @@ sockets.init = function socketInit(server) {
           case V3.start:
             const msg = JSON.parse(payload);
             if (msg.start){
-                [1, 2, 3, 4].forEach((n) =>
+                [1, 2, 3, 4].forEach((id) =>
                 socket.emit(`wireless_module-${id}-start`, true),
               );
               }
             else{
-              [1, 2, 3, 4].forEach((n) =>
+              [1, 2, 3, 4].forEach((id) =>
                 socket.emit(`wireless_module-${id}-stop`, true),
               );
             }
