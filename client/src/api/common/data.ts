@@ -193,30 +193,16 @@ export function useSensorData<T extends SensorsT>(
   return Union(shape, Null).check(data);
 }
 
-/**
- * Starts DAS log recording
+/***
+ * Start V3
  */
-export function startLogging() {
-  emit('start-das-recording');
+export function startV3() {
+  emit('start-V3');
 }
 
-/**
- * Stops DAS log recording
+/***
+ * Stop V3
  */
-export function stopLogging() {
-  emit('stop-das-recording');
-}
-
-/**
- * Start Boosting
- */
-export function startBoost() {
-  emit('start-boost');
-}
-
-/**
- * Stop Boosting
- */
-export function stopBoost() {
-  emit('stop-boost');
+export function stopV3() {
+  emit('stop-V3');
 }
