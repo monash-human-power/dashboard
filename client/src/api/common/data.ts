@@ -193,14 +193,14 @@ export function useSensorData<T extends SensorsT>(
   return Union(shape, Null).check(data);
 }
 
-/***
+/**
  * Start V3
  */
 export function startV3() {
   emit('start-V3');
 }
 
-/***
+/**
  * Stop V3
  */
 export function stopV3() {
