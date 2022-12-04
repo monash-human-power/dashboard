@@ -26,16 +26,14 @@ jobs:
         # install treated like errors
         run: |
           cd client
-          export CI='' && yarn install
-          yarn run build --if-present
-          yarn run test --if-present
+          CI='' && yarn install
+          yarn run build
       
       - name: yarn install, build, and test server
         run: |
           cd server
-          export CI='' && yarn install
-          yarn run build --if-present
-          yarn run test --if-present
+          CI='' && yarn install
+          yarn run build
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
