@@ -5,8 +5,7 @@ name: Build and deploy Node.js app to Azure Web App - DashMHP
 
 on:
   push:
-    branches:
-      - master
+    branches: *
   workflow_dispatch:
 
 jobs:
