@@ -22,16 +22,18 @@ jobs:
           node-version: '14.x'
 
       - name: yarn install, build, and test front-end
+        # We use CI='' here because Github Action sets CI=true which makes warnings during
+        # install treated like errors
         run: |
           cd client
-          yarn install
+          CI='' && yarn install
           yarn run build --if-present
           yarn run test --if-present
       
       - name: yarn install, build, and test server
         run: |
           cd server
-          yarn install
+          CI='' && yarn install
           yarn run build --if-present
           yarn run test --if-present
 
