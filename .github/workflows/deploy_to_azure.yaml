@@ -16,6 +16,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      # This is to allow github actions to clone our private common repository.
+      # The public key is with mhp-deployment github user
+      - uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: Set up Node.js version
         uses: actions/setup-node@v1
         with:
