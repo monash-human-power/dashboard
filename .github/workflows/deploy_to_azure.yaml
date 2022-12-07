@@ -39,7 +39,6 @@ jobs:
         run: |
           cd server
           CI='' && yarn install
-          yarn run build
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
