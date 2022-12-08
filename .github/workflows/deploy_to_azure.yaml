@@ -65,5 +65,5 @@ jobs:
         with:
           app-name: 'DashMHP'
           slot-name: 'production'
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_c005c357558940b3ad50124148e2565c }}
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile }}
           package: .
