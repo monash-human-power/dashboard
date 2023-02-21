@@ -32,7 +32,7 @@ export const V2 = createStory(Template, {
 export const V3 = createStory(Template, {
   ...baseProps,
   bikeVersion: {
-    name: 'Version 3 (V3)',
+    name: 'Version 3 (Bilby)',
     rootPath: '/v3',
     routes: V3routes,
   },

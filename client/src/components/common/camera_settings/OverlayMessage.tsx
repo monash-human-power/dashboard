@@ -7,10 +7,79 @@ export interface OverlayMessageProps {
 }
 
 type Message = {
+  id: number;
   text: string;
   time: Date;
-  elapsed: string; // "5 seconds" or something
 };
+
+/**
+ * Table for displaying previously sent messages.
+ *
+ * @param props Props
+ * @returns Component
+ */
+function MessageHistory(props: { history: Message[] }) {
+  const [now, setNow] = useState<Date>(new Date());
+
+  useEffect(() => {
+    const interval = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const calculateElapsed = useCallback(
+    (time) => {
+      let elapsed = (now.getTime() - time.getTime()) / 1000; // Elapsed seconds
+      if (elapsed < 1) {
+        // Display 'now' if sent less than a second ago
+        return 'now';
+      }
+      // Finding best unit of time to use
+      let unit = '';
+      const units = [
+        { label: ' sec', divisor: 1 },
+        { label: ' min', divisor: 60 },
+        { label: ' hour', divisor: 60 * 60 },
+        { label: ' day', divisor: 60 * 60 * 24 },
+      ];
+      for (let i = units.length - 1; i >= 0; i -= 1) {
+        if (elapsed >= units[i].divisor) {
+          elapsed /= units[i].divisor;
+          unit = units[i].label;
+          break;
+        }
+      }
+      unit += elapsed >= 2 ? 's' : '';
+      return Math.floor(elapsed).toString().concat(unit);
+    },
+    [now],
+  );
+
+  const { history } = props;
+  return (
+    <table className={styles.table} id="messageTable">
+      <thead>
+        <tr>
+          <th>Message</th>
+          <th>Time</th>
+          <th className={styles.table_time}>Elapsed</th>
+        </tr>
+      </thead>
+      <tbody>
+        {history.map(
+          ({ id, text, time }: { id: number; text: string; time: Date }) => (
+            <tr key={id}>
+              <td className={styles.table_message}>{text}</td>
+              <td className={styles.table_time}>
+                {time.toLocaleTimeString('en-AU')}
+              </td>
+              <td>{calculateElapsed(time)}</td>
+            </tr>
+          ),
+        )}
+      </tbody>
+    </table>
+  );
+}
 
 /**
  * Text field for sending messages to the rider via the active overlay.
@@ -20,9 +89,9 @@ type Message = {
  */
 export default function OverlayMessage({ sendMessage }: OverlayMessageProps) {
   const [message, setMessage] = useState('');
+  const [key, setKey] = useState(0);
 
-  const [messageHistory, setMessageHistory] = useState<Message[]>([]);
-
+  const [history, setHistory] = useState<Message[]>([]);
   const handleMessageChange = useCallback(
     (event) => setMessage(event.target.value),
     [setMessage],
@@ -30,14 +99,15 @@ export default function OverlayMessage({ sendMessage }: OverlayMessageProps) {
 
   const handleMessage = useCallback(() => {
     const newMessage: Message = {
+      id: key,
       text: message,
       time: new Date(),
-      elapsed: 'now',
     };
-    setMessageHistory((x) => [newMessage, ...x]);
+    setKey(key + 1);
+    setHistory((x) => [newMessage, ...x]);
     sendMessage(message);
     setMessage('');
-  }, [message, setMessage, sendMessage]);
+  }, [message, setMessage, sendMessage, key, setKey]);
 
   const handleKeyPressed = useCallback(
     (event) => {
@@ -45,37 +115,6 @@ export default function OverlayMessage({ sendMessage }: OverlayMessageProps) {
     },
     [handleMessage],
   );
-
-  const updateElapsed = useCallback(() => {
-    const newMessageHistory = Object.create(messageHistory); // Deep copied
-    for (let m = 0; m < newMessageHistory.length; m += 1) {
-      let time =
-        (new Date().getTime() - newMessageHistory[m].time.getTime()) / 1000; // Elapsed seconds
-      // Finding best unit of time to use
-      let unit: string;
-      if (time < 60) {
-        unit = ' sec';
-      } else if (time < 60 * 60) {
-        unit = ' min';
-        time /= 60;
-      } else if (time < 60 * 60 * 24) {
-        unit = ' hour';
-        time /= 60 * 60;
-      } else {
-        unit = ' day';
-        time /= 60 * 60 * 24;
-      }
-      unit += time >= 2 ? 's' : '';
-      newMessageHistory[m].elapsed = Math.floor(time).toString().concat(unit); // Updates dummy variable
-    }
-    setMessageHistory(newMessageHistory);
-  }, [messageHistory, setMessageHistory]);
-
-  useEffect(() => {
-    // Updates elapsed times in messageHistory every second
-    const interval = setInterval(updateElapsed, 1000);
-    return () => clearInterval(interval);
-  }, [updateElapsed]);
 
   return (
     <Card>
@@ -94,28 +133,7 @@ export default function OverlayMessage({ sendMessage }: OverlayMessageProps) {
             </Button>
           </InputGroup.Append>
         </InputGroup>
-        {messageHistory.length > 0 && (
-          <table className={styles.table} id="messageTable">
-            <thead>
-              <tr>
-                <th>Message</th>
-                <th>Time</th>
-                <th className={styles.table_time}>Elapsed time</th>
-              </tr>
-            </thead>
-            <tbody>
-              {messageHistory.map(({ text, elapsed, time }) => (
-                <tr>
-                  <td className={styles.table_message}>{text}</td>
-                  <td className={styles.table_time}>
-                    {time.toLocaleTimeString('en-AU')}
-                  </td>
-                  <td>{elapsed}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+        {history.length > 0 && <MessageHistory history={history} />}
       </Card.Body>
     </Card>
   );

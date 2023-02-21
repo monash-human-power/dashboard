@@ -20,7 +20,7 @@ export const bikeVersions: VersionInfo[] = [
     routes: V2Routes,
   },
   {
-    name: 'Version 3 (V3)',
+    name: 'Version 3 (Bilby)',
     rootPath: '/v3',
     routes: V3Routes,
   },

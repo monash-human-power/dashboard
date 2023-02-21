@@ -3,6 +3,11 @@
   max-width: 100%;
 }
 
+tbody,
+tr:not(:first-child) {
+  border-top: 1px solid rgba(0, 0, 0, 0.17);
+}
+
 .table_message {
   overflow-wrap: break-word;
   word-wrap: break-word;
