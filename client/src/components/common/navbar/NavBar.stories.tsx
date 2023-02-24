@@ -26,6 +26,7 @@ export const V2 = createStory(Template, {
     name: 'Version 2 (Wombat)',
     rootPath: '/v2',
     routes: V2routes,
+    id: 2,
   },
 });
 
@@ -35,5 +36,6 @@ export const V3 = createStory(Template, {
     name: 'Version 3 (V3)',
     rootPath: '/v3',
     routes: V3routes,
+    id: 3,
   },
 });

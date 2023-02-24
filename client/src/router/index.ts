@@ -11,6 +11,8 @@ export interface VersionInfo {
   rootPath: string;
   /** List of routes under this version */
   routes: RouteInfo[];
+  /** Key for React mapping */
+  id: number;
 }
 
 export const bikeVersions: VersionInfo[] = [
@@ -18,11 +20,13 @@ export const bikeVersions: VersionInfo[] = [
     name: 'Version 2 (Wombat)',
     rootPath: '/v2',
     routes: V2Routes,
+    id: 2,
   },
   {
     name: 'Version 3 (V3)',
     rootPath: '/v3',
     routes: V3Routes,
+    id: 3,
   },
 ];
 
