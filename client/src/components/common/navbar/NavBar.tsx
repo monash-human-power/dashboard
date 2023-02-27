@@ -40,8 +40,8 @@ export default function NavBar({
     </Nav.Link>
   ));
 
-  const versionDropdown = bikeVersions.map(({ name, rootPath }) => (
-    <NavDropdown.Item as={NavLink} to={rootPath} activeClassName="">
+  const versionDropdown = bikeVersions.map(({ name, rootPath, id }) => (
+    <NavDropdown.Item as={NavLink} to={rootPath} activeClassName="" key={id}>
       {name}
     </NavDropdown.Item>
   ));
