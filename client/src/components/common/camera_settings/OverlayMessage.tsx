@@ -6,6 +6,8 @@ export interface OverlayMessageProps {
   sendMessage: (message: string) => void;
 }
 
+export const mesHistKey = 'dashboard-camera-system-messages-key';
+
 type Message = {
   id: number;
   text: string;
@@ -92,6 +94,25 @@ export default function OverlayMessage({ sendMessage }: OverlayMessageProps) {
   const [key, setKey] = useState(0);
 
   const [history, setHistory] = useState<Message[]>([]);
+
+  useEffect(() => {
+    // Check if there are any messages in local storage and imports them
+    const savedMessages = localStorage.getItem(mesHistKey);
+    if (savedMessages) {
+      // If a save exists
+      const parsedMessages: Message[] = JSON.parse(savedMessages);
+      if (parsedMessages.length > 0) {
+        // If the save has messages
+        const messageHistory = parsedMessages.map((messages) => ({
+          ...messages,
+          time: new Date(messages.time),
+        }));
+        setHistory(messageHistory);
+        setKey(messageHistory[0].id + 1);
+      }
+    }
+  }, []);
+
   const handleMessageChange = useCallback(
     (event) => setMessage(event.target.value),
     [setMessage],
@@ -108,6 +129,15 @@ export default function OverlayMessage({ sendMessage }: OverlayMessageProps) {
     sendMessage(message);
     setMessage('');
   }, [message, setMessage, sendMessage, key, setKey]);
+
+  const deleteHistory = useCallback(() => {
+    setHistory([]);
+  }, []);
+
+  useEffect(() => {
+    // Save history in localStorage whenever history is updated
+    localStorage.setItem(mesHistKey, JSON.stringify(history));
+  }, [history]);
 
   const handleKeyPressed = useCallback(
     (event) => {
@@ -135,6 +165,17 @@ export default function OverlayMessage({ sendMessage }: OverlayMessageProps) {
         </InputGroup>
         {history.length > 0 && <MessageHistory history={history} />}
       </Card.Body>
+      {history.length > 0 && (
+        <Card.Footer>
+          <Button
+            className={styles.button}
+            variant="outline-danger"
+            onClick={deleteHistory}
+          >
+            Delete Messages
+          </Button>
+        </Card.Footer>
+      )}
     </Card>
   );
 }
