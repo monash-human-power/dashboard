@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Card, FormControl, InputGroup } from 'react-bootstrap';
 import styles from 'components/common/camera_settings/OverlayMessage.module.css';
+import toast from 'react-hot-toast';
 
 export interface OverlayMessageProps {
   sendMessage: (message: string) => void;
@@ -20,13 +21,25 @@ type Message = {
  * @param props Props
  * @returns Component
  */
-function MessageHistory(props: { history: Message[] }) {
-  const [now, setNow] = useState<Date>(new Date());
+function MessageHistory(props: { history: Message[]; time12Hour: boolean; setNow: any; now: Date}) {
+  const {now} = props;
+  const {setNow} = props;
 
   useEffect(() => {
-    const interval = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(interval);
-  }, []);
+    const { history } = props;
+    
+    // Update 'now' every 60 seconds after a minute, otherwise every second
+    const delay =
+      now.getTime() - history[0].time.getTime() > 60 * 1000 ? 60 : 1;
+    
+    // Recalls this function every 1 or 60 seconds
+    const timer = setTimeout(() => {
+      setNow(new Date());
+    }, delay * 1000);
+
+    // Clear timer in case multiple timeouts are made
+    return () => clearTimeout(timer);
+  }, [now]);
 
   const calculateElapsed = useCallback(
     (time) => {
@@ -51,35 +64,26 @@ function MessageHistory(props: { history: Message[] }) {
         }
       }
       unit += elapsed >= 2 ? 's' : '';
-      return Math.floor(elapsed).toString().concat(unit);
+      return `${Math.floor(elapsed)} ${unit} ago`;
     },
     [now],
   );
 
-  const { history } = props;
+  const { history, time12Hour } = props;
   return (
-    <table className={styles.table} id="messageTable">
-      <thead>
-        <tr>
-          <th>Message</th>
-          <th>Time</th>
-          <th className={styles.table_time}>Elapsed</th>
-        </tr>
-      </thead>
-      <tbody>
-        {history.map(
-          ({ id, text, time }: { id: number; text: string; time: Date }) => (
-            <tr key={id}>
-              <td className={styles.table_message}>{text}</td>
-              <td className={styles.table_time}>
-                {time.toLocaleTimeString('en-AU')}
-              </td>
-              <td>{calculateElapsed(time)}</td>
-            </tr>
-          ),
-        )}
-      </tbody>
-    </table>
+    <div className={styles.history}>
+      {history.map(
+        ({ id, text, time }: { id: number; text: string; time: Date }) => (
+          <div key={id} className={styles.history_message}>
+            <div className={styles.history_time}>
+              {time.toLocaleTimeString('en-AU', { hour12: time12Hour })},{' '}
+              {calculateElapsed(time)}
+            </div>
+            <div className={styles.history_text}>{text}</div>
+          </div>
+        ),
+      )}
+    </div>
   );
 }
 
@@ -90,10 +94,12 @@ function MessageHistory(props: { history: Message[] }) {
  * @returns Component
  */
 export default function OverlayMessage({ sendMessage }: OverlayMessageProps) {
-  const [message, setMessage] = useState('');
-  const [key, setKey] = useState(0);
-
-  const [history, setHistory] = useState<Message[]>([]);
+  const [message, setMessage] = useState(''); // Current message
+  const [history, setHistory] = useState<Message[]>([]); // History of messages
+  const [key, setKey] = useState(0); // Key used for history array
+  const [time12Hour, setTime12Hour] = useState(true); // Use 12 or 24 hour time
+  const [now, setNow] = useState<Date>(new Date());
+  
 
   useEffect(() => {
     // Check if there are any messages in local storage and imports them
@@ -119,20 +125,26 @@ export default function OverlayMessage({ sendMessage }: OverlayMessageProps) {
   );
 
   const handleMessage = useCallback(() => {
-    const newMessage: Message = {
-      id: key,
-      text: message,
-      time: new Date(),
-    };
-    setKey(key + 1);
-    setHistory((x) => [newMessage, ...x]);
-    sendMessage(message);
-    setMessage('');
+    if (message !== '') {
+      const newMessage: Message = {
+        id: key,
+        text: message,
+        time: new Date(),
+      };
+      setKey(key + 1);
+      setHistory((x) => [newMessage, ...x]);
+      sendMessage(message);
+      setMessage('');
+      setNow(new Date()); // Activates the useEffect in MessageHistory to update elapsed times
+    }
   }, [message, setMessage, sendMessage, key, setKey]);
 
   const deleteHistory = useCallback(() => {
+    toast.success(
+      `${history.length} message${history.length > 1 ? 's' : ''} deleted!`,
+    );
     setHistory([]);
-  }, []);
+  }, [history.length]);
 
   useEffect(() => {
     // Save history in localStorage whenever history is updated
@@ -163,16 +175,25 @@ export default function OverlayMessage({ sendMessage }: OverlayMessageProps) {
             </Button>
           </InputGroup.Append>
         </InputGroup>
-        {history.length > 0 && <MessageHistory history={history} />}
+        {history.length > 0 && (
+          <MessageHistory history={history} time12Hour={time12Hour} setNow={setNow} now={now}/>
+        )}
       </Card.Body>
       {history.length > 0 && (
         <Card.Footer>
           <Button
-            className={styles.button}
+            className="ml-2"
+            variant="outline-primary"
+            onClick={() => setTime12Hour(!time12Hour)}
+          >
+            {time12Hour ? '24' : '12'} Hour time
+          </Button>
+          <Button
+            className="ml-2"
             variant="outline-danger"
             onClick={deleteHistory}
           >
-            Delete Messages
+            Delete History
           </Button>
         </Card.Footer>
       )}
