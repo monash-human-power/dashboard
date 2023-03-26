@@ -21,6 +21,8 @@ export enum Sensor {
   SteeringAngle = 'steeringAngle',
   CO2 = 'co2',
   Accelerometer = 'accelerometer',
+  WindSpeed = 'windSpeed',
+  windDirection = 'windDirection',
   Gyroscope = 'gyroscope',
   ReedVelocity = 'reedVelocity',
   ReedDistance = 'reedDistance',
