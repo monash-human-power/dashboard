@@ -23,7 +23,7 @@ export const bikeVersions: VersionInfo[] = [
     id: 2,
   },
   {
-    name: 'Version 3 (V3)',
+    name: 'Version 3 (Bilby)',
     rootPath: '/v3',
     routes: V3Routes,
     id: 3,
