@@ -13,7 +13,7 @@ import OverlaySelectionContainer from 'components/common/camera_settings/Overlay
  */
 export default function CameraSystemView() {
   return (
-    <ContentPage title="Camera Settings">
+    <ContentPage title="Camera System">
       <div className="mb-4">
         <CameraStatusContainer />
       </div>

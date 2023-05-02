@@ -1,0 +1,22 @@
+.history {
+  width: 100%;
+  max-width: 100%;
+}
+
+.history_message:not(:first-child) {
+  border-top: 1px solid rgba(0, 0, 0, 0.17);
+}
+
+.history_text {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.history_time {
+  font-size: 0.8em;
+  color: #646464;
+}
