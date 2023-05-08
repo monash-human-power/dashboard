@@ -107,6 +107,7 @@ export default function WMStatus(props: WMStatusProps) {
       const anemRows: any[] = [];
       Object.entries(data).forEach((arr) => {
         anemRows.push({ name: arr[0], value: arr[1] });
+        console.log(data);
       });
       output = (
         <Table borderless>

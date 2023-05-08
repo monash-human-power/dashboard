@@ -4,8 +4,6 @@ import { Card, Row } from 'react-bootstrap';
 import AnemometerStatus from 'components/v3/status/AnemometerStatus';
 import { useModuleStatus } from 'api/common/data';
 
-import WMStatus from 'components/v3/status/WMStatus';
-
 /**
  * Container for Anemometer Statuses
  *
