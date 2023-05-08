@@ -210,7 +210,7 @@ export default function WMStatus(props: WMStatusProps) {
     <Col md xl="12" className="my-2">
       {statusPill}
 
-      {/* Only show more information if the camera is online */}
+      {/* Only show more information if the anemometer is online */}
       {info}
     </Col>
   );

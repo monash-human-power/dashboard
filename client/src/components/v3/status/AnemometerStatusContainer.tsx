@@ -4,14 +4,16 @@ import { Card, Row } from 'react-bootstrap';
 import AnemometerStatus from 'components/v3/status/AnemometerStatus';
 import { useModuleStatus } from 'api/common/data';
 
+import WMStatus from 'components/v3/status/WMStatus';
+
 /**
- * Container for Wireless Module Statuses
+ * Container for Anemometer Statuses
  *
  * @returns Component
  */
 export default function AnemometerStatusContainer() {
-  const front = useModuleStatus(1, 'Wind Speed');
-  const back = useModuleStatus(3, 'Wind Direction');
+  const speed = useModuleStatus(1, 'Wind Speed');
+  const direction = useModuleStatus(3, 'Wind Direction');
 
   return (
     <Card>
@@ -19,10 +21,10 @@ export default function AnemometerStatusContainer() {
         <Card.Title>Anemometer</Card.Title>
         <Row>
           {/* Front WM Status */}
-          <AnemometerStatus {...front} />
+          <AnemometerStatus {...speed} />
 
           {/* Back WM Status */}
-          <AnemometerStatus {...back} />
+          <AnemometerStatus {...direction} />
         </Row>
       </Card.Body>
     </Card>

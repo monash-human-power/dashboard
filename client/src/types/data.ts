@@ -127,7 +127,7 @@ export type CO2T = Static<typeof CO2RT>;
 export type AccelerometerT = Static<typeof AccelerometerRT>;
 
 /** Value type of aneomometer sensor data */
-export type AnemometerRT = Static<typeof AnemometerRT>;
+export type AnemometerT = Static<typeof AnemometerRT>;
 
 /** Value type of gyroscope sensor data */
 export type GyroscopeT = Static<typeof GyroscopeRT>;
