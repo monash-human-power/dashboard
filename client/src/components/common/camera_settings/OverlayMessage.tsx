@@ -2,12 +2,11 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Card, FormControl, InputGroup } from 'react-bootstrap';
 import styles from 'components/common/camera_settings/OverlayMessage.module.css';
 import toast from 'react-hot-toast';
+import { useBikeVersion } from 'router';
 
 export interface OverlayMessageProps {
   sendMessage: (message: string) => void;
 }
-
-export const mesHistKey = 'dashboard-camera-system-messages-key';
 
 type Message = {
   id: number;
@@ -21,17 +20,19 @@ type Message = {
  * @param props Props
  * @returns Component
  */
-function MessageHistory(props: { history: Message[]; time12Hour: boolean; setNow: any; now: Date}) {
-  const {now} = props;
-  const {setNow} = props;
+function MessageHistory(props: {
+  history: Message[];
+  time12Hour: boolean;
+  setNow: any;
+  now: Date;
+}) {
+  const { now, setNow, history } = props;
 
   useEffect(() => {
-    const { history } = props;
-    
     // Update 'now' every 60 seconds after a minute, otherwise every second
     const delay =
       now.getTime() - history[0].time.getTime() > 60 * 1000 ? 60 : 1;
-    
+
     // Recalls this function every 1 or 60 seconds
     const timer = setTimeout(() => {
       setNow(new Date());
@@ -39,7 +40,7 @@ function MessageHistory(props: { history: Message[]; time12Hour: boolean; setNow
 
     // Clear timer in case multiple timeouts are made
     return () => clearTimeout(timer);
-  }, [now]);
+  }, [now, history, setNow]);
 
   const calculateElapsed = useCallback(
     (time) => {
@@ -69,7 +70,7 @@ function MessageHistory(props: { history: Message[]; time12Hour: boolean; setNow
     [now],
   );
 
-  const { history, time12Hour } = props;
+  const { time12Hour } = props;
   return (
     <div className={styles.history}>
       {history.map(
@@ -99,11 +100,13 @@ export default function OverlayMessage({ sendMessage }: OverlayMessageProps) {
   const [key, setKey] = useState(0); // Key used for history array
   const [time12Hour, setTime12Hour] = useState(true); // Use 12 or 24 hour time
   const [now, setNow] = useState<Date>(new Date());
-  
+
+  const bikeVersionId = useBikeVersion()?.id || '';
+  const historyKeyBike = `dashboard-camera-system-messages-key-${bikeVersionId}`;
 
   useEffect(() => {
     // Check if there are any messages in local storage and imports them
-    const savedMessages = localStorage.getItem(mesHistKey);
+    const savedMessages = localStorage.getItem(historyKeyBike);
     if (savedMessages) {
       // If a save exists
       const parsedMessages: Message[] = JSON.parse(savedMessages);
@@ -117,7 +120,7 @@ export default function OverlayMessage({ sendMessage }: OverlayMessageProps) {
         setKey(messageHistory[0].id + 1);
       }
     }
-  }, []);
+  }, [historyKeyBike]);
 
   const handleMessageChange = useCallback(
     (event) => setMessage(event.target.value),
@@ -125,7 +128,7 @@ export default function OverlayMessage({ sendMessage }: OverlayMessageProps) {
   );
 
   const handleMessage = useCallback(() => {
-    if (message !== '') {
+    if (message.trim() !== '') {
       const newMessage: Message = {
         id: key,
         text: message,
@@ -134,9 +137,9 @@ export default function OverlayMessage({ sendMessage }: OverlayMessageProps) {
       setKey(key + 1);
       setHistory((x) => [newMessage, ...x]);
       sendMessage(message);
-      setMessage('');
       setNow(new Date()); // Activates the useEffect in MessageHistory to update elapsed times
     }
+    setMessage('');
   }, [message, setMessage, sendMessage, key, setKey]);
 
   const deleteHistory = useCallback(() => {
@@ -148,8 +151,8 @@ export default function OverlayMessage({ sendMessage }: OverlayMessageProps) {
 
   useEffect(() => {
     // Save history in localStorage whenever history is updated
-    localStorage.setItem(mesHistKey, JSON.stringify(history));
-  }, [history]);
+    localStorage.setItem(historyKeyBike, JSON.stringify(history));
+  }, [history, historyKeyBike]);
 
   const handleKeyPressed = useCallback(
     (event) => {
@@ -176,7 +179,12 @@ export default function OverlayMessage({ sendMessage }: OverlayMessageProps) {
           </InputGroup.Append>
         </InputGroup>
         {history.length > 0 && (
-          <MessageHistory history={history} time12Hour={time12Hour} setNow={setNow} now={now}/>
+          <MessageHistory
+            history={history}
+            time12Hour={time12Hour}
+            setNow={setNow}
+            now={now}
+          />
         )}
       </Card.Body>
       {history.length > 0 && (
