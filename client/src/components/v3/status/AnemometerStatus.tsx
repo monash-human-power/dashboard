@@ -14,7 +14,7 @@ export type WMStatusProps = WMStatusT;
  * @property props Props
  * @returns component
  */
-export default function AnemometerData(props: WMStatusProps) {
+export default function AnemometerStatus(props: WMStatusProps) {
   const { moduleName, online } = props;
 
   const statusPill = (
@@ -161,7 +161,7 @@ export default function AnemometerData(props: WMStatusProps) {
   let info = <> </>;
 
   if (isOnline(props)) {
-    const { data, batteryVoltage } = props;
+    const { data } = props;
     info = (
       <>
         <Table hover>
@@ -214,7 +214,7 @@ export default function AnemometerData(props: WMStatusProps) {
     <Col md xl="12" className="my-2">
       {statusPill}
 
-      {/* Only show more information if the camera is online */}
+      {/* Only show more information if the anemometer is online */}
       {info}
     </Col>
   );

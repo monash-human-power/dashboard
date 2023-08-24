@@ -3,7 +3,7 @@ import { Row, Col } from 'react-bootstrap';
 import ContentPage from 'components/common/ContentPage';
 import CameraStatusContainer from 'components/v3/status/CameraStatusContainer';
 import WMStatusContainer from 'components/v3/status/WMStatusContainer';
-import AnemometerDataContainer from 'components/v3/status/AnemometerDataContainer';
+import AnemometerStatusContainer from 'components/v3/status/AnemometerStatusContainer';
 
 /**
  * Status View component
@@ -26,9 +26,9 @@ export default function StatusView(): JSX.Element {
       </Row>
 
       <Row>
-        {/* Anemometer Data */}
+        {/* Anemometer Status */}
         <Col xl="6" className="mb-2">
-          <AnemometerDataContainer />
+          <AnemometerStatusContainer />
         </Col>
       </Row>
     </ContentPage>
