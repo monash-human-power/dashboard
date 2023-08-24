@@ -1,5 +1,6 @@
 import React from 'react';
 import { addArgs, createStory } from 'utils/stories';
+import { SensorDataT, SensorsT } from 'types/data';
 import AnemometerData, { WMStatusProps } from './AnemometerData';
 
 export default {
@@ -10,6 +11,11 @@ export default {
 const Template = addArgs<WMStatusProps>((props) => (
   <AnemometerData {...props} />
 ));
+
+const sensorData = (type: string, value: SensorsT): SensorDataT => ({
+  type,
+  value,
+});
 
 /* ----------------------------------- Stories ----------------------------------- */
 
@@ -23,4 +29,11 @@ export const Online = createStory(Template, {
   online: true,
   batteryVoltage: 3.123,
   data: [],
+});
+
+export const Data = createStory(Template, {
+  moduleName: 'Anemometer',
+  online: true,
+  batteryVoltage: 3.123,
+  data: [sensorData('windDirection', 10), sensorData('windSpeed', 20)],
 });

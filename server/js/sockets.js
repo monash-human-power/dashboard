@@ -28,6 +28,7 @@ const retained = {
     2: { online: null },
     3: { online: null },
     4: { online: null },
+    5: { online: null },
   },
   boost: {
     configs: null,
@@ -237,12 +238,12 @@ sockets.init = function socketInit(server) {
           case V3.start:
             const msg = JSON.parse(payload);
             if (msg.start){
-                [1, 2, 3, 4].forEach((id) =>
+                [1, 2, 3, 4, 5].forEach((id) =>
                 socket.emit(`wireless_module-${id}-start`, true),
               );
               }
             else{
-              [1, 2, 3, 4].forEach((id) =>
+              [1, 2, 3, 4, 5].forEach((id) =>
                 socket.emit(`wireless_module-${id}-stop`, true),
               );
             }
@@ -412,13 +413,13 @@ sockets.init = function socketInit(server) {
     });
 
     socket.on('start-das-recording', () => {
-      [1, 2, 3, 4].forEach((n) =>
+      [1, 2, 3, 4, 5].forEach((n) =>
         mqttClient.publish(WirelessModule.id(n).start),
       );
     });
 
     socket.on('stop-das-recording', () => {
-      [1, 2, 3, 4].forEach((n) =>
+      [1, 2, 3, 4, 5].forEach((n) =>
         mqttClient.publish(WirelessModule.id(n).stop),
       );
     });
