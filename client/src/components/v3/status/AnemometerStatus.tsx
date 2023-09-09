@@ -1,6 +1,5 @@
 import React from 'react';
 import { Accordion, Button, Card, Col, Table } from 'react-bootstrap';
-
 import OnlineStatusPill from 'components/common/OnlineStatusPill';
 import { WMStatus as WMStatusT } from 'types/data';
 import { isOnline, roundNum } from 'utils/data';
@@ -8,12 +7,6 @@ import { camelCaseToStartCase } from 'utils/string';
 
 export type WMStatusProps = WMStatusT;
 
-/**
- * Status for Wireless Modules
- *
- * @param props Props
- * @returns component
- */
 export default function WMStatus(props: WMStatusProps) {
   const { moduleName, online } = props;
 
@@ -23,13 +16,6 @@ export default function WMStatus(props: WMStatusProps) {
     </span>
   );
 
-  /**
-   * extract data from JSON objects and present them on client side so its user friendly
-   *
-   * @param type -  type of the data
-   * @param data - data JSON received from the mqtt broker
-   * @returns JSON-string
-   */
   function extractData(type: string, data: any) {
     interface strMap {
       [key: string]: string;
@@ -117,41 +103,11 @@ export default function WMStatus(props: WMStatusProps) {
     }
 
     let output = <></>;
-
-    if (type === 'accelerometer') {
-      const accRows: any[] = [];
-      Object.entries(data).forEach((arr) => {
-        accRows.push({ name: arr[0], value: arr[1] });
-      });
-
-      output = (
-        <Table borderless>
-          <tbody>
-            {accRows.map(({ name, value }) => (
-              <tr
-                key={name}
-                style={{
-                  width: '150px',
-                  borderBottomWidth: 1,
-                  borderBottomColor: 'gray',
-                  borderBottomStyle: 'solid',
-                }}
-              >
-                <td>{camelCaseToStartCase(name.toLowerCase())}</td>
-                <td>
-                  <div style={{ float: 'right' }}>
-                    {formatValue(name, value, '')}
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      );
-    } else if (type === 'anemometer') {
+    if (type === 'anemometer') {
       const anemRows: any[] = [];
       Object.entries(data).forEach((arr) => {
         anemRows.push({ name: arr[0], value: arr[1] });
+        console.log(data);
       });
       output = (
         <Table borderless>
@@ -170,73 +126,6 @@ export default function WMStatus(props: WMStatusProps) {
                 <td>
                   <div style={{ float: 'right' }}>
                     {formatValue(name, value, '')}
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      );
-    } else if (type === 'gyroscope') {
-      const gyroRows: any[] = [];
-      Object.entries(data).forEach((arr) => {
-        gyroRows.push({ name: arr[0], value: arr[1] });
-      });
-      output = (
-        <Table borderless>
-          <tbody>
-            {gyroRows.map(({ name, value }) => (
-              <tr
-                key={name}
-                style={{
-                  width: '150px',
-                  borderBottomWidth: 1,
-                  borderBottomColor: 'gray',
-                  borderBottomStyle: 'solid',
-                }}
-              >
-                <td>{camelCaseToStartCase(name.toLowerCase())}</td>
-                <td>
-                  <div style={{ float: 'right' }}>
-                    {formatValue(name, value, '')}
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      );
-    }
-    // output = JSON.stringify(data);
-    else if (type === 'gps') {
-      const gpsRows: any[] = [];
-
-      Object.entries(data).forEach((arr) => {
-        if (arr[0] === 'datetime') {
-          gpsRows.push({ name: 'Date', value: arr[1], unit: '' });
-          gpsRows.push({ name: 'Time', value: arr[1], unit: '' });
-        } else {
-          gpsRows.push({ name: arr[0], value: arr[1], unit: units[arr[0]] });
-        }
-      });
-
-      output = (
-        <Table borderless>
-          <tbody>
-            {gpsRows.map(({ name, value, unit }) => (
-              <tr
-                key={name}
-                style={{
-                  width: '150px',
-                  borderBottomWidth: 1,
-                  borderBottomColor: 'gray',
-                  borderBottomStyle: 'solid',
-                }}
-              >
-                <td>{camelCaseToStartCase(name.toLowerCase())}</td>
-                <td>
-                  <div style={{ float: 'right' }}>
-                    {formatValue(name, value, unit)}
                   </div>
                 </td>
               </tr>
@@ -322,7 +211,7 @@ export default function WMStatus(props: WMStatusProps) {
     <Col md xl="12" className="my-2">
       {statusPill}
 
-      {/* Only show more information if the camera is online */}
+      {/* Only show more information if the anemometer is online */}
       {info}
     </Col>
   );

@@ -37,6 +37,14 @@ export const GyroscopeRT = Record({
   z: Number,
 });
 
+export const AnemometerRT = Record({
+  /** Wind Speed value */
+  windSpeed: Number,
+
+  /** Wind Direction value */
+  windDirection: Number,
+});
+
 /** Value runtype of reedVelocity sensor data */
 export const ReedVelocityRT = Number;
 
@@ -92,6 +100,7 @@ export const SensorsRT = Union(
   PowerRT,
   CadenceRT,
   HeartRateRT,
+  AnemometerRT,
 );
 
 /** Sensor data as incoming from MQTT */
@@ -116,6 +125,9 @@ export type CO2T = Static<typeof CO2RT>;
 
 /** Value type of accelerometer sensor data */
 export type AccelerometerT = Static<typeof AccelerometerRT>;
+
+/** Value type of aneomometer sensor data */
+export type AnemometerT = Static<typeof AnemometerRT>;
 
 /** Value type of gyroscope sensor data */
 export type GyroscopeT = Static<typeof GyroscopeRT>;
