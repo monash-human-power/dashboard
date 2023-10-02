@@ -30,6 +30,8 @@ export enum Sensor {
   Power = 'power',
   Cadence = 'cadence',
   HeartRate = 'heartRate',
+  WindDirection = 'windDirection',
+  WindSpeed = 'windSpeed',
 }
 
 const ModuleData = Record({

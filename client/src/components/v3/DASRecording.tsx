@@ -23,16 +23,19 @@ export default function DASRecording(): JSX.Element {
   useModuleStartCallback(2, () => setLoggingEnabled(true));
   useModuleStartCallback(3, () => setLoggingEnabled(true));
   useModuleStartCallback(4, () => setLoggingEnabled(true));
+  useModuleStartCallback(5, () => setLoggingEnabled(true));
 
   useModuleDataCallback(1, () => setLoggingEnabled(true));
   useModuleDataCallback(2, () => setLoggingEnabled(true));
   useModuleDataCallback(3, () => setLoggingEnabled(true));
   useModuleDataCallback(4, () => setLoggingEnabled(true));
+  useModuleDataCallback(5, () => setLoggingEnabled(true));
 
   useModuleStopCallback(1, () => setLoggingEnabled(false));
   useModuleStopCallback(2, () => setLoggingEnabled(false));
   useModuleStopCallback(3, () => setLoggingEnabled(false));
   useModuleStopCallback(4, () => setLoggingEnabled(false));
+  useModuleStopCallback(5, () => setLoggingEnabled(false));
 
   /** Start DAS recording and BOOST computations */
   function startRecording() {

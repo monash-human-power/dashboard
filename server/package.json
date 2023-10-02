@@ -26,7 +26,7 @@
     "dotenv": "^8.0.0",
     "ejs": "^2.6.2",
     "express": "^4.17.1",
-    "mhp": "ssh://git@github.com:monash-human-power/common.git",
+    "mhp": "git+ssh://git@github.com:monash-human-power/common.git",
     "mqtt": "^2.18.8",
     "path": "^0.12.7",
     "socket.io": "^2.4.0"

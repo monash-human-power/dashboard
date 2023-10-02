@@ -76,6 +76,26 @@ export const CadenceRT = Number;
 /** Value runtype of heartRate sensor data */
 export const HeartRateRT = Number;
 
+/** Value runtype of windDirection sensor data */
+export const WindDirectionRT = Record({
+  /** Min Direction */
+  minDirection: Number,
+  /** Avg Direction */
+  avgDirection: Number,
+  /** Max Direction */
+  maxDirection: Number,
+});
+
+/** Value runtype of windSpeed sensor data */
+export const WindSpeedRT = Record({
+  /** Min Speed */
+  minSpeed: Number,
+  /** Avg Speed */
+  avgSpeed: Number,
+  /** Max Speed */
+  maxSpeed: Number,
+});
+
 /** Union type of all sensor value types */
 export const SensorsRT = Union(
   TemperatureRT,
@@ -92,6 +112,8 @@ export const SensorsRT = Union(
   PowerRT,
   CadenceRT,
   HeartRateRT,
+  WindDirectionRT,
+  WindSpeedRT,
 );
 
 /** Sensor data as incoming from MQTT */
@@ -143,6 +165,12 @@ export type CadenceT = Static<typeof CadenceRT>;
 
 /** Value type of heartRate sensor data */
 export type HeartRateT = Static<typeof HeartRateRT>;
+
+/** Value type of windDirection sensor data */
+export type WindDirectionT = Static<typeof WindDirectionRT>;
+
+/** Value type of windSpeed sensor data */
+export type WindSpeedT = Static<typeof WindSpeedRT>;
 
 export type SensorsT = Static<typeof SensorsRT>;
 
