@@ -1,35 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Modal } from 'react-bootstrap';
-import { Boolean } from 'runtypes';
-
 import { useChannelShaped } from 'api/common/socket';
-// import { usePayload } from 'api/common/server';
+import { CrashAlertRT, CrashAlertT } from 'types/crashAlert';
 
+/**
+ * Displays modal if vehicle has crashed
+ *
+ * @returns Component
+ */
 export default function CrashModal(): JSX.Element {
-  const now = new Date();
+  const [isCrashed, setIsCrashed] = useState<CrashAlertT>({ value: false });
 
-  // const [isCrashed, setIsCrashed] = useState(
-  //   //channel shaped or use payload?
-  //   usePayload(`/v3/wireless_module/3/crash_detection`, Boolean),
-  // );
-
-  const [isCrashed, setIsCrashed] = useState<boolean | null>(true);
-
+  // Listen into crash_detection topic and check if crash has occured
   useChannelShaped(
-    '/v3/wireless_module/3/crash_detection',
-    Boolean,
+    'wireless_module-3-crash_detection',
+    CrashAlertRT,
     setIsCrashed,
   );
 
-  console.log(
-    'useing chahe',
-    useChannelShaped(
-      'wireless_module/3/crash_detection',
-      Boolean,
-      setIsCrashed,
-    ),
-  );
+  // Tracking time of latest crash
+  // let now = useMemo(() => new Date(), []);
+  const [crashTime, setCrashTime] = useState<String | null>(null);
 
+  // Tracking number of crashes since modal appeared
   const [counter, setCounter] = useState(0);
   const increase = () => {
     setCounter((count) => count + 1);
@@ -41,34 +34,27 @@ export default function CrashModal(): JSX.Element {
 
   const [showCrashModal, setShowCrashModal] = useState(false);
 
-  const displayModal = () => setShowCrashModal(true);
-
   const hideModal = () => {
     setShowCrashModal(false);
-    setIsCrashed(false);
+    setIsCrashed({ value: false });
     setCounter(0);
   };
 
-  // monitoring status of crash
   useEffect(() => {
-    if (isCrashed) {
+    if (isCrashed.value) {
+      const now = new Date();
+      setCrashTime(now.toLocaleTimeString());
+
       if (!showCrashModal) {
-        displayModal();
+        setShowCrashModal(true);
       } else {
         increase();
       }
     }
-  }, [isCrashed, showCrashModal]);
+  }, [isCrashed, showCrashModal, setCrashTime]);
 
   return (
     <>
-      <Button
-        onClick={() => {
-          setIsCrashed(true);
-        }}
-      >
-        hi just testing crash!
-      </Button>
       <Modal
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
@@ -85,18 +71,11 @@ export default function CrashModal(): JSX.Element {
           <h4>A crash has occured!</h4>
           <h4>
             Timestamp:
-            {`  ${now.toLocaleTimeString()}`}
+            {crashTime}
           </h4>
-          <Button onClick={() => increase()}>Oh naur more crashes</Button>
         </Modal.Body>
         <Modal.Footer>
-          <Button
-            onClick={() => {
-              hideModal();
-            }}
-          >
-            Close
-          </Button>
+          <Button onClick={hideModal}>Close</Button>
         </Modal.Footer>
       </Modal>
     </>
