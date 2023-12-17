@@ -19,7 +19,6 @@ export default function CrashModal(): JSX.Element {
   );
 
   // Tracking time of latest crash
-  // let now = useMemo(() => new Date(), []);
   const [crashTime, setCrashTime] = useState<String | null>(null);
 
   // Tracking number of crashes since modal appeared

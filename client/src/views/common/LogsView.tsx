@@ -4,6 +4,7 @@ import ContentPage from 'components/common/ContentPage';
 import DeleteModal from 'components/common/download_files/DeleteModal';
 import LogFileList from 'components/common/download_files/LogFileList';
 import { LogFile, useFiles, useLatestFile } from 'api/common/files';
+import CrashModal from 'components/v3/CrashModal';
 
 /**
  * Download Files page component
@@ -26,6 +27,8 @@ export default function LogsView() {
 
   return (
     <ContentPage title="Files">
+      <CrashModal />
+
       {files && files.length > 0 && (
         <Button
           href={latestFileURL}

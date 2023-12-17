@@ -16,6 +16,7 @@ import { Static } from 'runtypes';
 import { useChannelShaped, emit } from 'api/common/socket';
 import toast from 'react-hot-toast';
 import { AntDistanceRT } from 'types/data';
+import CrashModal from 'components/v3/CrashModal';
 
 /**
  * Boost View component
@@ -126,6 +127,8 @@ export default function BoostView() {
 
   return (
     <ContentPage title="Boost Configuration">
+      <CrashModal />
+
       <BoostCalibration
         onSet={setCalibration}
         onReset={handleReset}

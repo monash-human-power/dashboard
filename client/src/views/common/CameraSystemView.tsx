@@ -5,6 +5,7 @@ import CameraRecordingContainer from 'components/common/camera_settings/CameraRe
 import CameraStatusContainer from 'components/common/camera_settings/CameraStatusContainer';
 import OverlayMessageContainer from 'components/common/camera_settings/OverlayMessageContainer';
 import OverlaySelectionContainer from 'components/common/camera_settings/OverlaySelectionContainer';
+import CrashModal from 'components/v3/CrashModal';
 
 /**
  * Camera Settings page component
@@ -14,6 +15,8 @@ import OverlaySelectionContainer from 'components/common/camera_settings/Overlay
 export default function CameraSystemView() {
   return (
     <ContentPage title="Camera System">
+      <CrashModal />
+
       <div className="mb-4">
         <CameraStatusContainer />
       </div>
