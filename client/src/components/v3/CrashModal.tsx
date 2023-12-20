@@ -69,12 +69,14 @@ export default function CrashModal(): JSX.Element {
         <Modal.Body>
           <h4>A crash has occured!</h4>
           <h4>
-            Timestamp:
+            Timestamp:<span> </span>
             {crashTime}
           </h4>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={hideModal}>Close</Button>
+          <Button variant="outline-danger" onClick={hideModal}>
+            Close
+          </Button>
         </Modal.Footer>
       </Modal>
     </>
