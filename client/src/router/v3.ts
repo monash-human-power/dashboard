@@ -3,6 +3,7 @@ import LogsView from 'views/common/LogsView';
 import CameraSystemView from 'views/common/CameraSystemView';
 import DashboardView from 'views/v3/DashboardView';
 import StatusView from 'views/v3/StatusView';
+import LapInformationView from 'views/v3/LapInformationView';
 import { RouteInfo } from 'types/route';
 
 /**
@@ -38,6 +39,12 @@ const routes: RouteInfo[] = [
     path: '/v3/camera-system',
     exact: true,
     component: (CameraSystemView as unknown) as React.Component,
+  },
+  {
+    name: 'Lap Information',
+    path: '/v3/lap-information',
+    exact: true,
+    component: (LapInformationView as unknown) as React.Component,
   },
 ];
 
