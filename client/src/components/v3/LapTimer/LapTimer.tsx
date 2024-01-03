@@ -57,10 +57,9 @@ export default function LapTimer(): JSX.Element {
   }
 
   return (
-    <Card>
+    <Card style={{ width: '13rem' }}>
       <Card.Body>
         <div>
-          <h1>Lap Timer</h1>
           <h1>
             {minutes.toString().padStart(2, '0')}:
             {seconds.toString().padStart(2, '0')}:
