@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Button } from 'react-bootstrap';
-// import { useChannelShaped, emit } from 'api/common/socket';
+import { useChannel, emit } from 'api/common/socket';
 
 /**
  * Show current lap time.
@@ -28,19 +28,33 @@ export default function LapTimer(): JSX.Element {
     setIsRunning(true);
   }
 
-  /** Resets timer. SHould do after second and remaining messages from lap topic */
-  function lap() {
+  /** Resets timer. Should do after second and remaining messages from lap topic */
+  function reset() {
     setTime(0);
+  }
+
+  /** Controls timer
+   *
+   * @returns nothing
+   */
+  function lap() {
+    return isRunning ? reset() : start();
   }
 
   // Minutes calculation
   const minutes = Math.floor((time % 360000) / 6000);
-
   // Seconds calculation
   const seconds = Math.floor((time % 6000) / 100);
-
   // Milliseconds calculation
   const milliseconds = time % 100;
+
+  /* Resets timer on MQTT message */
+  useChannel('lap-recieved', lap);
+
+  /** Posts on MQTT when lap is triggered through the online buttons */
+  function postLap() {
+    emit('lap-send');
+  }
 
   return (
     <Card>
@@ -55,7 +69,7 @@ export default function LapTimer(): JSX.Element {
           <Button
             className="ml-3"
             variant="outline-success"
-            onClick={start} /* should post to lap topic */
+            onClick={postLap} /* should post to lap topic */
             disabled={isRunning}
           >
             Start
@@ -63,7 +77,7 @@ export default function LapTimer(): JSX.Element {
           <Button
             className="ml-2"
             variant="outline-danger"
-            onClick={lap} /* should post to lap topic */
+            onClick={postLap} /* should post to lap topic */
             disabled={!isRunning}
           >
             Lap

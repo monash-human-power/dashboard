@@ -285,7 +285,9 @@ sockets.init = function socketInit(server) {
           case Camera.push_overlays:
             socket.emit('push-overlays', payloadString);
             break;
-
+          case 'lap/topic':
+            socket.emit('lap-recieved');
+            break;
           default:
             console.error(`Unhandled topic - ${topic}`);
             break;
@@ -308,6 +310,7 @@ sockets.init = function socketInit(server) {
     mqttClient.subscribe(Camera.push_overlays);
     mqttClient.subscribe(`${Camera.base}/#`);
     mqttClient.subscribe('status/#');
+    mqttClient.subscribe('lap/topic');
     // TODO: Remove in refactor, kept here for backwards compatability
     socket.on('get-status-payload', (path) => {
       if (path instanceof Array && path.length > 0)
@@ -431,6 +434,10 @@ sockets.init = function socketInit(server) {
     socket.on('stop-V3', ()=>{
       mqttClient.publish(V3.start, JSON.stringify({"start": false}));
     })
+
+    socket.on('lap-send', () => {
+      mqttClient.publish('lap/topic', 'lap'); 
+    });
 
   });
 };
