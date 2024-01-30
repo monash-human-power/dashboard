@@ -310,7 +310,7 @@ sockets.init = function socketInit(server) {
     mqttClient.subscribe(Camera.push_overlays);
     mqttClient.subscribe(`${Camera.base}/#`);
     mqttClient.subscribe('status/#');
-    mqttClient.subscribe('lap/topic');
+    mqttClient.subscribe('trike/lap/trigger');
     // TODO: Remove in refactor, kept here for backwards compatability
     socket.on('get-status-payload', (path) => {
       if (path instanceof Array && path.length > 0)
@@ -436,7 +436,7 @@ sockets.init = function socketInit(server) {
     })
 
     socket.on('lap-send', () => {
-      mqttClient.publish('lap/topic', 'lap'); 
+      mqttClient.publish('trike/lap/trigger', 'lap'); 
     });
 
   });
