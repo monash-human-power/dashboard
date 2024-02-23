@@ -285,7 +285,7 @@ sockets.init = function socketInit(server) {
           case Camera.push_overlays:
             socket.emit('push-overlays', payloadString);
             break;
-          case 'lap/topic':
+          case 'trike/lap/trigger':
             socket.emit('lap-recieved');
             break;
           default:
