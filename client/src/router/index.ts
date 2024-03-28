@@ -3,6 +3,7 @@ import HomeView from 'views/HomeView';
 import { RouteInfo } from 'types/route';
 import V2Routes from 'router/v2';
 import V3Routes from 'router/v3';
+import TrikeRoutes from 'router/trike';
 
 export interface VersionInfo {
   /** Bike version friendly name */
@@ -27,6 +28,12 @@ export const bikeVersions: VersionInfo[] = [
     rootPath: '/v3',
     routes: V3Routes,
     id: 3,
+  },
+  {
+    name: 'Trike (Bandicoot)',
+    rootPath: '/trike',
+    routes: TrikeRoutes,
+    id: 4,
   },
 ];
 
