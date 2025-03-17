@@ -11,7 +11,7 @@ The node.js + Express HTTP REST server is used to host the real-time dashboard w
 
 ## Getting Started
 
-### Environment variable setup
+### Environment variable setup #test
 
 Set up environment variables using a `.env` file. Create a `.env` file in the `server/` directory. Add the following variables:
 
