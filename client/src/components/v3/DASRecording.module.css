@@ -1,0 +1,24 @@
+.start{
+    margin-left: 12px;
+}
+
+.stop{
+    margin-left: 8px;
+}
+.text{
+    font-weight: bold;
+}
+/* Mobile view vertical for the dashboard */
+@media (min-width: 500px ) and (max-width: 1000px )  {
+    .start{
+        margin-left: 5px;
+    }
+    
+    .stop{
+        margin-left: 5px;
+    }
+    .text{
+        font-size: 12px;
+        font-weight: bold;
+    }
+}

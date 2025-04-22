@@ -8,6 +8,7 @@ import {
 import React, { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import toast from 'react-hot-toast';
+import style from './DASRecording.module.css';
 /**
  * Turn recording off and on
  *
@@ -53,9 +54,9 @@ export default function DASRecording(): JSX.Element {
 
   return (
     <>
-      <span style={{ fontWeight: 'bold' }}>DAS & BOOST Recording:</span>
+      <span className={style.text}>DAS & BOOST Recording:</span>
       <Button
-        className="ml-3"
+        className={style.start}
         variant="outline-success"
         onClick={startRecording}
         disabled={loggingEnabled}
@@ -63,7 +64,7 @@ export default function DASRecording(): JSX.Element {
         Start
       </Button>
       <Button
-        className="ml-2"
+        className={style.stop}
         variant="outline-danger"
         onClick={openConfirmModal}
         disabled={!loggingEnabled}

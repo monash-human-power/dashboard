@@ -1,0 +1,30 @@
+.generate{
+    float: right;
+    margin-right: 0.25rem;
+    
+}
+.configs{
+    float: right;
+    margin-left: 0.25rem;
+    
+}
+.text{
+    margin-bottom: 1.5rem;
+}
+
+/* Mobile view vertical for the dashboard */
+@media (max-width: 500px )  {
+    .generate{
+        float: right;
+        margin-left: 0.5rem;
+        width: 70px;
+        height: 30px;
+        font-size: 10px;
+    }
+    .configs{
+        float: right;
+        width: 70px;
+        height: 30px;
+        font-size: 7px;
+    }
+}

@@ -35,4 +35,34 @@
 .bigGraph {
   height: 100%;
   min-height: 400px;
+
+}
+
+/* Mobile view vertical for the dashboard */
+@media (min-width: 500px ) and (max-width: 1000px )  {
+  .contentContainer {
+    height: 100%
+  }
+  
+  .content {
+    width: 50%;
+    margin-top: 2px;
+  }
+  
+  .graph {
+    margin-top: 100px;
+    height: 30%;
+  }
+
+}
+/* Mobile view horizontal for the dashboard */
+@media (max-width: 500px )  {
+  
+  .content {
+    width: 100%;
+  }
+  .bigGraph {
+    margin-top: 135px;
+  }
+
 }
