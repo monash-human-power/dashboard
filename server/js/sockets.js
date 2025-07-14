@@ -125,25 +125,15 @@ sockets.init = function socketInit(server) {
     mqttClient = connectToPublicMQTTBroker(`${os.hostname()}-HEROKU`);
   } else {
     mqttClient = mqtt.connect('mqtt://localhost:1883', mqttOptions);
-    console.log("attempting to connect to local");
   }
   // Camera recording status subscription occurs when mqttClient message handler is set
   // Camera video feed status subscription occurs when mqttClient message handler is set
   mqttClient.on('connect', mqttConnected);
-  mqttClient.subscribe('test_topic');
-  mqttClient.publish('test_topic', JSON.stringify({ message: "test message for khang" }));
-
   mqttClient.on('error', mqttError);
-  // Not a heroku instance
-  if (sendToPublicMQTTBroker()) {
-    console.log('Not a heroku instance');
-    PUBLIC_MQTT_CLIENT = connectToPublicMQTTBroker(os.hostname());
-  }
 
   // eslint-disable-next-line global-require
   const io = require('socket.io').listen(server);
   io.on('connection', function ioConnection(socket) {
-    console.log("io connected---------")
     socket.setMaxListeners(20);
     /*
       Must subscribe to these when the mqtt message handler is set
@@ -156,7 +146,6 @@ sockets.init = function socketInit(server) {
     mqttClient.on('message', function mqttMessage(topic, payload) {
       const payloadString = payload.toString();
       if (topic.startsWith('test')) {
-        console.log("test topic received and handled");
         console.log(payloadString);
       } else if (topic.startsWith('status')) {
         try {
