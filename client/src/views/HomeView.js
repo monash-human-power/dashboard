@@ -7,5 +7,5 @@ import { Redirect } from 'react-router-dom';
  * @returns {React.Component} Component
  */
 export default function HomeView() {
-  return <Redirect to="/v3" />;
+  return <Redirect to="/v4" />;
 }

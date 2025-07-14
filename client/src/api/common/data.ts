@@ -55,12 +55,11 @@ function useModuleCallback<T>(
   callback: (payload: T) => void,
 ) {
   const payloadShape: any = type === 'data' ? ModuleData : StartStopData;
-  //V4 channels
   if (id == null) {
+    // V4 Channels
     useChannelShaped(`V4-sensors-${type}`, payloadShape, callback);
-  }
-  //V3 channels
-  else {
+  } else {
+    // V3,V2 Channels
     useChannelShaped(`wireless_module-${id}-${type}`, payloadShape, callback);
   }
 }
