@@ -30,11 +30,11 @@ export function V4SpeedDistanceChart() {
 
   // Reset when start message received
   const reset = () => setData([]);
-  useChannel('wireless_module-4-start', reset);
+  useChannel('V4-start', reset);
 
   // Speed
-  const speed = useSensorData(4, Sensor.AntSpeed, AntSpeedRT);
-  const distance = useSensorData(4, Sensor.AntDistance, AntDistanceRT);
+  const speed = useSensorData(null, Sensor.AntSpeed, AntSpeedRT);
+  const distance = useSensorData(null, Sensor.AntDistance, AntDistanceRT);
 
   // Update data whenever the point is updated
   useEffect(() => {

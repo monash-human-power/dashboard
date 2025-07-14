@@ -47,9 +47,9 @@ export default function StatisticRow(): JSX.Element {
     handlePredictedMaxSpeed,
   );
 
-  const power = useSensorData(4, Sensor.Power, PowerRT);
+  const power = useSensorData(null, Sensor.Power, PowerRT);
 
-  const heartRate = useSensorData(4, Sensor.HeartRate, HeartRateRT);
+  const heartRate = useSensorData(null, Sensor.HeartRate, HeartRateRT);
 
   return (
     <div className={styles.statContainer}>
