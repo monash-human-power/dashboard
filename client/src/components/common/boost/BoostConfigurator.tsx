@@ -18,7 +18,7 @@ import { camelCaseToStartCase } from 'utils/string';
 import BoostConfigList from 'components/common/boost/BoostConfigList';
 import BoostResults from 'components/common/boost/BoostResults';
 import { Runtype } from 'runtypes';
-import { sendConfigSelections } from 'api/v3/boost';
+import { sendConfigSelections } from 'api/common/boost';
 import toast from 'react-hot-toast';
 import { useChannelShaped } from 'api/common/socket';
 import style from 'components/common/boost/BoostConfigurator.module.css';

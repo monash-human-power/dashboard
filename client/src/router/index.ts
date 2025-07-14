@@ -3,6 +3,7 @@ import HomeView from 'views/HomeView';
 import { RouteInfo } from 'types/route';
 import V2Routes from 'router/v2';
 import V3Routes from 'router/v3';
+import V4Routes from 'router/v4';
 
 export interface VersionInfo {
   /** Bike version friendly name */
@@ -27,6 +28,12 @@ export const bikeVersions: VersionInfo[] = [
     rootPath: '/v3',
     routes: V3Routes,
     id: 3,
+  },
+  {
+    name: 'Version 4 (TBD)',
+    rootPath: '/v4',
+    routes: V4Routes,
+    id: 4,
   },
 ];
 

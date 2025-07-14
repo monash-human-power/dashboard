@@ -10,6 +10,10 @@ This folder contains react components used **_ONLY_ in V2 views**.
 
 This folder contains react components used **_ONLY_ in V3 views**.
 
+## [V4 Components](./v4)
+
+This folder contains react components used **_ONLY_ in V4 views**.
+
 ## [Common Components](./common)
 
 This folder contains react components that are for **_ALL_ views**.

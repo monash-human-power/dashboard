@@ -5,6 +5,7 @@ import NavBar, { NavBarProps } from 'components/common/navbar/NavBar';
 import { bikeVersions } from 'router';
 import V2routes from 'router/v2';
 import V3routes from 'router/v3';
+import V4routes from 'router/v4';
 import { addArgs, createStory } from 'utils/stories';
 
 export default {
@@ -37,5 +38,15 @@ export const V3 = createStory(Template, {
     rootPath: '/v3',
     routes: V3routes,
     id: 3,
+  },
+});
+
+export const V4 = createStory(Template, {
+  ...baseProps,
+  bikeVersion: {
+    name: 'Version 4 (TBD)',
+    rootPath: '/v4',
+    routes: V4routes,
+    id: 4,
   },
 });

@@ -7,7 +7,7 @@ const sockets = {};
 const mqtt = require('mqtt');
 const os = require('os');
 
-const { DAS, BOOST, Camera, WirelessModule, V3 } = require('mhp');
+const { DAS, BOOST, Camera, WirelessModule, V3, V4 } = require('mhp');
 const { getPropWithPath, setPropWithPath } = require('./util');
 
 // Public MQTT broker
@@ -37,17 +37,33 @@ const retained = {
   max_speed_achieved: null,
 };
 
+const retainedv4 = {
+  status: {},
+  camera: {},
+  boost: {
+    configs: null,
+    results: null,
+  },
+  max_speed_achieved: null,
+};
+
 function connectToPublicMQTTBroker(clientID = '') {
+  // const publicMqttOptions = {
+  //   reconnectPeriod: 1000,
+  //   connectTimeout: 5000,
+  //   clientId: `publicMqttClient-${clientID}-${Math.random()
+  //     .toString(16)
+  //     .substr(2, 8)}`,
+  //   username: process.env.MQTT_USERNAME,
+  //   password: process.env.MQTT_PASSWORD,
+  //   host: process.env.MQTT_SERVER,
+  //   port: process.env.MQTT_PORT,
+  // };
   const publicMqttOptions = {
     reconnectPeriod: 1000,
     connectTimeout: 5000,
-    clientId: `publicMqttClient-${clientID}-${Math.random()
-      .toString(16)
-      .substr(2, 8)}`,
-    username: process.env.MQTT_USERNAME,
-    password: process.env.MQTT_PASSWORD,
-    host: process.env.MQTT_SERVER,
-    port: process.env.MQTT_PORT,
+    host: "mqtt://localhost",
+    port: 1883,
   };
   const mqttInstance = mqtt.connect(publicMqttOptions);
   mqttInstance.on('connect', function publicMqttConnected(connack) {
@@ -114,11 +130,6 @@ sockets.init = function socketInit(server) {
   // Camera video feed status subscription occurs when mqttClient message handler is set
   mqttClient.on('connect', mqttConnected);
   mqttClient.on('error', mqttError);
-  // Not a heroku instance
-  if (sendToPublicMQTTBroker()) {
-    console.log('Not a heroku instance');
-    PUBLIC_MQTT_CLIENT = connectToPublicMQTTBroker(os.hostname());
-  }
 
   // eslint-disable-next-line global-require
   const io = require('socket.io').listen(server);
@@ -134,7 +145,9 @@ sockets.init = function socketInit(server) {
 
     mqttClient.on('message', function mqttMessage(topic, payload) {
       const payloadString = payload.toString();
-      if (topic.startsWith('status')) {
+      if (topic.startsWith('test')) {
+        console.log(payloadString);
+      } else if (topic.startsWith('status')) {
         try {
           const topicString = topic.split('/');
           // topicString: ["status", "<component>", "<subcomponent>", ...properties]
@@ -192,10 +205,34 @@ sockets.init = function socketInit(server) {
               path.slice(1),
               value,
             );
-
             // Emit parsed payload as is
             socket.emit(`wireless_module-${id}-${property}`, value);
 
+          }
+        } catch (e) {
+          console.error(
+            `Error in parsing received payload\n\ttopic: ${topic}\n\tpayload: ${payloadString}\n`,
+          );
+        }
+      } else if (topic.startsWith(V4.base)) {
+        // Emit on appropriate channel
+        try {
+          const topicString = topic.split('/').slice(1); // Remove leading ""
+          const [, , property] = topicString;
+          // topicString: ["v4", "sensors", <property>] 
+          const value = JSON.parse(payloadString); 
+          // Module's online
+          if (property === 'start') {
+            socket.emit(`V4-start`, true);
+          }
+          else if (property === 'stop') {
+            socket.emit(`V4-stop`, true);
+          }
+
+          // Add to global
+          else {
+            // Emit parsed payload as is
+            socket.emit(`V4-sensors-${property}`, value);
           }
         } catch (e) {
           console.error(
@@ -237,12 +274,13 @@ sockets.init = function socketInit(server) {
             break;
           case V3.start:
             const msg = JSON.parse(payload);
-            if (msg.start){
-                [1, 2, 3, 4, 5].forEach((id) =>
-                socket.emit(`wireless_module-${id}-start`, true),
+            if (msg.start) {
+              [1, 2, 3, 4, 5].forEach((id) =>
+                socket.emit(`
+                  ${id}-start`, true),
               );
-              }
-            else{
+            }
+            else {
               [1, 2, 3, 4, 5].forEach((id) =>
                 socket.emit(`wireless_module-${id}-stop`, true),
               );
@@ -297,6 +335,10 @@ sockets.init = function socketInit(server) {
     mqttClient.subscribe(DAS.start);
     mqttClient.subscribe(DAS.stop);
     mqttClient.subscribe(V3.start);
+    mqttClient.subscribe(V4.start);
+    mqttClient.subscribe(V4.base);
+    mqttClient.subscribe(V4.data);
+
     mqttClient.subscribe(DAS.data);
     mqttClient.subscribe(WirelessModule.all().module);
     mqttClient.subscribe(BOOST.prev_trap_speed);
@@ -423,13 +465,21 @@ sockets.init = function socketInit(server) {
         mqttClient.publish(WirelessModule.id(n).stop),
       );
     });
-    
-    socket.on('start-V3', ()=>{
-      mqttClient.publish(V3.start, JSON.stringify({"start": true}));      
+
+    socket.on('start-V3', () => {
+      mqttClient.publish(V3.start, JSON.stringify({ "start": true }));
     })
 
-    socket.on('stop-V3', ()=>{
-      mqttClient.publish(V3.start, JSON.stringify({"start": false}));
+    socket.on('stop-V3', () => {
+      mqttClient.publish(V3.start, JSON.stringify({ "start": false }));
+    })
+
+    socket.on('start-V4', () => {
+      mqttClient.publish(V4.start, JSON.stringify({ "start": true }));
+    })
+
+    socket.on('stop-V4', () => {
+      mqttClient.publish(V4.start, JSON.stringify({ "start": false }));
     })
 
   });
