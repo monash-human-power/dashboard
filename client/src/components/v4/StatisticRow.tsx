@@ -17,7 +17,7 @@ export default function StatisticRow(): JSX.Element {
   const [maxSpeed, setMaxSpeed] = useState<number | null>(null);
 
   // TODO: Multiple sensor data
-  const currVel = useSensorData(4, Sensor.AntSpeed, AntSpeedRT);
+  const currVel = useSensorData(null, Sensor.AntSpeed, AntSpeedRT);
 
   useChannelShaped('boost/max_speed_achieved', MaxSpeedRT, setMaxSpeed);
   // Get max speed whenever page refreshes
