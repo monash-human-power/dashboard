@@ -77,5 +77,6 @@ export default function AnimatedLocationMap(): JSX.Element {
   useEffect(updateLocationEffect, [currIndex, storedData]);
 
   // locationHistory type is <LocationTimeSeriesPoint[]>, NOT <LocationMapProps>
-  return <LocationMap series={locationHistory} />;
+  // return <LocationMap series={locationHistory} />;
+  return <LocationMap series={locationHistory} samplePeriodMs={INTERVAL_MS} />;
 }
