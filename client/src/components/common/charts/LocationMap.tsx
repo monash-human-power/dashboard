@@ -36,25 +36,19 @@ export interface LocationTimeSeriesPoint {
 export interface LocationMapProps {
   /** GPS location time series */
   series: LocationTimeSeriesPoint[];
-
-  /**
-   * if points don’t include ts or speed, assume a fixed sample period to estimate speed.
-   * e.g 1000 = 1Hz updates.
-   */
+  // If points don’t include ts or speed, assume a fixed sample period to estimate speed (e.g. 1000 = 1 Hz)
   samplePeriodMs?: number;
-
-  /**speed breakpoints in km/h, ascending (defines colour bins). */
+  // Speed breakpoints in km/h, ascending (defines colour bins).
   speedBreaks?: number[]; // default [10, 20, 35]
-
-  /**colours (CSS hex or names) to use for each bin; length = breaks.length + 1 */
+  // Colours for each bin; length = breaks.length + 1
   speedColors?: string[]; // default ['#d73027','#fc8d59','#91cf60','#4575b4']
 }
 
-/**haversine distance in meters */
+// Haversine distance in meters
 function haversineMeters(
   a: LocationTimeSeriesPoint,
   b: LocationTimeSeriesPoint,
-) {
+): number {
   const toRad = (d: number) => (d * Math.PI) / 180;
   const R = 6371000;
   const dLat = toRad(b.lat - a.lat);
@@ -65,11 +59,35 @@ function haversineMeters(
   return 2 * R * Math.asin(Math.sqrt(t));
 }
 
-function pickColor(kmh: number, breaks: number[], colors: string[]) {
-  for (let i = 0; i < breaks.length; i++) {
+function pickColor(kmh: number, breaks: number[], colors: string[]): string {
+  for (let i = 0; i < breaks.length; i += 1) {
     if (kmh < breaks[i]) return colors[i];
   }
   return colors[colors.length - 1];
+}
+
+// Compute km/h for segment a -> b using (a.speedKmh) or ts/samplePeriodMs fallbacks
+function segmentSpeedKmh(
+  a: LocationTimeSeriesPoint,
+  b: LocationTimeSeriesPoint,
+  samplePeriodMs?: number,
+): number {
+  // If upstream provided speed on point a, use it
+  if (Number.isFinite(a.speedKmh as number)) return a.speedKmh as number;
+
+  // If both timestamps are present, use their delta
+  if (typeof a.ts === 'number' && typeof b.ts === 'number' && b.ts > a.ts) {
+    const mps = haversineMeters(a, b) / ((b.ts - a.ts) / 1000);
+    return mps * 3.6;
+  }
+
+  // Fallback: assume fixed sampling period
+  if (typeof samplePeriodMs === 'number' && samplePeriodMs > 0) {
+    const mps = haversineMeters(a, b) / (samplePeriodMs / 1000);
+    return mps * 3.6;
+  }
+
+  return 0;
 }
 
 export default function LocationMap({
@@ -87,31 +105,46 @@ export default function LocationMap({
 
   //building coloured segments
   const segments = useMemo(() => {
-    const segs: { coords: LatLngTuple[]; color: string }[] = [];
-    for (let i = 0; i < series.length - 1; i++) {
+    const segs: { coords: LatLngTuple[]; color: string; key: string }[] = [];
+    for (let i = 0; i < series.length - 1; i += 1) {
       const a = series[i];
       const b = series[i + 1];
 
-      // speed preference: given -> timestamp delta -> fixed period
-      let vKmh =
-        a.speedKmh ??
-        (a.ts != null && b.ts != null && b.ts > a.ts
-          ? (haversineMeters(a, b) / ((b.ts - a.ts) / 1000)) * 3.6
-          : samplePeriodMs
-          ? (haversineMeters(a, b) / (samplePeriodMs / 1000)) * 3.6
-          : 0);
+      const dist = haversineMeters(a, b);
+      if (Number.isFinite(dist) && dist >= 0.2) {
+        let vKmh = segmentSpeedKmh(a, b, samplePeriodMs);
+        if (!Number.isFinite(vKmh)) vKmh = 0;
+        if (i < 10) {
+          const dtMs =
+            typeof a.ts === 'number' && typeof b.ts === 'number'
+              ? b.ts - a.ts
+              : samplePeriodMs;
+          console.debug(
+            `seg ${i}: dist=${dist.toFixed(2)}m dt=${dtMs}ms v=${vKmh.toFixed(
+              1,
+            )}km/h`,
+          );
+        }
 
-      //avoid NaN/infinity on bad samples
-      if (!Number.isFinite(vKmh)) vKmh = 0;
+        if (i < 10) console.debug(`seg ${i}: ${vKmh.toFixed(1)} km/h`);
+        const color = pickColor(vKmh, speedBreaks, speedColors);
+        if (i < 10)
+          console.debug(
+            `seg ${i} -> color ${color} | breaks=${JSON.stringify(
+              speedBreaks,
+            )}`,
+          );
 
-      const color = pickColor(vKmh, speedBreaks, speedColors);
-      segs.push({
-        coords: [
-          [a.lat, a.long],
-          [b.lat, b.long],
-        ],
-        color,
-      });
+        const key = `${a.lat},${a.long}->${b.lat},${b.long}-${i}`;
+        segs.push({
+          coords: [
+            [a.lat, a.long],
+            [b.lat, b.long],
+          ],
+          color,
+          key,
+        });
+      }
     }
     return segs;
   }, [series, samplePeriodMs, speedBreaks, speedColors]);
@@ -151,11 +184,11 @@ export default function LocationMap({
       ) : null}
 
       {/* draw speed-coloured path */}
-      {segments.map((s, idx) => (
+      {segments.map((s) => (
         <Polyline
-          key={idx}
+          key={s.key}
           positions={s.coords}
-          color={s.color}
+          color={s.color} // <- use top-level props in v2
           weight={3}
           opacity={0.9}
           lineCap="round"
