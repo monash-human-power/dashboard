@@ -36,15 +36,15 @@ export interface LocationTimeSeriesPoint {
 export interface LocationMapProps {
   /** GPS location time series */
   series: LocationTimeSeriesPoint[];
-  // If points don’t include ts or speed, assume a fixed sample period to estimate speed (e.g. 1000 = 1 Hz)
+  /** If points don’t include ts or speed, assume a fixed sample period to estimate speed (e.g. 1000 = 1 Hz) */
   samplePeriodMs?: number;
-  // Speed breakpoints in km/h, ascending (defines colour bins).
-  speedBreaks?: number[]; // default [10, 20, 35]
-  // Colours for each bin; length = breaks.length + 1
+  /** Optional custom speed breakpoints (km/h), ascending; if omitted we derive from data */
+  speedBreaks?: number[];
+  /** Colours for each bin; length = breaks.length + 1 */
   speedColors?: string[]; // default ['#d73027','#fc8d59','#91cf60','#4575b4']
 }
 
-// Haversine distance in meters
+/** Haversine distance in meters */
 function haversineMeters(
   a: LocationTimeSeriesPoint,
   b: LocationTimeSeriesPoint,
@@ -66,22 +66,19 @@ function pickColor(kmh: number, breaks: number[], colors: string[]): string {
   return colors[colors.length - 1];
 }
 
-// Compute km/h for segment a -> b using (a.speedKmh) or ts/samplePeriodMs fallbacks
+/** Compute km/h for segment a -> b using (a.speedKmh) or ts/samplePeriodMs fallbacks */
 function segmentSpeedKmh(
   a: LocationTimeSeriesPoint,
   b: LocationTimeSeriesPoint,
   samplePeriodMs?: number,
 ): number {
-  // If upstream provided speed on point a, use it
   if (Number.isFinite(a.speedKmh as number)) return a.speedKmh as number;
 
-  // If both timestamps are present, use their delta
   if (typeof a.ts === 'number' && typeof b.ts === 'number' && b.ts > a.ts) {
     const mps = haversineMeters(a, b) / ((b.ts - a.ts) / 1000);
     return mps * 3.6;
   }
 
-  // Fallback: assume fixed sampling period
   if (typeof samplePeriodMs === 'number' && samplePeriodMs > 0) {
     const mps = haversineMeters(a, b) / (samplePeriodMs / 1000);
     return mps * 3.6;
@@ -90,20 +87,74 @@ function segmentSpeedKmh(
   return 0;
 }
 
+/** Robust quantile (q in [0,1]) */
+function quantile(sortedAsc: number[], q: number): number {
+  if (!sortedAsc.length) return 0;
+  const pos = (sortedAsc.length - 1) * q;
+  const base = Math.floor(pos);
+  const rest = pos - base;
+  if (sortedAsc[base + 1] !== undefined) {
+    return sortedAsc[base] + rest * (sortedAsc[base + 1] - sortedAsc[base]);
+  }
+  return sortedAsc[base];
+}
+
+/** Derive [P25,P50,P75] from speeds; ensure strictly increasing; fallback if needed */
+function deriveBreaksFromSpeeds(speeds: number[]): number[] {
+  const clean = speeds.filter((v) => Number.isFinite(v) && v >= 0);
+  if (clean.length < 4) return [10, 20, 35]; // not enough data — sensible default
+
+  const s = [...clean].sort((a, b) => a - b);
+  let p25 = quantile(s, 0.25);
+  let p50 = quantile(s, 0.5);
+  let p75 = quantile(s, 0.75);
+
+  // Enforce strictly increasing ordering (avoid all-equal / flat ranges)
+  const eps = Math.max(0.1, (s[s.length - 1] - s[0]) * 0.01); // 1% of range or 0.1 km/h
+  if (!(p25 < p50)) p50 = p25 + eps;
+  if (!(p50 < p75)) p75 = p50 + eps;
+
+  // Clamp to realistic range
+  p25 = Math.max(0, p25);
+  p50 = Math.max(p25 + eps, p50);
+  p75 = Math.max(p50 + eps, p75);
+
+  return [p25, p50, p75];
+}
+
 export default function LocationMap({
   series,
   samplePeriodMs,
-  speedBreaks = [10, 20, 35],
+  speedBreaks, // if provided, we’ll use these; otherwise data-driven
   speedColors = ['#d73027', '#fc8d59', '#91cf60', '#4575b4'], // red, orange, green, blue
 }: LocationMapProps): JSX.Element {
   const bikeHistory: LatLngTuple[] = series.map(LTSPToTuple);
-  const initialLocation: LatLngTuple = bikeHistory[0];
-  const currentLocation: LatLngTuple = bikeHistory[bikeHistory.length - 1];
+  const initialLocation: LatLngTuple | undefined = bikeHistory[0];
+  const currentLocation: LatLngTuple | undefined =
+    bikeHistory[bikeHistory.length - 1];
 
   // Keeps centre constant
   const center: LatLngTuple = LOCATIONS.CASEY_FIELDS;
 
-  //building coloured segments
+  // 1) Compute all segment speeds once
+  const segmentSpeeds = useMemo<number[]>(() => {
+    const out: number[] = [];
+    for (let i = 0; i < series.length - 1; i += 1) {
+      const v = segmentSpeedKmh(series[i], series[i + 1], samplePeriodMs);
+      if (Number.isFinite(v)) out.push(v);
+    }
+    return out;
+  }, [series, samplePeriodMs]);
+
+  // 2) Choose breaks: use prop if provided; else derive from data; else fallback default
+  const effectiveBreaks = useMemo<number[]>(() => {
+    if (Array.isArray(speedBreaks) && speedBreaks.length >= 1) {
+      return [...speedBreaks].sort((a, b) => a - b);
+    }
+    return deriveBreaksFromSpeeds(segmentSpeeds);
+  }, [speedBreaks, segmentSpeeds]);
+
+  // 3) Build coloured segments
   const segments = useMemo(() => {
     const segs: { coords: LatLngTuple[]; color: string; key: string }[] = [];
     for (let i = 0; i < series.length - 1; i += 1) {
@@ -114,6 +165,7 @@ export default function LocationMap({
       if (Number.isFinite(dist) && dist >= 0.2) {
         let vKmh = segmentSpeedKmh(a, b, samplePeriodMs);
         if (!Number.isFinite(vKmh)) vKmh = 0;
+
         if (i < 10) {
           const dtMs =
             typeof a.ts === 'number' && typeof b.ts === 'number'
@@ -124,17 +176,12 @@ export default function LocationMap({
               1,
             )}km/h`,
           );
+          console.debug(
+            `seg ${i} -> color via breaks ${JSON.stringify(effectiveBreaks)}`,
+          );
         }
 
-        if (i < 10) console.debug(`seg ${i}: ${vKmh.toFixed(1)} km/h`);
-        const color = pickColor(vKmh, speedBreaks, speedColors);
-        if (i < 10)
-          console.debug(
-            `seg ${i} -> color ${color} | breaks=${JSON.stringify(
-              speedBreaks,
-            )}`,
-          );
-
+        const color = pickColor(vKmh, effectiveBreaks, speedColors);
         const key = `${a.lat},${a.long}->${b.lat},${b.long}-${i}`;
         segs.push({
           coords: [
@@ -147,7 +194,7 @@ export default function LocationMap({
       }
     }
     return segs;
-  }, [series, samplePeriodMs, speedBreaks, speedColors]);
+  }, [series, samplePeriodMs, effectiveBreaks, speedColors]);
 
   return (
     <Map
@@ -188,7 +235,7 @@ export default function LocationMap({
         <Polyline
           key={s.key}
           positions={s.coords}
-          color={s.color} // <- use top-level props in v2
+          color={s.color}
           weight={3}
           opacity={0.9}
           lineCap="round"
