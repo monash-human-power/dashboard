@@ -2,6 +2,7 @@ import { LatLngTuple } from 'leaflet';
 import React, { useMemo } from 'react';
 import {
   AttributionControl,
+  Pane,
   CircleMarker,
   Map,
   Polyline,
@@ -208,8 +209,42 @@ export default function LocationMap({
         url="http://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&s=Ga"
       />
 
-      {currentLocation ? (
+      {/* Define panes with explicit z-index */}
+      <Pane name="track" style={{ zIndex: 400 }} />
+      <Pane name="top" style={{ zIndex: 650 }} />
+
+      {/* draw older segments */}
+      {segments.slice(0, -1).map((s) => (
+        <Polyline
+          key={s.key}
+          pane="track"
+          positions={s.coords}
+          color={s.color}
+          weight={3}
+          opacity={0.9}
+          lineCap="round"
+          interactive={false}
+        />
+      ))}
+
+      {/* draw latest segment on top */}
+      {segments.length > 0 && (
+        <Polyline
+          key={`${segments[segments.length - 1].key}-top`}
+          pane="top"
+          positions={segments[segments.length - 1].coords}
+          color={segments[segments.length - 1].color}
+          weight={3}
+          opacity={0.95}
+          lineCap="round"
+          interactive={false}
+        />
+      )}
+
+      {/* current marker above everything */}
+      {currentLocation && (
         <CircleMarker
+          pane="top"
           center={currentLocation}
           radius={7}
           color="white"
@@ -217,10 +252,12 @@ export default function LocationMap({
           fillColor="DodgerBlue"
           fillOpacity={1}
         />
-      ) : null}
+      )}
 
-      {initialLocation ? (
+      {/* initial marker can stay lower if you want */}
+      {initialLocation && (
         <CircleMarker
+          pane="track"
           center={initialLocation}
           radius={7}
           color="white"
@@ -228,19 +265,7 @@ export default function LocationMap({
           fillColor="#0BDA51"
           fillOpacity={1}
         />
-      ) : null}
-
-      {/* draw speed-coloured path */}
-      {segments.map((s) => (
-        <Polyline
-          key={s.key}
-          positions={s.coords}
-          color={s.color}
-          weight={3}
-          opacity={0.9}
-          lineCap="round"
-        />
-      ))}
+      )}
 
       <ScaleControl imperial={false} />
       <AttributionControl prefix={false} />
