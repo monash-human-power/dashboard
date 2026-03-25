@@ -1,87 +1,137 @@
-# Monash Human Power - Data Acquisition System Web Server
+# MHP DAShboard
 
-![eslint Checker](https://github.com/monash-human-power/dashboard/workflows/eslint%20Checker/badge.svg)
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
+Web dashboard and API for **Monash Human Power**’s **Data Acquisition System (DAS)**. The stack is a **React** SPA, an **Express** server that serves the built UI and REST endpoints for log files, and a **Socket.IO** bridge to an **MQTT** broker for live sensor data and device control.
 
-[![Generic badge](https://img.shields.io/badge/PROJECT_BOARD-green.svg)](https://github.com/monash-human-power/dashboard/projects/1)
+## Features
 
-A web server for the Data Acquisition System (DAS) for Monash Human Power.
+- **Versioned UIs** for bike platforms **V2 (Wombat)**, **V3 (Bilby)**, and **V4** (`/v2`, `/v3`, `/v4`); home redirects to `/v4`.
+- **Live telemetry** via Socket.IO (MQTT topics from the shared `mhp` package).
+- **Dashboards** with charts and maps (Chart.js, Leaflet) tailored by version.
+- **Boost**, **camera**, **logs**, **status**, and **power-model** flows (coverage varies by version—see `client/src/router/`).
+- **Log files**: list, download, delete CSV assets under `server/data/`.
+- **Health check**: `GET /server/status` for edge devices polling until the server is online.
 
-The node.js + Express HTTP REST server is used to host the real-time dashboard whilst the MQTT broker is used to transfer data from the sensors to all the necessary scripts that need it.
+## Tech stack
 
-## Getting Started
+| Layer | Technologies |
+|-------|----------------|
+| Frontend | React 16, TypeScript + JavaScript, react-router-dom 5, react-bootstrap, Chart.js, Leaflet, Socket.IO client, Runtypes |
+| Backend | Node.js, Express, Socket.IO, MQTT.js |
+| Shared constants | Private npm package `mhp` (`git+ssh://git@github.com:monash-human-power/common.git`) |
+| Tooling | Yarn 1.x, ESLint, Prettier, Storybook (client) |
 
-### Environment variable setup #test
+## Prerequisites
 
-Set up environment variables using a `.env` file. Create a `.env` file in the `server/` directory. Add the following variables:
+- **Node.js** 14.x and **Yarn** 1.x (see root `package.json` `engines`).
+- A running **MQTT broker** (default in code: `mqtt://localhost:1883`) when exercising live data.
+- **SSH access** to GitHub configured for cloning the private `mhp` dependency (`server/yarn install`).
 
-| Environment Variable | Description                                         |
-| -------------------- | --------------------------------------------------- |
-| MQTT_USERNAME        | MQTT username                                       |
-| MQTT_PASSWORD        | MQTT password                                       |
-| MQTT_SERVER          | Address of the MQTT broker                          |
-| MQTT_PORT            | Port of the MQTT broker                             |
-| HEROKU               | Define this **only** if you are the Heroku instance |
+## Installation
 
-### Installation guide - Frontend
+### 1. Clone and install the server
 
-1. Go to `client/`
-2. `yarn install` to install all dependencies and libraries
-3. `yarn start` to start the development server
-4. `yarn build` to create an optimized production bundle
+```bash
+cd server
+yarn install
+```
 
-### Installation guide - Backend
+Create `server/.env` when you need non-default MQTT or hosting flags (see below).
 
-1. Go to `server/`
-2. `yarn install` to install all dependencies and libraries
-3. Build the frontend production bundle
-4. `yarn start` to start the server
+### 2. Install and build the client
 
-## Deploying
+```bash
+cd client
+yarn install
+yarn build
+```
 
-This project is set up to automatically deploy from GitHub.
+The production server expects static files at `client/build` (see `server/server.js`).
 
-| Branch        | Environment | URL                            |
-| ------------- | ----------- | ------------------------------ |
-| `master`      | Production  | http://mhp-board.herokuapp.com |
-| Pull requests | Review app  |                                |
+### 3. Run the production server
+
+From the `server` directory:
+
+```bash
+yarn start
+```
+
+The app listens on `PORT` or **5000** and serves the SPA plus API routes.
+
+## Development workflow
+
+Run **client** and **server** in separate terminals for hot reload and API proxying.
+
+**Terminal 1 — React dev server (port 3000):**
+
+```bash
+cd client
+yarn start
+```
+
+**Terminal 2 — API + Socket.IO + static (port 5000):**
+
+```bash
+cd server
+yarn start
+```
+
+`client/src/setupProxy.js` forwards `/files`, `/server/status`, and `/socket.io` to `http://localhost:5000`.
+
+Convenience scripts from the **repository root**:
+
+```bash
+yarn client-start   # dev client
+yarn server-start   # server
+yarn build          # client production build
+yarn start          # server only (expects built client)
+```
+
+## Environment variables
+
+Place a `.env` file in **`server/`** (ignored by git). Examples referenced in code and docs:
+
+| Variable | Purpose |
+|----------|---------|
+| `PORT` | HTTP port (default 5000) |
+| `HEROKU` | When set, server uses alternate MQTT connection behavior for hosted instances |
+| `MQTT_USERNAME`, `MQTT_PASSWORD`, `MQTT_SERVER`, `MQTT_PORT` | Used when public MQTT options are enabled (see `server/js/sockets.js`) |
+
+Client `client/.env` currently contains development flags (e.g. `EXTEND_ESLINT`).
+
+## HTTP API
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/files` | GET | JSON list of filenames in `server/data/` |
+| `/files/recent` | GET | Download the most recently modified file |
+| `/files/:filename` | GET | Download a specific file |
+| `/files/:filename` | DELETE | Delete a specific file |
+| `/server/status` | GET | `{ "status": "True" }` when the server is up |
+
+## Deployment
+
+- **Azure Web App** (`DashMHP`): GitHub Actions on `master` builds the client, installs server dependencies, and deploys (`.github/workflows/deploy_to_azure.yaml`). Requires secrets for Azure publish profile and SSH key for the `mhp` dependency.
+- **Lint CI**: Pull requests run ESLint in `client` and `server` (`.github/workflows/linter.yml`).
+
+## Project structure (brief)
+
+```
+├── client/          # React app (src/views, src/components, src/api, src/router)
+├── server/          # Express + Socket.IO + MQTT (server.js, js/sockets.js, data/)
+├── docs/            # Engineering documentation and backlog
+└── .github/workflows/
+```
 
 ## Documentation
 
-| Endpoint          | Method | Body | Description                                             |
-| ----------------- | ------ | ---- | ------------------------------------------------------- |
-| /files            | GET    |      | Returns an array of files that are stored on the server |
-| /files/recent     | GET    |      | Download most recent file edited from server            |
-| /files/_filename_ | GET    |      | Download specified file from server                     |
-| /files/_filename_ | DELETE |      | Delete specified file from server                       |
-| /server/status    | GET    |      | Status of the server                                    |
+Detailed architecture, implementation status, backlog, and recommendations: **[docs/README.md](docs/README.md)**.
 
-## TODO
+## Future improvements
 
-- [ ] Add Map display
-- [ ] Add power model graph/output
-- [ ] Options page that saves options to browser storage
+See **[docs/06-improvement-recommendations.md](docs/06-improvement-recommendations.md)** and **[docs/04-product-backlog.md](docs/04-product-backlog.md)**. High-impact items include consolidating MQTT message handling, modernizing the Node/React toolchain, and adding automated tests.
 
-## Contributors ✨
+## Contributors
 
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+Thanks to all [contributors](https://github.com/monash-human-power/dashboard/graphs/contributors) on the Monash Human Power project.
 
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<table>
-  <tr>
-    <td align="center"><a href="https://khlee.me"><img src="https://avatars3.githubusercontent.com/u/18709969?v=4" width="100px;" alt=""/><br /><sub><b>Angus Lee</b></sub></a><br /><a href="https://github.com/monash-human-power/dashboard/commits?author=khanguslee" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/hallgchris"><img src="https://avatars2.githubusercontent.com/u/17876556?v=4" width="100px;" alt=""/><br /><sub><b>Christopher Hall</b></sub></a><br /><a href="https://github.com/monash-human-power/dashboard/commits?author=hallgchris" title="Code">💻</a></td>
-    <td align="center"><a href="https://angus.ws"><img src="https://avatars1.githubusercontent.com/u/13267947?v=4" width="100px;" alt=""/><br /><sub><b>Angus Trau</b></sub></a><br /><a href="https://github.com/monash-human-power/dashboard/commits?author=angustrau" title="Code">💻</a></td>
-    <td align="center"><a href="https://twitter.com/harsilspatel"><img src="https://avatars1.githubusercontent.com/u/25992839?v=4" width="100px;" alt=""/><br /><sub><b>Harsil Patel</b></sub></a><br /><a href="https://github.com/monash-human-power/dashboard/commits?author=harsilspatel" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/rileyclarke"><img src="https://avatars1.githubusercontent.com/u/24428011?v=4" width="100px;" alt=""/><br /><sub><b>Riley Clarke</b></sub></a><br /><a href="https://github.com/monash-human-power/dashboard/commits?author=rileyclarke" title="Code">💻</a></td>
-  </tr>
-</table>
-
-<!-- markdownlint-enable -->
-<!-- prettier-ignore-end -->
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+![eslint Checker](https://github.com/monash-human-power/dashboard/workflows/eslint%20Checker/badge.svg)
