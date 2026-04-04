@@ -1,14 +1,18 @@
 /*
  * Socket.io (Server-side)
  */
-require('dotenv').config();
-
 const sockets = {};
 const mqtt = require('mqtt');
 const os = require('os');
 
 const { DAS, BOOST, Camera, WirelessModule, V3, V4 } = require('mhp');
 const { getPropWithPath, setPropWithPath } = require('./util');
+
+/** mhp `topics.yml` V4 no longer defines `base` / `data`; keep a stable root for routing. */
+const V4_TOPIC_ROOT = '/v4';
+function isV4Topic(topic) {
+  return topic === V4_TOPIC_ROOT || topic.startsWith(`${V4_TOPIC_ROOT}/`);
+}
 
 // Public MQTT broker
 let PUBLISH_ONLINE = false;
@@ -214,25 +218,38 @@ sockets.init = function socketInit(server) {
             `Error in parsing received payload\n\ttopic: ${topic}\n\tpayload: ${payloadString}\n`,
           );
         }
-      } else if (topic.startsWith(V4.base)) {
-        // Emit on appropriate channel
+      } else if (isV4Topic(topic)) {
         try {
-          const topicString = topic.split('/').slice(1); // Remove leading ""
-          const [, , property] = topicString;
-          // topicString: ["v4", "sensors", <property>] 
-          const value = JSON.parse(payloadString); 
-          // Module's online
-          if (property === 'start') {
-            socket.emit(`V4-start`, true);
-          }
-          else if (property === 'stop') {
-            socket.emit(`V4-stop`, true);
-          }
-
-          // Add to global
-          else {
-            // Emit parsed payload as is
-            socket.emit(`V4-sensors-${property}`, value);
+          const value = JSON.parse(payloadString);
+          if (topic === V4.start) {
+            if (value.start) {
+              socket.emit('V4-start', true);
+              socket.emit('V4-sensors-start', {});
+            } else {
+              socket.emit('V4-stop', true);
+              socket.emit('V4-sensors-stop', {});
+            }
+          } else if (
+            topic === V4.sensor_data
+            || topic === V4.telemetry_data
+            || topic === V4.battery
+          ) {
+            const leaf = topic.split('/').pop();
+            socket.emit(`V4-sensors-${leaf}`, value);
+          } else if (topic === V4.sensor_status || topic === V4.telemetry_status) {
+            const leaf = topic.split('/').pop();
+            socket.emit(`V4-sensors-${leaf}`, value);
+          } else {
+            // Legacy `/v4/sensors/<property>`-style topics
+            const topicString = topic.split('/').slice(1);
+            const [, , property] = topicString;
+            if (property === 'start') {
+              socket.emit('V4-start', true);
+            } else if (property === 'stop') {
+              socket.emit('V4-stop', true);
+            } else if (property) {
+              socket.emit(`V4-sensors-${property}`, value);
+            }
           }
         } catch (e) {
           console.error(
@@ -335,9 +352,7 @@ sockets.init = function socketInit(server) {
     mqttClient.subscribe(DAS.start);
     mqttClient.subscribe(DAS.stop);
     mqttClient.subscribe(V3.start);
-    mqttClient.subscribe(V4.start);
-    mqttClient.subscribe(V4.base);
-    mqttClient.subscribe(V4.data);
+    mqttClient.subscribe(`${V4_TOPIC_ROOT}/#`);
 
     mqttClient.subscribe(DAS.data);
     mqttClient.subscribe(WirelessModule.all().module);

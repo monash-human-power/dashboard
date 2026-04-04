@@ -57,10 +57,10 @@
     "typescript": "^4.0.3"
   },
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
+    "start": "node scripts/run-with-legacy-openssl.js start",
+    "build": "node scripts/run-with-legacy-openssl.js build",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
-    "test": "react-app-rewired test",
+    "test": "node scripts/run-with-legacy-openssl.js test",
     "eject": "react-app-rewired eject",
     "lint": "eslint src",
     "lint:fix": "eslint --fix",

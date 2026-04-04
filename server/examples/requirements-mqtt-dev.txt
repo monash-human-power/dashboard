@@ -1,0 +1,5 @@
+# For mqtt_dev_broker.py (local MQTT + sample publishers)
+# paho-mqtt: required. Stay on 1.x for mqtt.Client(...) signature used in the script.
+paho-mqtt>=1.6.0,<2.0.0
+# amqtt: optional embedded broker if Mosquitto is not installed
+amqtt>=0.11.0
