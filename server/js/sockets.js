@@ -1,14 +1,18 @@
 /*
  * Socket.io (Server-side)
  */
-require('dotenv').config();
-
 const sockets = {};
 const mqtt = require('mqtt');
 const os = require('os');
 
-const { DAS, BOOST, Camera, WirelessModule, V3 } = require('mhp');
+const { DAS, BOOST, Camera, WirelessModule, V3, V4 } = require('mhp');
 const { getPropWithPath, setPropWithPath } = require('./util');
+
+/** mhp `topics.yml` V4 no longer defines `base` / `data`; keep a stable root for routing. */
+const V4_TOPIC_ROOT = '/v4';
+function isV4Topic(topic) {
+  return topic === V4_TOPIC_ROOT || topic.startsWith(`${V4_TOPIC_ROOT}/`);
+}
 
 // Public MQTT broker
 let PUBLISH_ONLINE = false;
@@ -37,17 +41,33 @@ const retained = {
   max_speed_achieved: null,
 };
 
+const retainedv4 = {
+  status: {},
+  camera: {},
+  boost: {
+    configs: null,
+    results: null,
+  },
+  max_speed_achieved: null,
+};
+
 function connectToPublicMQTTBroker(clientID = '') {
+  // const publicMqttOptions = {
+  //   reconnectPeriod: 1000,
+  //   connectTimeout: 5000,
+  //   clientId: `publicMqttClient-${clientID}-${Math.random()
+  //     .toString(16)
+  //     .substr(2, 8)}`,
+  //   username: process.env.MQTT_USERNAME,
+  //   password: process.env.MQTT_PASSWORD,
+  //   host: process.env.MQTT_SERVER,
+  //   port: process.env.MQTT_PORT,
+  // };
   const publicMqttOptions = {
     reconnectPeriod: 1000,
     connectTimeout: 5000,
-    clientId: `publicMqttClient-${clientID}-${Math.random()
-      .toString(16)
-      .substr(2, 8)}`,
-    username: process.env.MQTT_USERNAME,
-    password: process.env.MQTT_PASSWORD,
-    host: process.env.MQTT_SERVER,
-    port: process.env.MQTT_PORT,
+    host: "mqtt://localhost",
+    port: 1883,
   };
   const mqttInstance = mqtt.connect(publicMqttOptions);
   mqttInstance.on('connect', function publicMqttConnected(connack) {
@@ -114,11 +134,6 @@ sockets.init = function socketInit(server) {
   // Camera video feed status subscription occurs when mqttClient message handler is set
   mqttClient.on('connect', mqttConnected);
   mqttClient.on('error', mqttError);
-  // Not a heroku instance
-  if (sendToPublicMQTTBroker()) {
-    console.log('Not a heroku instance');
-    PUBLIC_MQTT_CLIENT = connectToPublicMQTTBroker(os.hostname());
-  }
 
   // eslint-disable-next-line global-require
   const io = require('socket.io').listen(server);
@@ -134,7 +149,9 @@ sockets.init = function socketInit(server) {
 
     mqttClient.on('message', function mqttMessage(topic, payload) {
       const payloadString = payload.toString();
-      if (topic.startsWith('status')) {
+      if (topic.startsWith('test')) {
+        console.log(payloadString);
+      } else if (topic.startsWith('status')) {
         try {
           const topicString = topic.split('/');
           // topicString: ["status", "<component>", "<subcomponent>", ...properties]
@@ -192,10 +209,47 @@ sockets.init = function socketInit(server) {
               path.slice(1),
               value,
             );
-
             // Emit parsed payload as is
             socket.emit(`wireless_module-${id}-${property}`, value);
 
+          }
+        } catch (e) {
+          console.error(
+            `Error in parsing received payload\n\ttopic: ${topic}\n\tpayload: ${payloadString}\n`,
+          );
+        }
+      } else if (isV4Topic(topic)) {
+        try {
+          const value = JSON.parse(payloadString);
+          if (topic === V4.start) {
+            if (value.start) {
+              socket.emit('V4-start', true);
+              socket.emit('V4-sensors-start', {});
+            } else {
+              socket.emit('V4-stop', true);
+              socket.emit('V4-sensors-stop', {});
+            }
+          } else if (
+            topic === V4.sensor_data
+            || topic === V4.telemetry_data
+            || topic === V4.battery
+          ) {
+            const leaf = topic.split('/').pop();
+            socket.emit(`V4-sensors-${leaf}`, value);
+          } else if (topic === V4.sensor_status || topic === V4.telemetry_status) {
+            const leaf = topic.split('/').pop();
+            socket.emit(`V4-sensors-${leaf}`, value);
+          } else {
+            // Legacy `/v4/sensors/<property>`-style topics
+            const topicString = topic.split('/').slice(1);
+            const [, , property] = topicString;
+            if (property === 'start') {
+              socket.emit('V4-start', true);
+            } else if (property === 'stop') {
+              socket.emit('V4-stop', true);
+            } else if (property) {
+              socket.emit(`V4-sensors-${property}`, value);
+            }
           }
         } catch (e) {
           console.error(
@@ -237,12 +291,13 @@ sockets.init = function socketInit(server) {
             break;
           case V3.start:
             const msg = JSON.parse(payload);
-            if (msg.start){
-                [1, 2, 3, 4, 5].forEach((id) =>
-                socket.emit(`wireless_module-${id}-start`, true),
+            if (msg.start) {
+              [1, 2, 3, 4, 5].forEach((id) =>
+                socket.emit(`
+                  ${id}-start`, true),
               );
-              }
-            else{
+            }
+            else {
               [1, 2, 3, 4, 5].forEach((id) =>
                 socket.emit(`wireless_module-${id}-stop`, true),
               );
@@ -297,6 +352,8 @@ sockets.init = function socketInit(server) {
     mqttClient.subscribe(DAS.start);
     mqttClient.subscribe(DAS.stop);
     mqttClient.subscribe(V3.start);
+    mqttClient.subscribe(`${V4_TOPIC_ROOT}/#`);
+
     mqttClient.subscribe(DAS.data);
     mqttClient.subscribe(WirelessModule.all().module);
     mqttClient.subscribe(BOOST.prev_trap_speed);
@@ -423,13 +480,21 @@ sockets.init = function socketInit(server) {
         mqttClient.publish(WirelessModule.id(n).stop),
       );
     });
-    
-    socket.on('start-V3', ()=>{
-      mqttClient.publish(V3.start, JSON.stringify({"start": true}));      
+
+    socket.on('start-V3', () => {
+      mqttClient.publish(V3.start, JSON.stringify({ "start": true }));
     })
 
-    socket.on('stop-V3', ()=>{
-      mqttClient.publish(V3.start, JSON.stringify({"start": false}));
+    socket.on('stop-V3', () => {
+      mqttClient.publish(V3.start, JSON.stringify({ "start": false }));
+    })
+
+    socket.on('start-V4', () => {
+      mqttClient.publish(V4.start, JSON.stringify({ "start": true }));
+    })
+
+    socket.on('stop-V4', () => {
+      mqttClient.publish(V4.start, JSON.stringify({ "start": false }));
     })
 
   });

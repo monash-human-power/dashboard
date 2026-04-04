@@ -13,7 +13,7 @@ export interface CameraStatusProps {
  *
  * Starts/stops recording for both displays.
  *
- * This is a feature intended for V3 but is currently in V2 for testing.
+ * This is a feature intended for V3 & V4 but is currently in V2 for testing.
  *
  * @param props Props
  * @returns Component

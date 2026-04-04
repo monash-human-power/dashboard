@@ -18,9 +18,10 @@ import { camelCaseToStartCase } from 'utils/string';
 import BoostConfigList from 'components/common/boost/BoostConfigList';
 import BoostResults from 'components/common/boost/BoostResults';
 import { Runtype } from 'runtypes';
-import { sendConfigSelections } from 'api/v3/boost';
+import { sendConfigSelections } from 'api/common/boost';
 import toast from 'react-hot-toast';
 import { useChannelShaped } from 'api/common/socket';
+import style from 'components/common/boost/BoostConfigurator.module.css';
 
 export interface BoostConfiguratorProps {
   configs: BoostConfig[];
@@ -186,18 +187,18 @@ export default function BoostConfigurator({
       </Modal>
       <Card style={{ marginTop: '2.5rem' }}>
         <Card.Body>
-          <Card.Title style={{ marginBottom: '1.5rem' }}>
+          <Card.Title className={style.text}>
             Configuration
             <Button
               variant="primary"
-              className="ml-3 float-right"
+              className={style.generate}
               onClick={handleGenerate}
             >
               Generate
             </Button>
             <Button
               variant="outline-primary"
-              className="float-right"
+              className={style.configs}
               onClick={() => handleClickUpload('bundle')}
             >
               Upload All Configs

@@ -3,7 +3,7 @@ import ContentPage from 'components/common/ContentPage';
 import BoostCalibration from 'components/common/boost/BoostCalibration';
 import BoostConfigurator from 'components/common/boost/BoostConfigurator';
 import { setCalibration, resetCalibration } from 'api/common/powerModel';
-import uploadConfig, { sendConfig } from 'api/v3/boost';
+import uploadConfig, { sendConfig } from 'api/common/boost';
 import {
   ConfigT,
   BoostConfig,

@@ -50,12 +50,16 @@ export type ModuleData = Static<typeof ModuleData>;
  * @param callback The function to be called
  */
 function useModuleCallback<T>(
-  id: number,
+  id: number | null,
   type: 'start' | 'stop' | 'data',
   callback: (payload: T) => void,
 ) {
+  const channel =
+    id == null ? `V4-sensors-${type}` : `wireless_module-${id}-${type}`;
+
   const payloadShape: any = type === 'data' ? ModuleData : StartStopData;
-  useChannelShaped(`wireless_module-${id}-${type}`, payloadShape, callback);
+
+  useChannelShaped(channel, payloadShape, callback);
 }
 
 /**
@@ -91,7 +95,7 @@ export function useModuleStopCallback(
  * @param callback The function to be called
  */
 export function useModuleDataCallback(
-  id: number,
+  id: number | null,
   callback: (data: ModuleData) => void,
 ) {
   useModuleCallback(id, 'data', callback);
@@ -103,7 +107,7 @@ export function useModuleDataCallback(
  * @param id ID of module
  * @returns Data
  */
-export function useModuleData(id: number): ModuleData {
+export function useModuleData(id: number | null): ModuleData {
   const [data, setData] = useState<ModuleData>({ sensors: [] });
 
   useModuleDataCallback(id, setData);
@@ -183,7 +187,7 @@ export function useModuleStatus(id: number, name: string): WMStatus {
  * @returns Value of sensor data
  */
 export function useSensorData<T extends SensorsT>(
-  id: number,
+  id: number | null,
   sensor: Sensor,
   shape: Runtype<T>,
 ): T | null {
@@ -207,4 +211,18 @@ export function startV3() {
  */
 export function stopV3() {
   emit('stop-V3');
+}
+
+/**
+ * Start V4
+ */
+export function startV4() {
+  emit('start-V4');
+}
+
+/**
+ * Stop V4
+ */
+export function stopV4() {
+  emit('stop-V4');
 }

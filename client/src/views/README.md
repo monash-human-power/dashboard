@@ -10,6 +10,10 @@ This folder contains views used **_ONLY_ for the V2 bike**.
 
 This folder contains views used **_ONLY_ for the V3 bike**.
 
+## [V4 Views](./v4)
+
+This folder contains views used **_ONLY_ for the V4 bike**.
+
 ## [Common Views](./common)
 
 This folder contains views used that are used for **_ALL_ bikes**.
