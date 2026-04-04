@@ -57,6 +57,7 @@
     "typescript": "^4.0.3"
   },
   "scripts": {
+    "husky-run": "node ./node_modules/husky/bin/run.js",
     "start": "node scripts/run-with-legacy-openssl.js start",
     "build": "node scripts/run-with-legacy-openssl.js build",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
