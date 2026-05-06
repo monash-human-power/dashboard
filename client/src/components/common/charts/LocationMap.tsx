@@ -15,7 +15,7 @@ import LeafletCenterControl from 'components/v2/LeafletCenterControl';
 import { LTSPToTuple } from 'components/trike/dashboard/AnimatedLocationMap';
 import 'leaflet/dist/leaflet.css';
 
-// Contains some common (LatLngTuple) locations
+// Common (LatLngTuple) locations
 export const LOCATIONS: { [key: string]: LatLngTuple } = {
   MHP_WORKSHOP: [-37.908756, 145.13404],
   CASEY_FIELDS: [-38.126945, 145.314126],
@@ -24,25 +24,21 @@ export const LOCATIONS: { [key: string]: LatLngTuple } = {
 };
 
 export interface LocationTimeSeriesPoint {
-  /** GPS latitude */
   lat: number;
-  /** GPS longitude */
   long: number;
-  /** optional: timestamp (ms since epoch) */
   ts?: number;
-  /** optional: instantaneous speed in km/h (if already computed upstream) */
   speedKmh?: number;
 }
 
 export interface LocationMapProps {
-  /** GPS location time series */
   series: LocationTimeSeriesPoint[];
-  /** If points don’t include ts or speed, assume a fixed sample period to estimate speed (e.g. 1000 = 1 Hz) */
   samplePeriodMs?: number;
-  /** Optional custom speed breakpoints (km/h), ascending; if omitted we derive from data */
   speedBreaks?: number[];
-  /** Colours for each bin; length = breaks.length + 1 */
-  speedColors?: string[]; // default ['#d73027','#fc8d59','#91cf60','#4575b4']
+  speedColors?: string[];
+  binCount?: number; // total colour bins (default 7)
+  showLegend?: boolean;
+  showDirectionCues?: boolean;
+  arrowEvery?: number;
 }
 
 /** Haversine distance in meters */
@@ -67,77 +63,157 @@ function pickColor(kmh: number, breaks: number[], colors: string[]): string {
   return colors[colors.length - 1];
 }
 
-/** Compute km/h for segment a -> b using (a.speedKmh) or ts/samplePeriodMs fallbacks */
+/** Segment speed (km/h), using speedKmh or ts/samplePeriodMs fallbacks */
 function segmentSpeedKmh(
   a: LocationTimeSeriesPoint,
   b: LocationTimeSeriesPoint,
   samplePeriodMs?: number,
 ): number {
   if (Number.isFinite(a.speedKmh as number)) return a.speedKmh as number;
-
   if (typeof a.ts === 'number' && typeof b.ts === 'number' && b.ts > a.ts) {
     const mps = haversineMeters(a, b) / ((b.ts - a.ts) / 1000);
     return mps * 3.6;
   }
-
   if (typeof samplePeriodMs === 'number' && samplePeriodMs > 0) {
     const mps = haversineMeters(a, b) / (samplePeriodMs / 1000);
     return mps * 3.6;
   }
-
   return 0;
 }
 
-/** Robust quantile (q in [0,1]) */
-function quantile(sortedAsc: number[], q: number): number {
+/** Simple quantile helper */
+function quantile(sortedAsc: number[], p: number): number {
   if (!sortedAsc.length) return 0;
-  const pos = (sortedAsc.length - 1) * q;
+  const pos = (sortedAsc.length - 1) * p;
   const base = Math.floor(pos);
   const rest = pos - base;
-  if (sortedAsc[base + 1] !== undefined) {
-    return sortedAsc[base] + rest * (sortedAsc[base + 1] - sortedAsc[base]);
-  }
-  return sortedAsc[base];
+  return sortedAsc[base + 1] !== undefined
+    ? sortedAsc[base] + rest * (sortedAsc[base + 1] - sortedAsc[base])
+    : sortedAsc[base];
 }
 
-/** Derive [P25,P50,P75] from speeds; ensure strictly increasing; fallback if needed */
-function deriveBreaksFromSpeeds(speeds: number[]): number[] {
+/**
+ * Equal-width breaks:
+ *  - Always dedicate a stop bin (<= zeroThreshold)
+ *  - Compute trimmed moving range [P5..P95]
+ *  - Split that range into equal-width bins
+ *  - Enforce a minimum width per band (minWidth)
+ */
+function deriveEqualWidthBreaks(
+  speeds: number[],
+  binCount: number,
+  zeroThreshold = 1, // 0–1 km/h is "stopped"
+  trimLo = 0.05,
+  trimHi = 0.95,
+  minWidth = 2, // km/h
+): number[] {
   const clean = speeds.filter((v) => Number.isFinite(v) && v >= 0);
-  if (clean.length < 4) return [10, 20, 35]; // not enough data — sensible default
+  if (!clean.length) return [];
 
-  const s = [...clean].sort((a, b) => a - b);
-  let p25 = quantile(s, 0.25);
-  let p50 = quantile(s, 0.5);
-  let p75 = quantile(s, 0.75);
+  const hasZeroBin = clean.some((v) => v <= zeroThreshold);
+  const moving = clean.filter((v) => v > zeroThreshold).sort((a, b) => a - b);
+  if (!moving.length) return [zeroThreshold];
 
-  // Enforce strictly increasing ordering (avoid all-equal / flat ranges)
-  const eps = Math.max(0.1, (s[s.length - 1] - s[0]) * 0.01); // 1% of range or 0.1 km/h
-  if (!(p25 < p50)) p50 = p25 + eps;
-  if (!(p50 < p75)) p75 = p50 + eps;
+  const movingBins = hasZeroBin ? binCount - 1 : binCount;
+  const cutsNeeded = Math.max(0, movingBins - 1);
 
-  // Clamp to realistic range
-  p25 = Math.max(0, p25);
-  p50 = Math.max(p25 + eps, p50);
-  p75 = Math.max(p50 + eps, p75);
+  // Trim range to reduce outlier impact
+  const loQ = quantile(moving, trimLo);
+  const hiQ = quantile(moving, trimHi);
 
-  return [p25, p50, p75];
+  const lo = Math.max(zeroThreshold, loQ);
+  const hi = Math.max(lo + minWidth * movingBins, hiQ); // ensure enough span
+
+  const width = Math.max(minWidth, (hi - lo) / movingBins);
+
+  const cuts: number[] = [];
+  for (let i = 1; i <= cutsNeeded; i += 1) {
+    cuts.push(lo + i * width);
+  }
+
+  return hasZeroBin ? [zeroThreshold, ...cuts] : cuts;
+}
+
+/** Red→green palette (7). Sliced to needed length. */
+const RED_TO_GREEN_7 = [
+  '#7f0000',
+  '#b30000',
+  '#d7301f',
+  '#ef6548',
+  '#fdbb84',
+  '#a1d99b',
+  '#31a354',
+];
+
+// const RED_TO_GREEN_7 = ['#940404', '#e04010', '#e88d15', '#d6c313', '#72bf0d', '#16b8d9', '#1644d9'];
+
+/** Degrees-per-meter helper for arrow heads */
+function metersToDegrees(
+  latDeg: number,
+  metersX: number,
+  metersY: number,
+): [number, number] {
+  const latRad = (latDeg * Math.PI) / 180;
+  const metersPerDegLat = 111320;
+  const metersPerDegLng = 111320 * Math.cos(latRad);
+  return [metersY / metersPerDegLat, metersX / metersPerDegLng];
+}
+
+/** Tiny chevron arrow at end of segment a->b */
+function buildArrowChevrons(
+  a: LocationTimeSeriesPoint,
+  b: LocationTimeSeriesPoint,
+  sizeMeters = 10,
+): LatLngTuple[][] {
+  const dLat = b.lat - a.lat;
+  const dLng = b.long - a.long;
+  const segLen = Math.hypot(dLat, dLng);
+  if (segLen === 0) return [];
+
+  const [dLatSize, dLngSize] = metersToDegrees(b.lat, sizeMeters, sizeMeters);
+  const ux = dLng / segLen;
+  const uy = dLat / segLen;
+
+  const cosT = Math.cos((30 * Math.PI) / 180);
+  const sinT = Math.sin((30 * Math.PI) / 180);
+  const rot = (
+    x: number,
+    y: number,
+    c: number,
+    s: number,
+  ): [number, number] => [x * c - y * s, x * s + y * c];
+
+  const dir: [number, number] = [ux * dLngSize, uy * dLatSize];
+  const [rx1, ry1] = rot(dir[0], dir[1], cosT, sinT);
+  const [rx2, ry2] = rot(dir[0], dir[1], cosT, -sinT);
+
+  const tip: LatLngTuple = [b.lat, b.long];
+  const wing1: LatLngTuple = [b.lat - ry1, b.long - rx1];
+  const wing2: LatLngTuple = [b.lat - ry2, b.long - rx2];
+
+  return [
+    [tip, wing1],
+    [tip, wing2],
+  ];
 }
 
 export default function LocationMap({
   series,
   samplePeriodMs,
-  speedBreaks, // if provided, we’ll use these; otherwise data-driven
-  speedColors = ['#d73027', '#fc8d59', '#91cf60', '#4575b4'], // red, orange, green, blue
+  speedBreaks,
+  speedColors,
+  binCount = 7,
+  showLegend = true,
+  showDirectionCues = true,
+  arrowEvery = 60,
 }: LocationMapProps): JSX.Element {
   const bikeHistory: LatLngTuple[] = series.map(LTSPToTuple);
-  const initialLocation: LatLngTuple | undefined = bikeHistory[0];
-  const currentLocation: LatLngTuple | undefined =
-    bikeHistory[bikeHistory.length - 1];
+  const initialLocation = bikeHistory[0];
+  const currentLocation = bikeHistory[bikeHistory.length - 1];
 
-  // Keeps centre constant
   const center: LatLngTuple = LOCATIONS.CASEY_FIELDS;
 
-  // 1) Compute all segment speeds once
+  // 1) Segment speeds
   const segmentSpeeds = useMemo<number[]>(() => {
     const out: number[] = [];
     for (let i = 0; i < series.length - 1; i += 1) {
@@ -147,17 +223,34 @@ export default function LocationMap({
     return out;
   }, [series, samplePeriodMs]);
 
-  // 2) Choose breaks: use prop if provided; else derive from data; else fallback default
+  // 2) Breaks
   const effectiveBreaks = useMemo<number[]>(() => {
     if (Array.isArray(speedBreaks) && speedBreaks.length >= 1) {
       return [...speedBreaks].sort((a, b) => a - b);
     }
-    return deriveBreaksFromSpeeds(segmentSpeeds);
-  }, [speedBreaks, segmentSpeeds]);
+    return deriveEqualWidthBreaks(segmentSpeeds, binCount);
+  }, [speedBreaks, segmentSpeeds, binCount]);
 
-  // 3) Build coloured segments
-  const segments = useMemo(() => {
+  // 3) Colors
+  const effectiveColors = useMemo<string[]>(() => {
+    const need = effectiveBreaks.length + 1;
+    if (Array.isArray(speedColors) && speedColors.length >= need) {
+      return speedColors.slice(0, need);
+    }
+    if (need <= RED_TO_GREEN_7.length) return RED_TO_GREEN_7.slice(0, need);
+    return [
+      ...RED_TO_GREEN_7,
+      ...Array(need - RED_TO_GREEN_7.length).fill(
+        RED_TO_GREEN_7[RED_TO_GREEN_7.length - 1],
+      ),
+    ];
+  }, [speedColors, effectiveBreaks.length]);
+
+  // 4) Segments & arrows
+  const { segments, arrows } = useMemo(() => {
     const segs: { coords: LatLngTuple[]; color: string; key: string }[] = [];
+    const arrs: { coords: LatLngTuple[]; color: string; key: string }[] = [];
+
     for (let i = 0; i < series.length - 1; i += 1) {
       const a = series[i];
       const b = series[i + 1];
@@ -167,23 +260,9 @@ export default function LocationMap({
         let vKmh = segmentSpeedKmh(a, b, samplePeriodMs);
         if (!Number.isFinite(vKmh)) vKmh = 0;
 
-        if (i < 10) {
-          const dtMs =
-            typeof a.ts === 'number' && typeof b.ts === 'number'
-              ? b.ts - a.ts
-              : samplePeriodMs;
-          console.debug(
-            `seg ${i}: dist=${dist.toFixed(2)}m dt=${dtMs}ms v=${vKmh.toFixed(
-              1,
-            )}km/h`,
-          );
-          console.debug(
-            `seg ${i} -> color via breaks ${JSON.stringify(effectiveBreaks)}`,
-          );
-        }
-
-        const color = pickColor(vKmh, effectiveBreaks, speedColors);
+        const color = pickColor(vKmh, effectiveBreaks, effectiveColors);
         const key = `${a.lat},${a.long}->${b.lat},${b.long}-${i}`;
+
         segs.push({
           coords: [
             [a.lat, a.long],
@@ -192,10 +271,54 @@ export default function LocationMap({
           color,
           key,
         });
+
+        if (showDirectionCues && i % arrowEvery === 0) {
+          const chevrons = buildArrowChevrons(a, b, 10);
+          chevrons.forEach((coords, k) => {
+            arrs.push({ coords, color, key: `${key}-arrow-${k}` });
+          });
+        }
       }
     }
-    return segs;
-  }, [series, samplePeriodMs, effectiveBreaks, speedColors]);
+    return { segments: segs, arrows: arrs };
+  }, [
+    series,
+    samplePeriodMs,
+    effectiveBreaks,
+    effectiveColors,
+    showDirectionCues,
+    arrowEvery,
+  ]);
+
+  // 5) Legend labels (deduped)
+  const legendBands = useMemo(() => {
+    if (!segmentSpeeds.length) return [];
+    const min = Math.min(...segmentSpeeds);
+    const cuts = effectiveBreaks;
+
+    const raw: { color: string; text: string }[] = [];
+    raw.push({
+      color: effectiveColors[0],
+      text: `${min.toFixed(0)}–${cuts[0].toFixed(0)} km/h`,
+    });
+    for (let i = 1; i < cuts.length; i += 1) {
+      raw.push({
+        color: effectiveColors[i],
+        text: `${cuts[i - 1].toFixed(0)}–${cuts[i].toFixed(0)} km/h`,
+      });
+    }
+    raw.push({
+      color: effectiveColors[effectiveColors.length - 1],
+      text: `${cuts[cuts.length - 1].toFixed(0)}+ km/h`,
+    });
+
+    const deduped: { color: string; text: string }[] = [];
+    for (const item of raw) {
+      if (!deduped.length || deduped[deduped.length - 1].text !== item.text)
+        deduped.push(item);
+    }
+    return deduped;
+  }, [effectiveBreaks, effectiveColors, segmentSpeeds]);
 
   return (
     <Map
@@ -209,11 +332,10 @@ export default function LocationMap({
         url="http://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&s=Ga"
       />
 
-      {/* Define panes with explicit z-index */}
       <Pane name="track" style={{ zIndex: 400 }} />
+      <Pane name="arrows" style={{ zIndex: 625 }} />
       <Pane name="top" style={{ zIndex: 650 }} />
 
-      {/* draw older segments */}
       {segments.slice(0, -1).map((s) => (
         <Polyline
           key={s.key}
@@ -227,7 +349,6 @@ export default function LocationMap({
         />
       ))}
 
-      {/* draw latest segment on top */}
       {segments.length > 0 && (
         <Polyline
           key={`${segments[segments.length - 1].key}-top`}
@@ -241,7 +362,20 @@ export default function LocationMap({
         />
       )}
 
-      {/* current marker above everything */}
+      {showDirectionCues &&
+        arrows.map((a) => (
+          <Polyline
+            key={a.key}
+            pane="arrows"
+            positions={a.coords}
+            color={a.color}
+            weight={2}
+            opacity={0.9}
+            lineCap="round"
+            interactive={false}
+          />
+        ))}
+
       {currentLocation && (
         <CircleMarker
           pane="top"
@@ -254,7 +388,6 @@ export default function LocationMap({
         />
       )}
 
-      {/* initial marker can stay lower if you want */}
       {initialLocation && (
         <CircleMarker
           pane="track"
@@ -265,6 +398,50 @@ export default function LocationMap({
           fillColor="#0BDA51"
           fillOpacity={1}
         />
+      )}
+
+      {showLegend && legendBands.length > 0 && (
+        <div
+          style={{
+            position: 'absolute',
+            right: 10,
+            top: 10,
+            background: 'rgba(30,30,30,0.75)',
+            color: 'white',
+            padding: '8px 10px',
+            borderRadius: 8,
+            fontSize: 12,
+            lineHeight: 1.2,
+            boxShadow: '0 2px 6px rgba(0,0,0,0.3)',
+            backdropFilter: 'blur(2px)',
+            zIndex: 1000,
+            pointerEvents: 'none',
+          }}
+        >
+          <div style={{ fontWeight: 700, marginBottom: 6 }}>Speed</div>
+          {legendBands.map((b) => (
+            <div
+              key={b.text}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                margin: '3px 0',
+              }}
+            >
+              <span
+                style={{
+                  width: 16,
+                  height: 8,
+                  borderRadius: 2,
+                  display: 'inline-block',
+                  background: b.color,
+                }}
+              />
+              <span>{b.text}</span>
+            </div>
+          ))}
+        </div>
       )}
 
       <ScaleControl imperial={false} />
