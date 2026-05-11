@@ -3,6 +3,7 @@ import { roundNum } from 'utils/data';
 import styles from './LiveDataRow.module.css';
 import LiveData from './LiveData';
 import { INTERVAL_MS } from './AnimatedLocationMap';
+import { useLapContext } from './LapContext';
 
 /*
 // For testing display
@@ -53,26 +54,13 @@ export default function LiveDataRow(): JSX.Element {
   }, [currentIndex]);
   /* End Live data testing */
 
-  /* Button Counter testing */
-
-  const [LapNum, setLapNum] = useState(0);
-
-  const incLap = () => {
-    setLapNum((prevLapNum) => prevLapNum + 1); // Use prevLapNum for the most up-to-date value
-  };
-
-  const decLap = () => {
-    if (LapNum !== 0) {
-      setLapNum((prevLapNum) => prevLapNum - 1); // Use prevLapNum for the most up-to-date value
-    }
-  };
-
-  /* End Button testing */
+  /* Lap state from shared context */
+  const { lapNum, incLap, decLap } = useLapContext();
 
   /* Local Time / Date Testing */
   const date = new Date();
   const showTime = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
-  const lapval = `${currLap}/${LapNum}`;
+  const lapval = `${currLap}/${lapNum}`;
   /* End time testing */
 
   return (
