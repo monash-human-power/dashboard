@@ -4,6 +4,16 @@ import React from 'react';
 import { Scatter } from 'react-chartjs-2';
 import { AxisProps, DataProps, ScatterChartProps } from './ScatterChart';
 
+/**
+ * Convert a hex colour like "#00008B" to an rgba string with the given alpha.
+ */
+function hexToRgba(hex: string, alpha: number): string {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
 // Interface to define structure of input for dual axis scatter charts with shared X-Axis.
 // Extends existing ScatterChartProps interface by adding a second set of
 // Y-Axis data and associated attributes.
@@ -12,6 +22,8 @@ export interface DualAxisScatterChartProps extends ScatterChartProps {
   yAxis2: AxisProps;
   // Second Y-Axis data values
   data2: DataProps[];
+  // Optional per-lap segments of data2 for faded past-lap rendering
+  data2Segments?: DataProps[][];
   // Data2 background colour
   data2Colour: string;
   // Data2 Max value
@@ -39,6 +51,7 @@ export default function DualAxisScatterChart({
   maxColour,
   yAxis2,
   data2,
+  data2Segments,
   data2Colour,
   max2,
   max2Colour,
@@ -154,6 +167,39 @@ export default function DualAxisScatterChart({
     plugins: [AnnotationPlugin],
   };
 
+  // Build speed datasets — one per lap segment if segments are provided,
+  // otherwise fall back to the single data2 array for backwards compatibility.
+  const PAST_LAP_ALPHA = 0.2;
+  const segments =
+    data2Segments && data2Segments.length > 0 ? data2Segments : null;
+
+  const speedDatasets = segments
+    ? segments.map((seg, i) => {
+        const isCurrentLap = i === segments.length - 1;
+        return {
+          label: isCurrentLap ? 'Speed (current lap)' : `Speed (lap ${i + 1})`,
+          data: seg,
+          borderColor: isCurrentLap
+            ? data2Colour
+            : hexToRgba(data2Colour, PAST_LAP_ALPHA),
+          pointRadius: 0,
+          showLine: true,
+          yAxisID: 'y-axis-2',
+          tension: 0,
+        };
+      })
+    : [
+        {
+          label: 'Speed data',
+          data: data2,
+          borderColor: data2Colour,
+          pointRadius: 0,
+          showLine: true,
+          yAxisID: 'y-axis-2',
+          tension: 0,
+        },
+      ];
+
   const formattedData = {
     datasets: [
       {
@@ -165,15 +211,7 @@ export default function DualAxisScatterChart({
         yAxisID: 'y-axis-1',
         tension: 0,
       },
-      {
-        label: 'Speed data',
-        data: data2,
-        borderColor: data2Colour,
-        pointRadius: 0,
-        showLine: true,
-        yAxisID: 'y-axis-2',
-        tension: 0,
-      },
+      ...speedDatasets,
     ],
   };
   // Redraws graph after large sequence has been drawn

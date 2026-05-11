@@ -1,13 +1,44 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 // import { Sensor, useSensorData } from 'api/common/data';
 import { useChannel } from 'api/common/socket';
 import PowerSpeedTimeChart from 'components/common/charts/PowerSpeedTimeChart';
 import { ChartPoint } from 'types/chart';
+import { useLapContext } from '../dashboard/LapContext';
 // import { AntDistanceRT, AntSpeedRT, PowerRT } from 'types/data';
 
 export const TrikePTChartKey = 'trike-dashboard-power-time-chart-data';
 export const TrikeSTChartKey = 'trike-dashboard-speed-time-chart-data';
+
+/**
+ * Split a sorted array of chart points into segments at the given x boundaries.
+ * Adjacent segments share the boundary point so the line is visually continuous.
+ */
+function buildSpeedSegments(
+  data: ChartPoint[],
+  boundaries: number[],
+): ChartPoint[][] {
+  if (boundaries.length === 0) return [data];
+
+  const segments: ChartPoint[][] = [];
+  let bIdx = 0;
+  let segStart = 0;
+
+  for (let i = 0; i < data.length; i++) {
+    if (bIdx < boundaries.length && data[i].x >= boundaries[bIdx]) {
+      // End of current segment — include this point as the last in the segment
+      segments.push(data.slice(segStart, i + 1));
+      // Next segment starts at this same point (overlap so line is continuous)
+      segStart = i;
+      bIdx++;
+    }
+  }
+  // Remaining points form the current (in-progress) lap segment
+  if (segStart < data.length) {
+    segments.push(data.slice(segStart));
+  }
+  return segments;
+}
 
 /**
  * Passes trike data to the power-speed time chart component
@@ -65,6 +96,8 @@ export function TrikePowerSpeedTimeChart() {
   const timeData: number[] = require('../CaseyTimes.json');
   /* eslint-enable global-require */
 
+  const { lapBoundaries, recordSample } = useLapContext();
+
   // Stateful currentIndex
   const [currentIndex, setCurrentIndex] = useState(0);
   useEffect(() => {
@@ -84,22 +117,27 @@ export function TrikePowerSpeedTimeChart() {
     maxSpeed.current = Math.max(maxSpeed.current, speedKmh);
     maxPower.current = Math.max(maxPower.current, power);
 
-    // Only want to keep 1 minute's worth of data for performance
-    if (PTdata.length > 60) {
-      STdata.shift();
-      PTdata.shift();
-    }
-    // Append latest power and speed values
+    // Feed sample into the lap accumulator
+    recordSample(time, speedKmh, power);
+
+    // Append latest power and speed values (no cap — we need full history for lap segments)
     setSTData([...STdata, { x: time, y: speedKmh }]);
     setPTData([...PTdata, { x: time, y: power }]);
 
     return () => clearInterval(interval);
   }, [currentIndex]);
 
+  // Split speed data into per-lap segments for faded rendering
+  const speedSegments = useMemo(
+    () => buildSpeedSegments(STdata, lapBoundaries),
+    [STdata, lapBoundaries],
+  );
+
   return (
     <PowerSpeedTimeChart
       data={PTdata}
       data2={STdata}
+      data2Segments={speedSegments}
       // Maximums of datasets
       max={maxPower.current}
       max2={maxSpeed.current}

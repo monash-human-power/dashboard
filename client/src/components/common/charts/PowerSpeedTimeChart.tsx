@@ -14,6 +14,7 @@ import { DualChartProps } from 'types/chart';
 export default function PowerSpeedTimeChart({
   data,
   data2,
+  data2Segments,
   max,
   max2,
 }: DualChartProps): JSX.Element {
@@ -26,6 +27,7 @@ export default function PowerSpeedTimeChart({
       data={data}
       dataColour={DARKGREEN}
       data2={data2}
+      data2Segments={data2Segments}
       data2Colour={DARKBLUE}
       max={max}
       maxColour={DARKGREEN}

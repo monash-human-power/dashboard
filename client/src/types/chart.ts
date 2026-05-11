@@ -16,6 +16,8 @@ export interface DualChartProps {
   /** Data to render */
   data: ChartPoint[];
   data2: ChartPoint[];
+  /** Optional per-lap segments of data2 for faded rendering of past laps */
+  data2Segments?: ChartPoint[][];
   /** The maximum value achieved */
   max: number;
   max2: number;
