@@ -1,0 +1,18 @@
+.cardContainer {
+  background-color: #f4f4f4;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.tabs :global(.nav-link) {
+  font-size: 0.9rem;
+  padding: 6px 12px;
+}
+
+.tabs :global(.nav-link.active) {
+  background-color: #abd7ad;
+  border-color: #abd7ad;
+  color: #000;
+  font-weight: 600;
+}

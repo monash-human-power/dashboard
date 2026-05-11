@@ -5,6 +5,7 @@ import AnimatedLocationMap from 'components/trike/dashboard/AnimatedLocationMap'
 import { Container, Col, Row } from 'react-bootstrap';
 import LiveDataRow from 'components/trike/dashboard/LiveDataRow';
 import TrikeStatsRow from 'components/trike/dashboard/TrikeStats';
+import LapAnalyticsCard from 'components/trike/dashboard/LapAnalyticsCard';
 import { LapProvider } from 'components/trike/dashboard/LapContext';
 
 import styles from './DashboardView.module.css';
@@ -27,7 +28,7 @@ export default function DashboardView(): JSX.Element {
           >
             <LiveDataRow />
           </Col>
-          <Col xs={{ span: 12, order: 3 }} lg={{ span: 6, order: 2 }}>
+          <Col xs={{ span: 12, order: 4 }} lg={{ span: 6, order: 2 }}>
             <div className={styles.graph}>
               <TrikePowerSpeedTimeChart />
             </div>
@@ -37,12 +38,19 @@ export default function DashboardView(): JSX.Element {
             lg={{ span: 6, order: 3 }}
             className={styles.statContainer}
           >
-            <TrikeStatsRow />
+            <LapAnalyticsCard />
           </Col>
-          <Col xs={{ span: 12, order: 4 }} lg={{ span: 6, order: 4 }}>
+          <Col xs={{ span: 12, order: 5 }} lg={{ span: 6, order: 4 }}>
             <div className={styles.bigGraph}>
               <AnimatedLocationMap />
             </div>
+          </Col>
+          <Col
+            xs={{ span: 12, order: 3 }}
+            lg={{ span: 6, order: 5 }}
+            className={styles.statContainer}
+          >
+            <TrikeStatsRow />
           </Col>
         </Row>
       </Container>
