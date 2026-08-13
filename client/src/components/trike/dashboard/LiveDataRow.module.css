@@ -1,0 +1,59 @@
+.currentStintContainer {
+  display: flex; 
+  justify-content: space-evenly; 
+  align-items: center; 
+  margin: 20px 0 20px 0;
+  padding: 10px;
+  flex-wrap: wrap; 
+  background-color: #f4f4f4;
+  border-radius: 5px;
+  
+}
+
+
+.title {
+  display: inline-grid; 
+  background-color: #abd7ad;
+  border-radius: 1px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 10px 0px;
+  padding: 10px;
+}
+
+.subtitle {
+  display: inline-grid;
+  background-color: #e9f6e9;
+  border-radius: 1px;
+  font-size: 1.3rem;
+  font-weight: 200;
+  margin: 5px 0px;
+  padding: 5px;
+}
+
+
+.liveDataItem {
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+  margin: 20px 20px 20px 20px; 
+  min-width: 100px; 
+}
+
+.buttonContainer {
+  display: flex;
+}
+.pitButton {
+  background-color: #ddd; 
+  padding: 10px 10px;
+  margin: 0 15px; 
+  border: 1px ;
+  border-radius: 100px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+
+.pitButton:hover {
+  background-color: #ccc; 
+}

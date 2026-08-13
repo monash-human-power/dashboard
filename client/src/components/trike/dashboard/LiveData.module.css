@@ -1,0 +1,28 @@
+.value {
+font-size: 20px;
+color: black;
+text-align: right;
+}
+
+.unit {
+font-size: 14px;
+color: black;
+text-align: right;
+margin-left: 4px;
+
+}
+
+.desc {
+font-size: 14px;
+color: black;
+font-weight: bold;
+}
+
+
+.top {
+display: flex;
+flex-wrap: wrap;
+justify-content: flex-end;
+align-items: flex-end;
+margin: 5px 5px 5px 5px; 
+}

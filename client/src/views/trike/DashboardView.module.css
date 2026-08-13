@@ -1,0 +1,40 @@
+.statContainer {
+    display: flex;
+    margin-top: 25px;
+    margin-bottom: 30px;
+    margin-left: -8px;
+  }
+  
+  .stat {
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+  
+  .contentContainer {
+    width: 97vw;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    margin-left: 1.2vw;
+  }
+  
+  .content{
+    min-height: 80vh;
+  }
+
+  .line {
+    /* height: 100px; */
+    border: 1px solid #cccccc;
+  }
+  
+  .graph {
+    /* height: 85vh;
+    width: 85h; */
+    min-height: 50vh;
+    /* max-width: 800px; */
+  }
+  
+  .bigGraph {
+    min-height: 50vh;
+    height: 50vh;
+  }
+  
