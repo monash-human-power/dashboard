@@ -37,6 +37,23 @@ Set up environment variables using a `.env` file. Create a `.env` file in the `s
 3. Build the frontend production bundle
 4. `yarn start` to start the server
 
+### SSH connection guide
+
+This is relevant if SSH has not been setup on the computer (Windows)
+
+1. Open Command Prompt to generate a SSH Key.
+2. `ssh-keygen -t ed25519 -C "your_email@example.com"` to create a new SSH key, remember to change the `"your_email@example.com"` to the your own email
+3. When prompted, press Enter for default settings unless you know what you are doing
+4. Open a new Powershell
+5. `Get-Content C:\Users\YOUR_USERNAME\.ssh\id_ed25519.pub | clip` to copy the items inside to clipboard, make sure to change `YOUR_USERNAME` to your own username, or where the file was saved if it was not default
+6. Go to Github and view your account settings
+7. Navigate to the SSH and GPG Keys, under Access
+8. Press new SSH key and in the Key section, paste what was copied to clipboard
+9. Go back to Powershell and type `ssh -T git@github.com`
+10. If prompted by "The authenticity of host 'github.com' can't be established
+    Are you sure you want to continue connecting (yes/no/[fingerprint])?", Enter `yes`
+11. Test the connection with `ssh -T git@github.com` again, there should be a success message
+
 ## Deploying
 
 This project is set up to automatically deploy from GitHub.
