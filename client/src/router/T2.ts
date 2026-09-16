@@ -8,7 +8,7 @@ import LogsView from 'views/common/LogsView';
 const routes: RouteInfo[] = [
   {
     name: 'Dashboard',
-    path: '/T2/Dashboard',
+    path: '/T2',
     exact: true,
     component: (DashboardView as unknown) as React.Component,
   },

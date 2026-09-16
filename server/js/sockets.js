@@ -15,7 +15,7 @@ let PUBLISH_ONLINE = false;
 let PUBLIC_MQTT_CLIENT;
 
 // TODO: Add this to the topics.yml file in 'mhp' package
-Camera["base"] = "camera";
+Camera['base'] = 'camera';
 
 /**
  * Structure can be found in the MQTT V3 Topics page on Notion
@@ -164,19 +164,19 @@ sockets.init = function socketInit(server) {
           );
         }
         //editted
-        } else if (topic.startsWith('t2/') && topic.endsWith('/telemetry')) {
-            try {
-              const value = JSON.parse(payloadString);
+      } else if (topic.startsWith('t2/') && topic.endsWith('/telemetry')) {
+        try {
+          const value = JSON.parse(payloadString);
 
-              console.log('T2 telemetry received:', value);
+          console.log('T2 telemetry received:', value);
 
-              socket.emit('t2-telemetry', value);
-            } catch (e) {
-              console.error(
-                `Error parsing T2 telemetry\nTopic: ${topic}\nPayload: ${payloadString}`,
-              );
-            }
-       //
+          socket.emit('t2-telemetry', value);
+        } catch (e) {
+          console.error(
+            `Error parsing T2 telemetry\nTopic: ${topic}\nPayload: ${payloadString}`,
+          );
+        }
+        //
       } else if (topic.startsWith(WirelessModule.base)) {
         // Emit on appropriate channel
         try {
@@ -188,8 +188,7 @@ sockets.init = function socketInit(server) {
           // Module's online
           if (property === 'start') {
             socket.emit(`wireless_module-${id}-start`, true);
-          }
-          else if (property === 'stop') {
+          } else if (property === 'stop') {
             socket.emit(`wireless_module-${id}-stop`, true);
           }
           // Module's offline
@@ -209,7 +208,6 @@ sockets.init = function socketInit(server) {
 
             // Emit parsed payload as is
             socket.emit(`wireless_module-${id}-${property}`, value);
-
           }
         } catch (e) {
           console.error(
@@ -251,12 +249,11 @@ sockets.init = function socketInit(server) {
             break;
           case V3.start:
             const msg = JSON.parse(payload);
-            if (msg.start){
-                [1, 2, 3, 4, 5].forEach((id) =>
+            if (msg.start) {
+              [1, 2, 3, 4, 5].forEach((id) =>
                 socket.emit(`wireless_module-${id}-start`, true),
               );
-              }
-            else{
+            } else {
               [1, 2, 3, 4, 5].forEach((id) =>
                 socket.emit(`wireless_module-${id}-stop`, true),
               );
@@ -276,7 +273,9 @@ sockets.init = function socketInit(server) {
             socket.emit(BOOST.predicted_max_speed, JSON.parse(payloadString));
             break;
           case BOOST.max_speed_achieved:
-            const max_speed = payloadString ? JSON.parse(payloadString)["speed"] : null;
+            const max_speed = payloadString
+              ? JSON.parse(payloadString)['speed']
+              : null;
             retained.max_speed_achieved = max_speed;
             socket.emit(BOOST.max_speed_achieved, max_speed);
             break;
@@ -312,7 +311,7 @@ sockets.init = function socketInit(server) {
     mqttClient.subscribe(DAS.stop);
     mqttClient.subscribe(V3.start);
     mqttClient.subscribe(DAS.data);
-    mqttClient.subscribe('t2/+/telemetry');  //editted
+    mqttClient.subscribe('t2/+/telemetry'); //editted
     mqttClient.subscribe(WirelessModule.all().module);
     mqttClient.subscribe(BOOST.prev_trap_speed);
     mqttClient.subscribe(BOOST.predicted_max_speed);
@@ -337,8 +336,9 @@ sockets.init = function socketInit(server) {
         socket.emit(path.join('-'), getPropWithPath(retained, path));
     });
     socket.on('get-max-speed-achieved', (path) => {
-      if (retained.max_speed_achieved) socket.emit(path, retained.max_speed_achieved);
-    })
+      if (retained.max_speed_achieved)
+        socket.emit(path, retained.max_speed_achieved);
+    });
 
     socket.on('get-boost-configs', (path) => {
       if (retained.boost.configs) socket.emit(path, retained.boost.configs);
@@ -438,15 +438,14 @@ sockets.init = function socketInit(server) {
         mqttClient.publish(WirelessModule.id(n).stop),
       );
     });
-    
-    socket.on('start-V3', ()=>{
-      mqttClient.publish(V3.start, JSON.stringify({"start": true}));      
-    })
 
-    socket.on('stop-V3', ()=>{
-      mqttClient.publish(V3.start, JSON.stringify({"start": false}));
-    })
+    socket.on('start-V3', () => {
+      mqttClient.publish(V3.start, JSON.stringify({ start: true }));
+    });
 
+    socket.on('stop-V3', () => {
+      mqttClient.publish(V3.start, JSON.stringify({ start: false }));
+    });
   });
 };
 
