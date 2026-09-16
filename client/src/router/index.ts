@@ -4,6 +4,7 @@ import { RouteInfo } from 'types/route';
 import V2Routes from 'router/v2';
 import V3Routes from 'router/v3';
 import TrikeRoutes from 'router/trike';
+import T2Routes from 'router/T2';
 
 export interface VersionInfo {
   /** Bike version friendly name */
@@ -34,6 +35,12 @@ export const bikeVersions: VersionInfo[] = [
     rootPath: '/trike',
     routes: TrikeRoutes,
     id: 4,
+  },
+  {
+    name: 'T2',
+    rootPath: '/T2',
+    routes: T2Routes,
+    id: 5,
   },
 ];
 
