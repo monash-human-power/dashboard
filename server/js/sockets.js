@@ -163,6 +163,20 @@ sockets.init = function socketInit(server) {
             `Error in parsing received payload\n\ttopic: ${topic}\n\tpayload: ${payloadString}\n`,
           );
         }
+        //editted
+        } else if (topic.startsWith('t2/') && topic.endsWith('/telemetry')) {
+            try {
+              const value = JSON.parse(payloadString);
+
+              console.log('T2 telemetry received:', value);
+
+              socket.emit('t2-telemetry', value);
+            } catch (e) {
+              console.error(
+                `Error parsing T2 telemetry\nTopic: ${topic}\nPayload: ${payloadString}`,
+              );
+            }
+       //
       } else if (topic.startsWith(WirelessModule.base)) {
         // Emit on appropriate channel
         try {
@@ -298,6 +312,7 @@ sockets.init = function socketInit(server) {
     mqttClient.subscribe(DAS.stop);
     mqttClient.subscribe(V3.start);
     mqttClient.subscribe(DAS.data);
+    mqttClient.subscribe('t2/+/telemetry');  //editted
     mqttClient.subscribe(WirelessModule.all().module);
     mqttClient.subscribe(BOOST.prev_trap_speed);
     mqttClient.subscribe(BOOST.predicted_max_speed);
