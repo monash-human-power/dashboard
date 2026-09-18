@@ -1,11 +1,12 @@
 import React from 'react';
 
-import styles from './DashboardView.module.css';
 import { Col, Row } from 'react-bootstrap';
 
 import AnimatedLocationMap from 'components/T2/dashboard/AnimatedLocationMap';
 import VideoFeed from 'components/T2/dashboard/VideoFeed';
 import DataDisplay from 'components/T2/dashboard/DataDisplay';
+
+import styles from './DashboardView.module.css';
 
 export default function DashboardView(): JSX.Element {
   return (

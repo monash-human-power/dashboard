@@ -1,8 +1,8 @@
 import { useChannel } from 'api/common/socket';
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 
-// 2 second time out
-const TIMEOUT_MS = 2000;
+// 1 second time out
+const TIMEOUT_MS = 1000;
 
 // something to store the data that we collect
 interface TelemetryPayload {
