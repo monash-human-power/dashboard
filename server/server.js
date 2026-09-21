@@ -9,12 +9,18 @@ const server = require('http').Server(app);
 const path = require('path');
 const fs = require('fs');
 const bodyParser = require('body-parser');
+const { TelemetryStore } = require('./js/telemetry-store');
+const telemetryApi = require('./js/telemetry-api');
+const telemetryStore = new TelemetryStore(
+  process.env.TELEMETRY_DATA_DIR || path.join(__dirname, 'telemetry-data'),
+);
 
 // Set port to whatever the environment variable for PORT is, else use port 5000
 const PORT = process.env.PORT || 5000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use('/api/t2', telemetryApi(telemetryStore));
 app.use(express.static(path.join(__dirname, '../client/build')));
 
 // Create a data folder if it is not created already
@@ -29,7 +35,7 @@ if (!fs.existsSync(dataDirectory)) {
  */
 // eslint-disable-next-line import/no-dynamic-require
 const sockets = require(path.join(__dirname, 'js', 'sockets.js'));
-sockets.init(server);
+sockets.init(server, telemetryStore);
 
 /*
  * Start the server

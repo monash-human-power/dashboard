@@ -1,5 +1,6 @@
 /.vscode
 /server/data/*.csv
+/server/telemetry-data/
 
 # Ignore Storybook build output
 /client/storybook-static

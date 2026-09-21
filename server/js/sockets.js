@@ -9,6 +9,7 @@ const os = require('os');
 
 const { DAS, BOOST, Camera, WirelessModule, V3 } = require('mhp');
 const { getPropWithPath, setPropWithPath } = require('./util');
+const attachT2Telemetry = require('./t2-telemetry');
 
 // Public MQTT broker
 let PUBLISH_ONLINE = false;
@@ -96,7 +97,7 @@ function mqttDataTopicHandler(socket, payload) {
   socket.emit('data', message);
 }
 
-sockets.init = function socketInit(server) {
+sockets.init = function socketInit(server, telemetryStore) {
   const mqttOptions = {
     reconnectPeriod: 1000,
     connectTimeout: 5000,
@@ -122,6 +123,7 @@ sockets.init = function socketInit(server) {
 
   // eslint-disable-next-line global-require
   const io = require('socket.io').listen(server);
+  attachT2Telemetry(mqttClient, io, telemetryStore);
   io.on('connection', function ioConnection(socket) {
     socket.setMaxListeners(20);
     /*
@@ -133,6 +135,8 @@ sockets.init = function socketInit(server) {
     */
 
     mqttClient.on('message', function mqttMessage(topic, payload) {
+      // T2 telemetry is recorded and broadcast once by the server-level listener.
+      if (/^t2\/[^/]+\/telemetry$/.test(topic)) return;
       const payloadString = payload.toString();
       if (topic.startsWith('status')) {
         try {
@@ -163,20 +167,6 @@ sockets.init = function socketInit(server) {
             `Error in parsing received payload\n\ttopic: ${topic}\n\tpayload: ${payloadString}\n`,
           );
         }
-        //editted
-      } else if (topic.startsWith('t2/') && topic.endsWith('/telemetry')) {
-        try {
-          const value = JSON.parse(payloadString);
-
-          console.log('T2 telemetry received:', value);
-
-          socket.emit('t2-telemetry', value);
-        } catch (e) {
-          console.error(
-            `Error parsing T2 telemetry\nTopic: ${topic}\nPayload: ${payloadString}`,
-          );
-        }
-        //
       } else if (topic.startsWith(WirelessModule.base)) {
         // Emit on appropriate channel
         try {
@@ -311,7 +301,6 @@ sockets.init = function socketInit(server) {
     mqttClient.subscribe(DAS.stop);
     mqttClient.subscribe(V3.start);
     mqttClient.subscribe(DAS.data);
-    mqttClient.subscribe('t2/+/telemetry'); //editted
     mqttClient.subscribe(WirelessModule.all().module);
     mqttClient.subscribe(BOOST.prev_trap_speed);
     mqttClient.subscribe(BOOST.predicted_max_speed);
