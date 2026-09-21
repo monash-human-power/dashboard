@@ -39,6 +39,8 @@ export interface LocationMapProps {
   showLegend?: boolean;
   showDirectionCues?: boolean;
   arrowEvery?: number;
+  onMapClick?: (lat: number, long: number) => void;
+  checkpoints?: { lat: number; long: number; label: string }[];
 }
 
 /** Haversine distance in meters */
@@ -206,6 +208,8 @@ export default function LocationMap({
   showLegend = true,
   showDirectionCues = true,
   arrowEvery = 60,
+  onMapClick,
+  checkpoints = [],
 }: LocationMapProps): JSX.Element {
   const bikeHistory: LatLngTuple[] = series.map(LTSPToTuple);
   const initialLocation = bikeHistory[0];
@@ -326,6 +330,7 @@ export default function LocationMap({
       zoom={16}
       attributionControl={false}
       className={styles.map}
+      onClick={(e: any) => onMapClick && onMapClick(e.latlng.lat, e.latlng.lng)}
     >
       <TileLayer
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -399,6 +404,18 @@ export default function LocationMap({
           fillOpacity={1}
         />
       )}
+      {checkpoints.map((cp, i) => (
+        <CircleMarker
+          key={cp.label}
+          pane="top"
+          center={[cp.lat, cp.long]}
+          radius={9}
+          color="white"
+          weight={2}
+          fillColor={i === 0 ? 'orange' : 'purple'}
+          fillOpacity={1}
+        />
+      ))}
 
       {showLegend && legendBands.length > 0 && (
         <div

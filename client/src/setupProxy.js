@@ -2,7 +2,7 @@ const proxy = require('http-proxy-middleware');
 
 module.exports = function (app) {
   app.use(
-    ['/files', '/server/status'],
+    ['/files', '/server/status', '/api'],
     proxy({
       target: 'http://localhost:5000',
     }),

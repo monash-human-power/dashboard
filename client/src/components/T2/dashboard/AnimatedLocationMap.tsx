@@ -1,8 +1,9 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useChannel } from 'api/common/socket';
 import LocationMap, {
   LocationTimeSeriesPoint,
 } from 'components/common/charts/LocationMap';
+import { useLapContext } from 'components/T2/LapContext';
 
 interface TelemetryPayload {
   type: string;
@@ -20,33 +21,67 @@ interface TelemetryPayload {
 }
 
 export default function AnimatedLocationMap(): JSX.Element {
+  const {
+    checkpoints,
+    addCheckpoint,
+    clearCheckpoints,
+    checkCheckpointCrossing,
+    lapCount,
+  } = useLapContext();
   const [locationHistory, setLocationHistory] = useState<
     LocationTimeSeriesPoint[]
   >([]);
+  const prevLapCount = useRef(lapCount);
 
-  const handleMessage = useCallback((payload: string | TelemetryPayload) => {
-    const parsed: TelemetryPayload =
-      typeof payload === 'string' ? JSON.parse(payload) : payload;
+  const handleMessage = useCallback(
+    (payload: string | TelemetryPayload) => {
+      const parsed: TelemetryPayload =
+        typeof payload === 'string' ? JSON.parse(payload) : payload;
+      const { gps, speed } = parsed.data;
+      const tsMs = new Date(parsed.timestamp).getTime();
 
-    const point: LocationTimeSeriesPoint = {
-      lat: parsed.data.gps.latitude,
-      long: parsed.data.gps.longitude,
-      ts: new Date(parsed.timestamp).getTime(),
-      speedKmh: parsed.data.speed.value,
-    };
+      const point: LocationTimeSeriesPoint = {
+        lat: gps.latitude,
+        long: gps.longitude,
+        ts: tsMs,
+        speedKmh: speed.value,
+      };
 
-    setLocationHistory((prev) => [...prev, point]);
-  }, []);
+      const crossing = checkCheckpointCrossing(
+        gps.latitude,
+        gps.longitude,
+        tsMs,
+      );
+
+      if (crossing?.completedLap) {
+        setLocationHistory([point]); // wipe trail only on a full lap, not every segment
+      } else {
+        setLocationHistory((prev) => [...prev, point]);
+      }
+    },
+    [checkCheckpointCrossing],
+  );
 
   useChannel('t2-telemetry', handleMessage);
+
+  useEffect(() => {
+    if (lapCount !== prevLapCount.current) {
+      prevLapCount.current = lapCount;
+      setLocationHistory((prev) =>
+        prev.length > 1 ? [prev[prev.length - 1]] : prev,
+      );
+    }
+  }, [lapCount]);
 
   return (
     <LocationMap
       series={locationHistory}
+      checkpoints={checkpoints}
       binCount={7}
       showLegend
       showDirectionCues
       arrowEvery={10}
+      onMapClick={(lat, long) => addCheckpoint(lat, long)}
     />
   );
 }
