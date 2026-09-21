@@ -160,6 +160,19 @@ async function main() {
     app.use('/api/t2', telemetryApi(restarted));
     server = http.createServer(app);
     await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
+    const downloaded = await new Promise((resolve, reject) => {
+      http.get({ host: '127.0.0.1', port: server.address().port,
+        path: '/api/t2/sessions/test-session/file' }, (res) => {
+        let body = '';
+        res.on('data', (chunk) => { body += chunk; });
+        res.on('end', () => resolve({ status: res.statusCode, headers: res.headers, body }));
+      }).on('error', reject);
+    });
+    assert.strictEqual(downloaded.status, 200);
+    assert.ok(downloaded.headers['content-disposition'].includes('session-test-session_'));
+    assert.strictEqual(downloaded.body, originalBytes.toString());
+    assert.strictEqual((await get(server, '/api/t2/sessions/unknown/file')).status, 404);
+    assert.strictEqual((await get(server, '/api/t2/sessions/a%2Fb/file')).status, 400);
     const listed = await get(server, '/api/t2/sessions?limit=2');
     assert.strictEqual(listed.status, 200);
     assert.strictEqual(listed.body.total, 4);

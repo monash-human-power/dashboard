@@ -5,6 +5,7 @@ import { Col, Row } from 'react-bootstrap';
 import AnimatedLocationMap from 'components/T2/dashboard/AnimatedLocationMap';
 import VideoFeed from 'components/T2/dashboard/VideoFeed';
 import DataDisplay from 'components/T2/dashboard/DataDisplay';
+import SavedSessions from 'components/T2/dashboard/SavedSessions';
 import RiderAnalytics from 'components/T2/statistics/RiderRanker';
 import { LapProvider } from 'components/T2/LapContext';
 
@@ -20,6 +21,9 @@ export default function DashboardView(): JSX.Element {
           className={styles.statContainer}
         >
           <DataDisplay />
+          <div className={styles.sessionControls}>
+            <SavedSessions />
+          </div>
         </Col>
         <Col xs={{ span: 12, order: 2 }} lg={{ span: 6, order: 2 }}>
           <div className={styles.graph}>

@@ -62,6 +62,11 @@ timestamp rather than a hard-coded date/local time labelled `Z`.
 
 ## REST API
 
+The T2 dashboard includes a **Saved sessions** dropdown. Opening it refreshes
+the archive list; choosing a session downloads its complete JSON Lines file via
+`GET /api/t2/sessions/:sessionId/file`. Active sessions include data saved so far;
+download again later to get additional readings. This does not stop recording.
+
 Base URL for the local backend: `http://localhost:5000/api/t2`.
 
 ### List sessions

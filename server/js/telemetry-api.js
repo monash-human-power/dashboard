@@ -26,6 +26,16 @@ function pagination(query) {
 
 function telemetryApi(store) {
   const router = express.Router();
+  router.get('/sessions/:sessionId/file', async (req, res, next) => {
+    try {
+      const filename = await store.run(() => store.resolveFilename(req.params.sessionId));
+      res.download(filename, (error) => {
+        if (error && !res.headersSent) next(error);
+      });
+    } catch (error) {
+      next(error);
+    }
+  });
   router.get('/sessions', async (req, res, next) => {
     try {
       res.json(await store.listSessions(pagination(req.query)));
