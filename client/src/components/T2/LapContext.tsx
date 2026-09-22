@@ -160,9 +160,11 @@ export function LapProvider({ children }: { children: React.ReactNode }) {
         const lapNumber = currentLapNumberRef.current;
         const completedLap = crossedIndex === 0;
 
-        // The label for the leg just finished — independent of the checkpoint's
-        // own display label. Crossing checkpoint i finishes "Segment i"; crossing
-        // back to Start/Finish (index 0) finishes the final closing segment.
+        const fullLapDurationSec =
+          completedLap && lapStartTimeMsRef.current !== null
+            ? (tsMs - lapStartTimeMsRef.current) / 1000
+            : null;
+
         const segmentLabel = completedLap
           ? `Segment ${checkpoints.length}`
           : `Segment ${crossedIndex}`;
@@ -182,9 +184,7 @@ export function LapProvider({ children }: { children: React.ReactNode }) {
             ];
           }
 
-          if (completedLap && lapStartTimeMsRef.current !== null) {
-            const fullLapDurationSec =
-              (tsMs - lapStartTimeMsRef.current) / 1000;
+          if (fullLapDurationSec !== null) {
             next['Full Lap'] = [
               ...(next['Full Lap'] ?? []),
               { lapNumber, durationSec: fullLapDurationSec },
