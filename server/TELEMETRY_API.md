@@ -82,7 +82,18 @@ buffered while viewing it, and continues the same session without another fetch.
 Other session IDs are ignored in this mode; Start fresh live view clears the
 display and accepts the active publisher. Reload session explicitly fetches a
 new snapshot. Reloading the webpage always starts a fresh live view.
-Checkpoint definitions/lap timing and video are not persisted in these records.
+Checkpoint definitions are saved per session in a `.jsonl.checkpoints.json`
+sidecar next to its telemetry file. `PUT /api/t2/sessions/:sessionId/checkpoints`
+accepts `{ checkpoints: [{ lat, long }, ...] }`. The first point is start/finish;
+subsequent points are visited in placement order. Changing points recalculates
+timing over the recorded session. The backend calculates live timing even with
+no browser open. Snapshots return `lapTiming`, reconstructed from the full log,
+alongside the capped 20,000 telemetry readings. Live events also include it.
+A rider must leave the checkpoint radius before re-entering it to count another
+crossing. Lap duration includes the final segment returning to start/finish.
+Old sessions without saved points cannot recover previously clicked positions;
+set the points once in live mode to save them and recalculate recorded timing.
+Video is not persisted.
 The optional `GET /api/t2/sessions/:sessionId/file` endpoint still downloads the
 complete JSON Lines file. Viewing history does not stop backend recording.
 

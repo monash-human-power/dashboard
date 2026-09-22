@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const readline = require('readline');
+const { createTiming, advanceTiming } = require('./lap-timing');
 
 function badRequest(message) {
   const error = new Error(message);
@@ -78,6 +79,7 @@ class TelemetryStore {
   constructor(directory) {
     this.directory = path.resolve(directory);
     this.pending = Promise.resolve();
+    this.timings = new Map();
   }
 
   run(operation) {
@@ -125,12 +127,58 @@ class TelemetryStore {
     const value = validateTelemetry(topic, payload);
     const record = { ...value, topic, receivedAt: new Date().toISOString(), eventId: crypto.randomBytes(16).toString('hex') };
     return this.run(async () => {
+      let timing = this.timings.get(value.sessionId);
+      if (!timing) {
+        timing = createTiming(await this.readCheckpoints(value.sessionId));
+        try {
+          await TelemetryStore.scan(await this.resolveFilename(value.sessionId), (entry) => advanceTiming(timing, entry));
+        } catch (error) {
+          if (error.code !== 'ENOENT') throw error;
+        }
+        this.timings.set(value.sessionId, timing);
+      }
       await fs.promises.appendFile(
         await this.resolveFilename(value.sessionId),
         `${JSON.stringify(record)}\n`,
         'utf8',
       );
-      return record;
+      advanceTiming(timing, record);
+      // Return a detached snapshot; later messages must not mutate this event.
+      return { ...record, lapTiming: JSON.parse(JSON.stringify(timing)) };
+    });
+  }
+
+  async readCheckpoints(sessionId) {
+    try {
+      return JSON.parse(await fs.promises.readFile(`${this.filename(sessionId)}.checkpoints.json`, 'utf8')).checkpoints;
+    } catch (error) {
+      if (error.code === 'ENOENT') return [];
+      throw error;
+    }
+  }
+
+  saveCheckpoints(sessionId, points) {
+    validateSessionId(sessionId);
+    if (!Array.isArray(points) || points.some((point) => !point
+      || !Number.isFinite(point.lat) || Math.abs(point.lat) > 90
+      || !Number.isFinite(point.long) || Math.abs(point.long) > 180)) {
+      throw badRequest('checkpoints must contain valid latitude and longitude pairs');
+    }
+    const checkpoints = points.map((point, index) => ({ lat: point.lat, long: point.long,
+      label: index === 0 ? 'Start/Finish' : `Segment ${index}` }));
+    return this.run(async () => {
+      const timing = createTiming(checkpoints);
+      try {
+        await TelemetryStore.scan(await this.resolveFilename(sessionId), (record) => advanceTiming(timing, record));
+      } catch (error) {
+        if (error.code === 'ENOENT') error.status = 404;
+        throw error;
+      }
+      const filename = `${this.filename(sessionId)}.checkpoints.json`;
+      await fs.promises.writeFile(`${filename}.tmp`, JSON.stringify({ checkpoints }), 'utf8');
+      await fs.promises.rename(`${filename}.tmp`, filename);
+      this.timings.set(sessionId, timing);
+      return JSON.parse(JSON.stringify(timing));
     });
   }
 
@@ -216,8 +264,10 @@ class TelemetryStore {
       const filename = await this.resolveFilename(sessionId);
       let telemetry = [];
       let total = 0;
+      const timing = latest ? createTiming(await this.readCheckpoints(sessionId)) : null;
       try {
         await TelemetryStore.scan(filename, (record) => {
+          if (timing) advanceTiming(timing, record);
           if (latest) telemetry[total % limit] = record;
           else if (total >= offset && telemetry.length < limit)
             telemetry.push(record);
@@ -239,6 +289,7 @@ class TelemetryStore {
       }
       return {
         sessionId,
+        ...(timing ? { lapTiming: timing } : {}),
         telemetry,
         total,
         offset,

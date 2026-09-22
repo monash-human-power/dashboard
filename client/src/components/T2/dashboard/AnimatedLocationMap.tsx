@@ -31,6 +31,7 @@ export default function AnimatedLocationMap(): JSX.Element {
     addCheckpoint,
     clearCheckpoints,
     lapCount,
+    checkpointStatus,
   } = useLapContext();
   const [locationHistory, setLocationHistory] = useState<
     LocationTimeSeriesPoint[]
@@ -74,15 +75,18 @@ export default function AnimatedLocationMap(): JSX.Element {
   }, [lapCount]);
 
   return (
-    <LocationMap
-      compactRendering
-      series={locationHistory}
-      checkpoints={checkpoints}
-      binCount={7}
-      showLegend
-      showDirectionCues
-      arrowEvery={10}
-      onMapClick={(lat, long) => addCheckpoint(lat, long)}
-    />
+    <>
+      <LocationMap
+        compactRendering
+        series={locationHistory}
+        checkpoints={checkpoints}
+        binCount={7}
+        showLegend
+        showDirectionCues
+        arrowEvery={10}
+        onMapClick={(lat, long) => addCheckpoint(lat, long)}
+      />
+      {checkpointStatus && <div role="status">{checkpointStatus}</div>}
+    </>
   );
 }

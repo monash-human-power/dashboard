@@ -26,6 +26,11 @@ function pagination(query) {
 
 function telemetryApi(store) {
   const router = express.Router();
+  router.put('/sessions/:sessionId/checkpoints', express.json({ limit: '256kb' }), async (req, res, next) => {
+    try {
+      res.json(await store.saveCheckpoints(req.params.sessionId, req.body.checkpoints));
+    } catch (error) { next(error); }
+  });
   router.get('/sessions/:sessionId/snapshot', async (req, res, next) => {
     try {
       res.set('Cache-Control', 'no-store');

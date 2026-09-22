@@ -9,7 +9,7 @@
     "lint:fix": "eslint --fix",
     "start": "node server.js",
     "test": "npm run eslint .",
-    "test:telemetry": "node tests/telemetry.test.js"
+    "test:telemetry": "node tests/telemetry.test.js && node tests/lap-timing.test.js"
   },
   "repository": {
     "type": "git",

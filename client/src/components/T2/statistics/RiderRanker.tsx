@@ -239,6 +239,18 @@ export default function RiderAnalytics(): JSX.Element {
         </div>
       )}
 
+      {!!segmentHistory['Full Lap']?.length && (
+        <div className={styles.segmentRow} style={{ marginBottom: 12 }}>
+          <span className={styles.segmentName}>Last lap</span>
+          <span className={styles.segmentStats}>
+            {segmentHistory['Full Lap'][
+              segmentHistory['Full Lap'].length - 1
+            ].durationSec.toFixed(1)}
+            s
+          </span>
+        </div>
+      )}
+
       {Object.keys(segmentHistory).length === 0 ? (
         <div className={styles.emptyState}>
           No segments recorded yet — click the map to set a start point.

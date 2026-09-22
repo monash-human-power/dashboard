@@ -9,12 +9,23 @@ import React, {
 import { useChannel } from 'api/common/socket';
 
 export const MAX_SESSION_READINGS = 20000;
+export interface LapTiming {
+  checkpoints: { lat: number; long: number; label: string }[];
+  lapCount: number;
+  lastSegment: { label: string; durationSec: number } | null;
+  segmentHistory: {
+    [label: string]: { lapNumber: number; durationSec: number }[];
+  };
+  currentSegmentElapsedSec: number;
+  currentLapElapsedSec: number;
+}
 
 export interface Telemetry {
   type: string;
   sessionId: string;
   timestamp: string;
   eventId?: string;
+  lapTiming?: LapTiming;
   data: {
     speed: { value: number; unit: string };
     power: { value: number; unit: string };
@@ -33,6 +44,7 @@ const HistoryContext = createContext<{
   records: Telemetry[];
   select: (id: string | null) => void;
   revision: number;
+  savedTiming?: LapTiming;
 }>({ session: null, records: [], select: () => {}, revision: 0 });
 export const useSessionHistory = () => useContext(HistoryContext);
 
@@ -60,6 +72,7 @@ export function SessionHistoryProvider({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [revision, setRevision] = useState(0);
+  const [savedTiming, setSavedTiming] = useState<LapTiming | undefined>();
   const mode = useRef<string | null>(null);
   const active = useRef<string | null>(null);
   const pinned = useRef(false);
@@ -83,6 +96,7 @@ export function SessionHistoryProvider({
       active.current = record.sessionId;
       setLiveId(record.sessionId);
       seen.current.clear();
+      setSavedTiming(undefined);
       setRecords([record]);
       setRevision((previous) => previous + 1);
     } else {
@@ -122,6 +136,7 @@ export function SessionHistoryProvider({
       );
       setLoading(false);
     } else {
+      setSavedTiming(undefined);
       setLoading(true);
       setRecords([]);
       seen.current.clear();
@@ -141,6 +156,7 @@ export function SessionHistoryProvider({
     setSession(null);
     setLiveId(null);
     setRecords([]);
+    setSavedTiming(undefined);
     setError('');
     setLoading(false);
     setRevision((previous) => previous + 1);
@@ -170,6 +186,7 @@ export function SessionHistoryProvider({
             .filter((id): id is string => !!id),
         );
         setRecords(restored);
+        setSavedTiming(page.lapTiming);
         setLoading(false);
       })
       .catch((failure) => {
@@ -182,7 +199,9 @@ export function SessionHistoryProvider({
   }, [session, revision]);
 
   return (
-    <HistoryContext.Provider value={{ session, records, select, revision }}>
+    <HistoryContext.Provider
+      value={{ session, records, select, revision, savedTiming }}
+    >
       <div className="m-3" role="status">
         {session
           ? `Viewing saved session: ${session}.`
