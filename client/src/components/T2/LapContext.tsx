@@ -6,6 +6,12 @@ import React, {
   useCallback,
 } from 'react';
 
+import { useChannel } from 'api/common/socket';
+
+interface TelemetryPayload {
+  timestamp: string;
+  data: { gps: { latitude: number; longitude: number } };
+}
 export interface Checkpoint {
   lat: number;
   long: number;
@@ -17,19 +23,20 @@ interface SegmentResult {
   durationSec: number;
 }
 
+interface SegmentTiming {
+  lapNumber: number;
+  durationSec: number;
+}
+
 interface LapContextValue {
   checkpoints: Checkpoint[];
   addCheckpoint: (lat: number, long: number) => void;
   clearCheckpoints: () => void;
   lapCount: number;
   lastSegment: SegmentResult | null;
-  segmentHistory: { [label: string]: number[] }; // every recorded duration per segment, across laps
+  segmentHistory: { [label: string]: SegmentTiming[] }; // every recorded duration per segment, across laps
   currentSegmentElapsedSec: number;
-  checkCheckpointCrossing: (
-    lat: number,
-    long: number,
-    tsMs: number,
-  ) => { crossedCheckpointIndex: number; completedLap: boolean } | null;
+  currentLapElapsedSec: number;
 }
 
 const CHECKPOINT_TRIGGER_RADIUS_M = 12;
@@ -66,17 +73,22 @@ export function LapProvider({ children }: { children: React.ReactNode }) {
   const [checkpoints, setCheckpoints] = useState<Checkpoint[]>([]);
   const [lapCount, setLapCount] = useState(0);
   const [lastSegment, setLastSegment] = useState<SegmentResult | null>(null);
+  const [currentLapElapsedSec, setCurrentLapElapsedSec] = useState(0);
+  const lapStartTimeMsRef = useRef<number | null>(null);
   const [segmentHistory, setSegmentHistory] = useState<{
-    [label: string]: number[];
+    [label: string]: SegmentTiming[];
   }>({});
   const [currentSegmentElapsedSec, setCurrentSegmentElapsedSec] = useState(0);
+  const hasStartedRef = useRef(false);
 
   // Which checkpoint index we're currently waiting to reach next
   const targetIndexRef = useRef(0);
+  const currentLapNumberRef = useRef(1);
   // When the current segment (since the last checkpoint) started
   const segmentStartTimeMsRef = useRef<number | null>(null);
 
   const addCheckpoint = useCallback((lat: number, long: number) => {
+    hasStartedRef.current = false;
     setCheckpoints((prev) => {
       const label =
         prev.length === 0 ? 'Start/Finish' : `Segment ${prev.length}`;
@@ -90,17 +102,42 @@ export function LapProvider({ children }: { children: React.ReactNode }) {
     setLastSegment(null);
     setSegmentHistory({});
     setCurrentSegmentElapsedSec(0);
+    setCurrentLapElapsedSec(0);
     targetIndexRef.current = 0;
     segmentStartTimeMsRef.current = null;
+    lapStartTimeMsRef.current = null;
+    currentLapNumberRef.current = 1;
+    hasStartedRef.current = false;
   }, []);
 
-  const checkCheckpointCrossing = useCallback(
+  const processCrossing = useCallback(
     (lat: number, long: number, tsMs: number) => {
       if (checkpoints.length === 0) return null;
 
-      // First point after checkpoints exist — start timing, don't trigger yet
+      if (!hasStartedRef.current) {
+        const startPoint = checkpoints[0];
+        const distanceToStartM = haversineDistanceM(
+          startPoint.lat,
+          startPoint.long,
+          lat,
+          long,
+        );
+
+        if (distanceToStartM <= CHECKPOINT_TRIGGER_RADIUS_M) {
+          hasStartedRef.current = true;
+          segmentStartTimeMsRef.current = tsMs;
+          lapStartTimeMsRef.current = tsMs;
+          targetIndexRef.current = checkpoints.length > 1 ? 1 : 0;
+        }
+
+        // Either way — not yet started, or just started right now —
+        // this point itself never counts as completing anything
+        return null;
+      }
+
       if (segmentStartTimeMsRef.current === null) {
         segmentStartTimeMsRef.current = tsMs;
+        lapStartTimeMsRef.current = tsMs; // lap clock also starts here
         targetIndexRef.current = checkpoints.length > 1 ? 1 : 0;
         return null;
       }
@@ -110,28 +147,60 @@ export function LapProvider({ children }: { children: React.ReactNode }) {
       const elapsedSec = (tsMs - segmentStartTimeMsRef.current) / 1000;
       setCurrentSegmentElapsedSec(elapsedSec);
 
+      // Lap clock keeps running regardless of segment crossings
+      if (lapStartTimeMsRef.current !== null) {
+        setCurrentLapElapsedSec((tsMs - lapStartTimeMsRef.current) / 1000);
+      }
+
       if (
         distanceM <= CHECKPOINT_TRIGGER_RADIUS_M &&
         elapsedSec >= MIN_SEGMENT_DURATION_SEC
       ) {
         const crossedIndex = targetIndexRef.current;
+        const lapNumber = currentLapNumberRef.current;
+        const completedLap = crossedIndex === 0;
+
+        // The label for the leg just finished — independent of the checkpoint's
+        // own display label. Crossing checkpoint i finishes "Segment i"; crossing
+        // back to Start/Finish (index 0) finishes the final closing segment.
+        const segmentLabel = completedLap
+          ? `Segment ${checkpoints.length}`
+          : `Segment ${crossedIndex}`;
+
         const result: SegmentResult = {
-          label: target.label,
+          label: segmentLabel,
           durationSec: elapsedSec,
         };
-
         setLastSegment(result);
-        setSegmentHistory((prev) => ({
-          ...prev,
-          [target.label]: [...(prev[target.label] ?? []), elapsedSec],
-        }));
 
-        const completedLap = crossedIndex === 0;
+        setSegmentHistory((prev) => {
+          const next = { ...prev };
+          if (checkpoints.length > 1) {
+            next[segmentLabel] = [
+              ...(next[segmentLabel] ?? []),
+              { lapNumber, durationSec: elapsedSec },
+            ];
+          }
+
+          if (completedLap && lapStartTimeMsRef.current !== null) {
+            const fullLapDurationSec =
+              (tsMs - lapStartTimeMsRef.current) / 1000;
+            next['Full Lap'] = [
+              ...(next['Full Lap'] ?? []),
+              { lapNumber, durationSec: fullLapDurationSec },
+            ];
+          }
+
+          return next;
+        });
+
         if (completedLap) {
           setLapCount((prev) => prev + 1);
+          lapStartTimeMsRef.current = tsMs;
+          setCurrentLapElapsedSec(0);
+          currentLapNumberRef.current += 1;
         }
 
-        // Advance to the next checkpoint in sequence, wrapping back to 0
         targetIndexRef.current =
           checkpoints.length > 1 ? (crossedIndex + 1) % checkpoints.length : 0;
         segmentStartTimeMsRef.current = tsMs;
@@ -145,6 +214,22 @@ export function LapProvider({ children }: { children: React.ReactNode }) {
     [checkpoints],
   );
 
+  const handleTelemetry = useCallback(
+    (payload: string | TelemetryPayload) => {
+      const parsed: TelemetryPayload =
+        typeof payload === 'string' ? JSON.parse(payload) : payload;
+      const tsMs = new Date(parsed.timestamp).getTime();
+      processCrossing(
+        parsed.data.gps.latitude,
+        parsed.data.gps.longitude,
+        tsMs,
+      );
+    },
+    [processCrossing],
+  );
+
+  useChannel('t2-telemetry', handleTelemetry);
+
   const value: LapContextValue = {
     checkpoints,
     addCheckpoint,
@@ -153,7 +238,7 @@ export function LapProvider({ children }: { children: React.ReactNode }) {
     lastSegment,
     segmentHistory,
     currentSegmentElapsedSec,
-    checkCheckpointCrossing,
+    currentLapElapsedSec,
   };
 
   return <LapContext.Provider value={value}>{children}</LapContext.Provider>;

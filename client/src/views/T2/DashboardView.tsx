@@ -34,6 +34,12 @@ export default function DashboardView(): JSX.Element {
           <div className={styles.bigGraph}>
             <AnimatedLocationMap />
           </div>
+          <div>
+            <header>Click on the map to add segment points</header>
+            <header>
+              Note: try not to add any after the rider starts moving
+            </header>
+          </div>
         </Col>
         <Col xs={{ span: 12, order: 3 }} lg={{ span: 6, order: 3 }}>
           <div className={styles.bigGraph}>

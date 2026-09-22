@@ -1,0 +1,166 @@
+.card {
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 10px 0;
+}
+
+.sectionTitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #666;
+  margin: 0 0 12px 0;
+}
+
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.statBox {
+  background-color: #fff;
+  border-radius: 6px;
+  padding: 10px 12px;
+  text-align: center;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #222;
+  line-height: 1.2;
+}
+
+.statUnit {
+  font-size: 0.75rem;
+  color: #888;
+  margin-left: 2px;
+}
+
+.statLabel {
+  font-size: 0.75rem;
+  color: #888;
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 16px 0;
+}
+
+.lapSummaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 12px;
+}
+
+.lapCount {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #222;
+}
+
+.currentSegment {
+  background-color: #abd7ad;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.currentSegmentHalf {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.currentSegmentDivider {
+  width: 1px;
+  align-self: stretch;
+  background-color: rgba(0, 0, 0, 0.2);
+  margin: 0 12px;
+}
+
+.currentSegmentTime {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.segmentList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.segmentRow {
+  display: flex;
+  justify-content: space-between;
+  background-color: #fff;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
+
+.segmentName {
+  color: #444;
+  font-weight: 600;
+}
+
+.segmentStats {
+  color: #666;
+  font-variant-numeric: tabular-nums;
+}
+
+.emptyState {
+  color: #999;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.segmentRowWrapper {
+  position: relative;
+}
+
+.segmentPopup {
+  position: fixed;
+  background-color: #fff;
+  border-radius: 6px;
+  padding: 10px 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  min-width: 140px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.segmentRowWrapper:hover .segmentPopup {
+  display: block;
+}
+
+.segmentPopupTitle {
+  font-weight: 700;
+  font-size: 0.8rem;
+  margin-bottom: 6px;
+  color: #444;
+}
+
+.segmentPopupRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #555;
+  padding: 2px 0;
+  font-variant-numeric: tabular-nums;
+}
