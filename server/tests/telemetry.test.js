@@ -174,6 +174,10 @@ async function main() {
     assert.strictEqual((await get(server, '/api/t2/sessions/unknown/file')).status, 404);
     assert.strictEqual((await get(server, '/api/t2/sessions/a%2Fb/file')).status, 400);
     const listed = await get(server, '/api/t2/sessions?limit=2');
+    const snapshot = await get(server, '/api/t2/sessions/test-session/snapshot');
+    assert.strictEqual(snapshot.status, 200);
+    assert.strictEqual(snapshot.body.telemetry.length, 12);
+    assert.ok(snapshot.body.telemetry.every((record) => record.eventId));
     assert.strictEqual(listed.status, 200);
     assert.strictEqual(listed.body.total, 4);
     assert.strictEqual(listed.body.sessions.length, 2);
@@ -205,6 +209,18 @@ async function main() {
       400,
     );
     assert.strictEqual((await get(server, '/api/t2/missing')).status, 404);
+    // The snapshot is the newest window in file order, not timestamp order.
+    const largeLog = Array.from({ length: 20007 }, (_, index) =>
+      JSON.stringify({ ...sample('large-session'), eventId: String(index) }),
+    ).join('\n') + '\n';
+    await fs.promises.writeFile(store.filename('large-session'), largeLog);
+    const bounded = await get(server, '/api/t2/sessions/large-session/snapshot');
+    assert.strictEqual(bounded.body.telemetry.length, 20000);
+    assert.strictEqual(bounded.body.telemetry[0].eventId, '7');
+    assert.strictEqual(bounded.body.telemetry[19999].eventId, '20006');
+    assert.strictEqual(bounded.body.offset, 7);
+    assert.strictEqual(bounded.body.nextOffset, null);
+    assert.strictEqual(await fs.promises.readFile(store.filename('large-session'), 'utf8'), largeLog);
     console.log(
       'PASS: persistent telemetry, pagination, validation, REST errors, reconnect and browser-independent recording',
     );

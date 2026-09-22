@@ -26,6 +26,14 @@ function pagination(query) {
 
 function telemetryApi(store) {
   const router = express.Router();
+  router.get('/sessions/:sessionId/snapshot', async (req, res, next) => {
+    try {
+      res.set('Cache-Control', 'no-store');
+      res.json(await store.getTelemetry(req.params.sessionId, { limit: 20000, latest: true }));
+    } catch (error) {
+      next(error);
+    }
+  });
   router.get('/sessions/:sessionId/file', async (req, res, next) => {
     try {
       const filename = await store.run(() => store.resolveFilename(req.params.sessionId));

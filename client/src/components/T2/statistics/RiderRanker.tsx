@@ -1,6 +1,9 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { useChannel } from 'api/common/socket';
+import {
+  useSessionChannel as useChannel,
+  useSessionHistory,
+} from 'components/T2/SessionHistory';
 import { useLapContext } from 'components/T2/LapContext';
 import styles from './RiderRanker.module.css';
 
@@ -55,7 +58,25 @@ const INITIAL_ANALYTICS: Analytics = {
 };
 
 export default function RiderAnalytics(): JSX.Element {
-  const [analytics, setAnalytics] = useState<Analytics>(INITIAL_ANALYTICS);
+  const { records } = useSessionHistory();
+  const [analytics, setAnalytics] = useState<Analytics>(() =>
+    records.reduce((prev, record) => {
+      const { speed, power, cadence, batteryVoltage } = record.data;
+      const n = prev.sampleCount + 1;
+      return {
+        sampleCount: n,
+        currentSpeed: speed.value,
+        currentPower: power.value,
+        currentCadence: cadence.value,
+        currentBattery: batteryVoltage.value,
+        avgSpeed: (prev.avgSpeed * prev.sampleCount + speed.value) / n,
+        avgPower: (prev.avgPower * prev.sampleCount + power.value) / n,
+        avgCadence: (prev.avgCadence * prev.sampleCount + cadence.value) / n,
+        maxSpeed: Math.max(prev.maxSpeed, speed.value),
+        maxPower: Math.max(prev.maxPower, power.value),
+      };
+    }, INITIAL_ANALYTICS),
+  );
   const {
     lapCount,
     lastSegment,

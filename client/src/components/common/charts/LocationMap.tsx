@@ -14,6 +14,7 @@ import styles from 'components/common/charts/LocationMap.module.css';
 import LeafletCenterControl from 'components/v2/LeafletCenterControl';
 import { LTSPToTuple } from 'components/trike/dashboard/AnimatedLocationMap';
 import 'leaflet/dist/leaflet.css';
+import SessionMap from 'components/T2/SessionMap';
 
 // Common (LatLngTuple) locations
 export const LOCATIONS: { [key: string]: LatLngTuple } = {
@@ -39,6 +40,7 @@ export interface LocationMapProps {
   showLegend?: boolean;
   showDirectionCues?: boolean;
   arrowEvery?: number;
+  compactRendering?: boolean;
   onMapClick?: (lat: number, long: number) => void;
   checkpoints?: { lat: number; long: number; label: string }[];
 }
@@ -208,6 +210,7 @@ export default function LocationMap({
   showLegend = true,
   showDirectionCues = true,
   arrowEvery = 60,
+  compactRendering = false,
   onMapClick,
   checkpoints = [],
 }: LocationMapProps): JSX.Element {
@@ -294,9 +297,34 @@ export default function LocationMap({
     arrowEvery,
   ]);
 
+  // Keep T2's large history in a handful of layers instead of thousands of DOM paths.
+  const groupLines = (lines: typeof segments) => {
+    const groups: { [color: string]: LatLngTuple[][] } = {};
+    lines.forEach((line) => {
+      if (!groups[line.color]) groups[line.color] = [];
+      groups[line.color].push(line.coords);
+    });
+    return Object.keys(groups).map((color) => ({
+      key: color,
+      color,
+      coords: groups[color],
+    }));
+  };
+  type RenderLine = {
+    key: string;
+    color: string;
+    coords: LatLngTuple[] | LatLngTuple[][];
+  };
+  const trackLines: RenderLine[] = compactRendering
+    ? groupLines(segments.slice(0, -1))
+    : segments.slice(0, -1);
+  const arrowLines: RenderLine[] = compactRendering
+    ? groupLines(arrows)
+    : arrows;
+
   // 5) Legend labels (deduped)
   const legendBands = useMemo(() => {
-    if (!segmentSpeeds.length) return [];
+    if (!segmentSpeeds.length || !effectiveBreaks.length) return [];
     const min = Math.min(...segmentSpeeds);
     const cuts = effectiveBreaks;
 
@@ -324,10 +352,14 @@ export default function LocationMap({
     return deduped;
   }, [effectiveBreaks, effectiveColors, segmentSpeeds]);
 
+  const MapView = compactRendering ? SessionMap : Map;
   return (
-    <Map
+    <MapView
       center={center}
       zoom={16}
+      zoomAnimation={!compactRendering}
+      fadeAnimation={!compactRendering}
+      markerZoomAnimation={!compactRendering}
       attributionControl={false}
       className={styles.map}
       onClick={(e: any) => onMapClick && onMapClick(e.latlng.lat, e.latlng.lng)}
@@ -341,7 +373,7 @@ export default function LocationMap({
       <Pane name="arrows" style={{ zIndex: 625 }} />
       <Pane name="top" style={{ zIndex: 650 }} />
 
-      {segments.slice(0, -1).map((s) => (
+      {trackLines.map((s) => (
         <Polyline
           key={s.key}
           pane="track"
@@ -368,7 +400,7 @@ export default function LocationMap({
       )}
 
       {showDirectionCues &&
-        arrows.map((a) => (
+        arrowLines.map((a) => (
           <Polyline
             key={a.key}
             pane="arrows"
@@ -464,6 +496,6 @@ export default function LocationMap({
       <ScaleControl imperial={false} />
       <AttributionControl prefix={false} />
       <LeafletCenterControl center={center} />
-    </Map>
+    </MapView>
   );
 }

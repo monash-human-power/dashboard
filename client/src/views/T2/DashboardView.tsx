@@ -8,12 +8,17 @@ import DataDisplay from 'components/T2/dashboard/DataDisplay';
 import SavedSessions from 'components/T2/dashboard/SavedSessions';
 import RiderAnalytics from 'components/T2/statistics/RiderRanker';
 import { LapProvider } from 'components/T2/LapContext';
+import {
+  SessionHistoryProvider,
+  useSessionHistory,
+} from 'components/T2/SessionHistory';
 
 import styles from './DashboardView.module.css';
 
-export default function DashboardView(): JSX.Element {
+function DashboardContent(): JSX.Element {
+  const { session, revision } = useSessionHistory();
   return (
-    <LapProvider>
+    <LapProvider key={`${session || 'live'}-${revision}`}>
       <Row className={styles.contentContainer}>
         <Col
           xs={{ span: 12, order: 1 }}
@@ -48,5 +53,13 @@ export default function DashboardView(): JSX.Element {
         </Col>
       </Row>
     </LapProvider>
+  );
+}
+
+export default function DashboardView(): JSX.Element {
+  return (
+    <SessionHistoryProvider>
+      <DashboardContent />
+    </SessionHistoryProvider>
   );
 }

@@ -123,7 +123,7 @@ class TelemetryStore {
 
   append(topic, payload) {
     const value = validateTelemetry(topic, payload);
-    const record = { ...value, topic, receivedAt: new Date().toISOString() };
+    const record = { ...value, topic, receivedAt: new Date().toISOString(), eventId: crypto.randomBytes(16).toString('hex') };
     return this.run(async () => {
       await fs.promises.appendFile(
         await this.resolveFilename(value.sessionId),
@@ -210,15 +210,16 @@ class TelemetryStore {
     });
   }
 
-  getTelemetry(sessionId, { offset = 0, limit = 100 } = {}) {
+  getTelemetry(sessionId, { offset = 0, limit = 100, latest = false } = {}) {
     validateSessionId(sessionId);
     return this.run(async () => {
       const filename = await this.resolveFilename(sessionId);
-      const telemetry = [];
+      let telemetry = [];
       let total = 0;
       try {
         await TelemetryStore.scan(filename, (record) => {
-          if (total >= offset && telemetry.length < limit)
+          if (latest) telemetry[total % limit] = record;
+          else if (total >= offset && telemetry.length < limit)
             telemetry.push(record);
           total += 1;
         });
@@ -228,6 +229,13 @@ class TelemetryStore {
           error.message = 'Session not found';
         }
         throw error;
+      }
+      if (latest) {
+        if (total > limit) {
+          const start = total % limit;
+          telemetry = telemetry.slice(start).concat(telemetry.slice(0, start));
+        }
+        offset = Math.max(0, total - limit);
       }
       return {
         sessionId,

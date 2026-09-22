@@ -1,4 +1,7 @@
-import { useChannel } from 'api/common/socket';
+import {
+  useSessionChannel as useChannel,
+  useSessionHistory,
+} from 'components/T2/SessionHistory';
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 
 // 1 second time out
@@ -24,10 +27,13 @@ interface TelemetryPayload {
 }
 
 export default function DataDisplay(): JSX.Element {
+  const { session, records } = useSessionHistory();
   // Client sided detection of recieving telemetry data
   // Currently will claim to be disconnect if not recieving any new data for 2 seconds
   const [connected, setConnected] = useState(false);
-  const [telemetry, setTelemetry] = useState<TelemetryPayload | null>(null);
+  const [telemetry, setTelemetry] = useState<TelemetryPayload | null>(
+    records[records.length - 1] || null,
+  );
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleMessage = useCallback((payload: string | TelemetryPayload) => {
@@ -61,9 +67,10 @@ export default function DataDisplay(): JSX.Element {
     };
   }, []);
 
+  const liveStatus = connected ? 'Connected' : 'Disconnected';
   return (
     <header>
-      <div>Status: {connected ? 'Connected' : 'Disconnected'}</div>
+      <div>Status: {session ? 'Saved session' : liveStatus}</div>
       {telemetry && (
         <div>
           <div>type: {telemetry.type}</div>

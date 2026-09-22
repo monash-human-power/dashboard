@@ -6,6 +6,13 @@ original payload on the existing Socket.IO event `t2-telemetry`.
 
 ## Storage and retention
 
+The dashboard snapshot endpoint returns only the latest **20,000 readings** in
+file/receipt order. Live history and the map trail use the same rolling cap;
+older readings remain in the saved file and available through the paginated API.
+History is loaded only on selection. Go to live merges buffered readings for
+that session with the snapshot without fetching it again. Refresh starts fresh.
+T2 map paths are grouped by speed colour to avoid thousands of drawing layers.
+
 - Default location: `server/telemetry-data/`, excluded from Git. This is separate
   from the legacy CSV download/delete endpoints under `/files`.
 - Optional server environment variable: `TELEMETRY_DATA_DIR` (prefer an absolute
@@ -62,10 +69,22 @@ timestamp rather than a hard-coded date/local time labelled `Z`.
 
 ## REST API
 
+Page refresh starts fresh live data without fetching saved telemetry. Selecting
+a session explicitly loads `GET /api/t2/sessions/:sessionId/snapshot`.
+Snapshots return all records in one scan. New records include an `eventId` shared
+by REST and Socket.IO to avoid counting in-flight messages twice. Restart the
+backend when upgrading. Existing stored records remain readable.
+
 The T2 dashboard includes a **Saved sessions** dropdown. Opening it refreshes
-the archive list; choosing a session downloads its complete JSON Lines file via
-`GET /api/t2/sessions/:sessionId/file`. Active sessions include data saved so far;
-download again later to get additional readings. This does not stop recording.
+the archive list; choosing a session loads its snapshot into the T2 readings,
+GPS trail and analytics. Go to live keeps that snapshot, adds matching messages
+buffered while viewing it, and continues the same session without another fetch.
+Other session IDs are ignored in this mode; Start fresh live view clears the
+display and accepts the active publisher. Reload session explicitly fetches a
+new snapshot. Reloading the webpage always starts a fresh live view.
+Checkpoint definitions/lap timing and video are not persisted in these records.
+The optional `GET /api/t2/sessions/:sessionId/file` endpoint still downloads the
+complete JSON Lines file. Viewing history does not stop backend recording.
 
 Base URL for the local backend: `http://localhost:5000/api/t2`.
 

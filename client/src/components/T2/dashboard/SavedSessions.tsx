@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
+import { useSessionHistory } from 'components/T2/SessionHistory';
 
 interface Session {
   sessionId: string;
@@ -8,6 +9,7 @@ interface Session {
 
 /** Display links to the backend's saved session files. */
 export default function SavedSessions(): JSX.Element {
+  const { select } = useSessionHistory();
   const [sessions, setSessions] = useState<Session[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -67,9 +69,7 @@ export default function SavedSessions(): JSX.Element {
           sessions.map((session) => (
             <Dropdown.Item
               key={session.sessionId}
-              href={`/api/t2/sessions/${encodeURIComponent(
-                session.sessionId,
-              )}/file`}
+              onClick={() => select(session.sessionId)}
               style={{ whiteSpace: 'normal', overflowWrap: 'anywhere' }}
             >
               {session.sessionId} — {session.count} readings

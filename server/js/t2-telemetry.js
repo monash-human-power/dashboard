@@ -22,10 +22,12 @@ function attachT2Telemetry(mqttClient, io, store) {
       console.error('Rejected T2 telemetry:', error.message);
       return;
     }
-    // Keep the existing browser contract; storage metadata is REST-only.
+    // Broadcast saved event IDs so history/live overlap can be deduplicated.
     console.log('T2 telemetry received:', value);
-    io.emit('t2-telemetry', value);
-    store.append(topic, payload).catch((error) => {
+    store.append(topic, payload).then((record) => {
+      io.emit('t2-telemetry', record);
+    }).catch((error) => {
+      io.emit('t2-telemetry', value);
       console.error('Failed to save T2 telemetry:', error.message);
     });
   });

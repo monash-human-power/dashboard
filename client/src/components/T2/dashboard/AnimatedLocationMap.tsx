@@ -1,5 +1,9 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { useChannel } from 'api/common/socket';
+import {
+  useSessionChannel as useChannel,
+  useSessionHistory,
+  MAX_SESSION_READINGS,
+} from 'components/T2/SessionHistory';
 import LocationMap, {
   LocationTimeSeriesPoint,
 } from 'components/common/charts/LocationMap';
@@ -21,6 +25,7 @@ interface TelemetryPayload {
 }
 
 export default function AnimatedLocationMap(): JSX.Element {
+  const { records } = useSessionHistory();
   const {
     checkpoints,
     addCheckpoint,
@@ -29,7 +34,14 @@ export default function AnimatedLocationMap(): JSX.Element {
   } = useLapContext();
   const [locationHistory, setLocationHistory] = useState<
     LocationTimeSeriesPoint[]
-  >([]);
+  >(() =>
+    records.map((record) => ({
+      lat: record.data.gps.latitude,
+      long: record.data.gps.longitude,
+      ts: Date.parse(record.timestamp),
+      speedKmh: record.data.speed.value,
+    })),
+  );
   const prevLapCount = useRef(lapCount);
 
   const handleMessage = useCallback((payload: string | TelemetryPayload) => {
@@ -44,7 +56,10 @@ export default function AnimatedLocationMap(): JSX.Element {
       ts: tsMs,
       speedKmh: speed.value,
     };
-    setLocationHistory((prev) => [...prev, point]);
+    setLocationHistory((prev) => [
+      ...prev.slice(-(MAX_SESSION_READINGS - 1)),
+      point,
+    ]);
   }, []);
 
   useChannel('t2-telemetry', handleMessage);
@@ -60,6 +75,7 @@ export default function AnimatedLocationMap(): JSX.Element {
 
   return (
     <LocationMap
+      compactRendering
       series={locationHistory}
       checkpoints={checkpoints}
       binCount={7}

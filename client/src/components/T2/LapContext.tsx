@@ -6,7 +6,7 @@ import React, {
   useCallback,
 } from 'react';
 
-import { useChannel } from 'api/common/socket';
+import { useSessionChannel as useChannel } from 'components/T2/SessionHistory';
 
 interface TelemetryPayload {
   timestamp: string;
