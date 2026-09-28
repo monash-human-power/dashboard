@@ -8,6 +8,7 @@ import LocationMap, {
   LocationTimeSeriesPoint,
 } from 'components/common/charts/LocationMap';
 import { useLapContext } from 'components/T2/LapContext';
+import styles from './AnimatedLocationMap.module.css';
 
 interface TelemetryPayload {
   type: string;
@@ -29,10 +30,13 @@ export default function AnimatedLocationMap(): JSX.Element {
   const {
     checkpoints,
     addCheckpoint,
+    removeCheckpoint,
+    setStartCheckpoint,
     clearCheckpoints,
     lapCount,
     checkpointStatus,
   } = useLapContext();
+  const [mode, setMode] = useState<'add' | 'remove' | 'start'>('add');
   const [locationHistory, setLocationHistory] = useState<
     LocationTimeSeriesPoint[]
   >(() =>
@@ -45,6 +49,17 @@ export default function AnimatedLocationMap(): JSX.Element {
   );
   const prevLapCount = useRef(lapCount);
 
+  const modeHint = {
+    add: 'Click the map to add a checkpoint.',
+    remove: 'Click near an existing point to remove it.',
+    start: 'Click an existing point to make it the new Start/Finish.',
+  }[mode];
+
+  const handleMapClick = (lat: number, long: number) => {
+    if (mode === 'add') addCheckpoint(lat, long);
+    else if (mode === 'remove') removeCheckpoint(lat, long);
+    else setStartCheckpoint(lat, long);
+  };
   const handleMessage = useCallback((payload: string | TelemetryPayload) => {
     const parsed: TelemetryPayload =
       typeof payload === 'string' ? JSON.parse(payload) : payload;
@@ -76,6 +91,21 @@ export default function AnimatedLocationMap(): JSX.Element {
 
   return (
     <>
+      <div className={styles.controlBar}>
+        <div className={styles.segmentedControl}>
+          {(['add', 'remove', 'start'] as const).map((m) => (
+            <button
+              key={m}
+              type="button"
+              className={mode === m ? styles.segmentActive : styles.segment}
+              onClick={() => setMode(m)}
+            >
+              {m === 'add' ? 'Add' : m === 'remove' ? 'Remove' : 'Set Start'}
+            </button>
+          ))}
+        </div>
+        <span className={styles.hint}>{modeHint}</span>
+      </div>
       <LocationMap
         compactRendering
         series={locationHistory}
@@ -84,7 +114,7 @@ export default function AnimatedLocationMap(): JSX.Element {
         showLegend
         showDirectionCues
         arrowEvery={10}
-        onMapClick={(lat, long) => addCheckpoint(lat, long)}
+        onMapClick={handleMapClick}
       />
       {checkpointStatus && <div role="status">{checkpointStatus}</div>}
     </>

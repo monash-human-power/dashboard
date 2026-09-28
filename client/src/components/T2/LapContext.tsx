@@ -20,6 +20,8 @@ export interface Checkpoint {
 }
 interface LapContextValue extends LapTiming {
   addCheckpoint: (lat: number, long: number) => void;
+  removeCheckpoint: (lat: number, long: number) => void;
+  setStartCheckpoint: (lat: number, long: number) => void; // new
   clearCheckpoints: () => void;
   checkpointStatus: string;
 }
@@ -37,6 +39,53 @@ export function useLapContext(): LapContextValue {
   if (!context)
     throw new Error('useLapContext must be used within a LapProvider');
   return context;
+}
+
+function haversineDistanceM(
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number,
+): number {
+  const R = 6371000;
+  const toRad = (deg: number) => (deg * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
+const REMOVE_CLICK_RADIUS_M = 30;
+
+function insertionIndexFor(
+  checkpoints: Checkpoint[],
+  lat: number,
+  long: number,
+): number {
+  if (checkpoints.length < 2) return checkpoints.length; // nothing to compare yet — just append
+
+  let bestIndex = checkpoints.length;
+  let bestExtraDistance = Infinity;
+
+  for (let i = 0; i < checkpoints.length; i += 1) {
+    const a = checkpoints[i];
+    const b = checkpoints[(i + 1) % checkpoints.length]; // wraps last → Start/Finish
+    const extra =
+      haversineDistanceM(a.lat, a.long, lat, long) +
+      haversineDistanceM(a.lat, a.long, lat, long) +
+      haversineDistanceM(lat, long, b.lat, b.long) -
+      haversineDistanceM(a.lat, a.long, b.lat, b.long);
+
+    if (extra < bestExtraDistance) {
+      bestExtraDistance = extra;
+      bestIndex = i + 1; // insert between a and b
+    }
+  }
+
+  return bestIndex;
 }
 
 export function LapProvider({ children }: { children: React.ReactNode }) {
@@ -96,26 +145,97 @@ export function LapProvider({ children }: { children: React.ReactNode }) {
     }
   };
   const addCheckpoint = (lat: number, long: number) => {
-    save([
-      ...timing.checkpoints,
-      {
-        lat,
-        long,
-        label: timing.checkpoints.length
-          ? `Segment ${timing.checkpoints.length}`
-          : 'Start/Finish',
-      },
-    ]);
+    const insertAt = insertionIndexFor(timing.checkpoints, lat, long);
+
+    const updated = [
+      ...timing.checkpoints.slice(0, insertAt),
+      { lat, long, label: '' }, // label gets fixed up below, based on final position
+      ...timing.checkpoints.slice(insertAt),
+    ].map((cp, i) => ({
+      lat: cp.lat,
+      long: cp.long,
+      label: i === 0 ? 'Start/Finish' : `Segment ${i}`,
+    }));
+
+    save(updated);
+  };
+  const removeCheckpoint = (lat: number, long: number) => {
+    if (timing.checkpoints.length === 0) return;
+
+    // Find whichever existing checkpoint is closest to where the user clicked
+    let nearestIndex = 0;
+    let nearestDistM = Infinity;
+    timing.checkpoints.forEach((cp, i) => {
+      const d = haversineDistanceM(cp.lat, cp.long, lat, long);
+      if (d < nearestDistM) {
+        nearestDistM = d;
+        nearestIndex = i;
+      }
+    });
+
+    if (nearestDistM > REMOVE_CLICK_RADIUS_M) {
+      setCheckpointStatus('Click closer to an existing point to remove it.');
+      return;
+    }
+
+    // Rebuild the array without that point, relabeling so index 0 stays
+    // "Start/Finish" and the rest stay numbered "Segment 1", "Segment 2", ...
+    const remaining = timing.checkpoints
+      .filter((_, i) => i !== nearestIndex)
+      .map((cp, i) => ({
+        lat: cp.lat,
+        long: cp.long,
+        label: i === 0 ? 'Start/Finish' : `Segment ${i}`,
+      }));
+
+    save(remaining);
+  };
+  const setStartCheckpoint = (lat: number, long: number) => {
+    if (timing.checkpoints.length < 2) return; // nothing to reorder
+
+    let nearestIndex = 0;
+    let nearestDistM = Infinity;
+    timing.checkpoints.forEach((cp, i) => {
+      const d = haversineDistanceM(cp.lat, cp.long, lat, long);
+      if (d < nearestDistM) {
+        nearestDistM = d;
+        nearestIndex = i;
+      }
+    });
+
+    if (nearestDistM > REMOVE_CLICK_RADIUS_M) {
+      setCheckpointStatus(
+        'Click closer to an existing point to make it the start.',
+      );
+      return;
+    }
+
+    if (nearestIndex === 0) return; // already the start
+
+    // Rotate so the chosen point becomes index 0, keeping everyone else
+    // in the same relative loop order
+    const rotated = [
+      ...timing.checkpoints.slice(nearestIndex),
+      ...timing.checkpoints.slice(0, nearestIndex),
+    ].map((cp, i) => ({
+      lat: cp.lat,
+      long: cp.long,
+      label: i === 0 ? 'Start/Finish' : `Segment ${i}`,
+    }));
+
+    save(rotated);
   };
   return (
     <LapContext.Provider
       value={{
         ...timing,
         addCheckpoint,
+        removeCheckpoint,
         clearCheckpoints: () => {
           save([]);
         },
         checkpointStatus,
+        setStartCheckpoint,
       }}
     >
       {children}

@@ -1,0 +1,40 @@
+.controlBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.segmentedControl {
+  display: inline-flex;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #ccc;
+}
+
+.segment,
+.segmentActive {
+  border: none;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: #f4f4f4;
+  color: #444;
+  transition: background-color 0.15s ease;
+}
+
+.segment:hover {
+  background-color: #e8e8e8;
+}
+
+.segmentActive {
+  background-color: #abd7ad;
+  color: #1a3d1c;
+}
+
+.hint {
+  font-size: 0.85rem;
+  color: #777;
+}
