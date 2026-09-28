@@ -1,7 +1,4 @@
 import React from 'react';
-
-import { Col, Row } from 'react-bootstrap';
-
 import AnimatedLocationMap from 'components/T2/dashboard/AnimatedLocationMap';
 import VideoFeed from 'components/T2/dashboard/VideoFeed';
 import DataDisplay from 'components/T2/dashboard/DataDisplay';
@@ -12,50 +9,71 @@ import {
   SessionHistoryProvider,
   useSessionHistory,
 } from 'components/T2/SessionHistory';
-
 import styles from './DashboardView.module.css';
 
 function DashboardContent(): JSX.Element {
   const { session, revision } = useSessionHistory();
   return (
     <LapProvider key={`${session || 'live'}-${revision}`}>
-      <Row className={styles.contentContainer}>
-        <Col
-          xs={{ span: 12, order: 1 }}
-          lg={{ span: 6, order: 1 }}
-          className={styles.statContainer}
-        >
-          <DataDisplay />
-          <div className={styles.sessionControls}>
-            <SavedSessions />
+      <main className={styles.dashboard}>
+        <div className={styles.heading}>
+          <h1>T2 Session Dashboard</h1>
+          <SavedSessions />
+        </div>
+        <div className={styles.overview}>
+          <div className={`${styles.column} ${styles.mapColumn}`}>
+            <section className={styles.mapCard} aria-label="Track map">
+              <div className={styles.cardHeader}>
+                <div>
+                  <h2>Track & checkpoints</h2>
+                  <p>
+                    Yellow starts the lap. Add purple points in riding order.
+                  </p>
+                </div>
+                <span className={styles.badge}>
+                  {session ? 'Saved session' : 'Live view'}
+                </span>
+              </div>
+              <div className={styles.map}>
+                <AnimatedLocationMap />
+              </div>
+            </section>
+            <section className={styles.panel}>
+              <div className={styles.cardHeader}>
+                <div>
+                  <h2>Camera feed</h2>
+                  <p>On-board view</p>
+                </div>
+              </div>
+              <div className={styles.video}>
+                <VideoFeed />
+              </div>
+            </section>
           </div>
-        </Col>
-        <Col xs={{ span: 12, order: 2 }} lg={{ span: 6, order: 2 }}>
-          <div className={styles.graph}>
-            <VideoFeed />
+          <div className={styles.column}>
+            <section
+              className={styles.analytics}
+              aria-label="Telemetry and lap timing"
+            >
+              <RiderAnalytics />
+            </section>
+            <section className={styles.panel}>
+              <div className={styles.cardHeader}>
+                <div>
+                  <h2>Session details</h2>
+                  <p>Connection status and latest readings</p>
+                </div>
+              </div>
+              <div className={styles.details}>
+                <DataDisplay />
+              </div>
+            </section>
           </div>
-        </Col>
-        <Col xs={{ span: 12, order: 4 }} lg={{ span: 6, order: 4 }}>
-          <div className={styles.bigGraph}>
-            <AnimatedLocationMap />
-          </div>
-          <div>
-            <header>Click on the map to add segment points</header>
-            <header>
-              Note: try not to add any after the rider starts moving
-            </header>
-          </div>
-        </Col>
-        <Col xs={{ span: 12, order: 3 }} lg={{ span: 6, order: 3 }}>
-          <div className={styles.bigGraph}>
-            <RiderAnalytics />
-          </div>
-        </Col>
-      </Row>
+        </div>
+      </main>
     </LapProvider>
   );
 }
-
 export default function DashboardView(): JSX.Element {
   return (
     <SessionHistoryProvider>
