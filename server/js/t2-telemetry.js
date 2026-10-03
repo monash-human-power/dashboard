@@ -1,6 +1,7 @@
 const { validateTelemetry } = require('./telemetry-store');
 
 function attachT2Telemetry(mqttClient, io, store) {
+  store.riderEvents.on('change', (ranking) => io.emit('t2-riders', ranking));
   const subscribe = () =>
     mqttClient.subscribe('t2/+/telemetry', { qos: 1 }, (error, granted) => {
       if (error || !granted || granted.some((entry) => entry.qos === 128)) {

@@ -153,3 +153,39 @@ Restart the backend after updating the code (`yarn start` in `server/`), then ru
 your MQTT publisher. Open the session-list URL and use a returned `sessionId`
 in the telemetry URL. Only messages received after this change are stored;
 previous console output and browser chart history cannot be recovered.
+# Rider rankings
+
+On the T2 dashboard, open **Current rider**, type a name and choose **Add / select**.
+Choose an existing rider when they return: their previous stints remain in the same row.
+**No rider — pause attribution** leaves subsequent samples unassigned. Selection applies
+to new readings only, and is shared by all browsers connected to this backend.
+
+- `GET /api/t2/sessions/:sessionId/riders` returns the active rider and accumulated rankings.
+- `PUT /api/t2/sessions/:sessionId/riders` accepts `{ "name": "Alice" }` to create/select,
+  `{ "riderId": "existing-id" }` to switch, or `{ "riderId": null }` to pause attribution.
+- Each stored reading includes its server-assigned `riderId`. The roster and current
+  selection live in a `.jsonl.riders.json` sidecar beside the session archive. Keep both
+  files when copying/backing up a session. Selection and telemetry writes are serialized.
+- Live `t2-telemetry` events and REST snapshots include `riderRankings`. A `t2-riders`
+  WebSocket event announces rider selection changes immediately, even between samples.
+- Rankings rebuild from the full archive after a backend restart; the last selection
+  persists. Old readings without an assigned rider are not retroactively attributed.
+  The 20,000-reading display cap does not truncate rider totals or stored telemetry.
+- Saved-session rankings are a snapshot until **Reload session** or **Go to live**.
+  Reloading the webpage does not automatically load map history; live ranking totals
+  can be restored through the small riders endpoint independently.
+
+Scores use the agreed equal-weight formula: speed target 45 km/h, efficiency target
+5.5 Wh/km (`average power / average speed`), power target 250 W, and consistency
+target 8% power coefficient of variation. Each component is capped at 100 and the
+final score is their arithmetic mean. Means are sample-weighted across all stints;
+power standard deviation is the population standard deviation, maintained incrementally.
+Only nonnegative speed in `km/h` and power in `W` count. Other units/negative readings
+are excluded and counted in the UI. Two valid samples are required to rank. Zero
+speed gives zero efficiency score; zero average power gives zero consistency score;
+constant positive power gives 100 consistency. Zero power while moving gives 100
+efficiency but zero power and consistency. Display rounds scores to one decimal;
+sorting uses unrounded totals. Equal totals sort by name.
+
+Run `node tests/rider-ranking.test.js` from `server` for formula, rider-switching,
+restart, session-isolation, REST and 20K-cap checks.

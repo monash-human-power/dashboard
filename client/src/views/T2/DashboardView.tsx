@@ -3,6 +3,7 @@ import AnimatedLocationMap from 'components/T2/dashboard/AnimatedLocationMap';
 import VideoFeed from 'components/T2/dashboard/VideoFeed';
 import DataDisplay from 'components/T2/dashboard/DataDisplay';
 import SavedSessions from 'components/T2/dashboard/SavedSessions';
+import RiderRankings from 'components/T2/statistics/RiderRankings';
 import RiderAnalytics from 'components/T2/statistics/RiderRanker';
 import { LapProvider } from 'components/T2/LapContext';
 import {
@@ -57,6 +58,7 @@ function DashboardContent(): JSX.Element {
             >
               <RiderAnalytics />
             </section>
+            <RiderRankings />
             <section className={styles.panel}>
               <div className={styles.cardHeader}>
                 <div>

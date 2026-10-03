@@ -20,10 +20,36 @@ export interface LapTiming {
   currentLapElapsedSec: number;
 }
 
+export interface RiderRankingsData {
+  sessionId: string;
+  version: number;
+  activeRiderId: string | null;
+  riders: {
+    id: string;
+    name: string;
+    samples: number;
+    excluded: number;
+    averageSpeed: number;
+    averagePower: number;
+    efficiency: number | null;
+    cv: number | null;
+    scores: {
+      speed: number;
+      efficiency: number;
+      power: number;
+      consistency: number;
+      total: number;
+    } | null;
+  }[];
+}
+
 export interface Telemetry {
+  riderId?: string | null;
+  riderRankings?: RiderRankingsData;
   type: string;
   sessionId: string;
   timestamp: string;
+  receivedAt?: string;
   eventId?: string;
   lapTiming?: LapTiming;
   data: {
@@ -45,6 +71,7 @@ const HistoryContext = createContext<{
   select: (id: string | null) => void;
   revision: number;
   savedTiming?: LapTiming;
+  savedRiders?: RiderRankingsData;
 }>({ session: null, records: [], select: () => {}, revision: 0 });
 export const useSessionHistory = () => useContext(HistoryContext);
 
@@ -73,6 +100,9 @@ export function SessionHistoryProvider({
   const [error, setError] = useState('');
   const [revision, setRevision] = useState(0);
   const [savedTiming, setSavedTiming] = useState<LapTiming | undefined>();
+  const [savedRiders, setSavedRiders] = useState<
+    RiderRankingsData | undefined
+  >();
   const mode = useRef<string | null>(null);
   const active = useRef<string | null>(null);
   const pinned = useRef(false);
@@ -97,6 +127,7 @@ export function SessionHistoryProvider({
       setLiveId(record.sessionId);
       seen.current.clear();
       setSavedTiming(undefined);
+      setSavedRiders(undefined);
       setRecords([record]);
       setRevision((previous) => previous + 1);
     } else {
@@ -137,6 +168,7 @@ export function SessionHistoryProvider({
       setLoading(false);
     } else {
       setSavedTiming(undefined);
+      setSavedRiders(undefined);
       setLoading(true);
       setRecords([]);
       seen.current.clear();
@@ -157,6 +189,7 @@ export function SessionHistoryProvider({
     setLiveId(null);
     setRecords([]);
     setSavedTiming(undefined);
+    setSavedRiders(undefined);
     setError('');
     setLoading(false);
     setRevision((previous) => previous + 1);
@@ -187,6 +220,7 @@ export function SessionHistoryProvider({
         );
         setRecords(restored);
         setSavedTiming(page.lapTiming);
+        setSavedRiders(page.riderRankings);
         setLoading(false);
       })
       .catch((failure) => {
@@ -200,7 +234,7 @@ export function SessionHistoryProvider({
 
   return (
     <HistoryContext.Provider
-      value={{ session, records, select, revision, savedTiming }}
+      value={{ session, records, select, revision, savedTiming, savedRiders }}
     >
       <div className="m-3" role="status">
         {session

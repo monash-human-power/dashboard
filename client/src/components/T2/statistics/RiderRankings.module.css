@@ -1,0 +1,138 @@
+.card {
+  background: #fff;
+  border: 1px solid #dce5e1;
+  border-radius: 16px;
+  padding: 24px;
+  min-width: 0;
+  color: #263c43;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+.header h2 {
+  font-size: 18px;
+  margin: 0 0 6px;
+  font-weight: 700;
+}
+.header p,
+.hint {
+  color: #667b80;
+  font-size: 13px;
+}
+.badge {
+  border-radius: 20px;
+  background: #e5f3eb;
+  color: #30644d;
+  padding: 6px 10px;
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 700;
+}
+.selector {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 12px 0 20px;
+}
+.selector > span {
+  font-size: 13px;
+  font-weight: 600;
+}
+.selector button {
+  border: 1px solid #b5cac0;
+  border-radius: 6px;
+  background: white;
+  padding: 8px 12px;
+  color: #305846;
+}
+.selector button:disabled {
+  opacity: 0.6;
+}
+.menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1001;
+  width: min(420px, 100%);
+  padding: 12px;
+  border: 1px solid #dce5e1;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 8px 24px #263c4320;
+}
+.menu form {
+  display: flex;
+  gap: 6px;
+}
+.menu input {
+  min-width: 0;
+  width: 100%;
+  border: 1px solid #b5cac0;
+  border-radius: 6px;
+  padding: 8px;
+}
+.options {
+  max-height: 220px;
+  overflow-y: auto;
+  margin-top: 8px;
+}
+.options button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 0;
+}
+.options button:hover {
+  background: #e5f3eb;
+}
+.scroll {
+  overflow-x: auto;
+}
+.card table {
+  width: 100%;
+  font-size: 13px;
+  border-collapse: collapse;
+}
+.card th,
+.card td {
+  padding: 12px 8px;
+  text-align: right;
+  border-bottom: 1px solid #e6ece9;
+}
+.card th:first-child {
+  text-align: left;
+  min-width: 145px;
+}
+.card thead {
+  color: #667b80;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+.card small {
+  display: block;
+  font-weight: 400;
+  color: #667b80;
+  margin-top: 4px;
+}
+.active {
+  background: #f0f7f3;
+}
+.total {
+  font-size: 18px;
+  font-weight: 700;
+  color: #30644d;
+}
+.hint {
+  margin-top: 16px;
+}
+.hint summary {
+  cursor: pointer;
+}
+.error {
+  color: #a12f2f;
+}

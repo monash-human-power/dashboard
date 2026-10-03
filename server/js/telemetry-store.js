@@ -2,6 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const readline = require('readline');
+const EventEmitter = require('events');
+const { advanceRiders, newRider, riderSnapshot } = require('./rider-ranking');
 const { createTiming, advanceTiming } = require('./lap-timing');
 
 function badRequest(message) {
@@ -80,6 +82,8 @@ class TelemetryStore {
     this.directory = path.resolve(directory);
     this.pending = Promise.resolve();
     this.timings = new Map();
+    this.riders = new Map();
+    this.riderEvents = new EventEmitter();
   }
 
   run(operation) {
@@ -127,6 +131,9 @@ class TelemetryStore {
     const value = validateTelemetry(topic, payload);
     const record = { ...value, topic, receivedAt: new Date().toISOString(), eventId: crypto.randomBytes(16).toString('hex') };
     return this.run(async () => {
+      const riders = await this.loadRiders(value.sessionId);
+      record.riderId = riders.activeRiderId;
+      delete record.riderRankings;
       let timing = this.timings.get(value.sessionId);
       if (!timing) {
         timing = createTiming(await this.readCheckpoints(value.sessionId));
@@ -143,8 +150,66 @@ class TelemetryStore {
         'utf8',
       );
       advanceTiming(timing, record);
+      advanceRiders(riders, record);
       // Return a detached snapshot; later messages must not mutate this event.
-      return { ...record, lapTiming: JSON.parse(JSON.stringify(timing)) };
+      return { ...record, lapTiming: JSON.parse(JSON.stringify(timing)), riderRankings: riderSnapshot(riders, value.sessionId) };
+    });
+  }
+
+  async loadRiders(sessionId) {
+    if (this.riders.has(sessionId)) return this.riders.get(sessionId);
+    let metadata = { riders: [], activeRiderId: null, revision: 0 };
+    try {
+      metadata = JSON.parse(await fs.promises.readFile(`${this.filename(sessionId)}.riders.json`, 'utf8'));
+    } catch (error) { if (error.code !== 'ENOENT') throw error; }
+    const state = { ...metadata, total: 0, riders: metadata.riders.map((rider) => newRider(rider.id, rider.name)) };
+    try {
+      await TelemetryStore.scan(await this.resolveFilename(sessionId), (record) => advanceRiders(state, record));
+    } catch (error) { if (error.code !== 'ENOENT') throw error; }
+    this.riders.set(sessionId, state);
+    return state;
+  }
+
+  getRiders(sessionId) {
+    validateSessionId(sessionId);
+    return this.run(async () => riderSnapshot(await this.loadRiders(sessionId), sessionId));
+  }
+
+  selectRider(sessionId, selection) {
+    validateSessionId(sessionId);
+    if (!selection || (selection.name === undefined && selection.riderId === undefined))
+      throw badRequest('Provide a rider name or riderId');
+    if (selection.name !== undefined && (typeof selection.name !== 'string'
+      || !selection.name.trim() || selection.name.trim().length > 80))
+      throw badRequest('Rider name must contain 1–80 characters');
+    return this.run(async () => {
+      const filename = await this.resolveFilename(sessionId);
+      try { await fs.promises.access(filename); } catch (error) { error.status = 404; throw error; }
+      const previous = await this.loadRiders(sessionId);
+      const state = { ...previous, riders: previous.riders.slice(), revision: previous.revision + 1 };
+      let rider;
+      if (selection.name !== undefined) {
+        const name = selection.name.trim().replace(/\s+/g, ' ');
+        rider = state.riders.find((entry) => entry.name.toLowerCase() === name.toLowerCase());
+        if (!rider) {
+          if (state.riders.length >= 100) throw badRequest('A session supports up to 100 riders');
+          rider = newRider(crypto.randomBytes(12).toString('hex'), name);
+          state.riders.push(rider);
+        }
+      } else if (selection.riderId !== null) {
+        rider = state.riders.find((entry) => entry.id === selection.riderId);
+        if (!rider) throw badRequest('Rider not found in this session');
+      }
+      state.activeRiderId = rider ? rider.id : null;
+      const metadata = { revision: state.revision, activeRiderId: state.activeRiderId,
+        riders: state.riders.map(({ id, name }) => ({ id, name })) };
+      const destination = `${filename}.riders.json`;
+      await fs.promises.writeFile(`${destination}.tmp`, JSON.stringify(metadata), 'utf8');
+      await fs.promises.rename(`${destination}.tmp`, destination);
+      this.riders.set(sessionId, state);
+      const snapshot = riderSnapshot(state, sessionId);
+      this.riderEvents.emit('change', snapshot);
+      return snapshot;
     });
   }
 
@@ -289,7 +354,7 @@ class TelemetryStore {
       }
       return {
         sessionId,
-        ...(timing ? { lapTiming: timing } : {}),
+        ...(timing ? { lapTiming: timing, riderRankings: riderSnapshot(await this.loadRiders(sessionId), sessionId) } : {}),
         telemetry,
         total,
         offset,
