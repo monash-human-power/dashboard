@@ -453,7 +453,7 @@ export default function LocationMap({
         <div
           style={{
             position: 'absolute',
-            right: 10,
+            left: 10,
             top: 10,
             background: 'rgba(30,30,30,0.75)',
             color: 'white',

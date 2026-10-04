@@ -259,13 +259,12 @@ export default function RiderAnalytics(): JSX.Element {
         <div className={styles.segmentList}>
           {Object.entries(segmentHistory)
             .sort(([labelA], [labelB]) => {
-              // "Full Lap" always first
-              if (labelA === 'Full Lap') return -1;
-              if (labelB === 'Full Lap') return 1;
-              // Otherwise sort segments numerically: "Segment 1", "Segment 2", ...
-              const numA = parseInt(labelA.replace('Segment ', ''), 10);
-              const numB = parseInt(labelB.replace('Segment ', ''), 10);
-              return numA - numB;
+              const rank = (label: string) => {
+                if (label === 'Full Lap') return -2;
+                if (label === 'Start/Finish') return Infinity;
+                return parseInt(label.replace('Segment ', ''), 10);
+              };
+              return rank(labelA) - rank(labelB);
             })
             .map(([label, timings]) => {
               const avg =
