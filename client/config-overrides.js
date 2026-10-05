@@ -10,5 +10,15 @@ module.exports = override(
   }),
 
   // Use our own .eslint file rather than the config tha CRA uses
-  useEslintRc(path.resolve(__dirname, '.eslintrc')),
+  //useEslintRc(path.resolve(__dirname, '.eslintrc')),
+  (config) => {
+    config.module.rules = config.module.rules.filter(
+      (rule) =>
+        !(
+          rule.use &&
+          rule.use.some((u) => u.loader && u.loader.includes('eslint-loader'))
+        ),
+    );
+    return config;
+  },
 );

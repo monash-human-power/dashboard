@@ -15,4 +15,13 @@ module.exports = function (app) {
       ws: true,
     }),
   );
+
+  // MediaMTX WHEP (WebRTC) video playback endpoint
+  app.use(
+    '/whep',
+    proxy({
+      target: 'http://localhost:8889',
+      pathRewrite: { '^/whep': '' },
+    }),
+  );
 };

@@ -4,7 +4,8 @@
     "client-start": "cd client && yarn start",
     "server-start": "cd server && yarn start",
     "build": "cd client && yarn build",
-    "start": "cd server && yarn start"
+    "start": "cd server && yarn start",
+    "mock-video": "./scripts/mock_video_publish.sh"
   },
   "cacheDirectories": [
     "client/node_modules",
