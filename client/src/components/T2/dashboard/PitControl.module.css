@@ -1,0 +1,92 @@
+.control {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid #d5e5db;
+  background: #e8f3e9;
+}
+.status {
+  display: flex;
+  flex-direction: column;
+  min-width: 145px;
+}
+.status strong {
+  font-size: 13px;
+}
+.status small {
+  font-size: 11px;
+}
+.preparing {
+  background: #fff0bf;
+  border-color: #e3bd53;
+  color: #5c4505;
+}
+.pitting {
+  background: #fde2de;
+  border-color: #de857a;
+  color: #842c24;
+}
+.control button {
+  background: #fff;
+  border: 1px solid currentColor;
+  color: inherit;
+  border-radius: 7px;
+  min-height: 40px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.control button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.control button:focus-visible {
+  outline: 3px solid #2e674a;
+  outline-offset: 2px;
+}
+.error {
+  color: #a22424;
+  font-size: 12px;
+  flex-basis: 100%;
+}
+.idle,
+.completed,
+.cancelled {
+  color: #305e40;
+}
+
+.control {
+  position: relative;
+}
+.history {
+  font-size: 12px;
+}
+.history summary {
+  cursor: pointer;
+}
+.history > div {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 290px;
+  max-height: 260px;
+  overflow-y: auto;
+  padding: 12px;
+  background: white;
+  color: #293632;
+  border: 1px solid #d5e5db;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px #263c4320;
+}
+.history p {
+  margin: 0;
+  padding: 8px 0;
+  border-bottom: 1px solid #edf0ed;
+}
+.history small {
+  display: block;
+  color: #667b80;
+}

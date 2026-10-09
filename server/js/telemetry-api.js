@@ -1,4 +1,5 @@
 const express = require('express');
+const { readPit } = require('./pit-control');
 
 function pagination(query) {
   const result = {};
@@ -26,6 +27,19 @@ function pagination(query) {
 
 function telemetryApi(store) {
   const router = express.Router();
+  router.get('/sessions/:sessionId/pit', async (req, res, next) => {
+    try {
+      res.set('Cache-Control', 'no-store');
+      res.json({ ...(await store.run(() => readPit(store, req.params.sessionId))),
+        mqttConnected: !!(store.pitControl && store.pitControl.connected()) });
+    } catch (error) { next(error); }
+  });
+  router.post('/sessions/:sessionId/pit/commands', express.json({ limit: '8kb' }), async (req, res, next) => {
+    try {
+      if (!store.pitControl) { const error = new Error('Pit connection unavailable'); error.status = 503; throw error; }
+      res.json(await store.pitControl.execute(req.params.sessionId, req.body, 'crew'));
+    } catch (error) { next(error); }
+  });
   router.get('/sessions/:sessionId/riders', async (req, res, next) => {
     try {
       res.set('Cache-Control', 'no-store');

@@ -7,6 +7,7 @@ import React, {
   useRef,
 } from 'react';
 import { useChannel } from 'api/common/socket';
+import { PitStatus } from './PitStatus';
 
 export const MAX_SESSION_READINGS = 20000;
 export interface LapTiming {
@@ -72,6 +73,8 @@ const HistoryContext = createContext<{
   revision: number;
   savedTiming?: LapTiming;
   savedRiders?: RiderRankingsData;
+  savedPit?: PitStatus;
+  savedPitEvents?: PitStatus[];
 }>({ session: null, records: [], select: () => {}, revision: 0 });
 export const useSessionHistory = () => useContext(HistoryContext);
 
@@ -103,6 +106,8 @@ export function SessionHistoryProvider({
   const [savedRiders, setSavedRiders] = useState<
     RiderRankingsData | undefined
   >();
+  const [savedPit, setSavedPit] = useState<PitStatus | undefined>();
+  const [savedPitEvents, setSavedPitEvents] = useState<PitStatus[]>([]);
   const mode = useRef<string | null>(null);
   const active = useRef<string | null>(null);
   const pinned = useRef(false);
@@ -128,6 +133,8 @@ export function SessionHistoryProvider({
       seen.current.clear();
       setSavedTiming(undefined);
       setSavedRiders(undefined);
+      setSavedPit(undefined);
+      setSavedPitEvents([]);
       setRecords([record]);
       setRevision((previous) => previous + 1);
     } else {
@@ -169,6 +176,8 @@ export function SessionHistoryProvider({
     } else {
       setSavedTiming(undefined);
       setSavedRiders(undefined);
+      setSavedPit(undefined);
+      setSavedPitEvents([]);
       setLoading(true);
       setRecords([]);
       seen.current.clear();
@@ -190,6 +199,8 @@ export function SessionHistoryProvider({
     setRecords([]);
     setSavedTiming(undefined);
     setSavedRiders(undefined);
+    setSavedPit(undefined);
+    setSavedPitEvents([]);
     setError('');
     setLoading(false);
     setRevision((previous) => previous + 1);
@@ -221,6 +232,8 @@ export function SessionHistoryProvider({
         setRecords(restored);
         setSavedTiming(page.lapTiming);
         setSavedRiders(page.riderRankings);
+        setSavedPit(page.pitStatus);
+        setSavedPitEvents(page.pitEvents || []);
         setLoading(false);
       })
       .catch((failure) => {
@@ -234,7 +247,16 @@ export function SessionHistoryProvider({
 
   return (
     <HistoryContext.Provider
-      value={{ session, records, select, revision, savedTiming, savedRiders }}
+      value={{
+        session,
+        records,
+        select,
+        revision,
+        savedTiming,
+        savedRiders,
+        savedPit,
+        savedPitEvents,
+      }}
     >
       <div className="m-3" role="status">
         {session

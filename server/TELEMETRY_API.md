@@ -4,6 +4,22 @@ The backend subscribes to `t2/+/telemetry` when MQTT connects, even if no browse
 is open. One server-level handler saves each received message and broadcasts the
 original payload on the existing Socket.IO event `t2-telemetry`.
 
+## MQTT connection
+
+Set `MQTT_SERVER` and `MQTT_PORT` in `server/.env` to use the shared broker.
+The backend now uses this configuration without requiring `HEROKU` mode.
+With no `MQTT_SERVER` set, it keeps the local `localhost:1883` connection.
+For the team's current cloud test, use `MQTT_SERVER=172.204.8.32` and
+`MQTT_PORT=1883`. Leave `MQTT_USERNAME` and `MQTT_PASSWORD` empty when the
+broker allows anonymous access, or use credentials supplied by its administrator.
+Each backend connection uses a distinct client ID so teammates do not disconnect
+one another. Restart the backend after changing `.env`.
+
+The phone/publisher must send to `t2/<sessionId>/telemetry`; the JSON payload's
+`sessionId` must match that topic. The backend subscribes to `t2/+/telemetry`,
+so a new session ID requires no subscription edit. The browser still connects
+to our backend through Socket.IO; port 9001 is not needed for this data path.
+
 ## Storage and retention
 
 The dashboard snapshot endpoint returns only the latest **20,000 readings** in

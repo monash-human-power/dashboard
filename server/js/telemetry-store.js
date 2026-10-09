@@ -5,6 +5,7 @@ const readline = require('readline');
 const EventEmitter = require('events');
 const { advanceRiders, newRider, riderSnapshot } = require('./rider-ranking');
 const { createTiming, advanceTiming } = require('./lap-timing');
+const { readPit } = require('./pit-control');
 
 function badRequest(message) {
   const error = new Error(message);
@@ -355,6 +356,7 @@ class TelemetryStore {
       return {
         sessionId,
         ...(timing ? { lapTiming: timing, riderRankings: riderSnapshot(await this.loadRiders(sessionId), sessionId) } : {}),
+        ...(latest ? await readPit(this, sessionId) : {}),
         telemetry,
         total,
         offset,

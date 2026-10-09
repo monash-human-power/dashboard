@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Runtype, Static } from 'runtypes';
 import io from 'socket.io-client';
 
@@ -51,4 +51,20 @@ export function useChannelShaped<T>(
     }
   };
   useChannel(channel, parsedCallback);
+}
+
+/** Current dashboard-to-backend connection; pit actions need this connection. */
+export function useSocketConnected() {
+  const [connected, setConnected] = useState(!!socket.connected);
+  useEffect(() => {
+    const online = () => setConnected(true);
+    const offline = () => setConnected(false);
+    socket.on('connect', online);
+    socket.on('disconnect', offline);
+    return () => {
+      socket.off('connect', online);
+      socket.off('disconnect', offline);
+    };
+  }, []);
+  return connected;
 }

@@ -10,6 +10,7 @@ const os = require('os');
 const { DAS, BOOST, Camera, WirelessModule, V3 } = require('mhp');
 const { getPropWithPath, setPropWithPath } = require('./util');
 const attachT2Telemetry = require('./t2-telemetry');
+const { attachPitControl } = require('./pit-control');
 
 // Public MQTT broker
 let PUBLISH_ONLINE = false;
@@ -45,10 +46,10 @@ function connectToPublicMQTTBroker(clientID = '') {
     clientId: `publicMqttClient-${clientID}-${Math.random()
       .toString(16)
       .substr(2, 8)}`,
-    username: process.env.MQTT_USERNAME,
-    password: process.env.MQTT_PASSWORD,
+    username: process.env.MQTT_USERNAME || undefined,
+    password: process.env.MQTT_PASSWORD || undefined,
     host: process.env.MQTT_SERVER,
-    port: process.env.MQTT_PORT,
+    port: Number(process.env.MQTT_PORT || 1883),
   };
   const mqttInstance = mqtt.connect(publicMqttOptions);
   mqttInstance.on('connect', function publicMqttConnected(connack) {
@@ -101,13 +102,13 @@ sockets.init = function socketInit(server, telemetryStore) {
   const mqttOptions = {
     reconnectPeriod: 1000,
     connectTimeout: 5000,
-    clientId: 'mqttClient',
+    clientId: `mqttClient-${os.hostname()}-${Math.random().toString(16).substr(2, 8)}`,
   };
 
   let mqttClient = null;
-  if (process.env.HEROKU) {
-    console.log('I am using a Heroku instance');
-    mqttClient = connectToPublicMQTTBroker(`${os.hostname()}-HEROKU`);
+  if (process.env.MQTT_SERVER || process.env.HEROKU) {
+    console.log('Using configured MQTT broker');
+    mqttClient = connectToPublicMQTTBroker(os.hostname());
   } else {
     mqttClient = mqtt.connect('mqtt://localhost:1883', mqttOptions);
   }
@@ -124,6 +125,7 @@ sockets.init = function socketInit(server, telemetryStore) {
   // eslint-disable-next-line global-require
   const io = require('socket.io').listen(server);
   attachT2Telemetry(mqttClient, io, telemetryStore);
+  attachPitControl(mqttClient, io, telemetryStore);
   io.on('connection', function ioConnection(socket) {
     socket.setMaxListeners(20);
     /*
