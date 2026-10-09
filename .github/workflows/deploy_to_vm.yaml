@@ -2,8 +2,8 @@
 # T2-Pit-Subsystem deploys to production (port 3001). deploy-test/* branches deploy
 # to a separate staging copy on port 5000, reachable only from the VM itself.
 # Required repository secrets:
-#   SSH_PRIVATE_KEY - lets yarn clone our private `common` repository (mhp-deployment user)
-#   VM_SSH_KEY      - private key of a deploy key in ~/.ssh/authorized_keys on the VM
+#   NEW_SSH_PRIVATE_KEY - deploy key (read-only) on the private `common` repository, so yarn can clone it
+#   VM_SSH_KEY          - private key of a deploy key in ~/.ssh/authorized_keys on the VM
 
 name: Deploy to VM
 
@@ -36,7 +36,7 @@ jobs:
 
       - uses: webfactory/ssh-agent@v0.9.0
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-private-key: ${{ secrets.NEW_SSH_PRIVATE_KEY }}
 
       # react-scripts 3 doesn't build on Node 17+ (OpenSSL 3), so the client builds on 16
       - uses: actions/setup-node@v4

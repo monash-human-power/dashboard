@@ -62,7 +62,7 @@ Pushes to the deploy branch are automatically built and deployed to an Azure VM 
 | ------------------ | ----------- | ------------------------- |
 | `T2-Pit-Subsystem` | Production  | http://172.204.8.32:3001  |
 
-The workflow needs two repository secrets: `SSH_PRIVATE_KEY` (access to the private `common` repository) and `VM_SSH_KEY` (a deploy key authorised on the VM as `azureuser`). It can also be run manually from the Actions tab.
+The workflow needs two repository secrets: `NEW_SSH_PRIVATE_KEY` (a read-only deploy key on the private `common` repository) and `VM_SSH_KEY` (a deploy key authorised on the VM as `azureuser`). It can also be run manually from the Actions tab.
 
 ## Documentation
 
