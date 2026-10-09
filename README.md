@@ -56,12 +56,13 @@ This is relevant if SSH has not been setup on the computer (Windows)
 
 ## Deploying
 
-This project is set up to automatically deploy from GitHub.
+Pushes to the deploy branch are automatically built and deployed to an Azure VM by `.github/workflows/deploy_to_vm.yaml`. On the VM, pm2 runs the server (`ecosystem.config.js`) alongside MediaMTX and the MQTT broker.
 
-| Branch        | Environment | URL                            |
-| ------------- | ----------- | ------------------------------ |
-| `master`      | Production  | http://mhp-board.herokuapp.com |
-| Pull requests | Review app  |                                |
+| Branch             | Environment | URL                       |
+| ------------------ | ----------- | ------------------------- |
+| `T2-Pit-Subsystem` | Production  | http://172.204.8.32:3001  |
+
+The workflow needs two repository secrets: `SSH_PRIVATE_KEY` (access to the private `common` repository) and `VM_SSH_KEY` (a deploy key authorised on the VM as `azureuser`). It can also be run manually from the Actions tab.
 
 ## Documentation
 

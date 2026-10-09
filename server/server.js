@@ -11,6 +11,7 @@ const fs = require('fs');
 const bodyParser = require('body-parser');
 const { TelemetryStore } = require('./js/telemetry-store');
 const telemetryApi = require('./js/telemetry-api');
+const whepProxy = require('./js/whep-proxy');
 const telemetryStore = new TelemetryStore(
   process.env.TELEMETRY_DATA_DIR || path.join(__dirname, 'telemetry-data'),
 );
@@ -18,6 +19,11 @@ const telemetryStore = new TelemetryStore(
 // Set port to whatever the environment variable for PORT is, else use port 5000
 const PORT = process.env.PORT || 5000;
 
+// Registered before the body parsers so the SDP request body streams through untouched
+app.use(
+  '/whep',
+  whepProxy(process.env.MEDIAMTX_URL || 'http://localhost:8889'),
+);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/api/t2', telemetryApi(telemetryStore));

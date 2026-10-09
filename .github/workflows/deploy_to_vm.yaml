@@ -1,0 +1,97 @@
+# Builds the dashboard and deploys it to the Azure VM, where pm2 runs it.
+# T2-Pit-Subsystem deploys to production (port 3001). deploy-test/* branches deploy
+# to a separate staging copy on port 5000, reachable only from the VM itself.
+# Required repository secrets:
+#   SSH_PRIVATE_KEY - lets yarn clone our private `common` repository (mhp-deployment user)
+#   VM_SSH_KEY      - private key of a deploy key in ~/.ssh/authorized_keys on the VM
+
+name: Deploy to VM
+
+on:
+  push:
+    branches:
+      - 'T2-Pit-Subsystem'
+      - 'deploy-test/**'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-vm
+  cancel-in-progress: false
+
+env:
+  VM_HOST: 172.204.8.32
+  VM_USER: azureuser
+  APP_DIR: ${{ github.ref_name == 'T2-Pit-Subsystem' && 'dashboard' || 'dashboard-staging' }}
+  PM2_NAME: ${{ github.ref_name == 'T2-Pit-Subsystem' && 'dashboard' || 'dashboard-staging' }}
+  APP_PORT: ${{ github.ref_name == 'T2-Pit-Subsystem' && '3001' || '5000' }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.ref_name == 'T2-Pit-Subsystem' && 'production' || 'staging' }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      # react-scripts 3 doesn't build on Node 17+ (OpenSSL 3), so the client builds on 16
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '16.x'
+
+      - name: Build front-end
+        # CI='' stops CRA from treating lint warnings as errors
+        run: |
+          cd client
+          yarn install --frozen-lockfile
+          CI='' yarn build
+
+      # The server runs on the VM's Node 24, so install its dependencies with that
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+
+      - name: Install server dependencies
+        run: |
+          cd server
+          yarn install --frozen-lockfile --production
+
+      - name: Copy to VM
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VM_SSH_KEY }}" > ~/.ssh/vm_key
+          chmod 600 ~/.ssh/vm_key
+          ssh-keyscan -H "$VM_HOST" >> ~/.ssh/known_hosts
+          SSH="ssh -i $HOME/.ssh/vm_key"
+
+          $SSH "$VM_USER@$VM_HOST" "mkdir -p ~/$APP_DIR"
+          # Keep recorded data and the .env file that live on the VM
+          rsync -az --delete -e "$SSH" \
+            --exclude '/server/data/' \
+            --exclude '/server/telemetry-data/' \
+            --exclude '/server/.env' \
+            ecosystem.config.js client/build server \
+            "$VM_USER@$VM_HOST:~/$APP_DIR/" --relative
+
+      - name: Restart app
+        run: |
+          ssh -i ~/.ssh/vm_key "$VM_USER@$VM_HOST" \
+            "cd ~/$APP_DIR && PM2_NAME=$PM2_NAME PORT=$APP_PORT pm2 startOrReload ecosystem.config.js --update-env && pm2 save"
+
+      - name: Smoke test
+        # Checks the page, the API and that /whep reaches MediaMTX. The dummy offer is
+        # rejected, but MediaMTX's Server header proves the request got through.
+        run: |
+          ssh -i ~/.ssh/vm_key "$VM_USER@$VM_HOST" bash -s <<EOF
+          set -e
+          sleep 5
+          curl -fsS http://localhost:$APP_PORT/server/status
+          curl -fsS http://localhost:$APP_PORT/ | grep -q 'id="root"'
+          curl -sSi -X POST -H 'Content-Type: application/sdp' --data 'v=0' \
+            http://localhost:$APP_PORT/whep/t2/mock-session-001/whep | tee /dev/stderr | grep -qi '^server: mediamtx'
+          echo "Smoke test passed"
+          EOF
