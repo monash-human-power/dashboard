@@ -11,6 +11,7 @@ const fs = require('fs');
 const bodyParser = require('body-parser');
 const { TelemetryStore } = require('./js/telemetry-store');
 const telemetryApi = require('./js/telemetry-api');
+const { telemetryIngestRouter } = require('./js/t2-telemetry');
 const telemetryStore = new TelemetryStore(
   process.env.TELEMETRY_DATA_DIR || path.join(__dirname, 'telemetry-data'),
 );
@@ -20,7 +21,6 @@ const PORT = process.env.PORT || 5000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use('/api/t2', telemetryApi(telemetryStore));
 app.use(express.static(path.join(__dirname, '../client/build')));
 
 // Create a data folder if it is not created already
@@ -35,7 +35,12 @@ if (!fs.existsSync(dataDirectory)) {
  */
 // eslint-disable-next-line import/no-dynamic-require
 const sockets = require(path.join(__dirname, 'js', 'sockets.js'));
-sockets.init(server, telemetryStore);
+const io = sockets.init(server, telemetryStore);
+app.use(
+  '/api/t2',
+  telemetryIngestRouter(telemetryStore, io),
+  telemetryApi(telemetryStore),
+);
 
 /*
  * Start the server

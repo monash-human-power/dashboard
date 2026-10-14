@@ -9,7 +9,7 @@ const os = require('os');
 
 const { DAS, BOOST, Camera, WirelessModule, V3 } = require('mhp');
 const { getPropWithPath, setPropWithPath } = require('./util');
-const attachT2Telemetry = require('./t2-telemetry');
+const { attachT2Telemetry } = require('./t2-telemetry');
 const { attachPitControl } = require('./pit-control');
 
 // Public MQTT broker
@@ -438,6 +438,7 @@ sockets.init = function socketInit(server, telemetryStore) {
       mqttClient.publish(V3.start, JSON.stringify({ start: false }));
     });
   });
+  return io;
 };
 
 module.exports = sockets;

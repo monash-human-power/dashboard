@@ -7,7 +7,7 @@ const EventEmitter = require('events');
 const express = require('express');
 const { TelemetryStore } = require('../js/telemetry-store');
 const telemetryApi = require('../js/telemetry-api');
-const attachT2Telemetry = require('../js/t2-telemetry');
+const { attachT2Telemetry } = require('../js/t2-telemetry');
 
 function sample(sessionId, speed = 0) {
   return {

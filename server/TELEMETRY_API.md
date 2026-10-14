@@ -83,6 +83,16 @@ Invalid messages and payloads above 1 MiB are rejected and logged. Publisher
 timestamps are preserved, not replaced: ensure the publisher uses a real UTC
 timestamp rather than a hard-coded date/local time labelled `Z`.
 
+## HTTP ingest
+
+Devices that cannot publish MQTT can POST the same JSON body to
+`POST /api/t2/telemetry` with `Authorization: Bearer <TELEMETRY_INGEST_TOKEN>`.
+The server rejects every request while `TELEMETRY_INGEST_TOKEN` is unset.
+Valid readings are saved and broadcast exactly like MQTT readings and return
+`201` with `{ "eventId": "..." }`. Invalid readings return `400` with the
+validation message. Storage failures return `500`, so the device should retry.
+Bodies over the global 100 KB parser limit return `413`.
+
 ## REST API
 
 Page refresh starts fresh live data without fetching saved telemetry. Selecting
